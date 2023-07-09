@@ -1,3 +1,4 @@
+import connectMongo from "@/util/DataBase";
 import { NextResponse, NextRequest } from "next/server";
 import { SeasonProfileDocumentType, SeasonProfileDocument } from "@/util/models/SeasonProfile";
 // import rateLimit from "express-rate-limit";
@@ -52,7 +53,11 @@ export async function GET(request: NextRequest) {
     return;
   }
 
-  const teams = await SeasonProfileDocument.find({ seasonId: seasonId });
+  const connection = await connectMongo();
+
+  const teams = await SeasonProfileDocument.find({ seasonId: seasonId }).lean();
+
+  await connection.disconnect();
 
   const formattedTeams = await Promise.all(teams.map(async (team: SeasonProfileDocumentType) => {
     return await formatTeamDocument(team);

@@ -9,4 +9,3 @@ const metadataSchema = new Schema<MetadataDocumentType>({
 });
 
 export const MetadataDocument = model<MetadataDocumentType>('Metadata', metadataSchema);
-

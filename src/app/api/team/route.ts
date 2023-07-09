@@ -1,3 +1,4 @@
+import connectMongo from "@/util/DataBase";
 import { NextResponse, NextRequest } from "next/server";
 import { SeasonProfileDocumentType, SeasonProfileDocument } from "@/util/models/SeasonProfile";
 
@@ -42,7 +43,11 @@ export async function GET(request: NextRequest) {
     return;
   }
 
- const team = await SeasonProfileDocument.findOne({ teamNumber: teamNumber, seasonId: seasonId });
+  const connection = await connectMongo();
+
+  const team = await SeasonProfileDocument.findOne({ teamNumber: teamNumber, seasonId: seasonId }).lean();
+
+  await connection.disconnect();
 
   if (!team) {
     NextResponse.json({ error: 'Team not found' }, { status: 404 });
