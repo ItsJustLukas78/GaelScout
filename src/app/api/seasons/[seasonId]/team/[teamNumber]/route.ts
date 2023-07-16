@@ -1,4 +1,4 @@
-import prisma from "@/util/DataBase";
+import prisma from "@/utils/DataBase";
 import { NextResponse, NextRequest } from "next/server";
 
 async function formatTeamSeasonProfile(teamSeasonProfile: any) {

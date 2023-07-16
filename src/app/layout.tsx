@@ -1,6 +1,7 @@
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import Providers from '@/components/Providers'
 import type { Metadata } from 'next'
 import React from "react";
 
@@ -17,11 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        <div className="w-full mt-20">
-          {children}
-        </div>
-        {/*<Footer />*/}
+        <Providers>
+          <Navbar />
+          <div className="w-full mt-20">
+            {children}
+          </div>
+          {/*<Footer />*/}
+        </Providers>
       </body>
     </html>
   )

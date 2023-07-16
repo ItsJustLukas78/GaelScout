@@ -1,4 +1,4 @@
-import prisma from "@/util/DataBase";
+import prisma from "@/utils/DataBase";
 import { NextResponse, NextRequest } from "next/server";
 
 // import rateLimit from "express-rate-limit";

@@ -12,6 +12,8 @@ module.exports = {
       },
       colors: {
         "GSGray": "#141414",
+        "googleBlue": "#4285F4",
+        "discordBlue": "#5865F2",
       }
     }
   },
