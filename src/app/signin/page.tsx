@@ -1,7 +1,6 @@
 "use client"
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { signIn, signOut, useSession } from "next-auth/react"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import * as Form from "@radix-ui/react-form";
 import CorneredButton from "@/components/CorneredButton";
 
