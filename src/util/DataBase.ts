@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
+import { PrismaClient } from '@prisma/client'
 
-const connectMongo = async () => mongoose.connect(process.env.MONGO_URI as string);
+const prisma = new PrismaClient()
 
-export default connectMongo;
+export default prisma
