@@ -1,12 +1,17 @@
 "use client"
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import {signIn, signOut} from "next-auth/react"
-import { getServerSession } from "next-auth/next"
+import { signIn, signOut, useSession } from "next-auth/react"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import * as Form from "@radix-ui/react-form";
 import CorneredButton from "@/components/CorneredButton";
 
 export default function SignIn() {
+  const { data: session, status } = useSession();
+
+  if (session) {
+    return { redirect: { destination: "/" } };
+  }
+
   return (
     <>
       <div className="w-full justify-center flex flex-row my-44 gap-56">
@@ -20,7 +25,8 @@ export default function SignIn() {
             <div className="h-1/2 flex justify-center items-center flex-col">
             </div>
             <div className="h-1/2 flex justify-center items-center flex-col gap-5">
-              <div
+              <button
+                onClick={() => signIn("google")}
                 className="bg-googleBlue text-gray-100 hover:text-white shadow font-bold text-sm py-2 px-4 rounded flex justify-start items-center cursor-pointer w-72">
                 <svg viewBox="0 0 24 24" className="fill-current mr-3 w-6 h-5" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -28,8 +34,9 @@ export default function SignIn() {
                 </svg>
                 <span className="border-l border-blue-300 h-6 w-1 block"></span>
                 <span className="pl-3">Continue with Google</span>
-              </div>
-              <div
+              </button>
+              <button
+                onClick={() => signIn("github")}
                 className="bg-gray-900 text-gray-100 hover:text-white shadow font-bold text-sm py-2 px-4 rounded flex justify-start items-center cursor-pointer w-72">
                 <svg viewBox="0 0 24 24" className="fill-current mr-3 w-6 h-6" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -37,8 +44,9 @@ export default function SignIn() {
                 </svg>
                 <span className="border-l border-gray-800 h-6 w-1 block mr-1"></span>
                 <span className="pl-3">Continue with Github</span>
-              </div>
-              <div
+              </button>
+              <button
+                onClick={() => signIn("discord")}
                 className="bg-discordBlue text-gray-100 hover:text-white shadow text-sm font-bold py-2 px-4 rounded flex justify-start items-center cursor-pointer w-72">
                 <svg viewBox="0 0 16 16" className="fill-current mr-3 w-6 h-6" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -46,22 +54,11 @@ export default function SignIn() {
                 </svg>
                 <span className="border-l border-gray-400 h-6 w-1 block mr-1"></span>
                 <span className="pl-3">Continue with Discord</span>
-              </div>
+              </button>
             </div>
           </div>
         </div>
       </div>
     </>
   )
-}
-
-export async function getServerSideProps() {
-  const session = await getServerSession(authOptions);
-
-  // If the user is already logged in, redirect.
-  // Note: Make sure not to redirect to the same page
-  // To avoid an infinite loop!
-  if (session) {
-    return { redirect: { destination: "/" } };
-  }
 }
