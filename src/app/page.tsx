@@ -1,4 +1,4 @@
-import CorneredButton from '../components/CorneredButton'
+import CorneredButton from '@/components/CorneredButton'
 import Image from 'next/image'
 
 export default function Home() {

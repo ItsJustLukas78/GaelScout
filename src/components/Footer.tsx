@@ -1,7 +1,7 @@
 import NavButton from './NavButton'
 import Image from 'next/image'
 
-export default function Navbar() {
+export default function Footer() {
   return (
     <div className="h-20 w-full justify-center items-center gap-16 inline-flex">
       <div className="inline-flex items-center">

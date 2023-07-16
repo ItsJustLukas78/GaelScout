@@ -21,7 +21,7 @@ export default function RootLayout({
         <div className="w-full mt-20">
           {children}
         </div>
-        <Footer />
+        {/*<Footer />*/}
       </body>
     </html>
   )
