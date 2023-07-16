@@ -10,6 +10,9 @@ module.exports = {
         "128": "32rem",
         "144": "36rem",
       },
+      colors: {
+        "GSGray": "#141414",
+      }
     }
   },
   plugins: [],

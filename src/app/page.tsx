@@ -4,8 +4,8 @@ import Image from 'next/image'
 export default function Home() {
   return (
     <main>
-      <div className="w-full items-center justify-center flex-col px-5">
-        <div className="h-auto my-15 items-center justify-center flex">
+      <div className="w-full items-center justify-center flex flex-col my-44 gap-20">
+        <div className="h-auto my-15 items-center justify-center flex space-x-8">
           <div className="w-128 my-16 inline-flex flex-col space-y-8">
             <h1 className="text-8xl font-bold ">
               Scouting Done Easy.
@@ -21,7 +21,7 @@ export default function Home() {
             <CorneredButton>Sign Up</CorneredButton>
           </div>
           <div className="inline-flex">
-            <Image src="/homeblobs.svg" alt="GaelSuite Logo" width="600" height="600"/>
+            <Image priority src="/homeblobs.png" alt="GaelSuite Logo" width="500" height="600"/>
           </div>
         </div>
         <div className="h-auto my-15 items-center justify-center flex space-x-8">
