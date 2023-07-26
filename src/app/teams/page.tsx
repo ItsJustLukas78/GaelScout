@@ -117,6 +117,7 @@ export default function Teams() {
     }
 
     setResultsLoading(true);
+    setCurrentResults([]);
 
     const searchParams = new URLSearchParams();
 
