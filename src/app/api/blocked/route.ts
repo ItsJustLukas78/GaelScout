@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import {NextRequest, NextResponse} from "next/server";
 
-export default function handler(_req: NextApiRequest, res: NextApiResponse) {
-  res.status(429);
-  return res.end();
+
+export async function GET(request: NextRequest) {
+  return NextResponse.json({ error: 'You are rate limited' }, { status: 429 });
 }
