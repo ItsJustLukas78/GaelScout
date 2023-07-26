@@ -17,6 +17,8 @@ model TeamProfile {
   teamCity          String?             @default("No city")
   teamRegion        String?             @default("No region")
   teamCountry       String?             @default("No country")
+  programId         Int                 @default(0)
+  programCode       String              @default("No program")
   TeamSeasonProfile TeamSeasonProfile[]
 }
 

@@ -1,4 +1,4 @@
-import prisma from "@/utils/DataBase";
+import prisma from "@/lib/db";
 import { NextResponse, NextRequest } from "next/server";
 
 async function formatTeamSeasonProfile(teamSeasonProfile: any) {
@@ -38,8 +38,7 @@ export async function GET(
   const seasonId = parseInt(params.seasonId);
 
   if (!teamNumber || !seasonId) {
-    NextResponse.json({ error: 'Team ID or Season ID not provided' }, { status: 400 });
-    return;
+    return NextResponse.json({ error: 'Team number or Season ID not provided' }, { status: 400 });
   }
 
   const team = await prisma.teamSeasonProfile.findFirst({
@@ -50,11 +49,12 @@ export async function GET(
   });
 
   if (!team) {
-    NextResponse.json({ error: 'Team not found' }, { status: 404 });
-    return;
+    return NextResponse.json({ error: 'Team not found' }, { status: 404 });
   }
 
   const formattedTeam = await formatTeamSeasonProfile(team);
 
-  return NextResponse.json(formattedTeam, { status: 200 })
+  const prettyJson = JSON.stringify(formattedTeam, null, 2);
+
+  return NextResponse.json(prettyJson, { status: 200 })
 }

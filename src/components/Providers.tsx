@@ -1,12 +1,16 @@
-"use client";
-import { SessionProvider } from "next-auth/react";
-import React, { ReactNode } from "react";
+import { ClerkProvider } from '@clerk/nextjs'
+import { dark } from '@clerk/themes';
+import {ReactNode} from "react";
 
 const Providers = ({ children } : { children: ReactNode }) => {
   return (
-    <SessionProvider>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+      }}
+    >
       {children}
-    </SessionProvider>
+    </ClerkProvider>
   )
 }
 

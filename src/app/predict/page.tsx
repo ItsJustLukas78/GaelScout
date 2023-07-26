@@ -4,7 +4,6 @@ import Image from 'next/image'
 import * as Form from '@radix-ui/react-form';
 import * as Progress from '@radix-ui/react-progress';
 import React, {useEffect, useState} from "react";
-import {useSession} from "next-auth/react";
 
 export default function Teams() {
   const [r1Team, setR1Team] = useState< string | null >(null);
@@ -20,6 +19,8 @@ export default function Teams() {
 
   const [redChance, setRedChance] = useState< number >(0);
   const [blueChance, setBlueChance] = useState< number >(0);
+
+  const [allInputsProvided, setAllInputsProvided] = useState< boolean >(false);
 
   useEffect(() => {
     if (prediction === null) {
@@ -41,20 +42,21 @@ export default function Teams() {
 
   const predictMatch = (event: any) => {
     event.preventDefault();
+    console.log("submit")
 
     console.log(r1Team, r2Team, b1Team, b2Team);
 
-    if (r1Team === null || r2Team === null || b1Team === null || b2Team === null) {
+    if (!r1Team || !r2Team || !b1Team || !b2Team) {
       alert("Please fill out all team numbers");
       return;
     }
 
     const searchParams = new URLSearchParams();
 
-    searchParams.append('r1Team', r1Team);
-    searchParams.append('r2Team', r2Team);
-    searchParams.append('b1Team', b1Team);
-    searchParams.append('b2Team', b2Team);
+    searchParams.append('r1Team', r1Team.toUpperCase());
+    searchParams.append('r2Team', r2Team.toUpperCase());
+    searchParams.append('b1Team', b1Team.toUpperCase());
+    searchParams.append('b2Team', b2Team.toUpperCase());
     searchParams.append('seasonId', String(seasonId));
 
     fetch(`/api/predict?${searchParams.toString()}`).then((response) => {
@@ -66,15 +68,115 @@ export default function Teams() {
     });
   }
 
+  useEffect(() => {
+    console.log(r1Team, r2Team, b1Team, b2Team)
+    if (r1Team && r2Team && b1Team && b2Team) {
+      setAllInputsProvided(true);
+    } else {
+      setAllInputsProvided(false);
+    }
+  }, [r1Team, r2Team, b1Team, b2Team]);
+
+
   return (
     <main>
       <Form.Root
         onSubmit={predictMatch}
       >
-        <div className="w-full flex flex-col my-44">
+        <div className="h-auto justify-center flex flex-row sm:gap-11 md:gap-20 gap-7 mt-32 xl:mt-0">
+          <div className="items-left justify-center flex flex-col xl:hidden">
+            <h1 className="sm:text-5xl text-3xl font-bold mb-10 text-red-600 text-center">
+              Team One
+            </h1>
+            <div className="gap-5 flex flex-col items-center">
+              <Form.Field className="flex flex-col" name="r1Team">
+                <Form.Label>
+                  Team Number
+                </Form.Label>
+                <Form.Control asChild>
+                  <input
+                    className="p-3 h-8 text-black rounded-lg sm:w-full w-36"
+                    required
+                    value={r1Team || ""}
+                    onChange={(event) => setR1Team(event.target.value)}
+                  />
+                </Form.Control>
+              </Form.Field>
+              <Form.Field className="flex flex-col" name="r2Team">
+                <Form.Label>
+                  Team Number
+                </Form.Label>
+                <Form.Control asChild>
+                  <input
+                    className="p-3 h-8 text-black rounded-lg sm:w-full w-36"
+                    required
+                    value={r2Team || ""}
+                    onChange={(event) => setR2Team(event.target.value)}
+                  />
+                </Form.Control>
+              </Form.Field>
+            </div>
+          </div>
+          <div className="h-auto items-left justify-center flex flex-col xl:hidden">
+            <h1 className="sm:text-5xl text-3xl font-bold mb-10 text-blue-600 text-center">
+              Team Two
+            </h1>
+            <div className="gap-5 flex flex-col items-center">
+              <Form.Field className="flex flex-col" name="b1Team">
+                <Form.Label>
+                  Team Number
+                </Form.Label>
+                <Form.Control asChild>
+                  <input
+                    className="p-3 h-8 text-black rounded-lg sm:w-full w-36"
+                    required
+                    value={b1Team || ""}
+                    onChange={(event) => setB1Team(event.target.value)}
+                  />
+                </Form.Control>
+              </Form.Field>
+              <Form.Field className="flex flex-col" name="b2Team">
+                <Form.Label>
+                  Team Number
+                </Form.Label>
+                <Form.Control asChild>
+                  <input
+                    className="p-3 h-8 text-black rounded-lg sm:w-full w-36"
+                    required
+                    value={b2Team || ""}
+                    onChange={(event) => setB2Team(event.target.value)}
+                  />
+                </Form.Control>
+              </Form.Field>
+            </div>
+          </div>
+        </div>
+        <div className="flex sm:flex-row flex-col justify-center items-center my-10 gap-10 xl:hidden">
+          <Form.Field className="flex flex-col" name="seasonId">
+            <Form.Label>
+              Season
+            </Form.Label>
+            <Form.Control asChild>
+              <select
+                className="p-3 h-15 text-black rounded-lg sm:w-full w-36"
+                required
+                onChange={(event) => setSeasonId(parseInt(event.target.value))}
+              >
+                <option value="173">Spin Up 2022-2023</option>
+                <option value="181">Over Under 2023-2024</option>
+              </select>
+            </Form.Control>
+          </Form.Field>
+          <Form.Submit asChild>
+            <CorneredButton className={`sm:mt-5 ${allInputsProvided ? "" : "bg-gray-500"}`} disabled={!allInputsProvided}>
+              Predict
+            </CorneredButton>
+          </Form.Submit>
+        </div>
+        <div className="w-full flex flex-col xl:my-44 lg:my-14">
           <div className="h-auto items-center justify-center flex flex-row gap-20">
-            <div className="items-left justify-center flex flex-col">
-              <h1 className="text-6xl font-bold mb-10 text-red-600">
+            <div className="items-left justify-center xl:flex flex-col hidden">
+              <h1 className="text-5xl font-bold mb-10 text-red-600">
                 Team One
               </h1>
               <div className="gap-5 flex flex-col">
@@ -86,12 +188,10 @@ export default function Teams() {
                     <input
                       className="p-3 h-8 text-black rounded-lg"
                       required
+                      value={r1Team || ""}
                       onChange={(event) => setR1Team(event.target.value)}
                     />
                   </Form.Control>
-                  <Form.Message className="text-red-600 text-sm" match="valueMissing">
-                    Please enter a team number
-                  </Form.Message>
                 </Form.Field>
                 <Form.Field className="flex flex-col" name="r2Team">
                   <Form.Label>
@@ -101,32 +201,30 @@ export default function Teams() {
                     <input
                       className="p-3 h-8 text-black rounded-lg"
                       required
+                      value={r2Team || ""}
                       onChange={(event) => setR2Team(event.target.value)}
                     />
                   </Form.Control>
-                  <Form.Message className="text-red-600 text-sm" match="valueMissing">
-                    Please enter a team number
-                  </Form.Message>
                 </Form.Field>
               </div>
             </div>
             <div className="h-auto items-center justify-center flex flex-col">
-              <div className="rounded-2xl bg-neutral-800 w-144 h-72 shadow-lg shadow-neutral-700 flex flex-col">
-                <div className="flex flex-row justify-center items-center gap-44 mb-auto mt-20">
+              <div className="rounded-2xl bg-neutral-800 sm:w-144 w-64 sm:h-64 h-40 shadow-lg shadow-neutral-700 flex flex-col">
+                <div className="flex flex-row justify-center items-center sm:gap-44 gap-20 mb-auto sm:mt-16 mt-10">
                   <div className="flex flex-col justify-center items-center">
-                    <h1 className="text-red-600 text-6xl font-bold">
+                    <h1 className="text-red-600 sm:text-6xl text-4xl font-bold">
                       {redChance}%
                     </h1>
                   </div>
                   <div className="flex flex-col justify-center items-center">
-                    <h1 className="text-blue-600 text-6xl font-bold">
+                    <h1 className="text-blue-600 sm:text-6xl text-4xl font-bold">
                       {blueChance}%
                     </h1>
                   </div>
                 </div>
-                <div className="flex flex-row justify-center items-center gap-72 mb-auto mt-5">
+                <div className="flex flex-row justify-center items-center gap-72 mb-auto sm:mt-5 mt-2">
                   <Progress.Root
-                    className="relative overflow-hidden bg-blue-600 rounded-full w-[400px] h-[25px]"
+                    className="relative overflow-hidden bg-blue-600 rounded-full sm:w-[400px] sm:h-[25px] w-[200px] h-[15px]"
                     style={{
                       // Fix overflow clipping in Safari
                       // https://gist.github.com/domske/b66047671c780a238b51c51ffde8d3a0
@@ -142,8 +240,8 @@ export default function Teams() {
                 </div>
               </div>
             </div>
-            <div className="h-auto items-left justify-center flex flex-col">
-              <h1 className="text-6xl font-bold mb-10 text-blue-600">
+            <div className="h-auto items-left justify-center xl:flex flex-col hidden">
+              <h1 className="text-5xl font-bold mb-10 text-blue-600">
                 Team Two
               </h1>
               <div className="gap-5 flex flex-col">
@@ -155,12 +253,10 @@ export default function Teams() {
                     <input
                       className="p-3 h-8 text-black rounded-lg"
                       required
+                      value={b1Team || ""}
                       onChange={(event) => setB1Team(event.target.value)}
                     />
                   </Form.Control>
-                  <Form.Message className="text-red-600 text-sm" match="valueMissing">
-                    Please enter a team number
-                  </Form.Message>
                 </Form.Field>
                 <Form.Field className="flex flex-col" name="b2Team">
                   <Form.Label>
@@ -170,17 +266,15 @@ export default function Teams() {
                     <input
                       className="p-3 h-8 text-black rounded-lg"
                       required
+                      value={b2Team || ""}
                       onChange={(event) => setB2Team(event.target.value)}
                     />
                   </Form.Control>
-                  <Form.Message className="text-red-600 text-sm" match="valueMissing">
-                    Please enter a team number
-                  </Form.Message>
                 </Form.Field>
               </div>
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center mt-16 gap-10">
+          <div className="flex-col justify-center items-center mt-16 gap-10 hidden xl:flex">
             <Form.Field className="flex flex-col" name="seasonId">
               <Form.Label>
                 Season
@@ -189,18 +283,16 @@ export default function Teams() {
                 <select
                   className="p-3 h-15 text-black rounded-lg"
                   required
+                  value={seasonId}
                   onChange={(event) => setSeasonId(parseInt(event.target.value))}
                 >
                   <option value="173">Spin Up 2022-2023</option>
                   <option value="181">Over Under 2023-2024</option>
                 </select>
               </Form.Control>
-              <Form.Message className="text-red-600 text-sm" match="valueMissing">
-                Please select a season
-              </Form.Message>
             </Form.Field>
             <Form.Submit asChild>
-              <CorneredButton>
+              <CorneredButton className={`sm:mt-5 ${allInputsProvided ? "" : "bg-gray-500"}`} disabled={!allInputsProvided}>
                 Predict
               </CorneredButton>
             </Form.Submit>

@@ -1,4 +1,4 @@
-import prisma from "@/utils/DataBase";
+import prisma from "@/lib/db";
 import { NextResponse, NextRequest } from "next/server";
 import { rating, predictWin } from 'openskill'
 
@@ -18,33 +18,54 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const teams = await prisma.teamSeasonProfile.findMany({
+    const r1TeamData = await prisma.teamSeasonProfile.findFirst({
       where: {
-        teamNumber: {
-          in: [r1Team, r2Team, b1Team, b2Team]
-        },
-        seasonId: seasonId
+        teamNumber: r1Team,
       }
     });
 
-    if (teams.length !== 4) {
-      const missingTeams = [r1Team, r2Team, b1Team, b2Team].filter(team => !teams.find(t => t.teamNumber === team));
-      NextResponse.json({error: `Teams ${missingTeams.join(', ')} not found`}, {status: 404});
+    const r2TeamData = await prisma.teamSeasonProfile.findFirst({
+      where: {
+        teamNumber: r2Team,
+      }
+    });
+
+    const b1TeamData = await prisma.teamSeasonProfile.findFirst({
+      where: {
+        teamNumber: b1Team,
+      }
+    });
+
+    const b2TeamData = await prisma.teamSeasonProfile.findFirst({
+      where: {
+        teamNumber: b2Team,
+      }
+    });
+
+    if (!r1TeamData || !r2TeamData || !b1TeamData || !b2TeamData) {
+      const missingTeams = [r1TeamData, r2TeamData, b1TeamData, b2TeamData].filter(team => !team);
+      return NextResponse.json({error: `Teams ${missingTeams.join(', ')} not found`}, {status: 404});
     }
 
-    const rRatings = teams.filter(t => t.teamNumber === r1Team || t.teamNumber === r2Team).map(t => (rating({
+    const rRatings = [r1TeamData, r2TeamData].map(t => (rating({
       mu: t.opr,
       sigma: t.sigma
     })));
-    const bRatings = teams.filter(t => t.teamNumber === b1Team || t.teamNumber === b2Team).map(t => (rating({
+
+    const bRatings = [b1TeamData, b2TeamData].map(t => (rating({
       mu: t.opr,
       sigma: t.sigma
     })));
+
 
     const prediction = predictWin([rRatings, bRatings]);
 
     const rChance = Math.round(prediction[0] * 100);
     const bChance = Math.round(prediction[1] * 100);
+
+    console.log(rRatings, bRatings)
+    console.log(rChance, bChance)
+    console.log(prediction)
 
     return NextResponse.json({ rChance, bChance }, { status: 200 })
   } catch (e) {

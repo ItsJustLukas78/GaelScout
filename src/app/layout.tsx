@@ -18,16 +18,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <Providers>
+      <Providers>
+        <body>
           <Navbar />
+
           <div className="w-full mt-20">
             {children}
             <Analytics />
           </div>
           {/*<Footer />*/}
-        </Providers>
-      </body>
+        </body>
+      </Providers>
     </html>
   )
 }

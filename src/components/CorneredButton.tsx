@@ -1,8 +1,8 @@
 import React from 'react'
 
-export default function CorneredButton({ children }: { children: React.ReactNode }) {
+export default function CorneredButton({ children, className, disabled }: { children: React.ReactNode, className?: string, disabled?: boolean }) {
   return (
-    <button className="bg-white rounded-2xl whitespace-nowrap h-8 w-28 text-black text-xl font-semibold">
+    <button className={`bg-white rounded-2xl whitespace-nowrap h-8 w-28 text-black text-xl font-semibold ${className}`} disabled={disabled}>
       {children}
     </button>
   )
