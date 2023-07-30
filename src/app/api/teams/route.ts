@@ -32,6 +32,9 @@ export async function GET(
       teamCountry: country ? country : undefined,
       teamGrade: grade ? grade : undefined,
     },
+    include: {
+      TeamSeasonProfiles: true
+    },
     skip: (page - 1) * 15,
     take: 15
   });
@@ -50,7 +53,6 @@ export async function GET(
   const lastPage = Math.ceil(count / 15);
 
   const meta = {
-    page: page,
     currentPage: page,
     lastPage: lastPage,
     firstPageUrl: 'https://gaelscout.com/api/teams?page=1',

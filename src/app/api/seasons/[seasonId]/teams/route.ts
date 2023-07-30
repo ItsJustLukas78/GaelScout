@@ -76,7 +76,6 @@ export async function GET(
   const lastPage = Math.ceil(count / 15);
 
   const meta = {
-    page: page,
     currentPage: page,
     lastPage: lastPage,
     firstPageUrl: 'https://gaelscout.com/api/seasons/{seasonId}/teams?page=1',

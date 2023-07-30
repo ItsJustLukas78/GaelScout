@@ -10,11 +10,10 @@ const ratelimit = new Ratelimit({
 });
 
 export default async function middleware(request: NextRequest, event: NextFetchEvent): Promise<Response | undefined> {
-  console.log("middleware");
   const ip = request.ip ?? "127.0.0.1";
 
   if (request.nextUrl.pathname === "/api/blocked") {
-    return NextResponse.next(request);
+    return NextResponse.next();
   }
 
   const { success, pending, limit, reset, remaining } = await ratelimit.limit(`ratelimit_middleware_${ip}`);
@@ -25,9 +24,10 @@ export default async function middleware(request: NextRequest, event: NextFetchE
   res.headers.set("X-RateLimit-Limit", limit.toString());
   res.headers.set("X-RateLimit-Remaining", remaining.toString());
   res.headers.set("X-RateLimit-Reset", reset.toString());
+  console.log("Rate limit: " + remaining.toString() + "/" + limit.toString() + " resets in " + reset.toString() + " seconds")
   return res;
 }
 
 export const config = {
-  matcher: "/api/:path*",
+  matcher: ["/api/predict/:path*", "/api/seasons/:path*", "/api/teams/:path*"]
 };

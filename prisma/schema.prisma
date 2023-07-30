@@ -8,18 +8,18 @@ datasource db {
 }
 
 model TeamProfile {
-  teamId            Int                 @id
-  teamName          String
-  teamNumber        String
-  robotName         String?             @default("No name")
-  teamGrade         String?             @default("No grade")
-  teamOrg           String?             @default("No org")
-  teamCity          String?             @default("No city")
-  teamRegion        String?             @default("No region")
-  teamCountry       String?             @default("No country")
-  programId         Int                 @default(0)
-  programCode       String              @default("No program")
-  TeamSeasonProfile TeamSeasonProfile[]
+  teamId             Int                 @id
+  teamName           String
+  teamNumber         String              @unique
+  robotName          String?             @default("No name")
+  teamGrade          String?             @default("No grade")
+  teamOrg            String?             @default("No org")
+  teamCity           String?             @default("No city")
+  teamRegion         String?             @default("No region")
+  teamCountry        String?             @default("No country")
+  programCode        String              @default("No program")
+  programId          Int                 @default(0)
+  TeamSeasonProfiles TeamSeasonProfile[]
 }
 
 model TeamSeasonProfile {
@@ -55,4 +55,7 @@ model TeamSeasonProfile {
   qualToRegionals         Boolean
   awardQualToWorlds       Boolean
   team                    TeamProfile @relation(fields: [teamId], references: [teamId])
+
+  @@unique([teamId, seasonId])
+  @@unique([teamNumber, seasonId])
 }

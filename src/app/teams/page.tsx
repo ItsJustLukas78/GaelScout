@@ -83,14 +83,14 @@ enum GradeLevel {
 export default function Teams() {
 
   const [teamNumber, setTeamNumber] = useState("");
-  const [country, setCountry] = useState("All" as string);
+  const [country, setCountry] = useState<string>("All");
   const [region, setRegion] = useState("N/A");
   const [gradeLevel, setGradeLevel] = useState("All" as GradeLevel);
   const [eventSKU, setEventSKU] = useState("");
 
-  const [availableRegions, setAvailableRegions] = useState([] as string[]);
+  const [availableRegions, setAvailableRegions] = useState<string[]>([]);
 
-  const [currentResults, setCurrentResults] = useState([] as TeamResult[]);
+  const [currentResults, setCurrentResults] = useState<TeamResult[]>([]);
   const [currentResultsCount, setCurrentResultsCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
