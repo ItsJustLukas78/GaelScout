@@ -274,7 +274,10 @@ let schema = makeExecutableSchema({
 schema = rateLimitDirectiveTransformer(schema);
 
 
-const server = new ApolloServer({schema});
+const server = new ApolloServer({
+  schema,
+  introspection: true,
+});
 
 // req has the type NextRequest
 const handler = startServerAndCreateNextHandler<NextRequest>(server, { context: async req => ({ req }) });
