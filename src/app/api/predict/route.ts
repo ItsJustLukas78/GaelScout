@@ -111,7 +111,13 @@ export async function GET(request: NextRequest) {
     const rChance = Math.round(prediction[0] * 100);
     const bChance = Math.round(prediction[1] * 100);
 
-    return NextResponse.json({ rChance, bChance }, { status: 200 })
+    return NextResponse.json({ rChance, bChance }, {
+      status: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, OPTIONS',
+      }
+    })
   } catch (e) {
     console.error(e);
     return NextResponse.json({error: 'An error occurred while processing your request'}, {status: 500});

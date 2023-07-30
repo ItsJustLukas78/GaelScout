@@ -49,7 +49,7 @@ export default function Navbar() {
             <NavButton href="/">Home</NavButton>
             <NavButton href="/teams">Teams</NavButton>
             <NavButton href="/predict">Predict</NavButton>
-            <NavButton href="/api">API</NavButton>
+            <NavButton href="/api-docs">API</NavButton>
             <NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>
             <NavButton href="/about">About</NavButton>
             {/*<button*/}

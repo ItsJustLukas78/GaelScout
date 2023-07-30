@@ -4,15 +4,15 @@ import { NextRequest } from 'next/server';
 import { gql } from 'graphql-tag';
 import prisma from "@/lib/db";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import { shield } from 'graphql-shield';
-import { applyMiddleware } from 'graphql-middleware';
-import {
-  createRateLimitDirective,
-  RedisStore,
-  getGraphQLRateLimiter,
-  createRateLimitRule,
-} from 'graphql-rate-limit';
-import redis from 'redis';
+// import { shield } from 'graphql-shield';
+// import { applyMiddleware } from 'graphql-middleware';
+// import {
+//   createRateLimitDirective,
+//   RedisStore,
+//   getGraphQLRateLimiter,
+//   createRateLimitRule,
+// } from 'graphql-rate-limit';
+// import redis from 'redis';
 import { GraphQLSchemaContext } from "@apollo/server";
 import { defaultKeyGenerator, rateLimitDirective } from "graphql-rate-limit-directive";
 import Redis from 'ioredis';
@@ -280,9 +280,19 @@ const server = new ApolloServer({schema});
 const handler = startServerAndCreateNextHandler<NextRequest>(server, { context: async req => ({ req }) });
 
 export async function GET(request: NextRequest) {
-  return handler(request);
+  const response = await handler(request);
+
+  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+
+  return response;
 }
 
 export async function POST(request: NextRequest) {
-  return handler(request);
+  const response = await handler(request);
+
+  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+
+  return response;
 }
