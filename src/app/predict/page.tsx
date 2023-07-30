@@ -42,9 +42,6 @@ export default function Teams() {
 
   const predictMatch = (event: any) => {
     event.preventDefault();
-    console.log("submit")
-
-    console.log(r1Team, r2Team, b1Team, b2Team);
 
     if (!r1Team || !r2Team || !b1Team || !b2Team) {
       alert("Please fill out all team numbers");
@@ -69,7 +66,6 @@ export default function Teams() {
   }
 
   useEffect(() => {
-    console.log(r1Team, r2Team, b1Team, b2Team)
     if (r1Team && r2Team && b1Team && b2Team) {
       setAllInputsProvided(true);
     } else {

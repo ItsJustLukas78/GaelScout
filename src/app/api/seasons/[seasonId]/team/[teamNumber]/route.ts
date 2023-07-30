@@ -30,6 +30,36 @@ async function formatTeamSeasonProfile(teamSeasonProfile: any) {
   }
 }
 
+/**
+ * @swagger
+ * /api/seasons/{seasonId}/team/{teamNumber}:
+ *  get:
+ *    tags:
+ *      - Seasons
+ *    description: Returns the team season profile with the given team number in the given season
+ *    parameters:
+ *      - in: path
+ *        name: seasonId
+ *        required: true
+ *        description: The season ID
+ *        schema:
+ *        type: integer
+ *      - in: path
+ *        name: teamNumber
+ *        required: true
+ *        description: The team number
+ *        schema:
+ *        type: string
+ *    responses:
+ *      200:
+ *        description: The team season profile with the given team number in the given season
+ *      400:
+ *        description: Team number or Season ID not provided
+ *      404:
+ *        description: Team not found
+ *      500:
+ *        description: Internal server error
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { seasonId: string, teamNumber: string } }
@@ -56,5 +86,10 @@ export async function GET(
 
   const prettyJson = JSON.stringify(formattedTeam, null, 2);
 
-  return NextResponse.json(prettyJson, { status: 200 })
+  return new Response(prettyJson, {
+    status: 200,
+    headers: {
+      'content-type': 'application/json',
+    }
+  });
 }

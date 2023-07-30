@@ -2,6 +2,54 @@ import prisma from "@/lib/db";
 import { NextResponse, NextRequest } from "next/server";
 import { rating, predictWin } from 'openskill'
 
+/**
+ * @swagger
+ * /api/predict:
+ *  get:
+ *    tags:
+ *      - Predict
+ *    description: Returns the predicted outcome of a match
+ *    responses:
+ *      200:
+ *        description: Predicted outcome of a match
+ *      400:
+ *        description: Team ID or Season ID not provided
+ *      404:
+ *        description: Team not found
+ *      500:
+ *        description: Internal server error
+ *    parameters:
+ *      - name: r1Team
+ *        in: query
+ *        description: Red 1 Team Number
+ *        required: true
+ *        schema:
+ *        type: string
+ *      - name: r2Team
+ *        in: query
+ *        description: Red 2 Team Number
+ *        required: true
+ *        schema:
+ *        type: string
+ *      - name: b1Team
+ *        in: query
+ *        description: Blue 1 Team Number
+ *        required: true
+ *        schema:
+ *        type: string
+ *      - name: b2Team
+ *        in: query
+ *        description: Blue 2 Team Number
+ *        required: true
+ *        schema:
+ *        type: string
+ *      - name: seasonId
+ *        in: query
+ *        description: Season ID
+ *        required: true
+ *        schema:
+ *        type: integer
+ */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.nextUrl);
 
@@ -62,10 +110,6 @@ export async function GET(request: NextRequest) {
 
     const rChance = Math.round(prediction[0] * 100);
     const bChance = Math.round(prediction[1] * 100);
-
-    console.log(rRatings, bRatings)
-    console.log(rChance, bChance)
-    console.log(prediction)
 
     return NextResponse.json({ rChance, bChance }, { status: 200 })
   } catch (e) {

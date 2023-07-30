@@ -156,16 +156,12 @@ export default function Teams() {
 
     searchParams.append("page", page.toString());
 
-    console.log("searchParams: ", searchParams.toString());
-
     fetch(`/api/teams?${searchParams.toString()}`).then((response) => {
      response.json().then((data) => {
        const meta = data.meta;
        const totalResults = meta.total;
        const results = data.data;
        const resultCount = results.length;
-
-       console.log(results);
 
        if (resultCount === 0) {
          setCurrentResults([]);

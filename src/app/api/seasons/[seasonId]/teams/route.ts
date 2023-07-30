@@ -43,6 +43,36 @@ async function formatTeamSeasonProfile(teamSeasonProfile: any) {
   }
 }
 
+/**
+ * @swagger
+ * /api/seasons/{seasonId}/teams:
+ *  get:
+ *    tags:
+ *      - Seasons
+ *    description: Returns team season profiles in the given season
+ *    parameters:
+ *      - in: path
+ *        name: seasonId
+ *        required: true
+ *        description: The season ID
+ *        schema:
+ *        type: integer
+ *      - in: query
+ *        name: page
+ *        required: false
+ *        description: The page number
+ *        schema:
+ *        type: integer
+ *        default: 1
+ *        minimum: 1
+ *    responses:
+ *      200:
+ *        description: The team with the given team number in the given season
+ *      400:
+ *        description: Page is not a positive integer or Season ID not provided
+ *      500:
+ *        description: Internal server error
+ */
 export async function GET(
   request: NextRequest, { params }: { params: { seasonId: string } }
 ) {

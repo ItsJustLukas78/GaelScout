@@ -11,6 +11,58 @@ import { NextResponse, NextRequest } from "next/server";
 //   windowMs: 5 * 1000, // 5 seconds
 //   max: 10
 
+
+/**
+ * @swagger
+ * /api/teams:
+ *  get:
+ *    tags:
+ *      - Teams
+ *    description: Returns teams
+ *    parameters:
+ *      - in: query
+ *        name: teamNumber
+ *        required: false
+ *        description: The team number
+ *        schema:
+ *        type: string
+ *      - in: query
+ *        name: region
+ *        required: false
+ *        description: The team region
+ *        schema:
+ *        type: string
+ *      - in: query
+ *        name: country
+ *        required: false
+ *        description: The team country
+ *        schema:
+ *        type: string
+ *      - in: query
+ *        name: grade
+ *        required: false
+ *        description: The team grade
+ *        schema:
+ *        type: string
+ *      - in: query
+ *        name: page
+ *        required: false
+ *        description: The page number for pagination
+ *        schema:
+ *        type: integer
+ *        example: 1
+ *        default: 1
+ *        minimum: 1
+ *    responses:
+ *      200:
+ *        description: The team with the given team number in the given season
+ *      400:
+ *        description: Team number not provided
+ *      404:
+ *        description: Team not found
+ *      500:
+ *        description: Internal server error
+ */
 export async function GET(
   request: NextRequest
 ) {
@@ -31,9 +83,6 @@ export async function GET(
       teamRegion: region ? region : undefined,
       teamCountry: country ? country : undefined,
       teamGrade: grade ? grade : undefined,
-    },
-    include: {
-      TeamSeasonProfiles: true
     },
     skip: (page - 1) * 15,
     take: 15
