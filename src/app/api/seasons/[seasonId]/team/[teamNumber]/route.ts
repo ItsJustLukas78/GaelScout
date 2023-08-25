@@ -11,6 +11,8 @@ async function formatTeamSeasonProfile(teamSeasonProfile: any) {
     ccwm: teamSeasonProfile.ccwm,
     openSkill: teamSeasonProfile.openSkill,
     openSkillRank: teamSeasonProfile.openSkillRank,
+    openSkillMu: teamSeasonProfile.mu,
+    openSkillSigma: teamSeasonProfile.sigma,
     eventCount: teamSeasonProfile.eventCount,
     topProgSkills: teamSeasonProfile.topProgSkills,
     topDriverSkills: teamSeasonProfile.topDriverSkills,

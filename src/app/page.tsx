@@ -24,10 +24,10 @@ export default function Home() {
             </Link>
           </div>
           <div className="max-w-lg xl:inline-flex hidden">
-            <Image priority src="/homeblobs.png" alt="GaelSuite Logo" width="600" height="600"/>
+            <Image priority={true} src="/homeblobs.png" alt="GaelSuite Logo" width="600" height="600"/>
           </div>
           <div className="max-w-lg inline-flex xl:hidden">
-            <Image priority src="/homeblobs.png" alt="GaelSuite Logo" width="400" height="400"/>
+            <Image priority={true} src="/homeblobs.png" alt="GaelSuite Logo" width="400" height="400"/>
           </div>
         </div>
         <div className="h-auto my-15 items-center justify-center flex flex-col lg:flex-row lg:space-x-8">

@@ -133,6 +133,8 @@ const typeDefs = [
     sigma: Float!
     openSkill: Float!
     openSkillRank: Int!
+    openSkillMu: Float!
+    openSkillSigma: Float!
     opr: Float!
     dpr: Float!
     ccwm: Float!
@@ -285,9 +287,10 @@ const handler = startServerAndCreateNextHandler<NextRequest>(server, { context: 
 export async function GET(request: NextRequest) {
   const response = await handler(request);
 
-  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set("Access-Control-Allow-Origin", "https://studio.apollographql.com");
   response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+  response.headers.set("Access-Control-Allow-Credentials", "true");
 
   console.log(response.headers);
 
@@ -297,9 +300,10 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const response = await handler(request);
 
-  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set("Access-Control-Allow-Origin", "https://studio.apollographql.com");
   response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+  response.headers.set("Access-Control-Allow-Credentials", "true");
 
   console.log(response.headers);
 
@@ -309,9 +313,10 @@ export async function POST(request: NextRequest) {
 export async function OPTIONS(request: NextRequest) {
   const response = await handler(request);
 
-  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set("Access-Control-Allow-Origin", "https://studio.apollographql.com");
   response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+  response.headers.set("Access-Control-Allow-Credentials", "true");
 
   console.log(response.headers);
 
