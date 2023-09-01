@@ -7,15 +7,15 @@ export default function TeamResult({ teamNumber, teamName, programCode, teamGrad
       href={`/teams/${teamNumber}`}
       className="rounded-2xl bg-neutral-200 w-full p-3 min-h-28 h-auto shadow-lg shadow-neutral-500 flex flex-col"
     >
-      <h1 className="xs:text-md text-sm font-bold text-gray-900 mb-2">
+      <h1 className="xs:text-lg text-sm font-bold text-gray-900 mb-2">
         {teamNumber} - {teamName} | {programCode} {teamGrade}
       </h1>
       <div className="flex flex-col gap-2">
         <h2 className="xs:text-sm text-xs font-semibold text-gray-900">
-          Location: {location}
+          <strong>Location:</strong> {location}
         </h2>
         <h2 className="xs:text-sm text-xs font-semibold text-gray-900">
-          Organization: {teamOrg}
+          <strong>Organization:</strong> {teamOrg}
         </h2>
       </div>
     </Link>

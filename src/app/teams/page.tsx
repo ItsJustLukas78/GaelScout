@@ -313,7 +313,7 @@ export default function Teams() {
             </Form.Submit>
           </Form.Root>
         </div>
-        <div className="h-auto items-center justify-center flex flex-col =">
+        <div className="h-auto items-center justify-center flex flex-col">
           <div className="overflow-auto rounded-2xl xl:w-144 lg:w-120 xs:w-112 w-80 h-120 gap-4 flex flex-col items-center bg-neutral-800 p-8">
             {resultsLoading &&
               <>

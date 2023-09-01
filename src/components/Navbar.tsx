@@ -24,10 +24,11 @@ export default function Navbar() {
         <div className="hidden lg:inline-flex lg:gap-11 xl:gap-20">
           <NavButton href="/">Home</NavButton>
           <NavButton href="/teams">Teams</NavButton>
+          <NavButton href="/profiles">Profiles</NavButton>
           <NavButton href="/predict">Predict</NavButton>
           <NavButton href="/api-docs">API</NavButton>
           <NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>
-          <NavButton href="/about">About</NavButton>
+          {/*<NavButton href="/about">About</NavButton>*/}
           {isLoaded && isSignedIn ? <UserButton afterSignOutUrl="/"/> :
             <NavButton href="/sign-in">Sign In</NavButton>
           }

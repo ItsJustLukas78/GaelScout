@@ -143,13 +143,13 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
               <div className="mx-2 flex flex-col gap-5">
                 <div className="flex flex-row gap-5">
                   <h3 className="text-xl">
-                    <strong>OPR:</strong> {seasonStats.opr ? seasonStats.opr : "N/A"}
+                    <strong>OPR:</strong> {seasonStats.opr ? seasonStats.opr.toFixed(4) : "N/A"}
                   </h3>
                   <h3 className="text-xl">
-                    <strong>DPR:</strong> {seasonStats.dpr ? seasonStats.dpr : "N/A"}
+                    <strong>DPR:</strong> {seasonStats.dpr ? seasonStats.dpr.toFixed(4) : "N/A"}
                   </h3>
                   <h3 className="text-xl">
-                    <strong>CCWM:</strong> {seasonStats.ccwm ? seasonStats.ccwm : "N/A"}
+                    <strong>CCWM:</strong> {seasonStats.ccwm ? seasonStats.ccwm.toFixed(4) : "N/A"}
                   </h3>
                 </div>
                 <div className="flex flex-row gap-5">
@@ -162,10 +162,10 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                 </div>
                 <div className="flex flex-row gap-5">
                   <h3 className="text-xl">
-                    <strong>Qual Win:</strong> {seasonStats.qualMatchWinPercentage ? `${seasonStats.qualMatchWinPercentage}%` : "N/A"}
+                    <strong>Qual Win:</strong> {seasonStats.qualMatchWinPercentage ? `${seasonStats.qualMatchWinPercentage.toFixed(2)}%` : "N/A"}
                   </h3>
                   <h3 className="text-xl">
-                    <strong>Elim Win:</strong> {seasonStats.elimMatchWinPercentage ? `${seasonStats.elimMatchWinPercentage}%` : "N/A"}
+                    <strong>Elim Win:</strong> {seasonStats.elimMatchWinPercentage ? `${seasonStats.elimMatchWinPercentage.toFixed(2)}%` : "N/A"}
                   </h3>
                 </div>
                 <div className="flex flex-row gap-5">

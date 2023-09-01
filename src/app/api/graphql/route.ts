@@ -292,8 +292,6 @@ export async function GET(request: NextRequest) {
   response.headers.set("Access-Control-Allow-Headers", "Content-Type");
   response.headers.set("Access-Control-Allow-Credentials", "true");
 
-  console.log(response.headers);
-
   return response;
 }
 
@@ -305,8 +303,6 @@ export async function POST(request: NextRequest) {
   response.headers.set("Access-Control-Allow-Headers", "Content-Type");
   response.headers.set("Access-Control-Allow-Credentials", "true");
 
-  console.log(response.headers);
-
   return response;
 }
 
@@ -317,8 +313,6 @@ export async function OPTIONS(request: NextRequest) {
   response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   response.headers.set("Access-Control-Allow-Headers", "Content-Type");
   response.headers.set("Access-Control-Allow-Credentials", "true");
-
-  console.log(response.headers);
 
   return response;
 }
