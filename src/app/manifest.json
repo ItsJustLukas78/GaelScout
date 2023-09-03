@@ -1,0 +1,10 @@
+{
+    "display" : "standalone",
+    "scope" : "/",
+    "start_url" : "/",
+    "name" : "GaelScout",
+    "short_name" : "GaelScout",
+    "description" : "Scouting for VRC made easy",
+    "background_color": "#141414",
+    "theme_color": "#141414"
+}
