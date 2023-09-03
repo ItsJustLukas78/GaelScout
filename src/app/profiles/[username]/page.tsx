@@ -5,6 +5,7 @@ import * as Form from "@radix-ui/react-form/dist";
 import CorneredButton from "@/components/CorneredButton";
 import TeamResultSkeleton from "@/components/TeamResultSkeleton";
 import {AiOutlineDoubleLeft, AiOutlineDoubleRight, AiOutlineLeft, AiOutlineRight} from "react-icons/ai";
+import {toast} from "react-toastify";
 
 interface UserProfile {
   id: string
@@ -25,6 +26,9 @@ export default function Userprofile({ params }: { params: { username: string } }
   const getUserProfile = () => {
     fetch(`/api/users/${username.toLowerCase()}`).then((response) => {
       response.json().then((data) => {
+        if (data.error) {
+          toast.error(data.error)
+        }
         setUserProfile(data.user)
       });
     }).catch((error) => {

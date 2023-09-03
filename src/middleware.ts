@@ -18,6 +18,13 @@ const verifyRatelimit = new Ratelimit({
   analytics: true,
 });
 
+const verifyGenRatelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.cachedFixedWindow(3, "30s"),
+  ephemeralCache: new Map(),
+  analytics: true,
+});
+
 
 export default async function middleware(request: NextRequest, event: NextFetchEvent): Promise<Response | undefined> {
   const ip = request.ip ?? "127.0.0.1";
@@ -39,7 +46,19 @@ export default async function middleware(request: NextRequest, event: NextFetchE
     return res;
   }
 
-  if (request.nextUrl.pathname.startsWith('/api/verify')) {
+  if (request.nextUrl.pathname.startsWith('/api/verify/generate')) {
+    const { success, pending, limit, reset, remaining } = await verifyGenRatelimit.limit(`ratelimit_middleware_verify_gen_${ip}`);
+    event.waitUntil(pending);
+
+    // instead of redirecting to /api/blocked, we return a 429 error
+    const res = success ? NextResponse.next() : NextResponse.json({error: 'Too many requests'}, {status: 429});
+
+    res.headers.set("X-RateLimit-Limit", limit.toString());
+    res.headers.set("X-RateLimit-Remaining", remaining.toString());
+    res.headers.set("X-RateLimit-Reset", reset.toString());
+    console.log("Rate limit: " + remaining.toString() + "/" + limit.toString() + " resets at " + reset.toString())
+    return res;
+  } else if (request.nextUrl.pathname.startsWith('/api/verify/')) {
     const { success, pending, limit, reset, remaining } = await verifyRatelimit.limit(`ratelimit_middleware_verify_${ip}`);
     event.waitUntil(pending);
 

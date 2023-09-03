@@ -47,6 +47,24 @@ export default function Verify() {
       },
     ).then((response) => {
       response.json().then((data) => {
+        if (data.error) {
+          toast.error(data.error);
+          if (response.headers.get("X-RateLimit-Reset")) {
+            const resetTime = parseInt(response.headers.get("X-RateLimit-Reset") as string);
+
+            const currentTime = Date.now()
+            const timeToWait = resetTime - currentTime
+
+            const timeToWaitSeconds = Math.floor(timeToWait / 1000) + 1
+
+            toast.info(`Your code will generate in: ${timeToWaitSeconds}`);
+
+            setTimeout(() => {
+              return generateVerificationCode(e);
+            } , timeToWaitSeconds * 1000);
+          }
+          return;
+        }
         setVerificationCode(data.verificationCode);
       });
     }).catch((error) => {
