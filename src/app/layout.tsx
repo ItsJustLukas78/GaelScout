@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description: 'Scouting for VRC made easy',
   appleWebApp: {
     title: 'GaelScout',
-    statusBarStyle: 'black-translucent',
+    statusBarStyle: 'black',
     startupImage: [
       '/public/iphone14portrait.png',
     ],
