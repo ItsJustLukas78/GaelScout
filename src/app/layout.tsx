@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 export const metadata: Metadata = {
+  manifest: 'https://gaelscout.com/manifest.json',
   title: 'GaelScout',
   description: 'Scouting for VRC made easy',
   appleWebApp: {
