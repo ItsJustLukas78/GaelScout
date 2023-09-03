@@ -13,6 +13,13 @@ import 'react-toastify/dist/ReactToastify.css';
 export const metadata: Metadata = {
   title: 'GaelScout',
   description: 'Scouting for VRC made easy',
+  appleWebApp: {
+    title: 'GaelScout',
+    statusBarStyle: 'black-translucent',
+    startupImage: [
+      '/public/iphone14portrait.png',
+    ],
+  },
 }
 
 export default function RootLayout({
