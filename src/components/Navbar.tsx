@@ -15,21 +15,24 @@ export default function Navbar() {
 
   return (
     <div>
-      <div className="z-50 h-20 w-full fixed top-0 bg-GSGray bg-opacity-50 lg:justify-center items-center xl:gap-16 lg:gap-10 inline-flex bg-gradient-to-b
+      <div className="z-30 h-20 w-full fixed top-0 bg-GSGray bg-opacity-50 lg:justify-center items-center xl:gap-16 lg:gap-10 inline-flex bg-gradient-to-b
    from-neutral-800  to-GSGray">
         <div className="ml-5 inline-flex items-center">
           <Image src="/GS_logo.png" alt="GaelSuite Logo" width="50" height="50" />
           <NavButton href="/">GaelScout</NavButton>
         </div>
-        <div className="hidden lg:inline-flex lg:gap-11 xl:gap-20">
+        <div className="hidden lg:inline-flex lg:gap-11 xl:gap-16">
           <NavButton href="/">Home</NavButton>
           <NavButton href="/teams">Teams</NavButton>
           <NavButton href="/profiles">Profiles</NavButton>
           <NavButton href="/predict">Predict</NavButton>
+          <NavButton href="/verify">Verify</NavButton>
           <NavButton href="/api-docs">API</NavButton>
           <NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>
           {/*<NavButton href="/about">About</NavButton>*/}
-          {isLoaded && isSignedIn ? <UserButton afterSignOutUrl="/"/> :
+          {isLoaded && isSignedIn ? <UserButton
+              afterSignOutUrl="/"
+            /> :
             <NavButton href="/sign-in">Sign In</NavButton>
           }
         </div>
@@ -46,13 +49,15 @@ export default function Navbar() {
       <div className={`${expanded ? "block" : "hidden"} lg:hidden`}>
         <div className="z-50 h-full w-full fixed top-20 bg-GSGray bg-opacity-100 lg:justify-center
          bg-gradient-to-b" >
-          <div onClick={() => setExpanded(!expanded)} className="mt-5 ml-10 flex flex-col gap-10">
+          <div onClick={() => setExpanded(!expanded)} className="mt-5 ml-10 flex flex-col gap-8">
             <NavButton href="/">Home</NavButton>
             <NavButton href="/teams">Teams</NavButton>
+            <NavButton href="/profiles">Profiles</NavButton>
             <NavButton href="/predict">Predict</NavButton>
+            <NavButton href="/verify">Verify</NavButton>
             <NavButton href="/api-docs">API</NavButton>
             <NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>
-            <NavButton href="/about">About</NavButton>
+            {/*<NavButton href="/about">About</NavButton>*/}
             {/*<button*/}
             {/*  className="whitespace-nowrap w-fit text-white text-2xl font-semibold h-auto"*/}
             {/*  onClick={() => {*/}
@@ -63,7 +68,9 @@ export default function Navbar() {
             {/*    }*/}
             {/*  }}*/}
             {/*>*/}
-            {isLoaded && isSignedIn ? <UserButton afterSignOutUrl="/"/> :
+            {isLoaded && isSignedIn ? <UserButton
+                afterSignOutUrl="/"
+              /> :
             <NavButton href="/sign-in">Sign In</NavButton>
             }
           </div>

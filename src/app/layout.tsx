@@ -5,6 +5,10 @@ import Footer from '@/components/Footer'
 import Providers from '@/components/Providers'
 import type { Metadata } from 'next'
 import React from "react";
+import {Slide, ToastContainer} from "react-toastify";
+
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export const metadata: Metadata = {
   title: 'GaelScout',
@@ -21,12 +25,24 @@ export default function RootLayout({
       <Providers>
         <body>
           <Navbar />
-
           <div className="w-full mt-20">
             {children}
             <Analytics />
           </div>
           {/*<Footer />*/}
+          <ToastContainer
+            position="bottom-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            transition={Slide}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
         </body>
       </Providers>
     </html>

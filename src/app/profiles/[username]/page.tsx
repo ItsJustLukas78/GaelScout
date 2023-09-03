@@ -25,7 +25,6 @@ export default function Userprofile({ params }: { params: { username: string } }
   const getUserProfile = () => {
     fetch(`/api/users/${username.toLowerCase()}`).then((response) => {
       response.json().then((data) => {
-        console.log(data.user)
         setUserProfile(data.user)
       });
     }).catch((error) => {

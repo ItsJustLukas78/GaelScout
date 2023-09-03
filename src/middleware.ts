@@ -1,13 +1,23 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
+// import { authMiddleware } from "@clerk/nextjs";
+// import createMiddleware from "next-intl/middleware";
 
-const ratelimit = new Ratelimit({
+const generalRatelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.cachedFixedWindow(10, "10s"),
   ephemeralCache: new Map(),
   analytics: true,
 });
+
+const verifyRatelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.cachedFixedWindow(1, "30s"),
+  ephemeralCache: new Map(),
+  analytics: true,
+});
+
 
 export default async function middleware(request: NextRequest, event: NextFetchEvent): Promise<Response | undefined> {
   const ip = request.ip ?? "127.0.0.1";
@@ -16,18 +26,34 @@ export default async function middleware(request: NextRequest, event: NextFetchE
     return NextResponse.next();
   }
 
-  const { success, pending, limit, reset, remaining } = await ratelimit.limit(`ratelimit_middleware_${ip}`);
-  event.waitUntil(pending);
+  if (request.nextUrl.pathname.startsWith('/api/predict') || request.nextUrl.pathname.startsWith('/api/seasons') || request.nextUrl.pathname.startsWith('/api/teams')) {
+    const { success, pending, limit, reset, remaining } = await generalRatelimit.limit(`ratelimit_middleware_${ip}`);
+    event.waitUntil(pending);
 
-  const res = success ? NextResponse.next() : NextResponse.redirect(new URL("/api/blocked", request.url));
+    const res = success ? NextResponse.next() : NextResponse.redirect(new URL("/api/blocked", request.url));
 
-  res.headers.set("X-RateLimit-Limit", limit.toString());
-  res.headers.set("X-RateLimit-Remaining", remaining.toString());
-  res.headers.set("X-RateLimit-Reset", reset.toString());
-  console.log("Rate limit: " + remaining.toString() + "/" + limit.toString() + " resets in " + reset.toString() + " seconds")
-  return res;
+    res.headers.set("X-RateLimit-Limit", limit.toString());
+    res.headers.set("X-RateLimit-Remaining", remaining.toString());
+    res.headers.set("X-RateLimit-Reset", reset.toString());
+    console.log("Rate limit: " + remaining.toString() + "/" + limit.toString() + " resets at " + reset.toString())
+    return res;
+  }
+
+  if (request.nextUrl.pathname.startsWith('/api/verify')) {
+    const { success, pending, limit, reset, remaining } = await verifyRatelimit.limit(`ratelimit_middleware_verify_${ip}`);
+    event.waitUntil(pending);
+
+    // instead of redirecting to /api/blocked, we return a 429 error
+    const res = success ? NextResponse.next() : NextResponse.json({error: 'Too many requests'}, {status: 429});
+
+    res.headers.set("X-RateLimit-Limit", limit.toString());
+    res.headers.set("X-RateLimit-Remaining", remaining.toString());
+    res.headers.set("X-RateLimit-Reset", reset.toString());
+    console.log("Rate limit: " + remaining.toString() + "/" + limit.toString() + " resets at " + reset.toString())
+    return res;
+  }
 }
 
 export const config = {
-  matcher: ["/api/predict/:path*", "/api/seasons/:path*", "/api/teams/:path*"]
+  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };

@@ -143,43 +143,43 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
               <div className="mx-2 flex flex-col gap-5">
                 <div className="flex flex-row gap-5">
                   <h3 className="text-xl">
-                    <strong>OPR:</strong> {seasonStats.opr ? seasonStats.opr.toFixed(4) : "N/A"}
+                    <strong>OPR:</strong> {seasonStats.opr != undefined ? seasonStats.opr.toFixed(4) : "N/A"}
                   </h3>
                   <h3 className="text-xl">
-                    <strong>DPR:</strong> {seasonStats.dpr ? seasonStats.dpr.toFixed(4) : "N/A"}
+                    <strong>DPR:</strong> {seasonStats.dpr != undefined ? seasonStats.dpr.toFixed(4) : "N/A"}
                   </h3>
                   <h3 className="text-xl">
-                    <strong>CCWM:</strong> {seasonStats.ccwm ? seasonStats.ccwm.toFixed(4) : "N/A"}
-                  </h3>
-                </div>
-                <div className="flex flex-row gap-5">
-                  <h3 className="text-xl">
-                    <strong>OpenSkill:</strong> {seasonStats.openSkill ? seasonStats.openSkill.toFixed(4) : "N/A"}
-                  </h3>
-                  <h3 className="text-xl">
-                    <strong>OpenSkill Rank:</strong> {seasonStats.openSkillRank ? seasonStats.openSkillRank : "N/A"}
+                    <strong>CCWM:</strong> {seasonStats.ccwm != undefined ? seasonStats.ccwm.toFixed(4) : "N/A"}
                   </h3>
                 </div>
                 <div className="flex flex-row gap-5">
                   <h3 className="text-xl">
-                    <strong>Qual Win:</strong> {seasonStats.qualMatchWinPercentage ? `${seasonStats.qualMatchWinPercentage.toFixed(2)}%` : "N/A"}
+                    <strong>OpenSkill:</strong> {seasonStats.openSkill != undefined ? seasonStats.openSkill.toFixed(4) : "N/A"}
                   </h3>
                   <h3 className="text-xl">
-                    <strong>Elim Win:</strong> {seasonStats.elimMatchWinPercentage ? `${seasonStats.elimMatchWinPercentage.toFixed(2)}%` : "N/A"}
+                    <strong>OpenSkill Rank:</strong> {seasonStats.openSkillRank != undefined ? seasonStats.openSkillRank : "N/A"}
                   </h3>
                 </div>
                 <div className="flex flex-row gap-5">
                   <h3 className="text-xl">
-                    <strong>Skills:</strong> {seasonStats.topTotalSkills ? seasonStats.topTotalSkills : "N/A"}
+                    <strong>Qual Win:</strong> {seasonStats.qualMatchWinPercentage != undefined ? `${seasonStats.qualMatchWinPercentage.toFixed(2)}%` : "N/A"}
                   </h3>
                   <h3 className="text-xl">
-                    <strong>Driver:</strong> {seasonStats.topDriverSkills ? seasonStats.topDriverSkills : "N/A"}
+                    <strong>Elim Win:</strong> {seasonStats.elimMatchWinPercentage != undefined ? `${seasonStats.elimMatchWinPercentage.toFixed(2)}%` : "N/A"}
+                  </h3>
+                </div>
+                <div className="flex flex-row gap-5">
+                  <h3 className="text-xl">
+                    <strong>Skills:</strong> {seasonStats.topTotalSkills != undefined ? seasonStats.topTotalSkills : "N/A"}
                   </h3>
                   <h3 className="text-xl">
-                    <strong>Program:</strong> {seasonStats.topProgSkills ? seasonStats.topProgSkills : "N/A"}
+                    <strong>Driver:</strong> {seasonStats.topDriverSkills != undefined ? seasonStats.topDriverSkills : "N/A"}
                   </h3>
                   <h3 className="text-xl">
-                    <strong>Rank:</strong> {seasonStats.skillsRank ? seasonStats.skillsRank : "N/A"}
+                    <strong>Program:</strong> {seasonStats.topProgSkills != undefined ? seasonStats.topProgSkills : "N/A"}
+                  </h3>
+                  <h3 className="text-xl">
+                    <strong>Rank:</strong> {seasonStats.skillsRank != undefined ? seasonStats.skillsRank : "N/A"}
                   </h3>
                 </div>
                 <div className="flex flex-row gap-5">
@@ -192,7 +192,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                 </div>
                 <div className="flex flex-row gap-5">
                   <h3 className="text-xl">
-                    <strong>Event Count:</strong> {seasonStats.eventCount ? seasonStats.eventCount : "N/A"}
+                    <strong>Event Count:</strong> {seasonStats.eventCount != undefined ? seasonStats.eventCount : "N/A"}
                   </h3>
                 </div>
               </div>

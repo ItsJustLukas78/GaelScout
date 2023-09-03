@@ -4,6 +4,7 @@ import Image from 'next/image'
 import * as Form from '@radix-ui/react-form';
 import * as Progress from '@radix-ui/react-progress';
 import React, {useEffect, useState} from "react";
+import { toast } from "react-toastify";
 
 export default function Teams() {
   const [r1Team, setR1Team] = useState< string | null >(null);
@@ -48,6 +49,8 @@ export default function Teams() {
       return;
     }
 
+    toast.info("Predicting match...");
+
     const searchParams = new URLSearchParams();
 
     searchParams.append('r1Team', r1Team.toUpperCase());
@@ -56,8 +59,13 @@ export default function Teams() {
     searchParams.append('b2Team', b2Team.toUpperCase());
     searchParams.append('seasonId', String(seasonId));
 
+
     fetch(`/api/predict?${searchParams.toString()}`).then((response) => {
       response.json().then((data) => {
+        if (data.error) {
+          toast.error(data.error);
+          return;
+        }
         setPrediction(data);
       });
     }).catch((error) => {
@@ -158,8 +166,8 @@ export default function Teams() {
                 required
                 onChange={(event) => setSeasonId(parseInt(event.target.value))}
               >
-                <option value="173">Spin Up 2022-2023</option>
-                <option value="181">Over Under 2023-2024</option>
+                <option id="173" value="173">Spin Up 2022-2023</option>
+                <option id="181" value="181">Over Under 2023-2024</option>
               </select>
             </Form.Control>
           </Form.Field>
@@ -279,16 +287,15 @@ export default function Teams() {
                 <select
                   className="p-3 h-15 text-black rounded-lg"
                   required
-                  value={seasonId}
                   onChange={(event) => setSeasonId(parseInt(event.target.value))}
                 >
-                  <option value="173">Spin Up 2022-2023</option>
-                  <option value="181">Over Under 2023-2024</option>
+                  <option id="173" value="173">Spin Up 2022-2023</option>
+                  <option id="181" value="181">Over Under 2023-2024</option>
                 </select>
               </Form.Control>
             </Form.Field>
             <Form.Submit asChild>
-              <CorneredButton className={`sm:mt-5 ${allInputsProvided ? "" : "bg-gray-500"}`} disabled={!allInputsProvided}>
+              <CorneredButton className={`sm:mt-5 disabled:bg-gray-500`} disabled={!allInputsProvided}>
                 Predict
               </CorneredButton>
             </Form.Submit>

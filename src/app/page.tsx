@@ -14,10 +14,10 @@ export default function Home() {
             <p className="sm:text-xl text-base">
               Providing VEX Robotics Competition teams an accessible resource of data and
               analysis on other teams to get an upper hand in scouting, and winning competitions.
-              Manage a team page, where you can share more about your team, and communicate with others.
+              Manage a team page, where you can share more about your team and robot, and communicate with others.
             </p>
             <p className="sm:text-xl text-base">
-              Manage a team, communicate with other users, and gain access to our API.
+              Sign up to get access to more features, such as editing your team page after verification, and communicating with other users.
             </p>
             <Link href="sign-up">
               <CorneredButton>Sign Up</CorneredButton>

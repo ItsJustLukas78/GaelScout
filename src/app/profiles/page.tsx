@@ -40,8 +40,6 @@ export default function Profiles() {
 
     fetch(`/api/users?query=${usernameSearch}`).then((response) => {
       response.json().then((data) => {
-        console.log(data)
-        console.log(data.users)
         setCurrentResults(data.users);
         setResultsLoading(false);
       });
@@ -59,20 +57,20 @@ export default function Profiles() {
 
   return (
     <main>
-      <div className="w-full items-center justify-center flex md:flex-row flex-col my-44 lg:gap-20 md:gap-7 gap-16">
+      <div className="w-full items-center justify-center flex md:flex-row flex-col my-44 lg:gap-20 md:gap-12 gap-16">
         <div className="h-auto items-left justify-center flex flex-col lg:max-w-min md:max-w-[250px] xs:max-w-min max-w-[300px]">
           <h1 className="lg:text-8xl md:text-6xl xs:text-8xl text-6xl font-bold mb-10">
             User Profiles
           </h1>
           <input
-            className="p-1 h-8 text-black rounded-lg"
+            className="p-1 h-8 text-black rounded-lg lg:min-w-[400px] md:min-w-[200px] s:min-w-[100px] xs:min-w-[100px] min-w-[200px]"
             type="text"
             placeholder="Search for a user..."
             onChange={(e) => setUsernameSearch(e.target.value)}
           />
         </div>
         <div className="h-auto items-center justify-center flex flex-col">
-          <div className="overflow-auto rounded-2xl xl:w-144 lg:w-120 xs:w-112 w-80 h-120 gap-4 flex flex-col items-center bg-neutral-800 p-8">
+          <div className="overflow-auto rounded-2xl xl:w-144 lg:w-120 w-96 h-120 gap-4 flex flex-col items-center bg-neutral-800 p-8">
             {resultsLoading &&
               <>
                 <UserResultSkeleton />

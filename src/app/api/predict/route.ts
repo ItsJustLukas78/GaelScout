@@ -66,33 +66,54 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    let unFoundTeams = [];
+
     const r1TeamData = await prisma.teamSeasonProfile.findFirst({
       where: {
         teamNumber: r1Team,
+        seasonId: seasonId,
       }
     });
+
+    if (!r1TeamData) {
+      unFoundTeams.push(r1Team);
+    }
 
     const r2TeamData = await prisma.teamSeasonProfile.findFirst({
       where: {
         teamNumber: r2Team,
+        seasonId: seasonId,
       }
     });
+
+    if (!r2TeamData) {
+      unFoundTeams.push(r2Team);
+    }
 
     const b1TeamData = await prisma.teamSeasonProfile.findFirst({
       where: {
         teamNumber: b1Team,
+        seasonId: seasonId,
       }
     });
+
+    if (!b1TeamData) {
+      unFoundTeams.push(b1Team);
+    }
 
     const b2TeamData = await prisma.teamSeasonProfile.findFirst({
       where: {
         teamNumber: b2Team,
+        seasonId: seasonId,
       }
     });
 
+    if (!b2TeamData) {
+      unFoundTeams.push(b2Team);
+    }
+
     if (!r1TeamData || !r2TeamData || !b1TeamData || !b2TeamData) {
-      const missingTeams = [r1TeamData, r2TeamData, b1TeamData, b2TeamData].filter(team => !team);
-      return NextResponse.json({error: `Teams ${missingTeams.join(', ')} not found`}, {status: 404});
+      return NextResponse.json({error: `Teams ${unFoundTeams.join(', ')} not found`}, {status: 404});
     }
 
     const rRatings = [r1TeamData, r2TeamData].map(t => (rating({

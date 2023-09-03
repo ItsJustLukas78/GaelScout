@@ -5,14 +5,14 @@ export default function Navbutton({ external, href, children }: { external?: boo
   return <>
     {!external ? (
       <Link
-        className="whitespace-nowrap w-fit text-white text-2xl font-semibold h-auto"
+        className="whitespace-nowrap w-fit text-white text-xl font-semibold h-auto"
         href={href}
       >
         {children}
       </Link>
     ) : (
       <a
-        className="whitespace-nowrap w-fit text-white text-2xl font-semibold h-auto"
+        className="whitespace-nowrap w-fit text-white text-xl font-semibold h-auto"
         target="_blank"
         rel="noopener noreferrer"
         href={href}
