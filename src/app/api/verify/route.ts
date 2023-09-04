@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { clerkClient } from "@clerk/nextjs";
-import {getTeamRobotName} from "@/utils/puppeteer";
+import { getTeamRobotNameCheerio } from "@/utils/scraper";
 
 
 export async function POST(request: NextRequest) {
@@ -29,14 +29,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({error: 'Verification code not found'}, {status: 404});
     }
 
-    const currentTeamRobotName = await getTeamRobotName(teamNumber);
+    const currentTeamRobotName = await getTeamRobotNameCheerio(teamNumber);
 
     if (!currentTeamRobotName) {
       return NextResponse.json({error: 'Team or robot name not found'}, {status: 404});
     }
 
     if (verificationCode !== currentTeamRobotName) {
-      return NextResponse.json({error: 'Verification code does not match'}, {status: 400});
+      return NextResponse.json({error: `Verification code does not match, found ${currentTeamRobotName}`}, {status: 400});
     }
 
     await clerkClient.users.updateUserMetadata(clerkUser.id, {
