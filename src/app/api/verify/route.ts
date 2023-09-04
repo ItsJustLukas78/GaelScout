@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (verificationCode !== currentTeamRobotName) {
-      return NextResponse.json({error: `Verification code does not match, found ${currentTeamRobotName}`}, {status: 400});
+      return NextResponse.json({error: `Verification code does not match, found "${currentTeamRobotName}"`}, {status: 400});
     }
 
     await clerkClient.users.updateUserMetadata(clerkUser.id, {

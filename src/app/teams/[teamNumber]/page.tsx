@@ -73,7 +73,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
             </h1>
             <div className="md:gap-14 gap-5 flex md:flex-row flex-col min-w-auto">
               <div className="gap-5 flex md:flex-col flex-row min-w-fit">
-                <div className="flex flex-col">
+                <div className="flex flex-col md:w-auto w-[49%]">
                   <h3 className="text-xl font-bold">
                     Team Name:
                   </h3>
@@ -81,7 +81,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                     {teamProfile.teamName ? teamProfile.teamName : "N/A"}
                   </h3>
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col md:w-auto w-[49%]">
                   <h3 className="text-xl font-bold">
                     Robot Name:
                   </h3>
@@ -91,7 +91,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                 </div>
               </div>
               <div className="gap-5 flex md:flex-col flex-row min-w-fit">
-                <div className="flex flex-col">
+                <div className="flex flex-col md:w-auto w-[49%]">
                   <h3 className="text-xl font-bold">
                     Organization:
                   </h3>
@@ -99,7 +99,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                     {teamProfile.teamOrg ? teamProfile.teamOrg : "N/A"}
                   </h3>
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col md:w-auto w-[49%]">
                   <h3 className="text-xl font-bold">
                     Location:
                   </h3>
@@ -109,7 +109,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                 </div>
               </div>
               <div className="gap-5 flex md:flex-col flex-row min-w-fit">
-                <div className="flex flex-col">
+                <div className="flex flex-col md:w-auto w-[49%]">
                   <h3 className="text-xl font-bold">
                     Program:
                   </h3>
@@ -117,7 +117,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                     {teamProfile.programCode ? teamProfile.programCode : "N/A"}
                   </h3>
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col md:w-auto w-[49%]">
                   <h3 className="text-xl font-bold">
                     Grade:
                   </h3>
@@ -144,60 +144,137 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
               </select>
             </div>
             {seasonStats ? <>
-              <div className="mx-2 flex flex-col gap-5">
-                <div className="flex flex-row gap-5">
-                  <h3 className="text-xl">
-                    <strong>OPR:</strong> {seasonStats.opr != undefined ? seasonStats.opr.toFixed(4) : "N/A"}
-                  </h3>
-                  <h3 className="text-xl">
-                    <strong>DPR:</strong> {seasonStats.dpr != undefined ? seasonStats.dpr.toFixed(4) : "N/A"}
-                  </h3>
-                  <h3 className="text-xl">
-                    <strong>CCWM:</strong> {seasonStats.ccwm != undefined ? seasonStats.ccwm.toFixed(4) : "N/A"}
-                  </h3>
+              <div className="mx-2 flex flex-row gap-5 flex-wrap md:justify-between justify-center">
+                <div className="flex flex-col gap-5 xl:w-[49%] md:w-[47%] w-full bg-neutral-700 p-3 rounded-lg">
+                  <div className="flex flex-row justify-between">
+                    <h3 className="text-xl font-bold">
+                      OPR:
+                    </h3>
+                    <h3 className="text-xl">
+                      {seasonStats.opr != undefined ? seasonStats.opr.toFixed(4) : "N/A"}
+                    </h3>
+                  </div>
+                  <hr/>
+                  <div className="flex flex-row justify-between">
+                    <h3 className="text-xl font-bold">
+                      DPR:
+                    </h3>
+                    <h3 className="text-xl">
+                      {seasonStats.dpr != undefined ? seasonStats.dpr.toFixed(4) : "N/A"}
+                    </h3>
+                  </div>
+                  <hr/>
+                  <div className="flex flex-row justify-between">
+                    <h3 className="text-xl font-bold">
+                      CCWM:
+                    </h3>
+                    <h3 className="text-xl">
+                      {seasonStats.ccwm != undefined ? seasonStats.ccwm.toFixed(4) : "N/A"}
+                    </h3>
+                  </div>
                 </div>
-                <div className="flex flex-row gap-5">
-                  <h3 className="text-xl">
-                    <strong>OpenSkill:</strong> {seasonStats.openSkill != undefined ? seasonStats.openSkill.toFixed(4) : "N/A"}
-                  </h3>
-                  <h3 className="text-xl">
-                    <strong>OpenSkill Rank:</strong> {seasonStats.openSkillRank != undefined ? seasonStats.openSkillRank : "N/A"}
-                  </h3>
+                <div className="flex flex-col gap-5 xl:w-[49%] md:w-[47%] w-full bg-neutral-700 p-3 rounded-lg">
+                  <div className="flex flex-row justify-between">
+                    <h3 className="text-xl font-bold">
+                      OpenSkill:
+                    </h3>
+                    <h3 className="text-xl">
+                      {seasonStats.openSkill != undefined ? seasonStats.openSkill.toFixed(4) : "N/A"}
+                    </h3>
+                  </div>
+                  <hr/>
+                  <div className="flex flex-row justify-between">
+                    <h3 className="text-xl font-bold">
+                      OpenSkill Rank:
+                    </h3>
+                    <h3 className="text-xl">
+                      {seasonStats.openSkillRank != undefined ? seasonStats.openSkillRank : "N/A"}
+                    </h3>
+                  </div>
                 </div>
-                <div className="flex flex-row gap-5">
-                  <h3 className="text-xl">
-                    <strong>Qual Win:</strong> {seasonStats.qualMatchWinPercentage != undefined ? `${seasonStats.qualMatchWinPercentage.toFixed(2)}%` : "N/A"}
-                  </h3>
-                  <h3 className="text-xl">
-                    <strong>Elim Win:</strong> {seasonStats.elimMatchWinPercentage != undefined ? `${seasonStats.elimMatchWinPercentage.toFixed(2)}%` : "N/A"}
-                  </h3>
+                <div className="flex flex-col gap-5 xl:w-[49%] md:w-[47%] w-full bg-neutral-700 p-3 rounded-lg">
+                  <div className="flex flex-row justify-between">
+                    <h3 className="text-xl font-bold">
+                      Qual Win:
+                    </h3>
+                    <h3 className="text-xl">
+                      {seasonStats.qualMatchWinPercentage != undefined ? `${seasonStats.qualMatchWinPercentage.toFixed(2)}%` : "N/A"}
+                    </h3>
+                  </div>
+                  <hr/>
+                  <div className="flex flex-row justify-between">
+                    <h3 className="text-xl font-bold">
+                      Elim Win:
+                    </h3>
+                    <h3 className="text-xl">
+                      {seasonStats.elimMatchWinPercentage != undefined ? `${seasonStats.elimMatchWinPercentage.toFixed(2)}%` : "N/A"}
+                    </h3>
+                  </div>
+                  <hr/>
+                  <div className="flex flex-row justify-between">
+                    <h3 className="text-xl font-bold">
+                      Event Count:
+                    </h3>
+                    <h3 className="text-xl">
+                      {seasonStats.eventCount != undefined ? seasonStats.eventCount : "N/A"}
+                    </h3>
+                  </div>
                 </div>
-                <div className="flex flex-row gap-5">
-                  <h3 className="text-xl">
-                    <strong>Skills:</strong> {seasonStats.topTotalSkills != undefined ? seasonStats.topTotalSkills : "N/A"}
-                  </h3>
-                  <h3 className="text-xl">
-                    <strong>Driver:</strong> {seasonStats.topDriverSkills != undefined ? seasonStats.topDriverSkills : "N/A"}
-                  </h3>
-                  <h3 className="text-xl">
-                    <strong>Program:</strong> {seasonStats.topProgSkills != undefined ? seasonStats.topProgSkills : "N/A"}
-                  </h3>
-                  <h3 className="text-xl">
-                    <strong>Rank:</strong> {seasonStats.skillsRank != undefined ? seasonStats.skillsRank : "N/A"}
-                  </h3>
+                <div className="flex flex-col gap-5 xl:w-[49%] md:w-[47%] w-full bg-neutral-700 p-3 rounded-lg">
+                  <div className="flex flex-row justify-between">
+                    <h3 className="text-xl font-bold">
+                      Skills:
+                    </h3>
+                    <h3 className="text-xl">
+                      {seasonStats.topTotalSkills != undefined ? seasonStats.topTotalSkills : "N/A"}
+                    </h3>
+                  </div>
+                  <hr/>
+                  <div className="flex flex-row justify-between">
+                    <h3 className="text-xl font-bold">
+                      Skills Rank:
+                    </h3>
+                    <h3 className="text-xl">
+                      {seasonStats.skillsRank != undefined ? seasonStats.skillsRank : "N/A"}
+                    </h3>
+                  </div>
+                  <hr/>
+                  <div className="flex flex-row justify-between">
+                    <h3 className="text-xl font-bold">
+                      Driver:
+                    </h3>
+                    <h3 className="text-xl">
+                      {seasonStats.topDriverSkills != undefined ? seasonStats.topDriverSkills : "N/A"}
+                    </h3>
+                  </div>
+                  <hr/>
+                  <div className="flex flex-row justify-between">
+                    <h3 className="text-xl font-bold">
+                      Program:
+                    </h3>
+                    <h3 className="text-xl">
+                      {seasonStats.topProgSkills != undefined ? seasonStats.topProgSkills : "N/A"}
+                    </h3>
+                  </div>
                 </div>
-                <div className="flex flex-row gap-5">
-                  <h3 className="text-xl">
-                    <strong>Regionals Qual:</strong> {seasonStats.qualToRegionals ? "Yes" : "No"}
-                  </h3>
-                  <h3 className="text-xl">
-                    <strong>Award Worlds Qual:</strong> {seasonStats.awardQualToWorlds ? "Yes" : "No"}
-                  </h3>
-                </div>
-                <div className="flex flex-row gap-5">
-                  <h3 className="text-xl">
-                    <strong>Event Count:</strong> {seasonStats.eventCount != undefined ? seasonStats.eventCount : "N/A"}
-                  </h3>
+                <div className="flex flex-col gap-5 xl:w-[49%] md:w-[47%] w-full bg-neutral-700 p-3 rounded-lg">
+                  <div className="flex flex-row justify-between">
+                    <h3 className="text-xl font-bold">
+                      Regionals Qual:
+                    </h3>
+                    <h3 className="text-xl">
+                      {seasonStats.qualToRegionals ? "Yes" : "No"}
+                    </h3>
+                  </div>
+                  <hr/>
+                  <div className="flex flex-row justify-between">
+                    <h3 className="text-xl font-bold">
+                      Award Worlds Qual:
+                    </h3>
+                    <h3 className="text-xl">
+                      {seasonStats.awardQualToWorlds ? "Yes" : "No"}
+                    </h3>
+                  </div>
                 </div>
               </div>
             </> :
