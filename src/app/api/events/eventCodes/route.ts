@@ -1,5 +1,8 @@
+export const runtime = 'edge'
+export const preferredRegion = 'auto'
 import { NextResponse, NextRequest } from "next/server";
 import * as cheerio from 'cheerio';
+
 
 export async function GET(request: NextRequest) {
   try {
@@ -38,14 +41,22 @@ export async function GET(request: NextRequest) {
       newSearchParams.append('page', page);
     }
 
-
     const REURL: string = `https://www.robotevents.com/robot-competitions/vex-robotics-competition/?${newSearchParams}`;
 
     const response = await fetch(REURL, {
       headers: {
-       "Authorization": "Bearer " + process.env.ROBOTEVENTS_API_KEY,
-      }
+        'User-Agent': "GaelScout",
+        'Accept': 'text/html',
+        'credentials': 'same-origin',
+        'Authorization': `Bearer ${process.env.ROBOT_EVENTS_TOKEN}`
+      },
+      signal: AbortSignal.timeout(10000)
     });
+
+    if (!response.ok) {
+      console.log(response);
+      return NextResponse.json({error: 'An error occurred while processing your request'}, {status: 500});
+    }
 
     const html = await response.text();
 
