@@ -44,7 +44,6 @@ export const getTeamRobotNameCheerio = async (teamNumber: string) => {
 
   try {
     const team_robot_name = $('th:contains("Robot Name:")').parent().find('td').text();
-    console.log(team_robot_name, "hi")
     return team_robot_name;
   } catch (error) {
     console.log(error);

@@ -33,7 +33,7 @@ export default async function middleware(request: NextRequest, event: NextFetchE
     return NextResponse.next();
   }
 
-  if (request.nextUrl.pathname.startsWith('/api/predict') || request.nextUrl.pathname.startsWith('/api/seasons') || request.nextUrl.pathname.startsWith('/api/teams')) {
+  if (request.nextUrl.pathname.startsWith('/api/predict') || request.nextUrl.pathname.startsWith('/api/seasons') || request.nextUrl.pathname.startsWith('/api/teams') || request.nextUrl.pathname.startsWith('/api/events')) {
     const { success, pending, limit, reset, remaining } = await generalRatelimit.limit(`ratelimit_middleware_${ip}`);
     event.waitUntil(pending);
 

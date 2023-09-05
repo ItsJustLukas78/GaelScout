@@ -1,9 +1,5 @@
 "use client"
 import React, {useEffect, useState} from "react";
-import * as Form from "@radix-ui/react-form/dist";
-import CorneredButton from "@/components/CorneredButton";
-import TeamResultSkeleton from "@/components/TeamResultSkeleton";
-import {AiOutlineDoubleLeft, AiOutlineDoubleRight, AiOutlineLeft, AiOutlineRight} from "react-icons/ai";
 import {toast} from "react-toastify";
 
 interface TeamProfile {

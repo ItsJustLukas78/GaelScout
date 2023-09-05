@@ -4,8 +4,6 @@ import { MdVerified } from 'react-icons/md'
 
 export default function TeamResult({ username, firstName, lastName, image_url, has_image, public_metadata, unsafe_metadata } :
 { username: string, firstName: string | null, lastName: string | null, image_url: string | null, has_image: boolean, public_metadata: {}, unsafe_metadata: {} }) {
-  console.log(public_metadata)
-  // @ts-ignore
   // @ts-ignore
   return (
     <Link

@@ -24,6 +24,7 @@ export default function Navbar() {
         <div className="hidden lg:inline-flex lg:gap-11 xl:gap-16">
           <NavButton href="/">Home</NavButton>
           <NavButton href="/teams">Teams</NavButton>
+          <NavButton href="/events">Events</NavButton>
           <NavButton href="/profiles">Profiles</NavButton>
           <NavButton href="/predict">Predict</NavButton>
           <NavButton href="/verify">Verify</NavButton>
@@ -52,6 +53,7 @@ export default function Navbar() {
           <div onClick={() => setExpanded(!expanded)} className="mt-5 ml-10 flex flex-col gap-8">
             <NavButton href="/">Home</NavButton>
             <NavButton href="/teams">Teams</NavButton>
+            <NavButton href="/events">Events</NavButton>
             <NavButton href="/profiles">Profiles</NavButton>
             <NavButton href="/predict">Predict</NavButton>
             <NavButton href="/verify">Verify</NavButton>

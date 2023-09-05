@@ -1,6 +1,5 @@
 'use client'
 import CorneredButton from '@/components/CorneredButton'
-import Image from 'next/image'
 import * as Form from '@radix-ui/react-form';
 import * as Progress from '@radix-ui/react-progress';
 import React, {useEffect, useState} from "react";

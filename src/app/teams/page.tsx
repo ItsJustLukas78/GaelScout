@@ -2,10 +2,8 @@
 import CorneredButton from '@/components/CorneredButton'
 import TeamResult from "@/components/TeamResult";
 import TeamResultSkeleton from "@/components/TeamResultSkeleton";
-import Image from 'next/image'
 import * as Form from '@radix-ui/react-form';
 import {useEffect, useState} from "react";
-import {count} from "types-ramda";
 import { AiOutlineLeft, AiOutlineRight, AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
 
 const countries: any = {
@@ -283,7 +281,7 @@ export default function Teams() {
                   onChange={(e) => setGradeLevel(e.target.value as GradeLevel)}
                   disabled={teamNumber !== ""}
                 >
-                  {Object.keys(GradeLevel).map((gradeLevel: string) => {
+                  {Object.values(GradeLevel).map((gradeLevel: string) => {
                     return (
                       <option
                         key={gradeLevel}
