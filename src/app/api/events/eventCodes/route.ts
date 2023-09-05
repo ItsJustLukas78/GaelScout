@@ -41,7 +41,11 @@ export async function GET(request: NextRequest) {
 
     const REURL: string = `https://www.robotevents.com/robot-competitions/vex-robotics-competition/?${newSearchParams}`;
 
-    const response = await fetch(REURL);
+    const response = await fetch(REURL, {
+      headers: {
+       "Authorization": "Bearer " + process.env.ROBOTEVENTS_API_KEY,
+      }
+    });
 
     const html = await response.text();
 
