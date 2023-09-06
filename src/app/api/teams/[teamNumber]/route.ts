@@ -1,5 +1,7 @@
+// @ts-nocheck
 import prisma from "@/lib/db";
 import { NextResponse, NextRequest } from "next/server";
+import {getTeamObject} from "@/utils/RobotEventsAPI";
 
 
 /**
@@ -36,24 +38,45 @@ export async function GET(
     return NextResponse.json({ error: 'Team number not provided' }, { status: 400 });
   }
 
-  const team = await prisma.teamProfile.findFirst({
+  let team = await prisma.teamProfile.findFirst({
     where: {
       teamNumber: teamNumber,
     }
   });
 
+  // update if last updated date is old ?? cache!!
+
   if (!team) {
-    return NextResponse.json({ error: 'Team not found' }, { status: 404 });
+    team = await getTeamObject({teamNumber: teamNumber});
+
+    if (!team) {
+      return NextResponse.json({ error: 'Team not found' }, { status: 404 });
+    }
+
+    console.log("Team was created from API")
+
+    team = await prisma.teamProfile.create({
+      data: {
+        teamId: team.id,
+        teamName: team.team_name,
+        teamNumber: team.number,
+        robotName: team.robot_name,
+        teamGrade: team.grade,
+        teamOrg: team.organization,
+        teamCity: team.location.city,
+        teamRegion: team.location.region,
+        teamCountry: team.location.country,
+        programCode: team.program.code,
+        programId: team.program.id,
+      }
+    });
   }
 
-  const prettyJson: string = JSON.stringify(team, null, 2);
-
-  return new Response(prettyJson, {
+  return NextResponse.json({ team }, {
     status: 200,
     headers: {
-      'content-type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
     }
-  });
+  })
 }

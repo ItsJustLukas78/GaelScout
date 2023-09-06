@@ -6,7 +6,7 @@ import {
 } from "react-icons/gi";
 import React from "react";
 import { UserButton, useUser } from "@clerk/nextjs";
-
+import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 
 export default function Navbar() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -15,20 +15,21 @@ export default function Navbar() {
 
   return (
     <div>
-      <div className="z-30 h-20 w-full fixed top-0 bg-GSGray bg-opacity-50 lg:justify-center items-center xl:gap-16 lg:gap-10 inline-flex bg-gradient-to-b
+      <div className="z-30 h-20 w-full fixed top-0 bg-GSGray bg-opacity-50 lg:justify-center items-center 2xl:gap-16 xl:gap-12 lg:gap-10 inline-flex bg-gradient-to-b
    from-neutral-800  to-GSGray">
         <div className="ml-5 inline-flex items-center">
           <Image src="/GS_logo.png" alt="GaelSuite Logo" width="50" height="50" />
           <NavButton href="/">GaelScout</NavButton>
         </div>
-        <div className="hidden lg:inline-flex lg:gap-11 xl:gap-16">
+        <div className="hidden lg:inline-flex lg:gap-9 2xl:gap-16 xl:gap-14">
           <NavButton href="/">Home</NavButton>
           <NavButton href="/teams">Teams</NavButton>
           <NavButton href="/events">Events</NavButton>
           <NavButton href="/profiles">Profiles</NavButton>
+          <NavButton href="/Rankings">Rankings</NavButton>
           <NavButton href="/predict">Predict</NavButton>
           <NavButton href="/verify">Verify</NavButton>
-          <NavButton href="/api-docs">API</NavButton>
+          {/*<NavButton href="/api-docs">API</NavButton>*/}
           <NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>
           {/*<NavButton href="/about">About</NavButton>*/}
           {isLoaded && isSignedIn ? <UserButton
@@ -55,9 +56,10 @@ export default function Navbar() {
             <NavButton href="/teams">Teams</NavButton>
             <NavButton href="/events">Events</NavButton>
             <NavButton href="/profiles">Profiles</NavButton>
+            <NavButton href="/Rankings">Rankings</NavButton>
             <NavButton href="/predict">Predict</NavButton>
             <NavButton href="/verify">Verify</NavButton>
-            <NavButton href="/api-docs">API</NavButton>
+            {/*<NavButton href="/api-docs">API</NavButton>*/}
             <NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>
             {/*<NavButton href="/about">About</NavButton>*/}
             {/*<button*/}

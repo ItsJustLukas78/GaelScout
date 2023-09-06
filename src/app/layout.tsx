@@ -33,7 +33,7 @@ export default function RootLayout({
       <Providers>
         <body>
           <Navbar />
-          <div className="w-full mt-20">
+          <div className="w-full">
             {children}
             <Analytics />
           </div>

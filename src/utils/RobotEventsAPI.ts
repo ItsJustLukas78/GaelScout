@@ -120,27 +120,36 @@ async function apiCall(url: string, headers: object, params?: object): Promise<a
 //   }
 // }
 //
-// export async function getTeamObject(team_id: number): Promise<any | null> {
-//   const url = `https://www.robotevents.com/api/v2/teams/${team_id}`;
-//   const new_headers = {
-//     "accept": "application/json",
-//     "Authorization": "Bearer " + API_KEY,
-//   };
-//
-//   try {
-//     const team = await apiCall(url, new_headers);
-//
-//     if (!team) {
-//       console.error("Warning: No team could be found");
-//       return null;
-//     }
-//
-//     return team;
-//   } catch (error) {
-//     console.error(error);
-//     return null;
-//   }
-// }
+export async function getTeamObject({teamId, teamNumber} : {teamId?: number | string, teamNumber?: string}): Promise<any | null> {
+  if (!teamId && !teamNumber) {
+    console.error("Warning: No team id or team number could be found");
+    return null;
+  }
+
+  const url = `https://www.robotevents.com/api/v2/teams/${teamId ? teamId : ''}`
+  const new_headers = {
+    "accept": "application/json",
+    "Authorization": "Bearer " + API_KEY,
+  };
+
+  const new_params = teamNumber ? {number: teamNumber} : undefined;
+
+  try {
+    const team = await apiCall(url, new_headers, new_params);
+
+    if (!team) {
+      console.error("Warning: No team could be found");
+      return null;
+    }
+
+    const returnedTeam = (teamNumber ? team.data[0] : team)
+
+    return returnedTeam;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
 //
 // export async function getTeamSeasonId(team_id: number): Promise<number | null> {
 //   const url = "https://www.robotevents.com/api/v2/seasons";

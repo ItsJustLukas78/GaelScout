@@ -5,6 +5,7 @@ import TeamResultSkeleton from "@/components/TeamResultSkeleton";
 import * as Form from '@radix-ui/react-form';
 import {useEffect, useState} from "react";
 import { AiOutlineLeft, AiOutlineRight, AiOutlineDoubleLeft, AiOutlineDoubleRight } from "react-icons/ai";
+import {toast} from "react-toastify";
 
 const countries: any = {
 "Commonly Selected": [{"value":244,"data-code":"US","name":"United States"},{"value":49,"data-code":"CN","name":"China"},{"value":39,"data-code":"CA","name":"Canada"},{"value":14,"data-code":"AU","name":"Australia"},{"value":82,"data-code":"GB","name":"United Kingdom"},{"value":107,"data-code":"IE","name":"Ireland"},{"value":180,"data-code":"NZ","name":"New Zealand"},{"value":239,"data-code":"TW","name":"Taiwan"},{"value":100,"data-code":"HK","name":"Hong Kong"},{"value":164,"data-code":"MX","name":"Mexico"}],
@@ -84,7 +85,6 @@ export default function Teams() {
   const [country, setCountry] = useState<string>("All");
   const [region, setRegion] = useState("N/A");
   const [gradeLevel, setGradeLevel] = useState("All" as GradeLevel);
-  const [eventSKU, setEventSKU] = useState("");
 
   const [availableRegions, setAvailableRegions] = useState<string[]>([]);
 
@@ -119,8 +119,31 @@ export default function Teams() {
 
     const searchParams = new URLSearchParams();
 
-    if (teamNumber) {
-      searchParams.append("teamNumber", teamNumber.toUpperCase());
+    if (teamNumber && teamNumber !== "") {
+      fetch(`/api/teams/${teamNumber.toUpperCase()}`).then((response) => {
+        response.json().then((data) => {
+          if (data.error) {
+            toast.error(data.error)
+            setResultsLoading(false);
+            setCurrentResults([]);
+            setCurrentResultsCount(0);
+            setTotalPages(Math.ceil(0 / 15));
+            return;
+          }
+          setResultsLoading(false);
+          setCurrentResults([data.team]);
+          setCurrentResultsCount(1);
+          setTotalPages(Math.ceil(1 / 15));
+          return;
+        });
+      }).catch((error) => {
+        console.log(error);
+        setResultsLoading(false);
+        setCurrentResults([]);
+        setCurrentResultsCount(0);
+        setTotalPages(Math.ceil(0 / 15));
+        return;
+      });
     }
 
     if (country !== "All") {
@@ -141,10 +164,6 @@ export default function Teams() {
       searchParams.append("gradeLevel", gradeLevel);
     }
 
-    if (eventSKU) {
-      searchParams.append("eventSKU", eventSKU);
-    }
-
     if (!page) {
       page = 1;
       setCurrentPage(1);
@@ -156,6 +175,15 @@ export default function Teams() {
 
     fetch(`/api/teams?${searchParams.toString()}`).then((response) => {
      response.json().then((data) => {
+       if (data.error) {
+         toast.error(data.error)
+         setResultsLoading(false);
+         setCurrentResults([]);
+         setCurrentResultsCount(0);
+         setTotalPages(Math.ceil(0 / 15));
+         return;
+       }
+
        const meta = data.meta;
        const totalResults = meta.total;
        const results = data.data;
@@ -167,24 +195,18 @@ export default function Teams() {
          setTotalPages(0);
          setResultsLoading(false);
        } else {
-         const formattedResults = results.map((result: any) => {
-           return {
-             teamNumber: result.teamNumber,
-             teamName: result.teamName,
-             programCode: result.programCode,
-             teamGrade: result.teamGrade,
-             teamCity: result.teamCity,
-             teamRegion: result.teamRegion,
-             teamCountry: result.teamCountry,
-             teamOrg: result.teamOrg,
-           }
-         });
-
          setResultsLoading(false);
-         setCurrentResults(formattedResults);
+         setCurrentResults(results);
          setCurrentResultsCount(totalResults);
          setTotalPages(Math.ceil(totalResults / 15));
        }
+     }).catch((error) => {
+        console.log(error);
+        setResultsLoading(false);
+        setCurrentResults([]);
+        setCurrentResultsCount(0);
+        setTotalPages(Math.ceil(0 / 15));
+        return;
      });
     });
   }
@@ -292,18 +314,6 @@ export default function Teams() {
                     )
                   })}
                 </select>
-              </Form.Control>
-            </Form.Field>
-            <Form.Field className="flex flex-col" name="teamNumber">
-              <Form.Label>
-                Event SKU
-              </Form.Label>
-              <Form.Control asChild>
-                <input
-                  className="p-1 h-8 text-black rounded-lg"
-                  onChange={(e) => setEventSKU(e.target.value)}
-                  disabled={teamNumber !== ""}
-                />
               </Form.Control>
             </Form.Field>
             <Form.Submit asChild>
