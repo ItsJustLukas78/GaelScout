@@ -80,7 +80,6 @@ export async function GET(
   const page = parseInt(searchParams.get('page') || '1');
   const perPage = parseInt(searchParams.get('perPage') || '15') > 50 ? 50 : parseInt(searchParams.get('perPage') || '15');
   const seasonId = parseInt(params.seasonId);
-  const eventCode = searchParams.get('eventCode') || undefined;
 
   const teamNumber: string[] = [];
 

@@ -4,6 +4,7 @@ import {toast} from "react-toastify";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import CheckboxDiv from "@/components/CheckboxDiv";
 import * as RadioGroup from '@radix-ui/react-radio-group';
+import {val} from "cheerio/lib/api/attributes";
 
 
 interface Event {
@@ -124,6 +125,8 @@ export default function EventPage({ params }: { params: { eventCode: string } })
 
         setEventObject(data.events[0]);
 
+        toast.info("Loading teams...");
+
         // Get teams
         fetch(`/api/events/${data.events[0].id}/teams`).then((response) => {
           response.json().then((data) => {
@@ -154,6 +157,8 @@ export default function EventPage({ params }: { params: { eventCode: string } })
       toast.error("Event not found");
       return;
     }
+
+    toast.info("Generating sheet...");
 
     enum ShortHandToFull {
       "opr" = "OPR",
@@ -199,44 +204,25 @@ export default function EventPage({ params }: { params: { eventCode: string } })
       awardQualToWorlds: awqtwChecked,
     }
 
-
-    const seasonId = eventObject.season.id
-
-    const searchParams = new URLSearchParams(params as any);
-
-    searchParams.set("page", "1");
-    searchParams.set("perPage", "50");
-
-    paticipatingTeams.forEach((team) => {
-      searchParams.append("teamNumber[]", team.teamNumber);
-    });
-
-    const getTeamSeasonProfiles = async (currentTeamSeasonProfiles: TeamSeasonProfile[] = []): Promise<null | TeamSeasonProfile[]> => {
+    const getTeamSeasonProfiles = async (): Promise<null | TeamSeasonProfile[]> => {
       try {
-        const response = await fetch(`/api/seasons/${seasonId}/seasonProfiles/?${searchParams.toString()}`)
+        const response = await fetch(`/api/events/${eventObject.id}/seasonProfiles/?seasonId=${eventObject.season.id}`)
         const data = await response.json()
-
 
         if (data.error) {
           toast.error(data.error);
           return null;
         }
 
-        currentTeamSeasonProfiles = currentTeamSeasonProfiles.concat(data.data);
+        return data.teamSeasonProfiles;
 
-        if (data.meta.currentPage < data.meta.lastPage) {
-          searchParams.set("page", (data.meta.currentPage + 1).toString());
-          return getTeamSeasonProfiles(currentTeamSeasonProfiles);
-        } else {
-          return currentTeamSeasonProfiles;
-        }
       } catch (e) {
         toast.error("An error occurred while getting team season profiles");
         return null;
       }
     }
 
-    getTeamSeasonProfiles([]).then((teamSeasonProfiles: TeamSeasonProfile[] | null) => {
+    getTeamSeasonProfiles().then((teamSeasonProfiles: TeamSeasonProfile[] | null) => {
       if (teamSeasonProfiles === null) {
         toast.error("An error occurred while getting team season profiles");
         return;
@@ -302,23 +288,33 @@ export default function EventPage({ params }: { params: { eventCode: string } })
         }
       })
 
-      teamSeasonProfilesWithTeam.map((team) => {
+      teamSeasonProfilesWithTeam.map((team: TeamResult | TeamProfileWithTeamSeasonProfile) => {
         let csvRow = ""
 
         for (const [key, value] of Object.entries(teamValues)) {
           if (value) {
             const enumKey = key as keyof typeof team;
-            const value = team[enumKey];
-            if (!value || value === "") {
+            let teamValue: string | number | undefined = team[enumKey] as string | number | undefined;
+
+            if (!value || teamValue === "") {
               csvRow += "N/A" + ","
               continue;
             }
 
-            csvRow += `="${team[enumKey]}",`;
+            if (typeof teamValue === 'string') {
+              teamValue = teamValue.replaceAll(",", "")
+            } else if (typeof teamValue === 'number') {
+              // @ts-ignore
+              if (!Number.isInteger(teamValue)) {
+                teamValue = teamValue.toFixed(4)
+              }
+            }
+
+            csvRow += `="${teamValue}",`;
           }
         }
 
-        csvRow = csvRow + "\n"
+        csvRow = csvRow.substring(0, csvRow.length - 1) + "\n"
 
         csvBody += csvRow
       })

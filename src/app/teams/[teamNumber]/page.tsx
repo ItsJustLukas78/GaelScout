@@ -128,7 +128,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                     Location:
                   </h3>
                   <h3 className="text-md">
-                    {teamProfile.teamCity ? teamProfile.teamCity + ", " : ""}{teamProfile ? teamProfile.teamRegion + ", " : ""}{teamProfile ? teamProfile.teamCountry : ""}
+                    {teamProfile.teamCity ? teamProfile.teamCity + ", " : ""}{teamProfile.teamRegion ? teamProfile.teamRegion + ", " : ""}{teamProfile.teamCountry ? teamProfile.teamCountry : ""}
                   </h3>
                 </div>
               </div>
