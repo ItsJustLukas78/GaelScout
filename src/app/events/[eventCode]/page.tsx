@@ -296,7 +296,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
             const enumKey = key as keyof typeof team;
             let teamValue: string | number | undefined = team[enumKey] as string | number | undefined;
 
-            if (!value || teamValue === "") {
+            if (!teamValue || teamValue === "") {
               csvRow += "N/A" + ","
               continue;
             }
@@ -310,7 +310,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
               }
             }
 
-            csvRow += `="${teamValue}",`;
+            csvRow += `${teamValue},`;
           }
         }
 
@@ -345,7 +345,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
       <div className="w-full items-center justify-center flex flex-col my-44 gap-16">
         {eventObject ? <>
           <div className="h-auto items-left justify-center flex flex-col xl:min-w-[1200px] lg:min-w-[900px] md:min-w-[700px] sm:min-w-[500px] max-w-[340px] rounded-2xl bg-neutral-800 p-8">
-            <h1 className="lg:text-8xl md:text-5xl sm:text-4xl xs:text-3xl text-2xl font-bold mb-10 min-w-fit">
+            <h1 className="lg:text-7xl md:text-5xl sm:text-4xl xs:text-3xl text-2xl font-bold mb-10 min-w-fit">
               {eventObject.name}
             </h1>
             <div className="md:gap-10 gap-5 flex flex-row">
