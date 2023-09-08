@@ -26,7 +26,7 @@ export default function Navbar() {
           <NavButton href="/teams">Teams</NavButton>
           <NavButton href="/events">Events</NavButton>
           <NavButton href="/profiles">Profiles</NavButton>
-          <NavButton href="/Rankings">Rankings</NavButton>
+          {/*<NavButton href="/Rankings">Rankings</NavButton>*/}
           <NavButton href="/predict">Predict</NavButton>
           <NavButton href="/verify">Verify</NavButton>
           {/*<NavButton href="/api-docs">API</NavButton>*/}
@@ -56,7 +56,7 @@ export default function Navbar() {
             <NavButton href="/teams">Teams</NavButton>
             <NavButton href="/events">Events</NavButton>
             <NavButton href="/profiles">Profiles</NavButton>
-            <NavButton href="/Rankings">Rankings</NavButton>
+            {/*<NavButton href="/Rankings">Rankings</NavButton>*/}
             <NavButton href="/predict">Predict</NavButton>
             <NavButton href="/verify">Verify</NavButton>
             {/*<NavButton href="/api-docs">API</NavButton>*/}
