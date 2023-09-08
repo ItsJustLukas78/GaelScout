@@ -213,7 +213,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
 
     const getTeamSeasonProfiles = async (currentTeamSeasonProfiles: TeamSeasonProfile[] = []): Promise<null | TeamSeasonProfile[]> => {
       try {
-        const response = await fetch(`/api/seasons/${seasonId}/teams/?${searchParams.toString()}`)
+        const response = await fetch(`/api/seasons/${seasonId}/seasonProfiles/?${searchParams.toString()}`)
         const data = await response.json()
 
 

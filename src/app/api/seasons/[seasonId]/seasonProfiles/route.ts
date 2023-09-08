@@ -45,7 +45,7 @@ async function formatTeamSeasonProfile(teamSeasonProfile: any) {
 
 /**
  * @swagger
- * /api/seasons/{seasonId}/teams:
+ * /api/seasons/{seasonId}/seasonProfiles:
  *  get:
  *    tags:
  *      - Seasons
@@ -78,8 +78,9 @@ export async function GET(
 ) {
   const searchParams = new URL(request.url).searchParams;
   const page = parseInt(searchParams.get('page') || '1');
-  const seasonId = parseInt(params.seasonId);
   const perPage = parseInt(searchParams.get('perPage') || '15') > 50 ? 50 : parseInt(searchParams.get('perPage') || '15');
+  const seasonId = parseInt(params.seasonId);
+  const eventCode = searchParams.get('eventCode') || undefined;
 
   const teamNumber: string[] = [];
 
@@ -142,9 +143,9 @@ export async function GET(
   const meta = {
     currentPage: page,
     lastPage: lastPage,
-    firstPageUrl: 'https://gaelscout.com/api/seasons/{seasonId}/teams?page=1',
-    nextPageUrl: page < lastPage ? `https://gaelscout.com/api/seasons/{seasonId}/teams?page=${page + 1}` :
-      'https://gaelscout.com/api/seasons/{seasonId}/teams?page=1',
+    firstPageUrl: 'https://gaelscout.com/api/seasons/{seasonId}/seasonProfiles?page=1',
+    nextPageUrl: page < lastPage ? `https://gaelscout.com/api/seasons/{seasonId}/seasonProfiles?page=${page + 1}` :
+      'https://gaelscout.com/api/seasons/{seasonId}/seasonProfiles?page=1',
     total: count,
     perPage: 15,
   }

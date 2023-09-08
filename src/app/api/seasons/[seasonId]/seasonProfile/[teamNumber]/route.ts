@@ -34,7 +34,7 @@ async function formatTeamSeasonProfile(teamSeasonProfile: any) {
 
 /**
  * @swagger
- * /api/seasons/{seasonId}/team/{teamNumber}:
+ * /api/seasons/{seasonId}/seasonProfile/{teamNumber}:
  *  get:
  *    tags:
  *      - Seasons

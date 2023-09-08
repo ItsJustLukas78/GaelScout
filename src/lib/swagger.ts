@@ -68,7 +68,7 @@ export const getApiDocs = async () => {
             ]
           }
         },
-        "/api/seasons/{seasonId}/team/{teamNumber}": {
+        "/api/seasons/{seasonId}/seasonProfile/{teamNumber}": {
           "get": {
             "tags": [
               "Seasons"
@@ -106,7 +106,7 @@ export const getApiDocs = async () => {
             }
           }
         },
-        "/api/seasons/{seasonId}/teams": {
+        "/api/seasons/{seasonId}/seasonProfiles": {
           "get": {
             "tags": [
               "Seasons"

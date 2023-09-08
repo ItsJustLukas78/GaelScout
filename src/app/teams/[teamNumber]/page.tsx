@@ -65,7 +65,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
   }
 
   const getSeasonStats = () => {
-    fetch(`/api/seasons/${seasonId}/team/${teamNumber.toUpperCase()}`).then((response) => {
+    fetch(`/api/seasons/${seasonId}/seasonProfile/${teamNumber.toUpperCase()}`).then((response) => {
       response.json().then((data) => {
         if (data?.error) {
           setSeasonStats(null);
