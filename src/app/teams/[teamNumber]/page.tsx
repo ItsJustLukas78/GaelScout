@@ -1,47 +1,7 @@
 "use client"
 import React, {useEffect, useState} from "react";
-import {toast} from "react-toastify";
-
-interface TeamProfile {
-  teamId: number,
-  teamName: string,
-  teamNumber: string,
-  robotName: string,
-  teamGrade: string,
-  teamOrg: string,
-  teamCity: string,
-  teamRegion: string,
-  teamCountry: string,
-  programCode: string,
-  programId: number,
-}
-
-interface TeamSeasonProfile {
-  teamId: number,
-  teamName: string,
-  teamNumber: string,
-  opr: number,
-  dpr: number,
-  ccwm: number,
-  openSkill: number,
-  openSkillRank: number,
-  eventCount: number,
-  topProgSkills: number,
-  topDriverSkills: number,
-  topTotalSkills: number,
-  skillsRank: number,
-  qualMatchCount: number,
-  elimMatchCount: number,
-  qualMatchWins: number,
-  elimMatchWins: number,
-  qualMatchLosses: number,
-  elimMatchLosses: number,
-  qualMatchWinPercentage: number,
-  elimMatchWinPercentage: number,
-  totalMatchWinPercentage: number,
-  qualToRegionals: boolean,
-  awardQualToWorlds: boolean,
-}
+import { toast } from "react-toastify";
+import { TeamProfile, TeamSeasonProfile } from "@/app/types";
 
 export default function TeamProfile({ params }: { params: { teamNumber: string } }) {
   const teamNumber = params.teamNumber

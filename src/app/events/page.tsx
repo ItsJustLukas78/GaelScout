@@ -5,7 +5,8 @@ import EventResultSkeleton from "@/components/EventResultSkeleton";
 import * as Form from '@radix-ui/react-form';
 import React, {useEffect, useState} from "react";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
+import { Event, Country, Region } from "@/app/types";
 
 const countries: any = {
 "Commonly Selected": [{"value":244,"data-code":"US","name":"United States"},{"value":49,"data-code":"CN","name":"China"},{"value":39,"data-code":"CA","name":"Canada"},{"value":14,"data-code":"AU","name":"Australia"},{"value":82,"data-code":"GB","name":"United Kingdom"},{"value":107,"data-code":"IE","name":"Ireland"},{"value":180,"data-code":"NZ","name":"New Zealand"},{"value":239,"data-code":"TW","name":"Taiwan"},{"value":100,"data-code":"HK","name":"Hong Kong"},{"value":164,"data-code":"MX","name":"Mexico"}],
@@ -49,41 +50,6 @@ const regions: any = {
 "107":[{"value":744,"name":"Limerick"},{"value":732,"name":"Carlow"},{"value":733,"name":"Cavan"},{"value":734,"name":"Clare"},{"value":735,"name":"Cork"},{"value":736,"name":"Donegal"},{"value":737,"name":"Dublin"},{"value":738,"name":"Galway"},{"value":739,"name":"Kerry"},{"value":740,"name":"Kildare"},{"value":741,"name":"Kilkenny"},{"value":742,"name":"Laois"},{"value":743,"name":"Leitrim"},{"value":745,"name":"Longford"},{"value":746,"name":"Louth"},{"value":747,"name":"Mayo"},{"value":748,"name":"Meath"},{"value":749,"name":"Monaghan"},{"value":750,"name":"Offaly"},{"value":751,"name":"Roscommon"},{"value":752,"name":"Sligo"},{"value":753,"name":"Tipperary"},{"value":754,"name":"Waterford"},{"value":755,"name":"Westmeath"},{"value":756,"name":"Wexford"},{"value":757,"name":"Wicklow"}],
 };
 
-interface Country {
-  value: number;
-  "data-code": string;
-  name: string;
-}
-
-interface Region {
-  value: number;
-  name: string;
-}
-
-interface EventResult {
-  id: number;
-  sku: string;
-  name: string;
-  start: string;
-  end: string;
-  season: {
-    id: number;
-    name: string;
-  }
-  program: {
-    id: number;
-    name: string;
-    code: string;
-  },
-  location: {
-    venue: string;
-    address: string;
-    city: string;
-    region: string;
-    country: string;
-  }
-}
-
 enum GradeLevel {
   All = "All",
   HighSchool = "High School",
@@ -101,7 +67,7 @@ export default function Teams() {
 
   const [availableRegions, setAvailableRegions] = useState<string[]>([]);
 
-  const [currentResults, setCurrentResults] = useState<EventResult[]>([]);
+  const [currentResults, setCurrentResults] = useState<Event[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [resultsLoading, setResultsLoading] = useState(false);
@@ -372,7 +338,7 @@ export default function Teams() {
               </>
             }
 
-            {currentResults.length !== 0 && currentResults.map((result: EventResult) => {
+            {currentResults.length !== 0 && currentResults.map((result: Event) => {
               const locationString = `${result.location.city ? result.location.city + ", " : ""}${result.location.region ? result.location.region + ", " : ""}${result.location.country}`;
 
               return (

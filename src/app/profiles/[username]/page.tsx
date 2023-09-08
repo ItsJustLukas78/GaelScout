@@ -1,28 +1,12 @@
 "use client"
 import React, {useEffect, useState} from "react";
 import Image from "next/image";
-import * as Form from "@radix-ui/react-form/dist";
-import CorneredButton from "@/components/CorneredButton";
-import TeamResultSkeleton from "@/components/TeamResultSkeleton";
-import {AiOutlineDoubleLeft, AiOutlineDoubleRight, AiOutlineLeft, AiOutlineRight} from "react-icons/ai";
 import {toast} from "react-toastify";
 import {MdVerified} from "react-icons/md";
 import { AiOutlineLink } from "react-icons/ai";
+import { UserProfile } from "@/app/types";
 
-interface UserProfile {
-  id: string
-  firstName: string | null
-  lastName: string | null
-  username: string
-  image_url: string
-  has_image: boolean
-  public_metadata: {
-    verifiedTeamNumber: string
-  }
-  unsafe_metadata: {}
-}
-
-export default function Userprofile({ params }: { params: { username: string } }) {
+export default function UserProfile({ params }: { params: { username: string } }) {
   const username = params.username
 
   const [userProfile, setUserProfile] = useState<null | UserProfile >(null);

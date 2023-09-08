@@ -1,17 +1,7 @@
 import prisma from "@/lib/db";
 import { NextResponse, NextRequest } from "next/server";
 import { getEventTeams } from "@/utils/RobotEventsAPI";
-
-interface TeamResult {
-  teamNumber: string;
-  teamName: string;
-  programCode: string;
-  teamGrade: string;
-  teamCity: string;
-  teamRegion: string;
-  teamCountry: string;
-  teamOrg: string;
-}
+import { TeamProfile } from "@/app/types";
 
 export async function GET(
   request: NextRequest,
@@ -25,16 +15,19 @@ export async function GET(
 
   const RETeamObjects = await getEventTeams(eventId);
 
-  const teamResults: TeamResult[] = RETeamObjects.map((team) => {
+  const teamResults: TeamProfile[] = RETeamObjects.map((team) => {
     return {
-      teamNumber: team.number,
+      teamId: team.id,
       teamName: team.team_name,
-      programCode: team.program.code,
+      teamNumber: team.number,
+      robotName: team.robot_name,
       teamGrade: team.grade,
+      teamOrg: team.organization,
       teamCity: team.location.city,
       teamRegion: team.location.region,
       teamCountry: team.location.country,
-      teamOrg: team.organization,
+      programCode: team.program.code,
+      programId: team.program.id,
     }
   });
 

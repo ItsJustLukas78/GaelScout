@@ -2,17 +2,7 @@
 import {useEffect, useState} from "react";
 import UserResult from "@/components/UserResult";
 import UserResultSkeleton from "@/components/UserResultSkeleton";
-
-interface UserProfile {
-  id: string
-  firstName: string | null
-  lastName: string | null
-  username: string
-  image_url: string
-  has_image: boolean
-  public_metadata: {}
-  unsafe_metadata: {}
-}
+import { UserProfile } from "@/app/types";
 
 export default function Profiles() {
 

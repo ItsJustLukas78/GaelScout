@@ -4,70 +4,7 @@ import {toast} from "react-toastify";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import CheckboxDiv from "@/components/CheckboxDiv";
 import * as RadioGroup from '@radix-ui/react-radio-group';
-import {val} from "cheerio/lib/api/attributes";
-
-
-interface Event {
-  id: number;
-  sku: string;
-  name: string;
-  start: string;
-  end: string;
-  season: {
-    id: number;
-    name: string;
-  }
-  program: {
-    id: number;
-    name: string;
-    code: string;
-  },
-  location: {
-    venue: string;
-    address: string;
-    city: string;
-    region: string;
-    country: string;
-  }
-}
-
-interface TeamResult {
-  teamNumber: string;
-  teamName: string;
-  programCode: string;
-  teamGrade: string;
-  teamCity: string;
-  teamRegion: string;
-  teamCountry: string;
-  teamOrg: string;
-}
-
-interface TeamSeasonProfile {
-  teamId: number,
-  teamName: string,
-  teamNumber: string,
-  opr: number,
-  dpr: number,
-  ccwm: number,
-  openSkill: number,
-  openSkillRank: number,
-  eventCount: number,
-  topProgSkills: number,
-  topDriverSkills: number,
-  topTotalSkills: number,
-  skillsRank: number,
-  qualMatchCount: number,
-  elimMatchCount: number,
-  qualMatchWins: number,
-  elimMatchWins: number,
-  qualMatchLosses: number,
-  elimMatchLosses: number,
-  qualMatchWinPercentage: number,
-  elimMatchWinPercentage: number,
-  totalMatchWinPercentage: number,
-  qualToRegionals: boolean,
-  awardQualToWorlds: boolean,
-}
+import { Event, TeamProfile, TeamSeasonProfile } from "@/app/types";
 
 enum sortMethod {
   "openSkillRank" = "openSkillRank",
@@ -79,7 +16,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
   const eventCode = params.eventCode
 
   const [eventObject, setEventObject] = useState<Event | null>(null);
-  const [paticipatingTeams, setPaticipatingTeams] = useState<TeamResult[]>([]);
+  const [paticipatingTeams, setPaticipatingTeams] = useState<TeamProfile[]>([]);
 
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
 
@@ -242,10 +179,10 @@ export default function EventPage({ params }: { params: { eventCode: string } })
 
       csvHeader = csvHeader + "\n"
 
-      interface TeamProfileWithTeamSeasonProfile extends TeamResult, TeamSeasonProfile {}
+      interface TeamProfileWithTeamSeasonProfile extends TeamProfile, TeamSeasonProfile {}
 
       // make a list of objects representing both the team and their season profile
-      const teamSeasonProfilesWithTeam: TeamResult[] | TeamProfileWithTeamSeasonProfile[] = paticipatingTeams.map((team) => {
+      const teamSeasonProfilesWithTeam: TeamProfile[] | TeamProfileWithTeamSeasonProfile[] = paticipatingTeams.map((team) => {
         const currentTeamNumber = team.teamNumber;
 
         const currentTeamSeasonProfile = teamSeasonProfiles.find((teamSeasonProfile) => {
@@ -263,7 +200,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
       })
 
       // sort the list of objects using the sort method
-      teamSeasonProfilesWithTeam.sort((a: TeamResult | TeamProfileWithTeamSeasonProfile, b: TeamResult | TeamProfileWithTeamSeasonProfile) => {
+      teamSeasonProfilesWithTeam.sort((a: TeamProfile | TeamProfileWithTeamSeasonProfile, b: TeamProfile | TeamProfileWithTeamSeasonProfile) => {
         // account for season profiles that don't exist
         if (!a.hasOwnProperty(sortMethod) && !b.hasOwnProperty(sortMethod)) {
           return 0;
@@ -288,7 +225,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
         }
       })
 
-      teamSeasonProfilesWithTeam.map((team: TeamResult | TeamProfileWithTeamSeasonProfile) => {
+      teamSeasonProfilesWithTeam.map((team: TeamProfile | TeamProfileWithTeamSeasonProfile) => {
         let csvRow = ""
 
         for (const [key, value] of Object.entries(teamValues)) {
@@ -416,7 +353,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                     </tr>
                   </thead>
                   <tbody className="bg-neutral-700 rounded-2xl">
-                    {paticipatingTeams.length !== 0 && paticipatingTeams.map((result: TeamResult) => {
+                    {paticipatingTeams.length !== 0 && paticipatingTeams.map((result: TeamProfile) => {
                       const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
 
                       return (
