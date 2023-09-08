@@ -1,10 +1,10 @@
 "use client"
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
-import * as Checkbox from '@radix-ui/react-checkbox';
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
-import { BsCheckLg } from "react-icons/bs";
 import CheckboxDiv from "@/components/CheckboxDiv";
+import * as RadioGroup from '@radix-ui/react-radio-group';
+
 
 interface Event {
   id: number;
@@ -68,6 +68,12 @@ interface TeamSeasonProfile {
   awardQualToWorlds: boolean,
 }
 
+enum sortMethod {
+  "openSkillRank" = "openSkillRank",
+  "skillsRank" = "skillsRank",
+  "ccwm" = "ccwm",
+}
+
 export default function EventPage({ params }: { params: { eventCode: string } }) {
   const eventCode = params.eventCode
 
@@ -95,6 +101,8 @@ export default function EventPage({ params }: { params: { eventCode: string } })
   const [ewpChecked, setEwpChecked] = useState(false);
   const [qtrChecked, setQtrChecked] = useState(false);
   const [awqtwChecked, setAwqtwChecked] = useState(false);
+
+  const [sortMethod, setSortMethod] = useState<sortMethod>("openSkillRank" as sortMethod);
 
 
   const getEvent = () => {
@@ -169,7 +177,14 @@ export default function EventPage({ params }: { params: { eventCode: string } })
       "teamGrade" = "Grade",
     }
 
-    const teamSeasonProfileValues = {
+    const teamValues = {
+      teamNumber: numberChecked,
+      teamName: nameChecked,
+      teamOrg: orgChecked,
+      teamCity: cityChecked,
+      teamRegion: regionChecked,
+      teamCountry: countryChecked,
+      teamGrade: gradeChecked,
       opr: oprChecked,
       dpr: dprChecked,
       ccwm: ccwmChecked,
@@ -182,16 +197,6 @@ export default function EventPage({ params }: { params: { eventCode: string } })
       elimMatchWinPercentage: ewpChecked,
       qualToRegionals: qtrChecked,
       awardQualToWorlds: awqtwChecked,
-    }
-
-    const teamProfileValues = {
-      teamNumber: numberChecked,
-      teamName: nameChecked,
-      teamOrg: orgChecked,
-      teamCity: cityChecked,
-      teamRegion: regionChecked,
-      teamCountry: countryChecked,
-      teamGrade: gradeChecked,
     }
 
 
@@ -240,14 +245,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
       let csvHeader = ""
       let csvBody = ""
 
-      for (const [key, value] of Object.entries(teamProfileValues)) {
-        if (value) {
-          const enumKey = key as keyof typeof ShortHandToFull;
-          csvHeader += ShortHandToFull[enumKey] + ","
-        }
-      }
-
-      for (const [key, value] of Object.entries(teamSeasonProfileValues)) {
+      for (const [key, value] of Object.entries(teamValues)) {
         if (value) {
           const enumKey = key as keyof typeof ShortHandToFull;
           csvHeader += ShortHandToFull[enumKey] + ","
@@ -258,11 +256,56 @@ export default function EventPage({ params }: { params: { eventCode: string } })
 
       csvHeader = csvHeader + "\n"
 
+      interface TeamProfileWithTeamSeasonProfile extends TeamResult, TeamSeasonProfile {}
 
-      paticipatingTeams.map((team) => {
+      // make a list of objects representing both the team and their season profile
+      const teamSeasonProfilesWithTeam: TeamResult[] | TeamProfileWithTeamSeasonProfile[] = paticipatingTeams.map((team) => {
+        const currentTeamNumber = team.teamNumber;
+
+        const currentTeamSeasonProfile = teamSeasonProfiles.find((teamSeasonProfile) => {
+          return teamSeasonProfile.teamNumber === currentTeamNumber;
+        });
+
+        if (!currentTeamSeasonProfile) {
+          return team;
+        }
+
+        return {
+          ...team,
+          ...currentTeamSeasonProfile,
+        }
+      })
+
+      // sort the list of objects using the sort method
+      teamSeasonProfilesWithTeam.sort((a: TeamResult | TeamProfileWithTeamSeasonProfile, b: TeamResult | TeamProfileWithTeamSeasonProfile) => {
+        // account for season profiles that don't exist
+        if (!a.hasOwnProperty(sortMethod) && !b.hasOwnProperty(sortMethod)) {
+          return 0;
+        }
+
+        if (!a.hasOwnProperty(sortMethod)) {
+          return 1;
+        }
+
+        if (!b.hasOwnProperty(sortMethod)) {
+          return -1;
+        }
+
+        // @ts-ignore
+        if (a[sortMethod] < b[sortMethod]) {
+          return -1;
+          // @ts-ignore
+        } else if (a[sortMethod] > b[sortMethod]) {
+          return 1;
+        } else {
+          return 0;
+        }
+      })
+
+      teamSeasonProfilesWithTeam.map((team) => {
         let csvRow = ""
 
-        for (const [key, value] of Object.entries(teamProfileValues)) {
+        for (const [key, value] of Object.entries(teamValues)) {
           if (value) {
             const enumKey = key as keyof typeof team;
             const value = team[enumKey];
@@ -272,33 +315,6 @@ export default function EventPage({ params }: { params: { eventCode: string } })
             }
 
             csvRow += `="${team[enumKey]}",`;
-          }
-        }
-
-        const currentTeamNumber = team.teamNumber;
-
-        const currentTeamSeasonProfile = teamSeasonProfiles.find((teamSeasonProfile) => {
-          return teamSeasonProfile.teamNumber === currentTeamNumber;
-        });
-
-        if (currentTeamSeasonProfile) {
-          for (const [key, value] of Object.entries(teamSeasonProfileValues)) {
-            if (value) {
-              const enumKey = key as keyof typeof currentTeamSeasonProfile;
-              const value = currentTeamSeasonProfile[enumKey];
-              if ((!value && value !== 0) || (value === "")) {
-                csvRow += "N/A" + ","
-                continue;
-              }
-
-              csvRow += `="${currentTeamSeasonProfile[enumKey]}",`; // Wrap numbers in double quotes
-            }
-          }
-        } else {
-          for (const [key, value] of Object.entries(teamSeasonProfileValues)) {
-            if (value) {
-              csvRow += "N/A" + ","
-            }
           }
         }
 
@@ -424,7 +440,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
             </div>
             <AlertDialog.Portal>
               <AlertDialog.Overlay className="z-40 bg-black opacity-70 data-[state=open]:animate-overlayShow fixed inset-0" />
-              <AlertDialog.Content className="flex flex-col z-50 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] h-[775px] w-[375px] translate-x-[-50%] translate-y-[-50%] rounded-[10px] bg-neutral-800 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+              <AlertDialog.Content className="flex flex-col z-50 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] h-[650px] w-[350px] translate-x-[-50%] translate-y-[-50%] rounded-[10px] bg-neutral-800 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
                 <AlertDialog.Title className="text-xl font-bold mb-5">
                   Generate Scouting Sheet (CSV)
                 </AlertDialog.Title>
@@ -436,7 +452,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                     <p className="xs:text-md text-sm font-semibold">
                       Select all the information you want to be included in the sheet for each team:
                     </p>
-                    <div className="flex flex-row justify-between">
+                    <div className="flex flex-row justify-between overflow-scroll h-[300px] overflow-x-hidden mt-3">
                       <div className="flex flex-col">
                         <CheckboxDiv checked={numberChecked} onCheckedChange={(e) => setNumberChecked((numberChecked) => (!numberChecked))}>
                           Number
@@ -469,15 +485,15 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                           CCWM
                         </CheckboxDiv>
                       </div>
-                      <div className="flex flex-col">
+                      <div className="flex flex-col max-w-[60%]">
                         <CheckboxDiv checked={gopnChecked} onCheckedChange={(e) => setGopnChecked((gopnChecked) => (!gopnChecked))}>
-                          Global OpenSkill Rank
+                          OpenSkill Rank
                         </CheckboxDiv>
                         <CheckboxDiv checked={gskrChecked} onCheckedChange={(e) => setGskrChecked((gskrChecked) => (!gskrChecked))}>
-                          Global Skills Rank
+                          Skills Rank
                         </CheckboxDiv>
                         <CheckboxDiv checked={tcsChecked} onCheckedChange={(e) => setTcsChecked((tcsChecked) => (!tcsChecked))}>
-                          Top Combined Skills
+                          Total Skills
                         </CheckboxDiv>
                         <CheckboxDiv checked={psChecked} onCheckedChange={(e) => setPsChecked((psChecked) => (!psChecked))}>
                           Prog Skills
@@ -486,28 +502,73 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                           Driver Skills
                         </CheckboxDiv>
                         <CheckboxDiv checked={qwpChecked} onCheckedChange={(e) => setQwpChecked((qwpChecked) => (!qwpChecked))}>
-                          Qual Win Percentage
+                          Qual Win %
                         </CheckboxDiv>
                         <CheckboxDiv checked={ewpChecked} onCheckedChange={(e) => setEwpChecked((ewpChecked) => (!ewpChecked))}>
-                          Elim Win percentage
+                          Elim Win %
                         </CheckboxDiv>
                         <CheckboxDiv checked={qtrChecked} onCheckedChange={(e) => setQtrChecked((qtrChecked) => (!qtrChecked))}>
-                          Qualified to Regionals
+                          Qual to Regionals
                         </CheckboxDiv>
                         <CheckboxDiv checked={awqtwChecked} onCheckedChange={(e) => setAwqtwChecked((awqtwChecked) => (!awqtwChecked))}>
-                          Awards-Qualified to Worlds
+                          Awards-Qual to Worlds
                         </CheckboxDiv>
                       </div>
                     </div>
-                    <p className="xs:text-sm text-xs mt-6">
-                      Please note that this may take a while to generate depending on the number of teams in the event. Some values may not exist for some teams if they have not competed in any events this season or have done so very recently.
+                    <p className="xs:text-md text-sm font-semibold mt-5">
+                      Sort by:
+                    </p>
+                    <RadioGroup.Root
+                      className="flex flex-row gap-3 mt-3"
+                      value={sortMethod}
+                      onValueChange={(value: sortMethod) => setSortMethod(value)}
+                    >
+                      <div className="flex items-center">
+                        <RadioGroup.Item
+                          className="bg-white w-[25px] h-[25px] rounded-full"
+                          value="openSkillRank"
+                          id="openSkillRank"
+                        >
+                          <RadioGroup.Indicator className="flex items-center rounded-full justify-center w-full h-full bg-violet-400" />
+                        </RadioGroup.Item>
+                        <label className="text-white text-[15px] pl-[15px]" htmlFor="openSkillRank">
+                          OpenSkill
+                        </label>
+                      </div>
+                      <div className="flex items-center">
+                        <RadioGroup.Item
+                          className="bg-white w-[25px] h-[25px] rounded-full"
+                          value="skillsRank"
+                          id="skillsRank"
+                        >
+                          <RadioGroup.Indicator className="flex items-center rounded-full justify-center w-full h-full bg-violet-400" />
+                        </RadioGroup.Item>
+                        <label className="text-white text-[15px] pl-[15px]" htmlFor="skillsRank">
+                          Skills
+                        </label>
+                      </div>
+                      <div className="flex items-center">
+                        <RadioGroup.Item
+                          className="bg-white w-[25px] h-[25px] rounded-full"
+                          value="ccwm"
+                          id="ccwm"
+                        >
+                          <RadioGroup.Indicator className="flex items-center rounded-full justify-center w-full h-full bg-violet-400" />
+                        </RadioGroup.Item>
+                        <label className="text-white text-[15px] pl-[15px]" htmlFor="ccwm">
+                          CCWM
+                        </label>
+                      </div>
+                    </RadioGroup.Root>
+                    <p className="xs:text-sm text-xs mt-5">
+                      Some values may not be available if a team has not competed in the current season and has not been analyzed yet.
                     </p>
                   </form>
                 </AlertDialog.Description>
                 <div className="flex justify-between mt-auto">
                   <AlertDialog.Cancel asChild>
                     <button
-                      className="mt-7 mb-2 bg-red-300 rounded-md whitespace-nowrap h-8 w-28 text-black text-xl font-semibold"
+                      className="mt-4 mb-2 bg-red-300 rounded-md whitespace-nowrap h-8 w-28 text-black text-xl font-semibold"
                       onClick={() => setExportDialogOpen(false)}
                     >
                       Cancel
@@ -515,7 +576,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                   </AlertDialog.Cancel>
                   <AlertDialog.Action asChild>
                     <button
-                      className="mt-7 bg-green-300 rounded-md whitespace-nowrap h-8 w-28 text-black text-xl font-semibold disabled:opacity-50"
+                      className="mt-4 bg-green-300 rounded-md whitespace-nowrap h-8 w-28 text-black text-xl font-semibold disabled:opacity-50"
                       onClick={(e) => submitExportForm(e)}
                       disabled={false}
                     >
