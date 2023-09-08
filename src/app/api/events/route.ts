@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     const eventSKU: string[] = [];
 
     searchParams.forEach((value, key) => {
-      if (key === 'eventSKU[]') {
+      if (key === 'eventSKU[]' || key === 'eventSKU') {
         eventSKU.push(value);
       }
     });

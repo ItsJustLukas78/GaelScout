@@ -1,7 +1,10 @@
 "use client"
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
-import CompactTeamResult from "@/components/CompactTeamResult";
+import * as Checkbox from '@radix-ui/react-checkbox';
+import * as AlertDialog from "@radix-ui/react-alert-dialog";
+import { BsCheckLg } from "react-icons/bs";
+import CheckboxDiv from "@/components/CheckboxDiv";
 
 interface Event {
   id: number;
@@ -38,11 +41,61 @@ interface TeamResult {
   teamOrg: string;
 }
 
+interface TeamSeasonProfile {
+  teamId: number,
+  teamName: string,
+  teamNumber: string,
+  opr: number,
+  dpr: number,
+  ccwm: number,
+  openSkill: number,
+  openSkillRank: number,
+  eventCount: number,
+  topProgSkills: number,
+  topDriverSkills: number,
+  topTotalSkills: number,
+  skillsRank: number,
+  qualMatchCount: number,
+  elimMatchCount: number,
+  qualMatchWins: number,
+  elimMatchWins: number,
+  qualMatchLosses: number,
+  elimMatchLosses: number,
+  qualMatchWinPercentage: number,
+  elimMatchWinPercentage: number,
+  totalMatchWinPercentage: number,
+  qualToRegionals: boolean,
+  awardQualToWorlds: boolean,
+}
+
 export default function EventPage({ params }: { params: { eventCode: string } }) {
   const eventCode = params.eventCode
 
   const [eventObject, setEventObject] = useState<Event | null>(null);
   const [paticipatingTeams, setPaticipatingTeams] = useState<TeamResult[]>([]);
+
+  const [exportDialogOpen, setExportDialogOpen] = useState(false);
+
+  const [numberChecked, setNumberChecked] = useState(true);
+  const [nameChecked, setNameChecked] = useState(true);
+  const [orgChecked, setOrgChecked] = useState(false);
+  const [cityChecked, setCityChecked] = useState(false);
+  const [regionChecked, setRegionChecked] = useState(true);
+  const [countryChecked, setCountryChecked] = useState(false);
+  const [gradeChecked, setGradeChecked] = useState(false);
+  const [oprChecked, setOprChecked] = useState(true);
+  const [dprChecked, setDprChecked] = useState(true);
+  const [ccwmChecked, setCcwmChecked] = useState(true);
+  const [gopnChecked, setGopnChecked] = useState(true);
+  const [gskrChecked, setGskrChecked] = useState(true);
+  const [tcsChecked, setTcsChecked] = useState(true);
+  const [psChecked, setPsChecked] = useState(false);
+  const [dsChecked, setDsChecked] = useState(false);
+  const [qwpChecked, setQwpChecked] = useState(false);
+  const [ewpChecked, setEwpChecked] = useState(false);
+  const [qtrChecked, setQtrChecked] = useState(false);
+  const [awqtwChecked, setAwqtwChecked] = useState(false);
+
 
   const getEvent = () => {
     const skuSearchParams = new URLSearchParams();
@@ -71,10 +124,6 @@ export default function EventPage({ params }: { params: { eventCode: string } })
               return;
             }
 
-            console.log(data.teams)
-
-            console.log(typeof data.teams)
-
             setPaticipatingTeams(data.teams);
           });
         });
@@ -87,6 +136,191 @@ export default function EventPage({ params }: { params: { eventCode: string } })
       year: 'numeric',
       month: 'long',
       day: 'numeric',
+    })
+  }
+
+  const submitExportForm = (e: any) => {
+    e.preventDefault();
+
+    if (eventObject === null || !eventObject.id) {
+      toast.error("Event not found");
+      return;
+    }
+
+    enum ShortHandToFull {
+      "opr" = "OPR",
+      "dpr" = "DPR",
+      "ccwm" = "CCWM",
+      "openSkillRank" = "Global OpenSkill Rank",
+      "skillsRank" = "Global Skills Rank",
+      "topTotalSkills" = "Top Combined Skills",
+      "topProgSkills" = "Prog Skills",
+      "topDriverSkills" = "Driver Skills",
+      "qualMatchWinPercentage" = "Qual Win Percentage",
+      "elimMatchWinPercentage" = "Elim Win Percentage",
+      "qualToRegionals" = "Qualified to Regionals",
+      "awardQualToWorlds" = "Awards-Qualified to Worlds",
+      "teamNumber" = "Number",
+      "teamName" = "Name",
+      "teamOrg" = "Organization",
+      "teamCity" = "City",
+      "teamRegion" = "Region",
+      "teamCountry" = "Country",
+      "teamGrade" = "Grade",
+    }
+
+    const teamSeasonProfileValues = {
+      opr: oprChecked,
+      dpr: dprChecked,
+      ccwm: ccwmChecked,
+      openSkillRank: gopnChecked,
+      skillsRank: gskrChecked,
+      topTotalSkills: tcsChecked,
+      topProgSkills: psChecked,
+      topDriverSkills: dsChecked,
+      qualMatchWinPercentage: qwpChecked,
+      elimMatchWinPercentage: ewpChecked,
+      qualToRegionals: qtrChecked,
+      awardQualToWorlds: awqtwChecked,
+    }
+
+    const teamProfileValues = {
+      teamNumber: numberChecked,
+      teamName: nameChecked,
+      teamOrg: orgChecked,
+      teamCity: cityChecked,
+      teamRegion: regionChecked,
+      teamCountry: countryChecked,
+      teamGrade: gradeChecked,
+    }
+
+
+    const seasonId = eventObject.season.id
+
+    const searchParams = new URLSearchParams(params as any);
+
+    searchParams.set("page", "1");
+    searchParams.set("perPage", "50");
+
+    paticipatingTeams.forEach((team) => {
+      searchParams.append("teamNumber[]", team.teamNumber);
+    });
+
+    const getTeamSeasonProfiles = async (currentTeamSeasonProfiles: TeamSeasonProfile[] = []): Promise<null | TeamSeasonProfile[]> => {
+      try {
+        const response = await fetch(`/api/seasons/${seasonId}/teams/?${searchParams.toString()}`)
+        const data = await response.json()
+
+
+        if (data.error) {
+          toast.error(data.error);
+          return null;
+        }
+
+        currentTeamSeasonProfiles = currentTeamSeasonProfiles.concat(data.data);
+
+        if (data.meta.currentPage < data.meta.lastPage) {
+          searchParams.set("page", (data.meta.currentPage + 1).toString());
+          return getTeamSeasonProfiles(currentTeamSeasonProfiles);
+        } else {
+          return currentTeamSeasonProfiles;
+        }
+      } catch (e) {
+        toast.error("An error occurred while getting team season profiles");
+        return null;
+      }
+    }
+
+    getTeamSeasonProfiles([]).then((teamSeasonProfiles: TeamSeasonProfile[] | null) => {
+      if (teamSeasonProfiles === null) {
+        toast.error("An error occurred while getting team season profiles");
+        return;
+      }
+
+      let csvHeader = ""
+      let csvBody = ""
+
+      for (const [key, value] of Object.entries(teamProfileValues)) {
+        if (value) {
+          const enumKey = key as keyof typeof ShortHandToFull;
+          csvHeader += ShortHandToFull[enumKey] + ","
+        }
+      }
+
+      for (const [key, value] of Object.entries(teamSeasonProfileValues)) {
+        if (value) {
+          const enumKey = key as keyof typeof ShortHandToFull;
+          csvHeader += ShortHandToFull[enumKey] + ","
+        }
+      }
+
+      csvHeader = csvHeader.substring(0, csvHeader.length - 1)
+
+      csvHeader = csvHeader + "\n"
+
+
+      paticipatingTeams.map((team) => {
+        let csvRow = ""
+
+        for (const [key, value] of Object.entries(teamProfileValues)) {
+          if (value) {
+            const enumKey = key as keyof typeof team;
+            const value = team[enumKey];
+            if (!value || value === "") {
+              csvRow += "N/A" + ","
+              continue;
+            }
+
+            csvRow += `="${team[enumKey]}",`;
+          }
+        }
+
+        const currentTeamNumber = team.teamNumber;
+
+        const currentTeamSeasonProfile = teamSeasonProfiles.find((teamSeasonProfile) => {
+          return teamSeasonProfile.teamNumber === currentTeamNumber;
+        });
+
+        if (currentTeamSeasonProfile) {
+          for (const [key, value] of Object.entries(teamSeasonProfileValues)) {
+            if (value) {
+              const enumKey = key as keyof typeof currentTeamSeasonProfile;
+              const value = currentTeamSeasonProfile[enumKey];
+              if ((!value && value !== 0) || (value === "")) {
+                csvRow += "N/A" + ","
+                continue;
+              }
+
+              csvRow += `="${currentTeamSeasonProfile[enumKey]}",`; // Wrap numbers in double quotes
+            }
+          }
+        } else {
+          for (const [key, value] of Object.entries(teamSeasonProfileValues)) {
+            if (value) {
+              csvRow += "N/A" + ","
+            }
+          }
+        }
+
+        csvRow = csvRow + "\n"
+
+        csvBody += csvRow
+      })
+
+      const csv = csvHeader + csvBody
+
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('hidden', '');
+      a.setAttribute('href', url);
+      a.setAttribute('download', `${eventObject.name} - ${eventObject.sku}.csv`);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setExportDialogOpen(false);
+      toast.success("Exported successfully");
     })
   }
 
@@ -141,56 +375,157 @@ export default function EventPage({ params }: { params: { eventCode: string } })
               </div>
             </div>
           </div>
-          <div className="h-auto items-left justify-center flex flex-col xl:min-w-[1200px] lg:min-w-[900px] md:min-w-[700px] sm:min-w-[500px] max-w-[340px] rounded-2xl bg-neutral-800 p-8">
-            <div className="flex md:flex-row flex-col justify-between mb-10">
-              <h3 className="lg:text-5xl md:text-3xl xs:text-5xl text-3xl font-bold min-w-fit md:mb-0 mb-5">
-                Teams
-              </h3>
-            </div>
-            <div className="w-[100%] gap-4 flex flex-col overflow-auto">
-              <table className="table-auto min-w-[100%] rounded-2xl border-separate">
-                <thead>
-                  <tr className="[&>th]:text-left [&>th]:pl-4 xl:[&>th]:text-xl md:[&>th]:text-md [&>th]:text-sm [&>th]:pb-5">
-                    <th>Number</th>
-                    <th>Name</th>
-                    <th>Organization</th>
-                    <th>Location</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-neutral-700 rounded-2xl">
-                  {paticipatingTeams.length !== 0 && paticipatingTeams.map((result: TeamResult) => {
-                    const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
+          <AlertDialog.Root
+            open={exportDialogOpen}
+            onOpenChange={(open) => {}}
+          >
+            <div className="h-auto items-left justify-center flex flex-col xl:min-w-[1200px] lg:min-w-[900px] md:min-w-[700px] sm:min-w-[500px] max-w-[340px] rounded-2xl bg-neutral-800 p-8">
+              <div className="flex md:flex-row flex-col justify-between mb-10">
+                <h3 className="xs:text-5xl text-3xl font-bold min-w-fit md:mb-0 mb-5">
+                  Teams
+                </h3>
+                <AlertDialog.Trigger asChild>
+                  <button
+                    className="md:h-12 h-8 md:text-lg text-sm text-black rounded-lg md:w-52 w-44 bg-white"
+                    onClick={() => setExportDialogOpen(true)}
+                  >
+                    Generate Scout Sheet
+                  </button>
+                </AlertDialog.Trigger>
+              </div>
+              <div className="w-[100%] gap-4 flex flex-col overflow-auto">
+                <table className="table-auto min-w-[100%] rounded-2xl border-separate">
+                  <thead>
+                    <tr className="[&>th]:text-left [&>th]:pl-4 xl:[&>th]:text-xl md:[&>th]:text-md [&>th]:text-sm [&>th]:pb-5">
+                      <th>Number</th>
+                      <th>Name</th>
+                      <th>Organization</th>
+                      <th>Location</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-neutral-700 rounded-2xl">
+                    {paticipatingTeams.length !== 0 && paticipatingTeams.map((result: TeamResult) => {
+                      const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
 
-                    return (
-                      <tr key={result.teamNumber}>
-                        <td className="xl:text-2xl md:text-lg text-sm font-semibold px-4 py-2">
-                          <a href={`/teams/${result.teamNumber}`} className="hover:text-blue-500">{result.teamNumber}</a>
-                        </td>
-                        <td className="xl:text-xl md:text-lg xs:text-sm text-xs px-4 py-2">{result.teamName}</td>
-                        <td className="xl:text-xl md:text-lg xs:text-sm text-xs px-4 py-2">{result.teamOrg}</td>
-                        <td className="xl:text-xl md:text-lg xs:text-sm text-xs px-4 py-2">{locationString}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-              {/*{paticipatingTeams.length !== 0 && paticipatingTeams.map((result: TeamResult) => {*/}
-              {/*  const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
-
-                // return (
-                //   <CompactTeamResult
-                //     key={result.teamNumber}
-                //     teamNumber={result.teamNumber}
-                //     teamName={result.teamName}
-                //     programCode={result.programCode}
-                //     teamGrade={result.teamGrade}
-                //     location={locationString}
-                //     teamOrg={result.teamOrg}
-                //   />
-                // )
-                */}
+                      return (
+                        <tr key={result.teamNumber}>
+                          <td className="xl:text-2xl md:text-lg text-sm font-semibold px-4 py-2">
+                            <a href={`/teams/${result.teamNumber}`} className="hover:text-blue-500">{result.teamNumber}</a>
+                          </td>
+                          <td className="xl:text-xl md:text-lg xs:text-sm text-xs px-4 py-2">{result.teamName}</td>
+                          <td className="xl:text-xl md:text-lg xs:text-sm text-xs px-4 py-2">{result.teamOrg}</td>
+                          <td className="xl:text-xl md:text-lg xs:text-sm text-xs px-4 py-2">{locationString}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+            <AlertDialog.Portal>
+              <AlertDialog.Overlay className="z-40 bg-black opacity-70 data-[state=open]:animate-overlayShow fixed inset-0" />
+              <AlertDialog.Content className="flex flex-col z-50 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] h-[775px] w-[375px] translate-x-[-50%] translate-y-[-50%] rounded-[10px] bg-neutral-800 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+                <AlertDialog.Title className="text-xl font-bold mb-5">
+                  Generate Scouting Sheet (CSV)
+                </AlertDialog.Title>
+                <AlertDialog.Description asChild>
+                  <form
+                    id="exportOptionsForm"
+                    className="flex flex-col"
+                  >
+                    <p className="xs:text-md text-sm font-semibold">
+                      Select all the information you want to be included in the sheet for each team:
+                    </p>
+                    <div className="flex flex-row justify-between">
+                      <div className="flex flex-col">
+                        <CheckboxDiv checked={numberChecked} onCheckedChange={(e) => setNumberChecked((numberChecked) => (!numberChecked))}>
+                          Number
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={nameChecked} onCheckedChange={(e) => setNameChecked((nameChecked) => (!nameChecked))}>
+                          Name
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={orgChecked} onCheckedChange={(e) => setOrgChecked((orgChecked) => (!orgChecked))}>
+                          Org
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={cityChecked} onCheckedChange={(e) => setCityChecked((cityChecked) => (!cityChecked))}>
+                          City
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={regionChecked} onCheckedChange={(e) => setRegionChecked((regionChecked) => (!regionChecked))}>
+                          Region
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={countryChecked} onCheckedChange={(e) => setCountryChecked((countryChecked) => (!countryChecked))}>
+                          Country
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={gradeChecked} onCheckedChange={(e) => setGradeChecked((gradeChecked) => (!gradeChecked))}>
+                          Grade
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={oprChecked} onCheckedChange={(e) => setOprChecked((oprChecked) => (!oprChecked))}>
+                          OPR
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={dprChecked} onCheckedChange={(e) => setDprChecked((dprChecked) => (!dprChecked))}>
+                          DPR
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={ccwmChecked} onCheckedChange={(e) => setCcwmChecked((ccwmChecked) => (!ccwmChecked))}>
+                          CCWM
+                        </CheckboxDiv>
+                      </div>
+                      <div className="flex flex-col">
+                        <CheckboxDiv checked={gopnChecked} onCheckedChange={(e) => setGopnChecked((gopnChecked) => (!gopnChecked))}>
+                          Global OpenSkill Rank
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={gskrChecked} onCheckedChange={(e) => setGskrChecked((gskrChecked) => (!gskrChecked))}>
+                          Global Skills Rank
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={tcsChecked} onCheckedChange={(e) => setTcsChecked((tcsChecked) => (!tcsChecked))}>
+                          Top Combined Skills
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={psChecked} onCheckedChange={(e) => setPsChecked((psChecked) => (!psChecked))}>
+                          Prog Skills
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={dsChecked} onCheckedChange={(e) => setDsChecked((dsChecked) => (!dsChecked))}>
+                          Driver Skills
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={qwpChecked} onCheckedChange={(e) => setQwpChecked((qwpChecked) => (!qwpChecked))}>
+                          Qual Win Percentage
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={ewpChecked} onCheckedChange={(e) => setEwpChecked((ewpChecked) => (!ewpChecked))}>
+                          Elim Win percentage
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={qtrChecked} onCheckedChange={(e) => setQtrChecked((qtrChecked) => (!qtrChecked))}>
+                          Qualified to Regionals
+                        </CheckboxDiv>
+                        <CheckboxDiv checked={awqtwChecked} onCheckedChange={(e) => setAwqtwChecked((awqtwChecked) => (!awqtwChecked))}>
+                          Awards-Qualified to Worlds
+                        </CheckboxDiv>
+                      </div>
+                    </div>
+                    <p className="xs:text-sm text-xs mt-6">
+                      Please note that this may take a while to generate depending on the number of teams in the event. Some values may not exist for some teams if they have not competed in any events this season or have done so very recently.
+                    </p>
+                  </form>
+                </AlertDialog.Description>
+                <div className="flex justify-between mt-auto">
+                  <AlertDialog.Cancel asChild>
+                    <button
+                      className="mt-7 mb-2 bg-red-300 rounded-md whitespace-nowrap h-8 w-28 text-black text-xl font-semibold"
+                      onClick={() => setExportDialogOpen(false)}
+                    >
+                      Cancel
+                    </button>
+                  </AlertDialog.Cancel>
+                  <AlertDialog.Action asChild>
+                    <button
+                      className="mt-7 bg-green-300 rounded-md whitespace-nowrap h-8 w-28 text-black text-xl font-semibold disabled:opacity-50"
+                      onClick={(e) => submitExportForm(e)}
+                      disabled={false}
+                    >
+                      Export
+                    </button>
+                  </AlertDialog.Action>
+                </div>
+              </AlertDialog.Content>
+            </AlertDialog.Portal>
+          </AlertDialog.Root>
         </> : <></>}
       </div>
     </main>

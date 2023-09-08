@@ -79,6 +79,15 @@ export async function GET(
   const searchParams = new URL(request.url).searchParams;
   const page = parseInt(searchParams.get('page') || '1');
   const seasonId = parseInt(params.seasonId);
+  const perPage = parseInt(searchParams.get('perPage') || '15') > 50 ? 50 : parseInt(searchParams.get('perPage') || '15');
+
+  const teamNumber: string[] = [];
+
+  searchParams.forEach((value, key) => {
+    if (key === 'teamNumber[]' || key === 'teamNumber') {
+      teamNumber.push(value);
+    }
+  });
 
   if (isNaN(page) || page < 1) {
     return NextResponse.json({ error: 'Page must be positive integer' }, { status: 400 });
@@ -89,21 +98,46 @@ export async function GET(
     return NextResponse.json({ error: 'Season ID not provided' }, { status: 400 });
   }
 
-  const teams = await prisma.teamSeasonProfile.findMany({
-    where: {
-      seasonId: seasonId
-    },
-    skip: (page - 1) * 15,
-    take: 15,
-  });
+  let teams;
+  let count;
 
-  const count = await prisma.teamSeasonProfile.count({
-    where: {
-      seasonId: seasonId
-    }
-  });
+  if (teamNumber.length === 0) {
+    teams = await prisma.teamSeasonProfile.findMany({
+      where: {
+        seasonId: seasonId,
+      },
+      skip: (page - 1) * perPage,
+      take: perPage,
+    });
 
-  const lastPage = Math.ceil(count / 15);
+    count = await prisma.teamSeasonProfile.count({
+      where: {
+        seasonId: seasonId
+      }
+    });
+  } else {
+    teams = await prisma.teamSeasonProfile.findMany({
+      where: {
+        seasonId: seasonId,
+        teamNumber: {
+          in: teamNumber
+        }
+      },
+      skip: (page - 1) * perPage,
+      take: perPage,
+    });
+
+    count = await prisma.teamSeasonProfile.count({
+      where: {
+        seasonId: seasonId,
+        teamNumber: {
+          in: teamNumber
+        }
+      }
+    });
+  }
+
+  const lastPage = Math.ceil(count / perPage);
 
   const meta = {
     currentPage: page,

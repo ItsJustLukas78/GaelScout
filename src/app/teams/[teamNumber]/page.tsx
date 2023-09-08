@@ -16,11 +16,38 @@ interface TeamProfile {
   programId: number,
 }
 
+interface TeamSeasonProfile {
+  teamId: number,
+  teamName: string,
+  teamNumber: string,
+  opr: number,
+  dpr: number,
+  ccwm: number,
+  openSkill: number,
+  openSkillRank: number,
+  eventCount: number,
+  topProgSkills: number,
+  topDriverSkills: number,
+  topTotalSkills: number,
+  skillsRank: number,
+  qualMatchCount: number,
+  elimMatchCount: number,
+  qualMatchWins: number,
+  elimMatchWins: number,
+  qualMatchLosses: number,
+  elimMatchLosses: number,
+  qualMatchWinPercentage: number,
+  elimMatchWinPercentage: number,
+  totalMatchWinPercentage: number,
+  qualToRegionals: boolean,
+  awardQualToWorlds: boolean,
+}
+
 export default function TeamProfile({ params }: { params: { teamNumber: string } }) {
   const teamNumber = params.teamNumber
 
   const [teamProfile, setTeamProfile] = useState<TeamProfile | null>(null);
-  const [seasonStats, setSeasonStats] = useState< any >(null);
+  const [seasonStats, setSeasonStats] = useState<TeamSeasonProfile | null>(null);
   const [seasonId, setSeasonId] = useState< number >(173);
 
   const getTeam = () => {
