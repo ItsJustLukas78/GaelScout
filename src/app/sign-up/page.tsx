@@ -3,7 +3,7 @@ import {SignUp} from "@clerk/nextjs";
 export default function Page() {
   return (
       <main>
-        <div className="flex justify-center my-28">
+        <div className="my-28 flex justify-center">
            <SignUp
              signInUrl={"/sign-in"}
            />

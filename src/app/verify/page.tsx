@@ -130,13 +130,13 @@ export default function Verify() {
   }
   return <>
     <main>
-      <div className="w-full items-center justify-center flex md:flex-row flex-col my-44 lg:gap-20 md:gap-12 gap-16">
-        <div className="h-auto lg:items-start items-center justify-center flex flex-col lg:flex-row max-w-min">
-          <div className=" h-auto xl:min-w-[1000px] lg:min-w-[800px] sm:min-w-[400px] min-w-[350px]">
-            <h1 className="text-8xl font-bold mb-10 max-w-min">
+      <div className="my-44 flex w-full flex-col items-center justify-center gap-16 md:flex-row md:gap-12 lg:gap-20">
+        <div className="flex h-auto max-w-min flex-col items-center justify-center lg:flex-row lg:items-start">
+          <div className="h-auto min-w-[350px] sm:min-w-[400px] lg:min-w-[800px] xl:min-w-[1000px]">
+            <h1 className="mb-10 max-w-min text-8xl font-bold">
               Verify
             </h1>
-            <p className="sm:text-xl text-base max-w-[400px]">
+            <p className="text-base max-w-[400px] sm:text-xl">
               Verify ownership of a team to verify other members and manage a team page where you can share more about your team, and communicate with others. You will need access to the account on robotevents.com associated with your team.
             </p>
             <AlertDialog.Root
@@ -145,7 +145,7 @@ export default function Verify() {
             >
               <AlertDialog.Trigger asChild>
                 <button
-                  className="mt-10 bg-white rounded-2xl whitespace-nowrap h-8 w-28 text-black text-xl font-semibold"
+                  className="mt-10 h-8 w-28 whitespace-nowrap rounded-2xl bg-white text-xl font-semibold text-black"
                   onClick={(e) => {
                     setDialogOpen(true);
                     generateVerificationCode(e)
@@ -157,15 +157,15 @@ export default function Verify() {
               <AlertDialog.Portal>
                 <AlertDialog.Overlay className="z-40 bg-black opacity-70 data-[state=open]:animate-overlayShow fixed inset-0" />
                 <AlertDialog.Content className="flex flex-col z-50 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] h-[500px] w-[350px] translate-x-[-50%] translate-y-[-50%] rounded-[10px] bg-neutral-800 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
-                  <AlertDialog.Title className="text-xl font-bold mb-10">
+                  <AlertDialog.Title className="mb-10 text-xl font-bold">
                     Change Your Robot Name
                   </AlertDialog.Title>
                   <AlertDialog.Description asChild>
                     <div className="flex flex-col">
-                      <p className="xs:text-md text-sm font-semibold">
+                      <p className="text-sm font-semibold xs:text-md">
                         Temporarily change your robot name to:
                       </p>
-                      <p className="xs:text-md text-sm font-semibold mt-2 bg-neutral-600 rounded-md p-2 flex flex-row items-center">
+                      <p className="mt-2 flex flex-row items-center rounded-md bg-neutral-600 p-2 text-sm font-semibold xs:text-md">
                         <span className="text-green-500">
                           {verificationCode ? verificationCode : "Loading..."}
                         </span>
@@ -177,19 +177,19 @@ export default function Verify() {
                             });
                           }}
                         >
-                          <FaRegClipboard className="inline-block mr-1" />
+                          <FaRegClipboard className="mr-1 inline-block" />
                         </button>
                       </p>
-                      <p className="xs:text-md text-sm font-semibold mt-5">
+                      <p className="mt-5 text-sm font-semibold xs:text-md">
                         Input the number of the team you are verifying ownership of:
                       </p>
                       <input
-                        className="p-1 h-8 text-black rounded-lg mt-2"
+                        className="mt-2 h-8 rounded-lg p-1 text-black"
                         type="text"
                         placeholder="Team Number"
                         onChange={(e) => setTeamNumberInput(e.target.value)}
                       />
-                      <p className="xs:text-md text-sm font-semibold mt-5">
+                      <p className="mt-5 text-sm font-semibold xs:text-md">
                         {"Click confirm once you have changed your robot name and it has been updated on your "}
                         <a
                           target={"_blank"}
@@ -201,16 +201,16 @@ export default function Verify() {
                       </p>
                       {/* Timer for ratelimit */}
                       {timeLeft > 0 && (
-                        <p className="xs:text-md text-sm font-semibold mt-5">
+                        <p className="mt-5 text-sm font-semibold xs:text-md">
                           {`You can verify again in: ${timeLeft}`}
                         </p>
                       )}
                     </div>
                   </AlertDialog.Description>
-                  <div className="flex justify-between mt-auto">
+                  <div className="mt-auto flex justify-between">
                     <AlertDialog.Cancel asChild>
                       <button
-                        className="mt-10 mb-2 bg-red-300 rounded-md whitespace-nowrap h-8 w-28 text-black text-xl font-semibold"
+                        className="mt-10 mb-2 h-8 w-28 whitespace-nowrap rounded-md bg-red-300 text-xl font-semibold text-black"
                         onClick={() => setDialogOpen(false)}
                       >
                         Cancel
@@ -218,7 +218,7 @@ export default function Verify() {
                     </AlertDialog.Cancel>
                     <AlertDialog.Action asChild>
                       <button
-                        className="mt-10 bg-green-300 rounded-md whitespace-nowrap h-8 w-28 text-black text-xl font-semibold disabled:opacity-50"
+                        className="mt-10 h-8 w-28 whitespace-nowrap rounded-md bg-green-300 text-xl font-semibold text-black disabled:opacity-50"
                         onClick={(e) => confirmVerification(e)}
                         disabled={timeLeft > 0 || (teamNumberInput === "")}
                       >
@@ -231,7 +231,7 @@ export default function Verify() {
             </AlertDialog.Root>
           </div>
         </div>
-        <div className="h-auto items-center justify-center flex flex-col">
+        <div className="flex h-auto flex-col items-center justify-center">
 
         </div>
       </div>

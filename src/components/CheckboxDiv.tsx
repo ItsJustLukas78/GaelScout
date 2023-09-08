@@ -5,19 +5,19 @@ import * as Checkbox from '@radix-ui/react-checkbox';
 
 export default function CheckboxDiv({ children, checked, onCheckedChange } : { children: string, checked: boolean, onCheckedChange: (e: any) => void }) {
   return (
-    <div className="flex flex-row mt-5 items-center">
+    <div className="mt-5 flex flex-row items-center">
       <Checkbox.Root
-        className="flex min-h-[25px] min-w-[25px] items-center justify-center rounded-[4px] bg-white"
+        className="flex items-center justify-center bg-white min-h-[25px] min-w-[25px] rounded-[4px]"
         name={children}
         onCheckedChange={onCheckedChange}
         checked={checked}
         id={children}
       >
-        <Checkbox.Indicator className="bg-blue-500 min-h-[25px] min-w-[25px] rounded-[3px] flex items-center justify-center" >
+        <Checkbox.Indicator className="flex items-center justify-center bg-blue-500 min-h-[25px] min-w-[25px] rounded-[3px]" >
           <BsCheckLg size={15} />
         </Checkbox.Indicator>
       </Checkbox.Root>
-      <label className="pl-[15px] text-sm text-white min-h-full" htmlFor={children}>
+      <label className="min-h-full text-sm text-white pl-[15px]" htmlFor={children}>
         {children}
       </label>
     </div>

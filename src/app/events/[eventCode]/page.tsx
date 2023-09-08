@@ -279,45 +279,45 @@ export default function EventPage({ params }: { params: { eventCode: string } })
 
   return (
     <main>
-      <div className="w-full items-center justify-center flex flex-col my-44 gap-16">
+      <div className="my-44 flex w-full flex-col items-center justify-center gap-16">
         {eventObject ? <>
-          <div className="h-auto items-left justify-center flex flex-col xl:min-w-[1200px] lg:min-w-[900px] md:min-w-[700px] sm:min-w-[500px] max-w-[340px] rounded-2xl bg-neutral-800 p-8">
-            <h1 className="lg:text-7xl md:text-5xl sm:text-4xl xs:text-3xl text-2xl font-bold mb-10 min-w-fit">
+          <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+            <h1 className="mb-10 min-w-fit text-2xl font-bold xs:text-3xl sm:text-4xl md:text-5xl lg:text-7xl">
               {eventObject.name}
             </h1>
-            <div className="md:gap-10 gap-5 flex flex-row">
-              <div className="gap-5 flex flex-col mim-w-[49%]">
+            <div className="flex flex-row gap-5 md:gap-10">
+              <div className="flex flex-col gap-5 mim-w-[49%]">
                 <div className="flex flex-col">
-                  <h3 className="sm:text-xl text-md font-bold">
+                  <h3 className="font-bold text-md sm:text-xl">
                     Location:
                   </h3>
-                  <h3 className="sm:text-lg text-sm">
+                  <h3 className="text-sm sm:text-lg">
                     {eventObject.location.city ? eventObject.location.city + ", " : ""}{eventObject.location.region + ", "}{eventObject.location.country}
                   </h3>
                 </div>
                 <div className="flex flex-col">
-                  <h3 className="sm:text-xl text-md font-bold">
+                  <h3 className="font-bold text-md sm:text-xl">
                     SKU:
                   </h3>
-                  <h3 className="sm:text-lg text-sm">
+                  <h3 className="text-sm sm:text-lg">
                     {eventObject.sku}
                   </h3>
                 </div>
               </div>
-              <div className="gap-5 flex flex-col min-w-[49%]">
+              <div className="flex flex-col gap-5 min-w-[49%]">
                 <div className="flex flex-col">
-                  <h3 className="sm:text-xl text-md font-bold">
+                  <h3 className="font-bold text-md sm:text-xl">
                     Date:
                   </h3>
-                  <h3 className="sm:text-lg text-sm">
+                  <h3 className="text-sm sm:text-lg">
                     {formatDate(eventObject.start)} - {formatDate(eventObject.end)}
                   </h3>
                 </div>
                 <div className="flex flex-col">
-                  <h3 className="sm:text-xl text-md font-bold">
+                  <h3 className="font-bold text-md sm:text-xl">
                     Season:
                   </h3>
-                  <h3 className="sm:text-lg text-sm">
+                  <h3 className="text-sm sm:text-lg">
                     {eventObject.season.name}
                   </h3>
                 </div>
@@ -328,42 +328,42 @@ export default function EventPage({ params }: { params: { eventCode: string } })
             open={exportDialogOpen}
             onOpenChange={(open) => {}}
           >
-            <div className="h-auto items-left justify-center flex flex-col xl:min-w-[1200px] lg:min-w-[900px] md:min-w-[700px] sm:min-w-[500px] max-w-[340px] rounded-2xl bg-neutral-800 p-8">
-              <div className="flex md:flex-row flex-col justify-between mb-10">
-                <h3 className="xs:text-5xl text-3xl font-bold min-w-fit md:mb-0 mb-5">
+            <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+              <div className="mb-10 flex flex-col justify-between md:flex-row">
+                <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl md:mb-0">
                   Teams
                 </h3>
                 <AlertDialog.Trigger asChild>
                   <button
-                    className="md:h-12 h-8 md:text-lg text-sm text-black rounded-lg md:w-52 w-44 bg-white"
+                    className="h-8 w-44 rounded-lg bg-white text-sm text-black md:h-12 md:w-52 md:text-lg"
                     onClick={() => setExportDialogOpen(true)}
                   >
                     Generate Scout Sheet
                   </button>
                 </AlertDialog.Trigger>
               </div>
-              <div className="w-[100%] gap-4 flex flex-col overflow-auto">
-                <table className="table-auto min-w-[100%] rounded-2xl border-separate">
+              <div className="flex flex-col gap-4 overflow-auto w-[100%]">
+                <table className="table-auto border-separate rounded-2xl min-w-[100%]">
                   <thead>
-                    <tr className="[&>th]:text-left [&>th]:pl-4 xl:[&>th]:text-xl md:[&>th]:text-md [&>th]:text-sm [&>th]:pb-5">
+                    <tr className="md:[&>th]:text-md [&>th]:pb-5 [&>th]:pl-4 [&>th]:text-left [&>th]:text-sm xl:[&>th]:text-xl">
                       <th>Number</th>
                       <th>Name</th>
                       <th>Organization</th>
                       <th>Location</th>
                     </tr>
                   </thead>
-                  <tbody className="bg-neutral-700 rounded-2xl">
+                  <tbody className="rounded-2xl bg-neutral-700">
                     {paticipatingTeams.length !== 0 && paticipatingTeams.map((result: TeamProfile) => {
                       const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
 
                       return (
                         <tr key={result.teamNumber}>
-                          <td className="xl:text-2xl md:text-lg text-sm font-semibold px-4 py-2">
+                          <td className="px-4 py-2 text-sm font-semibold md:text-lg xl:text-2xl">
                             <a href={`/teams/${result.teamNumber}`} className="hover:text-blue-500">{result.teamNumber}</a>
                           </td>
-                          <td className="xl:text-xl md:text-lg xs:text-sm text-xs px-4 py-2">{result.teamName}</td>
-                          <td className="xl:text-xl md:text-lg xs:text-sm text-xs px-4 py-2">{result.teamOrg}</td>
-                          <td className="xl:text-xl md:text-lg xs:text-sm text-xs px-4 py-2">{locationString}</td>
+                          <td className="px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl">{result.teamName}</td>
+                          <td className="px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl">{result.teamOrg}</td>
+                          <td className="px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl">{locationString}</td>
                         </tr>
                       )
                     })}
@@ -374,7 +374,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
             <AlertDialog.Portal>
               <AlertDialog.Overlay className="z-40 bg-black opacity-70 data-[state=open]:animate-overlayShow fixed inset-0" />
               <AlertDialog.Content className="flex flex-col z-50 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] h-[650px] w-[350px] translate-x-[-50%] translate-y-[-50%] rounded-[10px] bg-neutral-800 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
-                <AlertDialog.Title className="text-xl font-bold mb-5">
+                <AlertDialog.Title className="mb-5 text-xl font-bold">
                   Generate Scouting Sheet (CSV)
                 </AlertDialog.Title>
                 <AlertDialog.Description asChild>
@@ -382,10 +382,10 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                     id="exportOptionsForm"
                     className="flex flex-col"
                   >
-                    <p className="xs:text-md text-sm font-semibold">
+                    <p className="text-sm font-semibold xs:text-md">
                       Select all the information you want to be included in the sheet for each team:
                     </p>
-                    <div className="flex flex-row justify-between overflow-scroll h-[300px] overflow-x-hidden mt-3">
+                    <div className="mt-3 flex flex-row justify-between overflow-scroll overflow-x-hidden h-[300px]">
                       <div className="flex flex-col">
                         <CheckboxDiv checked={numberChecked} onCheckedChange={(e) => setNumberChecked((numberChecked) => (!numberChecked))}>
                           Number
@@ -448,21 +448,21 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                         </CheckboxDiv>
                       </div>
                     </div>
-                    <p className="xs:text-md text-sm font-semibold mt-5">
+                    <p className="mt-5 text-sm font-semibold xs:text-md">
                       Sort by:
                     </p>
                     <RadioGroup.Root
-                      className="flex flex-row gap-3 mt-3"
+                      className="mt-3 flex flex-row gap-3"
                       value={sortMethod}
                       onValueChange={(value: sortMethod) => setSortMethod(value)}
                     >
                       <div className="flex items-center">
                         <RadioGroup.Item
-                          className="bg-white w-[25px] h-[25px] rounded-full"
+                          className="rounded-full bg-white w-[25px] h-[25px]"
                           value="openSkillRank"
                           id="openSkillRank"
                         >
-                          <RadioGroup.Indicator className="flex items-center rounded-full justify-center w-full h-full bg-violet-400" />
+                          <RadioGroup.Indicator className="flex h-full w-full items-center justify-center rounded-full bg-violet-400" />
                         </RadioGroup.Item>
                         <label className="text-white text-[15px] pl-[15px]" htmlFor="openSkillRank">
                           OpenSkill
@@ -470,11 +470,11 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                       </div>
                       <div className="flex items-center">
                         <RadioGroup.Item
-                          className="bg-white w-[25px] h-[25px] rounded-full"
+                          className="rounded-full bg-white w-[25px] h-[25px]"
                           value="skillsRank"
                           id="skillsRank"
                         >
-                          <RadioGroup.Indicator className="flex items-center rounded-full justify-center w-full h-full bg-violet-400" />
+                          <RadioGroup.Indicator className="flex h-full w-full items-center justify-center rounded-full bg-violet-400" />
                         </RadioGroup.Item>
                         <label className="text-white text-[15px] pl-[15px]" htmlFor="skillsRank">
                           Skills
@@ -482,26 +482,26 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                       </div>
                       <div className="flex items-center">
                         <RadioGroup.Item
-                          className="bg-white w-[25px] h-[25px] rounded-full"
+                          className="rounded-full bg-white w-[25px] h-[25px]"
                           value="ccwm"
                           id="ccwm"
                         >
-                          <RadioGroup.Indicator className="flex items-center rounded-full justify-center w-full h-full bg-violet-400" />
+                          <RadioGroup.Indicator className="flex h-full w-full items-center justify-center rounded-full bg-violet-400" />
                         </RadioGroup.Item>
                         <label className="text-white text-[15px] pl-[15px]" htmlFor="ccwm">
                           CCWM
                         </label>
                       </div>
                     </RadioGroup.Root>
-                    <p className="xs:text-sm text-xs mt-5">
+                    <p className="mt-5 text-xs xs:text-sm">
                       Some values may not be available if a team has not competed in the current season and has not been analyzed yet.
                     </p>
                   </form>
                 </AlertDialog.Description>
-                <div className="flex justify-between mt-auto">
+                <div className="mt-auto flex justify-between">
                   <AlertDialog.Cancel asChild>
                     <button
-                      className="mt-4 mb-2 bg-red-300 rounded-md whitespace-nowrap h-8 w-28 text-black text-xl font-semibold"
+                      className="mt-4 mb-2 h-8 w-28 whitespace-nowrap rounded-md bg-red-300 text-xl font-semibold text-black"
                       onClick={() => setExportDialogOpen(false)}
                     >
                       Cancel
@@ -509,7 +509,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                   </AlertDialog.Cancel>
                   <AlertDialog.Action asChild>
                     <button
-                      className="mt-4 bg-green-300 rounded-md whitespace-nowrap h-8 w-28 text-black text-xl font-semibold disabled:opacity-50"
+                      className="mt-4 h-8 w-28 whitespace-nowrap rounded-md bg-green-300 text-xl font-semibold text-black disabled:opacity-50"
                       onClick={(e) => submitExportForm(e)}
                       disabled={false}
                     >

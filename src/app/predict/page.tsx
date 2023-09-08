@@ -86,19 +86,19 @@ export default function Teams() {
       <Form.Root
         onSubmit={predictMatch}
       >
-        <div className="h-auto justify-center flex flex-row sm:gap-11 md:gap-20 gap-7 mt-32 xl:mt-0">
-          <div className="items-left justify-center flex flex-col xl:hidden">
-            <h1 className="sm:text-5xl text-3xl font-bold mb-10 text-red-600 text-center">
+        <div className="mt-32 flex h-auto flex-row justify-center gap-7 sm:gap-11 md:gap-20 xl:mt-0">
+          <div className="flex flex-col justify-center items-left xl:hidden">
+            <h1 className="mb-10 text-center text-3xl font-bold text-red-600 sm:text-5xl">
               Team One
             </h1>
-            <div className="gap-5 flex flex-col items-center">
+            <div className="flex flex-col items-center gap-5">
               <Form.Field className="flex flex-col" name="r1Team">
                 <Form.Label>
                   Team Number
                 </Form.Label>
                 <Form.Control asChild>
                   <input
-                    className="p-3 h-8 text-black rounded-lg sm:w-full w-36"
+                    className="h-8 w-36 rounded-lg p-3 text-black sm:w-full"
                     required
                     value={r1Team || ""}
                     onChange={(event) => setR1Team(event.target.value)}
@@ -111,7 +111,7 @@ export default function Teams() {
                 </Form.Label>
                 <Form.Control asChild>
                   <input
-                    className="p-3 h-8 text-black rounded-lg sm:w-full w-36"
+                    className="h-8 w-36 rounded-lg p-3 text-black sm:w-full"
                     required
                     value={r2Team || ""}
                     onChange={(event) => setR2Team(event.target.value)}
@@ -120,18 +120,18 @@ export default function Teams() {
               </Form.Field>
             </div>
           </div>
-          <div className="h-auto items-left justify-center flex flex-col xl:hidden">
-            <h1 className="sm:text-5xl text-3xl font-bold mb-10 text-blue-600 text-center">
+          <div className="flex h-auto flex-col justify-center items-left xl:hidden">
+            <h1 className="mb-10 text-center text-3xl font-bold text-blue-600 sm:text-5xl">
               Team Two
             </h1>
-            <div className="gap-5 flex flex-col items-center">
+            <div className="flex flex-col items-center gap-5">
               <Form.Field className="flex flex-col" name="b1Team">
                 <Form.Label>
                   Team Number
                 </Form.Label>
                 <Form.Control asChild>
                   <input
-                    className="p-3 h-8 text-black rounded-lg sm:w-full w-36"
+                    className="h-8 w-36 rounded-lg p-3 text-black sm:w-full"
                     required
                     value={b1Team || ""}
                     onChange={(event) => setB1Team(event.target.value)}
@@ -144,7 +144,7 @@ export default function Teams() {
                 </Form.Label>
                 <Form.Control asChild>
                   <input
-                    className="p-3 h-8 text-black rounded-lg sm:w-full w-36"
+                    className="h-8 w-36 rounded-lg p-3 text-black sm:w-full"
                     required
                     value={b2Team || ""}
                     onChange={(event) => setB2Team(event.target.value)}
@@ -154,14 +154,14 @@ export default function Teams() {
             </div>
           </div>
         </div>
-        <div className="flex sm:flex-row flex-col justify-center items-center my-10 gap-10 xl:hidden">
+        <div className="my-10 flex flex-col items-center justify-center gap-10 sm:flex-row xl:hidden">
           <Form.Field className="flex flex-col" name="seasonId">
             <Form.Label>
               Season
             </Form.Label>
             <Form.Control asChild>
               <select
-                className="p-3 h-15 text-black rounded-lg sm:w-full w-36"
+                className="h-15 w-36 rounded-lg p-3 text-black sm:w-full"
                 required
                 onChange={(event) => setSeasonId(parseInt(event.target.value))}
               >
@@ -176,20 +176,20 @@ export default function Teams() {
             </CorneredButton>
           </Form.Submit>
         </div>
-        <div className="w-full flex flex-col xl:my-44 lg:my-14">
-          <div className="h-auto items-center justify-center flex flex-row gap-20">
-            <div className="items-left justify-center xl:flex flex-col hidden">
-              <h1 className="text-5xl font-bold mb-10 text-red-600">
+        <div className="flex w-full flex-col lg:my-14 xl:my-44">
+          <div className="flex h-auto flex-row items-center justify-center gap-20">
+            <div className="hidden flex-col justify-center items-left xl:flex">
+              <h1 className="mb-10 text-5xl font-bold text-red-600">
                 Team One
               </h1>
-              <div className="gap-5 flex flex-col">
+              <div className="flex flex-col gap-5">
                 <Form.Field className="flex flex-col" name="r1Team">
                   <Form.Label>
                     Team Number
                   </Form.Label>
                   <Form.Control asChild>
                     <input
-                      className="p-3 h-8 text-black rounded-lg"
+                      className="h-8 rounded-lg p-3 text-black"
                       required
                       value={r1Team || ""}
                       onChange={(event) => setR1Team(event.target.value)}
@@ -202,7 +202,7 @@ export default function Teams() {
                   </Form.Label>
                   <Form.Control asChild>
                     <input
-                      className="p-3 h-8 text-black rounded-lg"
+                      className="h-8 rounded-lg p-3 text-black"
                       required
                       value={r2Team || ""}
                       onChange={(event) => setR2Team(event.target.value)}
@@ -211,23 +211,23 @@ export default function Teams() {
                 </Form.Field>
               </div>
             </div>
-            <div className="h-auto items-center justify-center flex flex-col">
-              <div className="rounded-2xl bg-neutral-800 sm:w-144 w-64 sm:h-64 h-40 shadow-lg shadow-neutral-700 flex flex-col">
-                <div className="flex flex-row justify-center items-center sm:gap-44 gap-20 mb-auto sm:mt-16 mt-10">
-                  <div className="flex flex-col justify-center items-center">
-                    <h1 className="text-red-600 sm:text-6xl text-4xl font-bold">
+            <div className="flex h-auto flex-col items-center justify-center">
+              <div className="flex h-40 w-64 flex-col rounded-2xl bg-neutral-800 shadow-lg shadow-neutral-700 sm:w-144 sm:h-64">
+                <div className="mt-10 mb-auto flex flex-row items-center justify-center gap-20 sm:mt-16 sm:gap-44">
+                  <div className="flex flex-col items-center justify-center">
+                    <h1 className="text-4xl font-bold text-red-600 sm:text-6xl">
                       {redChance}%
                     </h1>
                   </div>
-                  <div className="flex flex-col justify-center items-center">
-                    <h1 className="text-blue-600 sm:text-6xl text-4xl font-bold">
+                  <div className="flex flex-col items-center justify-center">
+                    <h1 className="text-4xl font-bold text-blue-600 sm:text-6xl">
                       {blueChance}%
                     </h1>
                   </div>
                 </div>
-                <div className="flex flex-row justify-center items-center gap-72 mb-auto sm:mt-5 mt-2">
+                <div className="mt-2 mb-auto flex flex-row items-center justify-center gap-72 sm:mt-5">
                   <Progress.Root
-                    className="relative overflow-hidden bg-blue-600 rounded-full sm:w-[400px] sm:h-[25px] w-[200px] h-[15px]"
+                    className="relative overflow-hidden rounded-full bg-blue-600 w-[200px] h-[15px] sm:w-[400px] sm:h-[25px]"
                     style={{
                       // Fix overflow clipping in Safari
                       // https://gist.github.com/domske/b66047671c780a238b51c51ffde8d3a0
@@ -243,18 +243,18 @@ export default function Teams() {
                 </div>
               </div>
             </div>
-            <div className="h-auto items-left justify-center xl:flex flex-col hidden">
-              <h1 className="text-5xl font-bold mb-10 text-blue-600">
+            <div className="hidden h-auto flex-col justify-center items-left xl:flex">
+              <h1 className="mb-10 text-5xl font-bold text-blue-600">
                 Team Two
               </h1>
-              <div className="gap-5 flex flex-col">
+              <div className="flex flex-col gap-5">
                 <Form.Field className="flex flex-col" name="b1Team">
                   <Form.Label>
                     Team Number
                   </Form.Label>
                   <Form.Control asChild>
                     <input
-                      className="p-3 h-8 text-black rounded-lg"
+                      className="h-8 rounded-lg p-3 text-black"
                       required
                       value={b1Team || ""}
                       onChange={(event) => setB1Team(event.target.value)}
@@ -267,7 +267,7 @@ export default function Teams() {
                   </Form.Label>
                   <Form.Control asChild>
                     <input
-                      className="p-3 h-8 text-black rounded-lg"
+                      className="h-8 rounded-lg p-3 text-black"
                       required
                       value={b2Team || ""}
                       onChange={(event) => setB2Team(event.target.value)}
@@ -277,14 +277,14 @@ export default function Teams() {
               </div>
             </div>
           </div>
-          <div className="flex-col justify-center items-center mt-16 gap-10 hidden xl:flex">
+          <div className="mt-16 hidden flex-col items-center justify-center gap-10 xl:flex">
             <Form.Field className="flex flex-col" name="seasonId">
               <Form.Label>
                 Season
               </Form.Label>
               <Form.Control asChild>
                 <select
-                  className="p-3 h-15 text-black rounded-lg"
+                  className="h-15 rounded-lg p-3 text-black"
                   required
                   onChange={(event) => setSeasonId(parseInt(event.target.value))}
                 >

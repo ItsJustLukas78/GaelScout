@@ -191,14 +191,14 @@ export default function Teams() {
 
   return (
     <main>
-      <div className="w-full items-center justify-center flex md:flex-row flex-col my-44 lg:gap-20 md:gap-7 gap-16">
-        <div className="h-auto items-left justify-center flex flex-col lg:max-w-min md:max-w-[250px] xs:max-w-min max-w-[300px]">
-          <h1 className="lg:text-8xl md:text-6xl xs:text-8xl text-6xl font-bold mb-10">
+      <div className="my-44 flex w-full flex-col items-center justify-center gap-16 md:flex-row md:gap-7 lg:gap-20">
+        <div className="flex h-auto flex-col justify-center items-left max-w-[300px] xs:max-w-min md:max-w-[250px] lg:max-w-min">
+          <h1 className="mb-10 text-6xl font-bold xs:text-8xl md:text-6xl lg:text-8xl">
             Events
           </h1>
           <Form.Root
             onSubmit={getEvents}
-            className="gap-5 flex flex-col"
+            className="flex flex-col gap-5"
           >
             <Form.Field className="flex flex-col" name="teamNumber">
               <Form.Label>
@@ -206,7 +206,7 @@ export default function Teams() {
               </Form.Label>
               <Form.Control asChild>
                 <input
-                  className="p-1 h-8 text-black rounded-lg"
+                  className="h-8 rounded-lg p-1 text-black"
                   onChange={(e) => setEventSKU(e.target.value)}
                 />
               </Form.Control>
@@ -217,7 +217,7 @@ export default function Teams() {
               </Form.Label>
               <Form.Control asChild>
                 <input
-                  className="p-1 h-8 text-black rounded-lg"
+                  className="h-8 rounded-lg p-1 text-black"
                   onChange={(e) => setEventName(e.target.value)}
                   disabled={eventSKU !== ""}
                 />
@@ -229,7 +229,7 @@ export default function Teams() {
               </Form.Label>
               <Form.Control asChild>
                 <select
-                  className="p-1 h-8 text-black rounded-lg"
+                  className="h-8 rounded-lg p-1 text-black"
                   onChange={(e) => setCountry(e.target.value)}
                   disabled={eventSKU !== ""}
                 >
@@ -265,7 +265,7 @@ export default function Teams() {
               <Form.Field className="flex flex-col" name="region" asChild>
                 <Form.Control asChild>
                   <select
-                    className="p-1 h-8 text-black rounded-lg"
+                    className="h-8 rounded-lg p-1 text-black"
                     onChange={(e) => setRegion(e.target.value)}
                     disabled={availableRegions.length === 1 || eventSKU !== ""}
                   >
@@ -289,7 +289,7 @@ export default function Teams() {
               </Form.Label>
               <Form.Control asChild>
                 <select
-                  className="p-1 h-8 text-black rounded-lg"
+                  className="h-8 rounded-lg p-1 text-black"
                   onChange={(e) => setSeasonId(e.target.value)}
                   disabled={eventSKU !== ""}
                 >
@@ -305,7 +305,7 @@ export default function Teams() {
               </Form.Label>
               <Form.Control asChild>
                 <select
-                  className="p-1 h-8 text-black rounded-lg"
+                  className="h-8 rounded-lg p-1 text-black"
                   onChange={(e) => setGradeLevel(e.target.value as GradeLevel)}
                   disabled={eventSKU !== ""}
                 >
@@ -327,8 +327,8 @@ export default function Teams() {
             </Form.Submit>
           </Form.Root>
         </div>
-        <div className="h-auto items-center justify-center flex flex-col">
-          <div className="overflow-auto rounded-2xl lg:w-120 sm:w-96 w-80 h-120 gap-4 flex flex-col items-center bg-neutral-800 p-8">
+        <div className="flex h-auto flex-col items-center justify-center">
+          <div className="flex w-80 flex-col items-center gap-4 overflow-auto rounded-2xl bg-neutral-800 p-8 h-120 sm:w-96 lg:w-120">
             {resultsLoading &&
               <>
                 <EventResultSkeleton />
@@ -353,22 +353,22 @@ export default function Teams() {
               )
             })}
           </div>
-          <div className="flex flex-row mt-4">
+          <div className="mt-4 flex flex-row">
             <button
-              className="p-1 bg-white text-black h-8 min-w-[20px] rounded-l-lg"
+              className="h-8 rounded-l-lg bg-white p-1 text-black min-w-[20px]"
               onClick={() => getEvents(null, currentPage - 1)}
               disabled={currentPage === 1}
             >
               <AiOutlineLeft />
             </button>
             <button
-              className="p-1 bg-white text-black h-8 min-w-[20px] rounded-r-lg"
+              className="h-8 rounded-r-lg bg-white p-1 text-black min-w-[20px]"
               onClick={() => getEvents(null, currentPage + 1)}
               disabled={currentResults.length < 20}
             >
               <AiOutlineRight />
             </button>
-            <h3 className="text-sm text-white ml-4 flex items-center">
+            <h3 className="ml-4 flex items-center text-sm text-white">
               Page {currentPage}
             </h3>
           </div>

@@ -49,15 +49,15 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
 
   return (
     <main>
-      <div className="w-full items-center justify-center flex flex-col my-44 gap-16">
-        <div className="h-auto items-left justify-center flex flex-col xl:min-w-[1200px] lg:min-w-[900px] md:min-w-[700px] sm:min-w-[500px] max-w-[340px] rounded-2xl bg-neutral-800 p-8">
-          <h1 className="lg:text-8xl md:text-5xl sm:text-8xl xs:text-5xl text-5xl font-bold mb-10 min-w-fit">
+      <div className="my-44 flex w-full flex-col items-center justify-center gap-16">
+        <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+          <h1 className="mb-10 min-w-fit text-5xl font-bold xs:text-5xl sm:text-8xl md:text-5xl lg:text-8xl">
             Team #{teamNumber}
           </h1>
           {teamProfile ? <>
-            <div className="md:gap-14 gap-5 flex md:flex-row flex-col min-w-auto">
-              <div className="gap-5 flex md:flex-col flex-row min-w-fit">
-                <div className="flex flex-col md:w-auto w-[49%]">
+            <div className="flex flex-col gap-5 min-w-auto md:flex-row md:gap-14">
+              <div className="flex min-w-fit flex-row gap-5 md:flex-col">
+                <div className="flex flex-col w-[49%] md:w-auto">
                   <h3 className="text-xl font-bold">
                     Team Name:
                   </h3>
@@ -65,7 +65,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                     {teamProfile.teamName ? teamProfile.teamName : "N/A"}
                   </h3>
                 </div>
-                <div className="flex flex-col md:w-auto w-[49%]">
+                <div className="flex flex-col w-[49%] md:w-auto">
                   <h3 className="text-xl font-bold">
                     Robot Name:
                   </h3>
@@ -74,8 +74,8 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                   </h3>
                 </div>
               </div>
-              <div className="gap-5 flex md:flex-col flex-row min-w-fit">
-                <div className="flex flex-col md:w-auto w-[49%]">
+              <div className="flex min-w-fit flex-row gap-5 md:flex-col">
+                <div className="flex flex-col w-[49%] md:w-auto">
                   <h3 className="text-xl font-bold">
                     Organization:
                   </h3>
@@ -83,7 +83,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                     {teamProfile.teamOrg ? teamProfile.teamOrg : "N/A"}
                   </h3>
                 </div>
-                <div className="flex flex-col md:w-auto w-[49%]">
+                <div className="flex flex-col w-[49%] md:w-auto">
                   <h3 className="text-xl font-bold">
                     Location:
                   </h3>
@@ -92,8 +92,8 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                   </h3>
                 </div>
               </div>
-              <div className="gap-5 flex md:flex-col flex-row min-w-fit">
-                <div className="flex flex-col md:w-auto w-[49%]">
+              <div className="flex min-w-fit flex-row gap-5 md:flex-col">
+                <div className="flex flex-col w-[49%] md:w-auto">
                   <h3 className="text-xl font-bold">
                     Program:
                   </h3>
@@ -101,7 +101,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                     {teamProfile.programCode ? teamProfile.programCode : "N/A"}
                   </h3>
                 </div>
-                <div className="flex flex-col md:w-auto w-[49%]">
+                <div className="flex flex-col w-[49%] md:w-auto">
                   <h3 className="text-xl font-bold">
                     Grade:
                   </h3>
@@ -112,18 +112,18 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
               </div>
             </div>
           </> :
-            <h3 className="text-xl mb-5">
+            <h3 className="mb-5 text-xl">
               Team Profile Not Found
             </h3>
           }
           </div>
-        <div className="h-auto items-left justify-center flex flex-col xl:min-w-[1200px] lg:min-w-[900px] md:min-w-[700px] sm:min-w-[500px] max-w-[340px] rounded-2xl bg-neutral-800 p-8">
-          <div className="flex md:flex-row flex-col justify-between mb-10">
-            <h3 className="lg:text-5xl md:text-3xl xs:text-5xl text-3xl font-bold min-w-fit md:mb-0 mb-5">
+        <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+          <div className="mb-10 flex flex-col justify-between md:flex-row">
+            <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl md:mb-0 md:text-3xl lg:text-5xl">
               Season Statistics
             </h3>
             <select
-              className="p-3 h-12 text-black rounded-lg lg:w-80 sm:w-52 w-48"
+              className="h-12 w-48 rounded-lg p-3 text-black sm:w-52 lg:w-80"
               required
               value={seasonId}
               onChange={(event) => setSeasonId(parseInt(event.target.value))}
@@ -133,8 +133,8 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
             </select>
           </div>
           {seasonStats ? <>
-            <div className="mx-2 flex flex-row gap-5 flex-wrap md:justify-between justify-center">
-              <div className="flex flex-col gap-5 xl:w-[49%] md:w-[47%] w-full bg-neutral-700 p-3 rounded-lg">
+            <div className="mx-2 flex flex-row flex-wrap justify-center gap-5 md:justify-between">
+              <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 md:w-[47%] xl:w-[49%]">
                 <div className="flex flex-row justify-between">
                   <h3 className="text-xl font-bold">
                     OPR:
@@ -162,7 +162,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                   </h3>
                 </div>
               </div>
-              <div className="flex flex-col gap-5 xl:w-[49%] md:w-[47%] w-full bg-neutral-700 p-3 rounded-lg">
+              <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 md:w-[47%] xl:w-[49%]">
                 <div className="flex flex-row justify-between">
                   <h3 className="text-xl font-bold">
                     OpenSkill:
@@ -181,7 +181,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                   </h3>
                 </div>
               </div>
-              <div className="flex flex-col gap-5 xl:w-[49%] md:w-[47%] w-full bg-neutral-700 p-3 rounded-lg">
+              <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 md:w-[47%] xl:w-[49%]">
                 <div className="flex flex-row justify-between">
                   <h3 className="text-xl font-bold">
                     Qual Win:
@@ -209,7 +209,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                   </h3>
                 </div>
               </div>
-              <div className="flex flex-col gap-5 xl:w-[49%] md:w-[47%] w-full bg-neutral-700 p-3 rounded-lg">
+              <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 md:w-[47%] xl:w-[49%]">
                 <div className="flex flex-row justify-between">
                   <h3 className="text-xl font-bold">
                     Skills:
@@ -246,7 +246,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                   </h3>
                 </div>
               </div>
-              <div className="flex flex-col gap-5 xl:w-[49%] md:w-[47%] w-full bg-neutral-700 p-3 rounded-lg">
+              <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 md:w-[47%] xl:w-[49%]">
                 <div className="flex flex-row justify-between">
                   <h3 className="text-xl font-bold">
                     Regionals Qual:
@@ -267,7 +267,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
               </div>
             </div>
           </> :
-            <h3 className="text-xl mx-2">
+            <h3 className="mx-2 text-xl">
               Season Profile Not Found
             </h3>
           }

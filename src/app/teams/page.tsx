@@ -192,14 +192,14 @@ export default function Teams() {
 
   return (
     <main>
-      <div className="w-full items-center justify-center flex md:flex-row flex-col my-44 lg:gap-20 md:gap-7 gap-16">
-        <div className="h-auto items-left justify-center flex flex-col lg:max-w-min md:max-w-[250px] xs:max-w-min max-w-[300px]">
-          <h1 className="lg:text-8xl md:text-6xl xs:text-8xl text-6xl font-bold mb-10">
+      <div className="my-44 flex w-full flex-col items-center justify-center gap-16 md:flex-row md:gap-7 lg:gap-20">
+        <div className="flex h-auto flex-col justify-center items-left max-w-[300px] xs:max-w-min md:max-w-[250px] lg:max-w-min">
+          <h1 className="mb-10 text-6xl font-bold xs:text-8xl md:text-6xl lg:text-8xl">
             Teams
           </h1>
           <Form.Root
             onSubmit={getTeams}
-            className="gap-5 flex flex-col"
+            className="flex flex-col gap-5"
           >
             <Form.Field className="flex flex-col" name="teamNumber">
               <Form.Label>
@@ -207,7 +207,7 @@ export default function Teams() {
               </Form.Label>
               <Form.Control asChild>
                 <input
-                  className="p-1 h-8 text-black rounded-lg"
+                  className="h-8 rounded-lg p-1 text-black"
                   onChange={(e) => setTeamNumber(e.target.value)}
                 />
               </Form.Control>
@@ -218,7 +218,7 @@ export default function Teams() {
               </Form.Label>
               <Form.Control asChild>
                 <select
-                  className="p-1 h-8 text-black rounded-lg"
+                  className="h-8 rounded-lg p-1 text-black"
                   onChange={(e) => setCountry(e.target.value)}
                   disabled={teamNumber !== ""}
                 >
@@ -254,7 +254,7 @@ export default function Teams() {
               <Form.Field className="flex flex-col" name="region" asChild>
                 <Form.Control asChild>
                   <select
-                    className="p-1 h-8 text-black rounded-lg"
+                    className="h-8 rounded-lg p-1 text-black"
                     onChange={(e) => setRegion(e.target.value)}
                     disabled={availableRegions.length === 1 || teamNumber !== ""}
                   >
@@ -278,7 +278,7 @@ export default function Teams() {
               </Form.Label>
               <Form.Control asChild>
                 <select
-                  className="p-1 h-8 text-black rounded-lg"
+                  className="h-8 rounded-lg p-1 text-black"
                   onChange={(e) => setGradeLevel(e.target.value as GradeLevel)}
                   disabled={teamNumber !== ""}
                 >
@@ -300,8 +300,8 @@ export default function Teams() {
             </Form.Submit>
           </Form.Root>
         </div>
-        <div className="h-auto items-center justify-center flex flex-col">
-          <div className="overflow-auto rounded-2xl lg:w-120 sm:w-96 w-80 h-120 gap-4 flex flex-col items-center bg-neutral-800 p-8">
+        <div className="flex h-auto flex-col items-center justify-center">
+          <div className="flex w-80 flex-col items-center gap-4 overflow-auto rounded-2xl bg-neutral-800 p-8 h-120 sm:w-96 lg:w-120">
             {resultsLoading &&
               <>
                 <TeamResultSkeleton />
@@ -327,19 +327,19 @@ export default function Teams() {
               )
             })}
           </div>
-          <div className="flex flex-row mt-4">
-            <h3 className="text-sm text-white mr-4 flex items-center">
+          <div className="mt-4 flex flex-row">
+            <h3 className="mr-4 flex items-center text-sm text-white">
               {currentResultsCount} Results
             </h3>
             <button
-              className="p-1 bg-white text-black h-8 min-w-[20px] rounded-l-md"
+              className="h-8 rounded-l-md bg-white p-1 text-black min-w-[20px]"
               onClick={() => getTeams(null, 1)}
               disabled={currentPage === 1}
             >
               <AiOutlineDoubleLeft />
             </button>
             <button
-              className="p-1 bg-white text-black h-8 min-w-[20px]"
+              className="h-8 bg-white p-1 text-black min-w-[20px]"
               onClick={() => getTeams(null, currentPage - 1)}
               disabled={currentPage === 1}
             >
@@ -349,7 +349,7 @@ export default function Teams() {
               {totalPages === 1 &&
                 <>
                   <button
-                    className="p-1 bg-white text-black h-8 min-w-[20px]"
+                    className="h-8 bg-white p-1 text-black min-w-[20px]"
                     onClick={() => {}}
                     disabled={true}
                   >
@@ -361,7 +361,7 @@ export default function Teams() {
                   {currentPage - 2 > 0 &&
                     <>
                       <button
-                        className="p-1 bg-white text-black h-8 min-w-[20px]"
+                        className="h-8 bg-white p-1 text-black min-w-[20px]"
                         onClick={(e) => getTeams(e, currentPage - 2)}
                       >
                         {currentPage - 2}
@@ -371,7 +371,7 @@ export default function Teams() {
                   {currentPage - 1 > 0 &&
                     <>
                       <button
-                        className="p-1 bg-white text-black h-8 min-w-[20px]"
+                        className="h-8 bg-white p-1 text-black min-w-[20px]"
                         onClick={(e) => getTeams(e, currentPage - 1)}
                       >
                         {currentPage - 1}
@@ -379,7 +379,7 @@ export default function Teams() {
                     </>
                   }
                   <button
-                    className="p-1 text-black h-8 min-w-[20px] bg-neutral-400"
+                    className="h-8 bg-neutral-400 p-1 text-black min-w-[20px]"
                     onClick={() => {}}
                     disabled={true}
                   >
@@ -388,7 +388,7 @@ export default function Teams() {
                   {currentPage + 1 <= totalPages &&
                     <>
                       <button
-                        className="p-1 bg-white text-black h-8 min-w-[20px]"
+                        className="h-8 bg-white p-1 text-black min-w-[20px]"
                         onClick={(e) =>  getTeams(e, currentPage + 1)}
                       >
                         {currentPage + 1}
@@ -398,7 +398,7 @@ export default function Teams() {
                   {currentPage + 2 <= totalPages &&
                     <>
                       <button
-                        className="p-1 bg-white text-black h-8 min-w-[20px]"
+                        className="h-8 bg-white p-1 text-black min-w-[20px]"
                         onClick={(e) => getTeams(e, currentPage + 2)}
                       >
                         {currentPage + 2}
@@ -409,20 +409,20 @@ export default function Teams() {
               }
             </div>
             <button
-              className="p-1 bg-white text-black h-8 min-w-[20px]"
+              className="h-8 bg-white p-1 text-black min-w-[20px]"
               onClick={() => getTeams(null, currentPage + 1)}
               disabled={currentPage === totalPages}
             >
               <AiOutlineRight />
             </button>
             <button
-              className="p-1 bg-white text-black h-8 min-w-[20px] rounded-r-md"
+              className="h-8 rounded-r-md bg-white p-1 text-black min-w-[20px]"
               onClick={() => getTeams(null, totalPages)}
               disabled={currentPage === totalPages}
             >
               <AiOutlineDoubleRight />
             </button>
-            <h3 className="text-sm text-white ml-4 flex items-center">
+            <h3 className="ml-4 flex items-center text-sm text-white">
               Page {currentPage} of {totalPages}
             </h3>
           </div>

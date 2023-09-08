@@ -8,10 +8,10 @@ export default function TeamResult({ username, firstName, lastName, image_url, h
   return (
     <Link
       href={`/profiles/${username}`}
-      className="rounded-2xl bg-neutral-300 w-full p-2 h-auto shadow-lg shadow-neutral-500 flex flex-col"
+      className="flex h-auto w-full flex-col rounded-2xl bg-neutral-300 p-2 shadow-lg shadow-neutral-500"
     >
-      <div className="flex flex-row gap-2 items-center">
-        <div className="sm:min-w-[50px] sm:min-h-[50px] min-w-[40px] min-h-[40px] relative">
+      <div className="flex flex-row items-center gap-2">
+        <div className="relative min-w-[40px] min-h-[40px] sm:min-w-[50px] sm:min-h-[50px]">
           <Image
             className="rounded-full"
             src={has_image ? image_url as string : "/GS_logo.png"}
@@ -19,25 +19,25 @@ export default function TeamResult({ username, firstName, lastName, image_url, h
             alt="Profile Picture"
           />
         </div>
-        <div className="flex flex-row w-full items-center justify-between">
+        <div className="flex w-full flex-row items-center justify-between">
           <div className="flex flex-col">
             <div className="flex flex-row items-center">
-              <h2 className="sm:text-xl text-sm font-bold text-gray-900">
+              <h2 className="text-sm font-bold text-gray-900 sm:text-xl">
                 @{username}
               </h2>
               {public_metadata.hasOwnProperty("verifiedTeamNumber") ? (
-                <MdVerified className="text-blue-600 ml-2" />
+                <MdVerified className="ml-2 text-blue-600" />
               ) : (
                 <></>
               )}
             </div>
-            <h2 className="sm:text-sm text-xs font-semibold text-gray-900 mb-2">
+            <h2 className="mb-2 text-xs font-semibold text-gray-900 sm:text-sm">
               {firstName ? firstName : ""} {lastName ? lastName : ""}
             </h2>
           </div>
-          <div className="flex mr-3 p-1">
+          <div className="mr-3 flex p-1">
             {public_metadata.hasOwnProperty("verifiedTeamNumber") ? (
-              <h1 className="sm:text-lg text-sm font-bold text-blue-600">
+              <h1 className="text-sm font-bold text-blue-600 sm:text-lg">
                 {/*@ts-ignore*/}
                 {public_metadata["verifiedTeamNumber"]}
               </h1>

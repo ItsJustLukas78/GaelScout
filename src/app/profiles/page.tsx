@@ -47,20 +47,20 @@ export default function Profiles() {
 
   return (
     <main>
-      <div className="w-full items-center justify-center flex md:flex-row flex-col my-44 lg:gap-20 md:gap-12 gap-16">
-        <div className="h-auto items-left justify-center flex flex-col lg:max-w-min md:max-w-[250px] xs:max-w-min max-w-[300px]">
-          <h1 className="lg:text-8xl md:text-6xl xs:text-8xl text-6xl font-bold mb-10">
+      <div className="my-44 flex w-full flex-col items-center justify-center gap-16 md:flex-row md:gap-12 lg:gap-20">
+        <div className="flex h-auto flex-col justify-center items-left max-w-[300px] xs:max-w-min md:max-w-[250px] lg:max-w-min">
+          <h1 className="mb-10 text-6xl font-bold xs:text-8xl md:text-6xl lg:text-8xl">
             User Profiles
           </h1>
           <input
-            className="p-1 h-8 text-black rounded-lg lg:min-w-[400px] md:min-w-[200px] s:min-w-[100px] xs:min-w-[100px] min-w-[200px]"
+            className="h-8 rounded-lg p-1 text-black s:min-w-[100px] min-w-[200px] xs:min-w-[100px] md:min-w-[200px] lg:min-w-[400px]"
             type="text"
             placeholder="Search for a user..."
             onChange={(e) => setUsernameSearch(e.target.value)}
           />
         </div>
-        <div className="h-auto items-center justify-center flex flex-col">
-          <div className="overflow-auto rounded-2xl xl:w-144 lg:w-120 sm:w-96 w-80 h-120 gap-4 flex flex-col items-center bg-neutral-800 p-8">
+        <div className="flex h-auto flex-col items-center justify-center">
+          <div className="flex w-80 flex-col items-center gap-4 overflow-auto rounded-2xl bg-neutral-800 p-8 h-120 sm:w-96 lg:w-120 xl:w-144">
             {resultsLoading &&
               <>
                 <UserResultSkeleton />

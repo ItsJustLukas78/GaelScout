@@ -21,7 +21,7 @@ export default function Navbar() {
           <Image src="/GS_logo.png" alt="GaelSuite Logo" width="50" height="50" />
           <NavButton href="/">GaelScout</NavButton>
         </div>
-        <div className="hidden lg:inline-flex lg:gap-9 2xl:gap-16 xl:gap-14">
+        <div className="hidden lg:inline-flex lg:gap-9 xl:gap-14 2xl:gap-16">
           <NavButton href="/">Home</NavButton>
           <NavButton href="/teams">Teams</NavButton>
           <NavButton href="/events">Events</NavButton>
@@ -38,9 +38,9 @@ export default function Navbar() {
             <NavButton href="/sign-in">Sign In</NavButton>
           }
         </div>
-        <div className="ml-auto mr-10 lg:hidden">
+        <div className="mr-10 ml-auto lg:hidden">
           <button
-              className="w-[35px] h-[35px] inline-flex items-center justify-center"
+              className="inline-flex items-center justify-center w-[35px] h-[35px]"
               aria-label="Customise options"
               onClick={() => setExpanded(!expanded)}
             >
@@ -63,7 +63,7 @@ export default function Navbar() {
             <NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>
             {/*<NavButton href="/about">About</NavButton>*/}
             {/*<button*/}
-            {/*  className="whitespace-nowrap w-fit text-white text-2xl font-semibold h-auto"*/}
+            {/*  className="h-auto w-fit whitespace-nowrap text-2xl font-semibold text-white"*/}
             {/*  onClick={() => {*/}
             {/*    if (status === "authenticated") {*/}
             {/*      signOut();*/}

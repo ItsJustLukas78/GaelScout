@@ -31,11 +31,11 @@ export default function UserProfile({ params }: { params: { username: string } }
   // @ts-ignore
   return (
     <main>
-      <div className="w-full items-center justify-center flex flex-col my-44 gap-16">
+      <div className="my-44 flex w-full flex-col items-center justify-center gap-16">
         {userProfile ? <>
-          <div className="h-auto items-left justify-center flex flex-col xl:min-w-[1200px] lg:min-w-[900px] md:min-w-[700px] sm:min-w-[500px] max-w-[340px] rounded-2xl bg-neutral-800 p-8">
-            <div className="flex flex-row gap-5 items-center mb-5">
-              <div className="lg:w-24 lg:h-24 md:w-16 md:h-16 xs:w-12 xs:h-12 h-11 w-11 relative">
+          <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+            <div className="mb-5 flex flex-row items-center gap-5">
+              <div className="relative h-11 w-11 xs:h-12 xs:w-12 md:h-16 md:w-16 lg:h-24 lg:w-24">
                 <Image
                   className="rounded-full"
                   src={userProfile.has_image ? userProfile.image_url : "/GS_logo.png"}
@@ -44,29 +44,29 @@ export default function UserProfile({ params }: { params: { username: string } }
                 />
               </div>
               <div className="flex flex-row items-center">
-                <h2 className="lg:text-8xl md:text-6xl xs:text-3xl text-2xl font-bold mb-2">
+                <h2 className="mb-2 text-2xl font-bold xs:text-3xl md:text-6xl lg:text-8xl">
                   @{userProfile.username}
                 </h2>
                 {userProfile.public_metadata.hasOwnProperty("verifiedTeamNumber") ? (
                   <MdVerified
-                    className="text-blue-600 ml-2 md:w-20 md:h-20 sm:w-14 sm:h-14 w-8 h-8"
+                    className="ml-2 h-8 w-8 text-blue-600 sm:h-14 sm:w-14 md:h-20 md:w-20"
                   />
                 ) : (
                   <></>
                 )}
               </div>
             </div>
-            <div className="md:gap-14 gap-5 flex md:flex-row flex-col min-w-auto">
-              <div className="gap-5 flex md:flex-col flex-row min-w-fit">
-                <h3 className="lg:text-3xl md:text-xl sm:text-lg font-bold">
+            <div className="flex flex-col gap-5 min-w-auto md:flex-row md:gap-14">
+              <div className="flex min-w-fit flex-row gap-5 md:flex-col">
+                <h3 className="font-bold sm:text-lg md:text-xl lg:text-3xl">
                   {userProfile.firstName ? userProfile.firstName : ""} {userProfile.lastName ? userProfile.lastName : ""}
                 </h3>
                 <a
                   href={`/teams/${userProfile.public_metadata["verifiedTeamNumber"]}`}
                 >
-                  <div className="flex flex-row gap-2 lg:text-xl md:text-lg sm:text-md font-bold">
+                  <div className="flex flex-row gap-2 font-bold sm:text-md md:text-lg lg:text-xl">
                     Team: {userProfile.public_metadata.hasOwnProperty("verifiedTeamNumber") ? userProfile.public_metadata["verifiedTeamNumber"] : "N/A"}
-                    <AiOutlineLink className="text-blue-600 w-6 h-6" />
+                    <AiOutlineLink className="h-6 w-6 text-blue-600" />
                   </div>
                 </a>
               </div>

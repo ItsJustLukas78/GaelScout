@@ -7,9 +7,9 @@ import * as Accordion from '@radix-ui/react-accordion';
 export default async function IndexPage() {
   const spec = await getApiDocs();
   return (
-    <div className="h-auto justify-center flex flex-col mt-32 gap-20">
-      <div className="h-auto justify-center flex flex-row">
-        <div className="bg-neutral-300 w-4/5 rounded-2xl">
+    <div className="mt-32 flex h-auto flex-col justify-center gap-20">
+      <div className="flex h-auto flex-row justify-center">
+        <div className="w-4/5 rounded-2xl bg-neutral-300">
           <ReactSwagger spec={spec} />
         </div>
       </div>
