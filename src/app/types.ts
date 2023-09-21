@@ -87,4 +87,12 @@ export interface Region {
   name: string;
 }
 
+export enum RankableStatistic {
+  OPR = "opr",
+  DPR = "dpr",
+  CCWM = "ccwm",
+  OPENSKILL = "openSkill",
+  TOTALSKILLS = "topTotalSkills",
+}
+
 

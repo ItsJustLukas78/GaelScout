@@ -8,7 +8,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
 
   const [teamProfile, setTeamProfile] = useState<TeamProfile | null>(null);
   const [seasonStats, setSeasonStats] = useState<TeamSeasonProfile | null>(null);
-  const [seasonId, setSeasonId] = useState< number >(173);
+  const [seasonId, setSeasonId] = useState< number >(181);
 
   const getTeam = () => {
     fetch(`/api/teams/${teamNumber.toUpperCase()}`).then((response) => {

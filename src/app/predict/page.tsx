@@ -11,7 +11,7 @@ export default function Teams() {
   const [b1Team, setB1Team] = useState< string | null >(null);
   const [b2Team, setB2Team] = useState< string | null >(null);
 
-  const [seasonId, setSeasonId] = useState< number >(173);
+  const [seasonId, setSeasonId] = useState< number >(181);
 
   const [prediction, setPrediction] = useState< any >(null);
 

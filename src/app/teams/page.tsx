@@ -123,6 +123,8 @@ export default function Teams() {
         setTotalPages(Math.ceil(0 / 15));
         return;
       });
+
+      return;
     }
 
     if (country !== "All") {
@@ -180,7 +182,7 @@ export default function Teams() {
          setTotalPages(Math.ceil(totalResults / 15));
        }
      }).catch((error) => {
-        console.log(error);
+        toast.error(error);
         setResultsLoading(false);
         setCurrentResults([]);
         setCurrentResultsCount(0);

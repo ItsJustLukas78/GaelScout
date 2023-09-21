@@ -1,5 +1,6 @@
 import prisma from "@/lib/db";
 import { NextResponse, NextRequest } from "next/server";
+import { RankableStatistic } from "@/app/types";
 
 // import rateLimit from "express-rate-limit";
 
@@ -22,7 +23,7 @@ async function formatTeamSeasonProfile(teamSeasonProfile: any) {
     opr: teamSeasonProfile.opr,
     dpr: teamSeasonProfile.dpr,
     ccwm: teamSeasonProfile.ccwm,
-    openSkill: teamSeasonProfile.openSkill,
+    openSkill: teamSeasonProfile.openSkill.toFixed(4),
     openSkillRank: teamSeasonProfile.openSkillRank,
     eventCount: teamSeasonProfile.eventCount,
     topProgSkills: teamSeasonProfile.topProgSkills,
@@ -80,6 +81,13 @@ export async function GET(
   const page = parseInt(searchParams.get('page') || '1');
   const perPage = parseInt(searchParams.get('perPage') || '15') > 50 ? 50 : parseInt(searchParams.get('perPage') || '15');
   const seasonId = parseInt(params.seasonId);
+  let sortMethod = (searchParams.get('sort') ? searchParams.get('sort') : RankableStatistic.OPENSKILL) as string
+
+  if (sortMethod) {
+    if (!Object.values(RankableStatistic).includes(sortMethod as RankableStatistic)) {
+      return NextResponse.json({ error: 'Invalid sort method' }, { status: 400 });
+    }
+  }
 
   const teamNumber: string[] = [];
 
@@ -106,6 +114,9 @@ export async function GET(
       where: {
         seasonId: seasonId,
       },
+      orderBy: {
+        [sortMethod]: (sortMethod === RankableStatistic.DPR ? 'asc' : 'desc')
+      },
       skip: (page - 1) * perPage,
       take: perPage,
     });
@@ -122,6 +133,9 @@ export async function GET(
         teamNumber: {
           in: teamNumber
         }
+      },
+      orderBy: {
+        [sortMethod]: (sortMethod === RankableStatistic.DPR ? 'asc' : 'desc')
       },
       skip: (page - 1) * perPage,
       take: perPage,
@@ -152,10 +166,6 @@ export async function GET(
   const formattedTeams = await Promise.all(teams.map(async (team: any) => {
     return await formatTeamSeasonProfile(team);
   }));
-
-  formattedTeams.sort((a: any, b: any) => {
-    return a.openSkillRank - b.openSkillRank;
-  });
 
   const formattedResponse = {
     meta: meta,

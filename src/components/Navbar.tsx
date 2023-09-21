@@ -7,6 +7,8 @@ import {
 import React from "react";
 import { UserButton, useUser } from "@clerk/nextjs";
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
+import NavDropDown from "@/components/NavDropdown";
+import NavDropButton from "@/components/NavDropButton";
 
 export default function Navbar() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -26,9 +28,11 @@ export default function Navbar() {
           <NavButton href="/teams">Teams</NavButton>
           <NavButton href="/events">Events</NavButton>
           <NavButton href="/profiles">Profiles</NavButton>
-          {/*<NavButton href="/Rankings">Rankings</NavButton>*/}
-          <NavButton href="/predict">Predict</NavButton>
+          <NavButton href="/rankings">Rankings</NavButton>
           <NavButton href="/verify">Verify</NavButton>
+          <NavDropDown>
+            <NavDropButton href="/predict">Predict</NavDropButton>
+          </NavDropDown>
           {/*<NavButton href="/api-docs">API</NavButton>*/}
           <NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>
           {/*<NavButton href="/about">About</NavButton>*/}
@@ -56,7 +60,7 @@ export default function Navbar() {
             <NavButton href="/teams">Teams</NavButton>
             <NavButton href="/events">Events</NavButton>
             <NavButton href="/profiles">Profiles</NavButton>
-            {/*<NavButton href="/Rankings">Rankings</NavButton>*/}
+            <NavButton href="/rankings">Rankings</NavButton>
             <NavButton href="/predict">Predict</NavButton>
             <NavButton href="/verify">Verify</NavButton>
             {/*<NavButton href="/api-docs">API</NavButton>*/}
