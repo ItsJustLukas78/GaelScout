@@ -28,6 +28,10 @@
     background: #555;
 }
 
+@font-face {
+  font-family: "ClashDisplay";
+  src: url("../../public/fonts/ClashDisplay-Regular.otf");
+}
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -53,4 +57,31 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+.tiptap h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.tiptap h2 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.tiptap li {
+    margin-left: 1rem;
+    @apply list-disc;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror:focus {
+    outline: none;
 }

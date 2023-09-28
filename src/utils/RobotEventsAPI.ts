@@ -370,43 +370,43 @@ export async function getEvents({seasonId, eventSKUs, eventId} : {seasonId?: num
   }
 }
 
-// export async function getEventMatches(
-//     event_id: number,
-//     division_id: number,
-//     round?: number,
-//     matchnum?: number
-// ): Promise<any[]> {
-//   const url = `https://www.robotevents.com/api/v2/events/${event_id}/divisions/${division_id}/matches`;
-//   const new_headers = {
-//     "accept": "application/json",
-//     "Authorization": "Bearer " + API_KEY,
-//   };
-//
-//   const new_params = { round: round ? round : null, matchnum: matchnum ? matchnum : null };
-//
-//   const division_matches: any[] = [];
-//
-//   try {
-//     const response = await apiCall(url, new_headers, new_params);
-//
-//     division_matches.push(...response.data);
-//
-//     let next_page_url = response.meta.next_page_url;
-//
-//     while (next_page_url) {
-//       const nextPageResponse = await apiCall(next_page_url, new_headers, new_params);
-//
-//       next_page_url = nextPageResponse.meta.next_page_url;
-//
-//       division_matches.push(...nextPageResponse.data);
-//     }
-//
-//     return division_matches;
-//   } catch (error) {
-//     console.error(error);
-//     return [];
-//   }
-// }
+export async function getEventMatches(
+    event_id: number,
+    division_id: number,
+    round?: number,
+    matchnum?: number
+): Promise<any[]> {
+  const url = `https://www.robotevents.com/api/v2/events/${event_id}/divisions/${division_id}/matches`;
+  const new_headers = {
+    "accept": "application/json",
+    "Authorization": "Bearer " + API_KEY,
+  };
+
+  const new_params = { round: round ? round : null, matchnum: matchnum ? matchnum : null };
+
+  const division_matches: any[] = [];
+
+  try {
+    const response = await apiCall(url, new_headers, new_params);
+
+    division_matches.push(...response.data);
+
+    let next_page_url = response.meta.next_page_url;
+
+    while (next_page_url) {
+      const nextPageResponse = await apiCall(next_page_url, new_headers, new_params);
+
+      next_page_url = nextPageResponse.meta.next_page_url;
+
+      division_matches.push(...nextPageResponse.data);
+    }
+
+    return division_matches;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
 
 export async function getEventTeams(event_id: number) {
   const url = `https://www.robotevents.com/api/v2/events/${event_id}/teams`;

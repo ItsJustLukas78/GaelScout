@@ -1,12 +1,14 @@
 import { NextResponse, NextRequest } from "next/server";
 import { clerkClient } from "@clerk/nextjs";
 import { getTeamRobotNameCheerio } from "@/utils/scraper";
+import { getAuth } from "@clerk/nextjs/server";
+
 
 
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    const userId = data.userId;
+    const { userId } = await getAuth(request);
     const teamNumber = data.teamNumber;
 
     if (!userId) {

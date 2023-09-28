@@ -1,0 +1,127 @@
+'use client'
+
+import {
+  EditorContent, useEditor
+} from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import Placeholder from '@tiptap/extension-placeholder'
+import CharacterCount from "@tiptap/extension-character-count";
+import Highlight from "@tiptap/extension-highlight";
+import React, { useEffect, useState } from 'react'
+import {
+  StrikethroughIcon,
+  FontBoldIcon,
+  FontItalicIcon,
+  ListBulletIcon,
+} from '@radix-ui/react-icons';
+
+interface TiptapProps {
+  setEditor: (value: any) => void
+}
+
+const charLimit = 300
+
+const Tiptap = ({setEditor}: TiptapProps) => {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Placeholder.configure({
+        placeholder: 'Write match notes here...',
+      }),
+      CharacterCount.configure({
+        limit: charLimit,
+      }),
+      Highlight.configure({
+        multicolor: true,
+      }),
+    ],
+    editorProps: {
+      attributes: {
+        class: "min-h-[100px] bg-neutral-900 p-3 shadow-md shadow-neutral-900 rounded-t-2xl"
+      }
+    },
+    content: '<p></p>',
+    onCreate: () => setEditor(editor),
+  })
+
+  return (
+    <>
+      {/* Toolbar */}
+      {editor &&
+        <div className="flex flex-row gap-3 bg-neutral-900 rounded-xl p-2 shadow-md shadow-neutral-900 mb-5">
+          <button
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            className={`${editor.isActive('bold') ? 'is-active' : ''} hover:bg-neutral-700 rounded-md p-1`}
+          >
+            <FontBoldIcon/>
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            className={editor.isActive('italic') ? 'is-active' : ''}
+          >
+            <FontItalicIcon/>
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleStrike().run()}
+            className={editor.isActive('strike') ? 'is-active' : ''}
+          >
+            <StrikethroughIcon/>
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+            className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
+          >
+            h1
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+            className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+          >
+            h2
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            className={editor.isActive('bulletList') ? 'is-active' : ''}
+          >
+            <ListBulletIcon/>
+          </button>
+          {/* Highlight color picker with yellow, green, red, and blue only */}
+          <div className="flex flex-row gap-1">
+            <button
+              onClick={() => editor.chain().focus().toggleHighlight({ color: '#DC262640' }).run()}
+              className={editor.isActive('highlight', { color: '#DC262640' }) ? 'is-active' : ''}
+            >
+              <div className="w-5 h-5 rounded-full bg-red-600"></div>
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleHighlight({ color: '#f1e74040' }).run()}
+              className={editor.isActive('highlight', { color: '#f1e74040' }) ? 'is-active' : ''}
+            >
+              <div className="w-5 h-5 rounded-full bg-yellow-400"></div>
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleHighlight({ color: '#2be22240' }).run()}
+              className={editor.isActive('highlight', { color: '#2be22240' }) ? 'is-active' : ''}
+            >
+              <div className="w-5 h-5 rounded-full bg-green-600"></div>
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleHighlight({ color: '#2563eb40' }).run()}
+              className={editor.isActive('highlight', { color: '#2563eb40' }) ? 'is-active' : ''}
+            >
+              <div className="w-5 h-5 rounded-full bg-blue-600"></div>
+            </button>
+          </div>
+        </div>
+      }
+      <EditorContent editor={editor} />
+      {editor &&
+        <div className="text-xs bg-neutral-900 p-3 shadow-md shadow-neutral-900 rounded-b-2xl text-gray-500">
+          {editor.storage.characterCount.characters()}/{charLimit} characters
+        </div>
+      }
+    </>
+  )
+}
+
+export default Tiptap

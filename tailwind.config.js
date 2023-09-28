@@ -5,8 +5,13 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 module.exports = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+	],
   theme: {
+    screens: {
+      '2xs': '320px',
+      'xs': '425px',
+      ...defaultTheme.screens,
+    },
     extend: {
       spacing: {
         "112": "28rem",
@@ -22,14 +27,24 @@ module.exports = {
         "GSGray": "#141414",
         "googleBlue": "#4285F4",
         "discordBlue": "#5865F2",
-      }
-    },
-    screens: {
-      '2xs': '320px',
-      'xs': '425px',
-      ...defaultTheme.screens,
+        "GSGreen": "#2be222",
+      },
+
+      keyframes: {
+        "accordion-down": {
+          from: { height: 0 },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: 0 },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+      },
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 }
-

@@ -53,8 +53,6 @@ export async function GET(
       return NextResponse.json({ error: 'Team not found' }, { status: 404 });
     }
 
-    console.log("Team was created from API")
-
     team = await prisma.teamProfile.create({
       data: {
         teamId: team.id,

@@ -1,14 +1,14 @@
 import { NextResponse, NextRequest } from "next/server";
 import { clerkClient } from "@clerk/nextjs";
+import { getAuth } from "@clerk/nextjs/server";
 
 
 export async function POST(request: NextRequest) {
   try {
-    const data = await request.json();
-    const userId = data.userId;
+    const { userId } = await getAuth(request);
 
     if (!userId) {
-      return NextResponse.json({error: 'User ID not provided'}, {status: 400});
+      return NextResponse.json({error: 'Unauthorized'}, {status: 401});
     }
 
     const clerkUser = await clerkClient.users.getUser(userId);

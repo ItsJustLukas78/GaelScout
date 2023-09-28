@@ -1,6 +1,7 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
+import { withClerkMiddleware } from "@clerk/nextjs";
 // import { authMiddleware } from "@clerk/nextjs";
 // import createMiddleware from "next-intl/middleware";
 
@@ -25,8 +26,7 @@ const verifyGenRatelimit = new Ratelimit({
   analytics: true,
 });
 
-
-export default async function middleware(request: NextRequest, event: NextFetchEvent): Promise<Response | undefined> {
+async function middleware(request: NextRequest, event: NextFetchEvent): Promise<Response | undefined> {
   const ip = request.ip ?? "127.0.0.1";
 
   if (request.nextUrl.pathname === "/api/blocked") {
@@ -72,6 +72,10 @@ export default async function middleware(request: NextRequest, event: NextFetchE
     return res;
   }
 }
+
+export default withClerkMiddleware((request: NextRequest, event: NextFetchEvent): Promise<Response | undefined> => {
+  return middleware(request, event);
+});
 
 export const config = {
   matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],

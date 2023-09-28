@@ -20,6 +20,9 @@ model TeamProfile {
   programCode        String              @default("No program")
   programId          Int                 @default(0)
   TeamSeasonProfiles TeamSeasonProfile[]
+  TeamNotes          TeamNote[]
+
+  @@unique([teamId, teamNumber])
 }
 
 model TeamSeasonProfile {
@@ -58,4 +61,24 @@ model TeamSeasonProfile {
 
   @@unique([teamId, seasonId])
   @@unique([teamNumber, seasonId])
+}
+
+model SeasonAnalysis {
+  seasonId       Int      @id
+  seasonName     String   @unique
+  numberOfTeams  Int
+  numberOfEvents Int
+  lastEventDate  DateTime
+}
+
+model TeamNote {
+  id         Int         @id @default(autoincrement())
+  userId     String
+  teamId     Int
+  teamNumber String
+  seasonId   Int
+  note       Json
+  team       TeamProfile @relation(fields: [teamId, teamNumber], references: [teamId, teamNumber])
+
+  @@unique([userId, seasonId, teamNumber, teamId])
 }

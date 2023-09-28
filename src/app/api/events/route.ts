@@ -51,7 +51,14 @@ export async function GET(request: NextRequest) {
           city: event.location.city,
           region: event.location.region,
           country: event.location.country,
-        }
+        },
+        // @ts-ignore
+        divisions: event.divisions.map((division) => {
+          return {
+            id: division.id,
+            name: division.name,
+          }
+        }),
       }
     });
 

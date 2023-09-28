@@ -25,6 +25,26 @@ export interface TeamProfile {
   programId: number,
 }
 
+export interface TeamIdentifiers {
+  teamId: number,
+  teamNumber: string,
+}
+
+export interface EventMatch {
+  id: number,
+  eventId: number,
+  divisionId: number,
+  round: number,
+  instance: number,
+  matchnum: number,
+  field: string,
+  name: string,
+  blueTeams: TeamIdentifiers[],
+  redTeams: TeamIdentifiers[],
+  blueScore: number,
+  redScore: number,
+}
+
 export interface TeamSeasonProfile {
   teamId: number,
   teamName: string,
@@ -52,6 +72,11 @@ export interface TeamSeasonProfile {
   awardQualToWorlds: boolean,
 }
 
+export interface Division {
+  id: number;
+  name: string;
+}
+
 export interface Event {
   id: number;
   sku: string;
@@ -73,7 +98,8 @@ export interface Event {
     city: string;
     region: string;
     country: string;
-  }
+  },
+  divisions: Division[]
 }
 
 export interface Country {

@@ -7,7 +7,7 @@ export default function Home() {
     <main>
       <div className="my-28 flex w-full flex-col items-center justify-center gap-20">
         <div className="flex h-auto flex-col items-center justify-center lg:space-x-8 lg:flex-row">
-          <div className="my-16 inline-flex w-72 flex-col space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
+          <div className="my-16 inline-flex flex-col space-y-8 w-72 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
             <h1 className="text-5xl font-bold xs:text-7xl sm:text-8xl">
               Scouting Done Easy.
             </h1>
@@ -36,7 +36,7 @@ export default function Home() {
               Developed by students at GaelSuite.
             </h1>
             <p className="text-base sm:text-xl">
-              GaelScout was developed by GaelSuite, a nonprofit established by members
+              GaelScout was developed by Lukas from 5327S with support from GaelSuite, a nonprofit established by members
               of the Gael Force 5327 Organization. Scouting teams can be challenging,
               with a vast amount of participants, few to no reliable methods of communication,
               limited resources, and difficulty distinguishing teams from one another in

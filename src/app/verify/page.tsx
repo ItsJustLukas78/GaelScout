@@ -41,9 +41,6 @@ export default function Verify() {
     fetch(`/api/verify/generate`,
       {
         method: "POST",
-        body: JSON.stringify({
-          userId: user.id,
-        }),
       },
     ).then((response) => {
       response.json().then((data) => {
@@ -91,7 +88,6 @@ export default function Verify() {
       {
         method: "POST",
         body: JSON.stringify({
-          userId: user.id,
           teamNumber: teamNumberInput,
         }),
       },
