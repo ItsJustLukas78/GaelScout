@@ -30,16 +30,25 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
       return;
     }
 
+    if (!completedInitialFetch) {
+      toast.warn("No changes made because existing notes not loaded.")
+      currentEditor.setEditable(false)
+      setCurrentTeamNotes(null)
+      setCompletedInitialFetch(false)
+      setLoadedNotesWasEmpty(false)
+      setTeamNotesDialogOpen(false)
+      return;
+    }
+
     setLoading(true)
 
     let notes = currentEditor.getJSON()
 
     if (notes.content.length === 1 && !("content" in notes.content[0])) {
-      console.log("notes was empty");
       notes = null
 
       if (loadedNotesWasEmpty) {
-        console.log("notes was empty and loadedNotesWasEmpty was true")
+        currentEditor.setEditable(false)
         setCurrentTeamNotes(null)
         setCompletedInitialFetch(false)
         setLoadedNotesWasEmpty(false)
@@ -67,23 +76,34 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
         }
       }).then((response) => {
         response.json().then((data) => {
+          console.log({data})
           if (data.error) {
             toast.error(data.error);
+            setLoading(false);
             return;
           }
 
-          currentEditor.commands.clearContent()
-          setCurrentTeamNotes(null)
-          setCompletedInitialFetch(false)
-          setLoadedNotesWasEmpty(false)
-          setTeamNotesDialogOpen(false)
+          currentEditor.setEditable(false)
+          currentEditor.commands.clearContent();
+          setCurrentTeamNotes(null);
+          setCompletedInitialFetch(false);
+          setLoadedNotesWasEmpty(false);
+          setTeamNotesDialogOpen(false);
+        }).catch((error) => {
+          console.log(error);
+          toast.error("An error occurred while saving team notes.");
+          setLoading(false);
         });
       }).catch((error) => {
         console.log(error);
         toast.error("An error occurred while saving team notes.");
-        setLoading(false)
+        setLoading(false);
       });
-    })
+    }).catch((error) => {
+      console.log(error);
+      toast.error("An error occurred while saving team notes.");
+      setLoading(false);
+    });
   }
 
   const getTeamNotes = () => {
@@ -108,19 +128,23 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
           setCompletedInitialFetch(true)
           setLoading(false)
 
-          console.log(data.notes)
-
           if (data.notes.length === 0) {
             setLoadedNotesWasEmpty(true)
             return;
           }
 
           setCurrentTeamNotes(data.notes[0].note)
+        }).catch((error) => {
+          console.log(error);
+          toast.error("An error occurred while fetching team notes.");
         });
       }).catch((error) => {
         console.log(error);
         toast.error("An error occurred while fetching team notes.");
       });
+    }).catch((error) => {
+      console.log(error);
+      toast.error("An error occurred while fetching team notes.");
     })
   }
 
@@ -131,14 +155,13 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
   }, [currentNotesTeam, teamNotesDialogOpen])
 
   useEffect(() => {
-    console.log("SECOND useEFFECT")
-    console.log(currentTeamNotes)
-    console.log(currentEditor)
-    console.log(completedInitialFetch)
-    if (currentTeamNotes && currentEditor && completedInitialFetch) {
-      console.log("setting content")
-      console.log({currentTeamNotes})
-      currentEditor.commands.setContent(currentTeamNotes)
+    if (currentEditor) {
+      if (currentTeamNotes && completedInitialFetch) {
+        currentEditor.commands.setContent(currentTeamNotes)
+      } else if (!currentTeamNotes && completedInitialFetch) {
+        currentEditor.commands.clearContent()
+      }
+      currentEditor.setEditable(true)
     }
   }, [currentTeamNotes, completedInitialFetch, currentEditor])
 

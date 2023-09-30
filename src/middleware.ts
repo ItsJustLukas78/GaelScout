@@ -5,7 +5,7 @@ import { authMiddleware } from "@clerk/nextjs/server";
 
 const generalRatelimit = new Ratelimit({
   redis: Redis.fromEnv(),
-  limiter: Ratelimit.cachedFixedWindow(10, "10s"),
+  limiter: Ratelimit.cachedFixedWindow(15, "10s"),
   ephemeralCache: new Map(),
   analytics: true,
 });

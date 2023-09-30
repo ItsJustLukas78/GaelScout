@@ -25,6 +25,7 @@ export default function MatchTeamResult({ teamId, teamNumber, teamName, programC
         className="opacity-50 flex sm:mr-3 min-w-[50px] min-h-[40px] whitespace-nowrap rounded-md bg-neutral-50 text-xl font-semibold text-black disabled:opacity-50 ml-auto items-center justify-center"
         onClick={(e) => {
           e.preventDefault()
+          e.stopPropagation()
           openMatchNotes(teamId)
         }}
       >

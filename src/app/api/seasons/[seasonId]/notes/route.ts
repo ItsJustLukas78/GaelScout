@@ -116,8 +116,6 @@ export async function POST(
       }
     }));
 
-    console.log("done")
-
     return NextResponse.json({notes}, {
       status: 201,
       headers: {

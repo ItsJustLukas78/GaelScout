@@ -48,6 +48,11 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
       return;
     }
 
+    if (!completedinitialFetch) {
+      toast.warn("No changes made because existing notes not loaded.")
+      return;
+    }
+
     setLoading(true)
 
     let latestTeamToMatchNotes = {
@@ -81,12 +86,18 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
             return;
           }
 
+          currentEditor.setEditable(false)
           currentEditor.commands.clearContent()
+
           if (match) {
             setCurrentMatch(match)
           } else {
             setMatchNotesDialogOpen(false)
           }
+          setLoading(false)
+        }).catch((error) => {
+          console.log(error);
+          toast.error("An error occurred while saving team notes.");
           setLoading(false)
         });
       }).catch((error) => {
@@ -94,7 +105,11 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
         toast.error("An error occurred while saving team notes.");
         setLoading(false)
       });
-    })
+    }).catch((error) => {
+      console.log(error);
+      toast.error("An error occurred while saving team notes.");
+      setLoading(false)
+    });
   }
 
   const getMatchTeamNotes = (teams: TeamIdentifiers[]) => {
@@ -132,12 +147,18 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
           }
 
           setTeamToMatchNotes(teamNotes)
+        }).catch((error) => {
+          console.log(error);
+          toast.error("An error occurred while fetching team notes.");
         });
       }).catch((error) => {
         console.log(error);
         toast.error("An error occurred while fetching team notes.");
       });
-    })
+    }).catch((error) => {
+      console.log(error);
+      toast.error("An error occurred while fetching team notes.");
+    });
   }
 
   useEffect(() => {
@@ -147,10 +168,15 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
   }, [currentMatch])
 
   useEffect(() => {
-    if (currentTeam && currentEditor) {
+    if (!currentEditor) {
+      return;
+    }
+
+    if (currentTeam && completedinitialFetch) {
       if (teamToMatchNotes[currentTeam.teamNumber]) {
         currentEditor.commands.setContent(teamToMatchNotes[currentTeam.teamNumber])
       }
+      currentEditor.setEditable(true)
     }
   }, [teamToMatchNotes, completedinitialFetch, currentTeam, currentEditor])
 

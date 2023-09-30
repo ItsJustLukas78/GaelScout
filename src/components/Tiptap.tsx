@@ -22,7 +22,7 @@ interface TiptapProps {
   setEditor: (value: any) => void
 }
 
-const charLimit = 300
+const charLimit = 500
 
 const Tiptap = ({setEditor}: TiptapProps) => {
   const editor = useEditor({
@@ -45,7 +45,10 @@ const Tiptap = ({setEditor}: TiptapProps) => {
       }
     },
     content: '<p></p>',
-    onCreate: () => setEditor(editor),
+    editable: false,
+    onCreate: () => {
+      setEditor(editor)
+    },
   })
 
   return (
