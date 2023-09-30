@@ -120,7 +120,7 @@ async function apiCall(url: string, headers: object, params?: object): Promise<a
 //   }
 // }
 //
-export async function getTeamObject({teamId, teamNumber} : {teamId?: number | string, teamNumber?: string}): Promise<any | null> {
+export async function getTeamObject({teamId, teamNumber, onlyActive} : {teamId?: number | string, teamNumber?: string, onlyActive?: boolean}): Promise<any | null> {
   if (!teamId && !teamNumber) {
     console.error("Warning: No team id or team number could be found");
     return null;
@@ -132,7 +132,7 @@ export async function getTeamObject({teamId, teamNumber} : {teamId?: number | st
     "Authorization": "Bearer " + API_KEY,
   };
 
-  const new_params = teamNumber ? {number: teamNumber} : undefined;
+  let new_params = (!teamNumber && !onlyActive) ? { number: teamNumber ? teamNumber : null, registered: onlyActive ? true : null } : undefined;
 
   try {
     const team = await apiCall(url, new_headers, new_params);

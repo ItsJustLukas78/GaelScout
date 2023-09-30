@@ -319,6 +319,7 @@ export default function Teams() {
               return (
                 <TeamResult
                   key={result.teamNumber}
+                  teamId={result.teamId}
                   teamNumber={result.teamNumber}
                   teamName={result.teamName}
                   programCode={result.programCode}

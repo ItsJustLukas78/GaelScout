@@ -2,11 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Event, EventMatch, TeamProfile, Division } from "@/app/types";
+import {Event, EventMatch, TeamProfile, Division, TeamIdentifiers} from "@/app/types";
 import ScoutingSheetDialog from "@/components/ScoutingSheetDialog";
 import MatchNotesDialog from "@/components/MatchNotesDialog";
 import MatchResult from "@/components/MatchResult";
 import { useUser } from "@clerk/nextjs";
+import MatchTeamResult from "@/components/MatchTeamResult";
+import TeamNotesDialog from "@/components/TeamNotesDialog";
 
 export default function EventPage({ params }: { params: { eventCode: string } }) {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -25,6 +27,9 @@ export default function EventPage({ params }: { params: { eventCode: string } })
 
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
   const [matchNotesDialogOpen, setMatchNotesDialogOpen] = useState(false);
+  const [teamNotesDialogOpen, setTeamNotesDialogOpen] = useState(false);
+
+  const [currentNotesTeam, setCurrentNotesTeam] = useState<TeamProfile | null>(null);
 
   const getEvent = () => {
     const skuSearchParams = new URLSearchParams();
@@ -168,42 +173,38 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                   </button>
                 </div>
                 <div className="flex flex-col gap-4 overflow-auto w-[100%]">
-                  <table className="table-auto border-separate rounded-2xl min-w-[100%]">
-                    <thead>
-                      <tr className="md:[&>th]:text-md [&>th]:pb-5 [&>th]:pl-4 [&>th]:text-left [&>th]:text-sm xl:[&>th]:text-xl">
-                        <th>Number</th>
-                        <th>Name</th>
-                        <th>Organization</th>
-                        <th>Location</th>
-                      </tr>
-                    </thead>
-                    <tbody className="rounded-2xl bg-neutral-700">
-                      {paticipatingTeams.length !== 0 ? paticipatingTeams.map((result: TeamProfile) => {
-                        const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
+                  {paticipatingTeams.length !== 0 ? paticipatingTeams.map((result: TeamProfile) => {
+                    const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
 
-                        return (
-                          <tr key={result.teamNumber}>
-                            <td className="px-4 py-2 text-sm font-semibold md:text-lg xl:text-2xl">
-                              <a href={`/teams/${result.teamNumber}`} className="hover:text-blue-500">{result.teamNumber}</a>
-                            </td>
-                            <td className="px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl">{result.teamName}</td>
-                            <td className="px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl">{result.teamOrg}</td>
-                            <td className="px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl">{locationString}</td>
-                          </tr>
-                        )
-                      }) : loadingTeams ?
-                        [0,1,2,3,4].map(() => {
-                          return (
-                            <tr className="animate-pulse h-16" key={Math.random()}>
-                              <td className="px-4 py-2 text-sm font-semibold md:text-lg xl:text-2xl bg-gray-400"></td>
-                              <td className="px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl bg-gray-400"></td>
-                              <td className="px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl bg-gray-400"></td>
-                              <td className="px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl bg-gray-400"></td>
-                            </tr>
-                          )
-                        }) : null}
-                    </tbody>
-                  </table>
+                    return (
+                      <MatchTeamResult
+                        key={result.teamNumber}
+                        teamId={result.teamId}
+                        teamNumber={result.teamNumber}
+                        teamName={result.teamName}
+                        programCode={result.programCode}
+                        teamGrade={result.teamGrade}
+                        location={locationString}
+                        teamOrg={result.teamOrg}
+                        openMatchNotes={(teamId: number) => {
+                          if (isSignedIn) {
+                            const foundTeamProfile = paticipatingTeams.find((team) => team.teamId === teamId);
+                            if (!foundTeamProfile) {
+                              toast.error("Team not found");
+                              setCurrentNotesTeam(null)
+                              setTeamNotesDialogOpen(false)
+                              return;
+                            }
+                            setCurrentNotesTeam(foundTeamProfile);
+                            console.log("set open")
+                            setTeamNotesDialogOpen(true);
+                          } else {
+                            toast.error("You must be signed in to view match notes");
+                          }
+                        }}
+                      />
+                    )
+                  }) : null}
                 </div>
                 <ScoutingSheetDialog
                   exportDialogOpen={exportDialogOpen}
@@ -212,6 +213,14 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                   loadingTeams={loadingTeams}
                   setExportDialogOpen={setExportDialogOpen}
                 />
+                {isSignedIn ?
+                  <TeamNotesDialog
+                    teamNotesDialogOpen={teamNotesDialogOpen}
+                    currentNotesTeam={currentNotesTeam}
+                    seasonId={eventObject.season.id}
+                    setTeamNotesDialogOpen={setTeamNotesDialogOpen}
+                  />
+                : null}
               </TabsContent>
               <TabsContent value="matches">
                 <div className="mb-10 flex flex-col justify-between md:flex-row">

@@ -16,7 +16,7 @@ export async function POST(
   //   teamNumber: string;
   //   notes: json
   // }]
-  const newTeamsToNotes = data.notes as { [key: string]: string };
+  const newTeamsToNotes = data.notes as { [key: string]: object | null };
 
   try {
     if (!userId) {
@@ -38,10 +38,14 @@ export async function POST(
     const notes = await Promise.all(Object.keys(newTeamsToNotes).map(async (teamNumber: string) => {
       const newNotes = newTeamsToNotes[teamNumber];
 
-      let team = await getTeamObject({teamNumber: teamNumber});
+      let team: any = await prisma.teamProfile.findFirst({
+        where: {
+          teamNumber: teamNumber,
+        }
+      });
 
       if (!team) {
-        team = await getTeamObject({teamNumber: teamNumber});
+        team = await getTeamObject({teamNumber: teamNumber, onlyActive: true});
 
         if (!team) {
           return NextResponse.json({ error: 'A team does not exist' }, { status: 400 });
@@ -64,27 +68,55 @@ export async function POST(
         });
       }
 
-      return prisma.teamNote.upsert({
-        where: {
-          userId_seasonId_teamNumber_teamId : {
+      if (!newNotes) {
+        const existingNote = await prisma.teamNote.findFirst({
+          where: {
             userId: userId,
             seasonId: seasonId,
             teamNumber: teamNumber,
-            teamId: team.id,
+            teamId: team.teamId,
           }
-        },
-        update: {
-          note: newNotes,
-        },
-        create: {
-          teamId: team.id,
-          teamNumber: teamNumber,
-          seasonId: seasonId,
-          userId: userId,
-          note: newNotes,
+        });
+
+        if (!existingNote) {
+          return null;
         }
-      })
+
+        return prisma.teamNote.delete({
+          where: {
+            userId_seasonId_teamNumber_teamId : {
+              userId: userId,
+              seasonId: seasonId,
+              teamNumber: teamNumber,
+              teamId: team.teamId,
+            }
+          }
+        });
+      } else {
+        return prisma.teamNote.upsert({
+          where: {
+            userId_seasonId_teamNumber_teamId : {
+              userId: userId,
+              seasonId: seasonId,
+              teamNumber: teamNumber,
+              teamId: team.teamId,
+            }
+          },
+          update: {
+            note: newNotes,
+          },
+          create: {
+            teamId: team.teamId,
+            teamNumber: teamNumber,
+            seasonId: seasonId,
+            userId: userId,
+            note: newNotes,
+          }
+        })
+      }
     }));
+
+    console.log("done")
 
     return NextResponse.json({notes}, {
       status: 201,

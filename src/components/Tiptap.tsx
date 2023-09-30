@@ -6,13 +6,16 @@ import {
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import CharacterCount from "@tiptap/extension-character-count";
-import Highlight from "@tiptap/extension-highlight";
+import Highlight from '@tiptap/extension-highlight';
+import Underline from '@tiptap/extension-underline';
+// import FileHandler from "@tiptap-pro/extension-file-handler";
 import React, { useEffect, useState } from 'react'
 import {
   StrikethroughIcon,
   FontBoldIcon,
   FontItalicIcon,
   ListBulletIcon,
+  UnderlineIcon,
 } from '@radix-ui/react-icons';
 
 interface TiptapProps {
@@ -34,10 +37,11 @@ const Tiptap = ({setEditor}: TiptapProps) => {
       Highlight.configure({
         multicolor: true,
       }),
+      Underline
     ],
     editorProps: {
       attributes: {
-        class: "min-h-[100px] bg-neutral-900 p-3 shadow-md shadow-neutral-900 rounded-t-2xl"
+        class: "min-h-[100px] bg-neutral-900 p-3 shadow-md shadow-neutral-900 rounded-t-2xl overflow-y-auto max-h-[150px]"
       }
     },
     content: '<p></p>',
@@ -60,6 +64,12 @@ const Tiptap = ({setEditor}: TiptapProps) => {
             className={editor.isActive('italic') ? 'is-active' : ''}
           >
             <FontItalicIcon/>
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            className={editor.isActive('underline') ? 'is-active' : ''}
+          >
+            <UnderlineIcon/>
           </button>
           <button
             onClick={() => editor.chain().focus().toggleStrike().run()}

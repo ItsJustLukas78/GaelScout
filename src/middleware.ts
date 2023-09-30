@@ -1,9 +1,7 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
-import { withClerkMiddleware } from "@clerk/nextjs";
-// import { authMiddleware } from "@clerk/nextjs";
-// import createMiddleware from "next-intl/middleware";
+import { authMiddleware } from "@clerk/nextjs";
 
 const generalRatelimit = new Ratelimit({
   redis: Redis.fromEnv(),
@@ -73,8 +71,10 @@ async function middleware(request: NextRequest, event: NextFetchEvent): Promise<
   }
 }
 
-export default withClerkMiddleware((request: NextRequest, event: NextFetchEvent): Promise<Response | undefined> => {
-  return middleware(request, event);
+export default authMiddleware({
+  afterAuth(auth, request: NextRequest, event: NextFetchEvent) {
+    return middleware(request, event);
+  }
 });
 
 export const config = {

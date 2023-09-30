@@ -78,7 +78,7 @@ model TeamNote {
   teamNumber String
   seasonId   Int
   note       Json
-  team       TeamProfile @relation(fields: [teamId, teamNumber], references: [teamId, teamNumber])
+  team       TeamProfile @relation(fields: [teamId, teamNumber], references: [teamId, teamNumber], onUpdate: Cascade)
 
   @@unique([userId, seasonId, teamNumber, teamId])
 }

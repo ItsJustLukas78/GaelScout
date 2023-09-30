@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
-export default function TeamResult({ teamNumber, teamName, programCode, teamGrade, location, teamOrg } :
-{ teamNumber: string, teamName: string, programCode: string, teamGrade: string, location: string, teamOrg: string }) {
+export default function TeamResult({ teamId, teamNumber, teamName, programCode, teamGrade, location, teamOrg } :
+{ teamId: number, teamNumber: string, teamName: string, programCode: string, teamGrade: string, location: string, teamOrg: string }) {
   return (
     <Link
       href={`/teams/${teamNumber}`}

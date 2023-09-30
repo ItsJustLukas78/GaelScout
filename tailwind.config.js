@@ -13,6 +13,9 @@ module.exports = {
       ...defaultTheme.screens,
     },
     extend: {
+      fontSize: {
+        '2xs': '.625rem',
+      },
       spacing: {
         "112": "28rem",
         "120": "30rem",

@@ -41,9 +41,18 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
   const saveNotesAndChangeMatch = (match?: EventMatch) => {
     setLoading(true)
 
-    const latestTeamToMatchNotes = {
+    let latestTeamToMatchNotes = {
       ...teamToMatchNotes,
       [currentTeam?.teamNumber]: currentEditor.getJSON()
+    }
+
+    // set team to null if content array is empty
+    for (const teamNumber in latestTeamToMatchNotes) {
+      const firstContentBlock = latestTeamToMatchNotes[teamNumber].content[0]
+
+      if (latestTeamToMatchNotes[teamNumber].content.length === 1 && !("content" in firstContentBlock)) {
+        latestTeamToMatchNotes[teamNumber] = null
+      }
     }
 
     fetch(`/api/seasons/${eventObject?.season.id}/notes`, {
@@ -136,7 +145,7 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
     >
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="z-40 bg-black opacity-70 data-[state=open]:animate-overlayShow fixed inset-0" />
-        <AlertDialog.Content className="flex flex-col z-50 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] min-h-[650px] min-w-[350px] translate-x-[-50%] translate-y-[-50%] rounded-[10px] bg-neutral-800 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+        <AlertDialog.Content className="flex flex-col z-50 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] min-h-[650px] min-w-[350px] max-h-full translate-x-[-50%] translate-y-[-50%] rounded-[10px] bg-neutral-800 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
           <AlertDialog.Title className="mb-5 text-xl font-bold">
             Match Notes
           </AlertDialog.Title>
