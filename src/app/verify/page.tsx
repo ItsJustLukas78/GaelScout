@@ -2,11 +2,13 @@
 import React, {useEffect, useState} from "react";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import { FaRegClipboard } from "react-icons/fa";
-import { useUser } from "@clerk/nextjs";
+import {useAuth, useUser} from "@clerk/nextjs";
 import { toast } from 'react-toastify';
 
 
 export default function Verify() {
+  const { getToken } = useAuth();
+
   const { isSignedIn, user, isLoaded } = useUser();
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -38,35 +40,37 @@ export default function Verify() {
       return;
     }
 
-    fetch(`/api/verify/generate`,
-      {
-        method: "POST",
-      },
-    ).then((response) => {
-      response.json().then((data) => {
-        if (data.error) {
-          toast.error(data.error);
-          if (response.headers.get("X-RateLimit-Reset")) {
-            const resetTime = parseInt(response.headers.get("X-RateLimit-Reset") as string);
+    getToken().then((token) => {
+      fetch(`/api/verify/generate`,
+        {
+          method: "POST",
+        },
+      ).then((response) => {
+        response.json().then((data) => {
+          if (data.error) {
+            toast.error(data.error);
+            if (response.headers.get("X-RateLimit-Reset")) {
+              const resetTime = parseInt(response.headers.get("X-RateLimit-Reset") as string);
 
-            const currentTime = Date.now()
-            const timeToWait = resetTime - currentTime
+              const currentTime = Date.now()
+              const timeToWait = resetTime - currentTime
 
-            const timeToWaitSeconds = Math.floor(timeToWait / 1000) + 1
+              const timeToWaitSeconds = Math.floor(timeToWait / 1000) + 1
 
-            toast.info(`Your code will generate in: ${timeToWaitSeconds}`);
+              toast.info(`Your code will generate in: ${timeToWaitSeconds}`);
 
-            setTimeout(() => {
-              return generateVerificationCode(e);
-            } , timeToWaitSeconds * 1000);
+              setTimeout(() => {
+                return generateVerificationCode(e);
+              } , timeToWaitSeconds * 1000);
+            }
+            return;
           }
-          return;
-        }
-        setVerificationCode(data.verificationCode);
+          setVerificationCode(data.verificationCode);
+        });
+      }).catch((error) => {
+        console.log(error);
       });
-    }).catch((error) => {
-      console.log(error);
-    });
+    })
   }
 
   const confirmVerification = (e: any) => {
@@ -84,45 +88,47 @@ export default function Verify() {
 
     toast.info("Verifying...");
 
-    fetch(`/api/verify`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          teamNumber: teamNumberInput,
-        }),
-      },
-    ).then((response) => {
-      response.json().then((data) => {
-        if (data.error) {
-          toast.error(data.error);
+    getToken().then((token) => {
+      fetch(`/api/verify`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            teamNumber: teamNumberInput,
+          }),
+        },
+      ).then((response) => {
+        response.json().then((data) => {
+          if (data.error) {
+            toast.error(data.error);
 
-          // check X-RateLimit-Reset header
-          if (response.headers.get("X-RateLimit-Reset")) {
-            const resetTime = parseInt(response.headers.get("X-RateLimit-Reset") as string);
+            // check X-RateLimit-Reset header
+            if (response.headers.get("X-RateLimit-Reset")) {
+              const resetTime = parseInt(response.headers.get("X-RateLimit-Reset") as string);
 
-            const currentTime = Date.now()
-            const timeToWait = resetTime - currentTime
+              const currentTime = Date.now()
+              const timeToWait = resetTime - currentTime
 
-            const timeToWaitSeconds = Math.floor(timeToWait / 1000) + 1
+              const timeToWaitSeconds = Math.floor(timeToWait / 1000) + 1
 
-            setTimeLeft(timeToWaitSeconds);
-          }
+              setTimeLeft(timeToWaitSeconds);
+            }
 
-          if (data.error === "Verification code does not match") {
-            // TODO: show error with toast
-            return;
+            if (data.error === "Verification code does not match") {
+              // TODO: show error with toast
+              return;
+            } else {
+              return;
+            }
           } else {
-            return;
-          }
-        } else {
-          toast.success(`Verified with team: ${data.verifiedTeamNumber}!`);
+            toast.success(`Verified with team: ${data.verifiedTeamNumber}!`);
 
-          setDialogOpen(false);
-        }
+            setDialogOpen(false);
+          }
+        });
+      }).catch((error) => {
+        console.log(error);
       });
-    }).catch((error) => {
-      console.log(error);
-    });
+    })
   }
   return <>
     <main>

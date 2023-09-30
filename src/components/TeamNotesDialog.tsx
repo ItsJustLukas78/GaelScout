@@ -11,8 +11,11 @@ import {
   BsArrowReturnLeft,
   BsArrowReturnRight,
 } from "react-icons/bs";
+import {useAuth} from "@clerk/nextjs";
 
 export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam, seasonId, setTeamNotesDialogOpen }: { teamNotesDialogOpen: boolean, currentNotesTeam: TeamProfile | null, seasonId: number, setTeamNotesDialogOpen: (open: boolean) => void }) {
+  const { getToken } = useAuth();
+
   const [currentEditor, setCurrentEditor] = useState<any>(null)
 
   const [currentTeamNotes, setCurrentTeamNotes] = useState<object | null>(null)
@@ -52,31 +55,36 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
 
     console.log(notesPostBody)
 
-    fetch(`/api/seasons/${seasonId}/notes`, {
-      method: "POST",
-      body: JSON.stringify({
-        notes: notesPostBody
-      })
-    }).then((response) => {
-      response.json().then((data) => {
-        if (data.error) {
-          toast.error(data.error);
-          setLoading(false)
-          return;
+    getToken().then((token) => {
+      fetch(`/api/seasons/${seasonId}/notes`, {
+        method: "POST",
+        body: JSON.stringify({
+          notes: notesPostBody
+        }),
+        headers: {
+          "Authorization": `Bearer ${token}`
         }
+      }).then((response) => {
+        response.json().then((data) => {
+          if (data.error) {
+            toast.error(data.error);
+            setLoading(false)
+            return;
+          }
 
+          setLoading(false)
+          currentEditor.commands.clearContent()
+          setCurrentTeamNotes(null)
+          setCompletedInitialFetch(false)
+          setLoadedNotesWasEmpty(false)
+          setTeamNotesDialogOpen(false)
+        });
+      }).catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while saving team notes.");
         setLoading(false)
-        currentEditor.commands.clearContent()
-        setCurrentTeamNotes(null)
-        setCompletedInitialFetch(false)
-        setLoadedNotesWasEmpty(false)
-        setTeamNotesDialogOpen(false)
       });
-    }).catch((error) => {
-      console.log(error);
-      toast.error("An error occurred while saving team notes.");
-      setLoading(false)
-    });
+    })
   }
 
   const getTeamNotes = () => {
@@ -90,30 +98,32 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
 
     searchParams.append("teamNumber", currentNotesTeam.teamNumber)
 
-    fetch(`/api/seasons/${seasonId}/notes?${searchParams.toString()}`, {
-      method: "GET",
-    }).then((response) => {
-      response.json().then((data) => {
-        if (data.error) {
-          toast.error(data.error);
-          return;
-        }
+    getToken().then((token) => {
+      fetch(`/api/seasons/${seasonId}/notes?${searchParams.toString()}`, {
+        method: "GET",
+      }).then((response) => {
+        response.json().then((data) => {
+          if (data.error) {
+            toast.error(data.error);
+            return;
+          }
 
-        setCompletedInitialFetch(true)
+          setCompletedInitialFetch(true)
 
-        console.log(data.notes)
+          console.log(data.notes)
 
-        if (data.notes.length === 0) {
-          setLoadedNotesWasEmpty(true)
-          return;
-        }
+          if (data.notes.length === 0) {
+            setLoadedNotesWasEmpty(true)
+            return;
+          }
 
-        setCurrentTeamNotes(data.notes[0].note)
+          setCurrentTeamNotes(data.notes[0].note)
+        });
+      }).catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while fetching team notes.");
       });
-    }).catch((error) => {
-      console.log(error);
-      toast.error("An error occurred while fetching team notes.");
-    });
+    })
   }
 
   useEffect(() => {

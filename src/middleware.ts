@@ -77,6 +77,7 @@ export default authMiddleware({
   debug: true,
   publicRoutes: ["/"],
 
+  //@ts-ignore
   afterAuth(auth, request: NextRequest, event: NextFetchEvent) {
     return middleware(request, event);
   }

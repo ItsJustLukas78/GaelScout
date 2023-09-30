@@ -11,8 +11,11 @@ import {
   BsArrowReturnLeft,
   BsArrowReturnRight,
 } from "react-icons/bs";
+import { useAuth } from "@clerk/nextjs";
 
 export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, matchList, setMatchNotesDialogOpen }: { matchNotesDialogOpen: boolean, eventObject: Event | null, matchList: EventMatch[], setMatchNotesDialogOpen: (open: boolean) => void }) {
+  const { getToken } = useAuth();
+
   const [currentMatch, setCurrentMatch] = useState<EventMatch>(matchList[0])
   const [currentTeam, setCurrentTeam] = useState(currentMatch?.blueTeams[0])
 
@@ -55,32 +58,37 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
       }
     }
 
-    fetch(`/api/seasons/${eventObject?.season.id}/notes`, {
-      method: "POST",
-      body: JSON.stringify({
-        notes: latestTeamToMatchNotes
-      })
-    }).then((response) => {
-      response.json().then((data) => {
-        if (data.error) {
-          toast.error(data.error);
-          setLoading(false)
-          return;
+    getToken().then((token) => {
+      fetch(`/api/seasons/${eventObject?.season.id}/notes`, {
+        method: "POST",
+        body: JSON.stringify({
+          notes: latestTeamToMatchNotes
+        }),
+        headers: {
+          Authorization: `Bearer ${token}`
         }
+      }).then((response) => {
+        response.json().then((data) => {
+          if (data.error) {
+            toast.error(data.error);
+            setLoading(false)
+            return;
+          }
 
-        currentEditor.commands.clearContent()
-        if (match) {
-          setCurrentMatch(match)
-        } else {
-          setMatchNotesDialogOpen(false)
-        }
+          currentEditor.commands.clearContent()
+          if (match) {
+            setCurrentMatch(match)
+          } else {
+            setMatchNotesDialogOpen(false)
+          }
+          setLoading(false)
+        });
+      }).catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while saving team notes.");
         setLoading(false)
       });
-    }).catch((error) => {
-      console.log(error);
-      toast.error("An error occurred while saving team notes.");
-      setLoading(false)
-    });
+    })
   }
 
   const getMatchTeamNotes = (teams: TeamIdentifiers[]) => {
@@ -92,35 +100,38 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
       searchParams.append("teamNumber", team.teamNumber)
     }
 
-    fetch(`/api/seasons/${eventObject?.season.id}/notes?${searchParams.toString()}`, {
-      method: "GET",
-    }).then((response) => {
-      response.json().then((data) => {
-        if (data.error) {
-          toast.error(data.error);
-          return;
+    getToken().then((token) => {
+      fetch(`/api/seasons/${eventObject?.season.id}/notes?${searchParams.toString()}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`
         }
+      }).then((response) => {
+        response.json().then((data) => {
+          if (data.error) {
+            toast.error(data.error);
+            return;
+          }
 
-        setCurrentTeam(currentMatch?.blueTeams[0])
+          setCurrentTeam(currentMatch?.blueTeams[0])
 
-        setCompletedInitialFetch(true)
+          setCompletedInitialFetch(true)
 
-        if (data.notes.length === 0) {
-          return;
-        }
+          if (data.notes.length === 0) {
+            return;
+          }
 
-        for (const teamNote of data.notes) {
-          teamNotes[teamNote.teamNumber as string] = teamNote.note
-        }
+          for (const teamNote of data.notes) {
+            teamNotes[teamNote.teamNumber as string] = teamNote.note
+          }
 
-        setTeamToMatchNotes(teamNotes)
+          setTeamToMatchNotes(teamNotes)
+        });
+      }).catch((error) => {
+        console.log(error);
+        toast.error("An error occurred while fetching team notes.");
       });
-    }).catch((error) => {
-      console.log(error);
-      toast.error("An error occurred while fetching team notes.");
-    });
-
-    return teamNotes
+    })
   }
 
   useEffect(() => {
