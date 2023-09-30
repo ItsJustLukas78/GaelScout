@@ -1,7 +1,7 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
-import { authMiddleware } from "@clerk/nextjs";
+import { authMiddleware } from "@clerk/nextjs/server";
 
 const generalRatelimit = new Ratelimit({
   redis: Redis.fromEnv(),
