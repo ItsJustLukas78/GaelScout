@@ -41,7 +41,7 @@ const Tiptap = ({setEditor}: TiptapProps) => {
     ],
     editorProps: {
       attributes: {
-        class: "min-h-[100px] bg-neutral-900 p-3 shadow-md shadow-neutral-900 rounded-t-2xl overflow-y-auto max-h-[150px]"
+        class: "min-h-[100px] bg-neutral-900 p-3 shadow-md shadow-neutral-900 rounded-t-2xl overflow-y-auto"
       }
     },
     content: '<p></p>',

@@ -82,6 +82,14 @@ body {
   pointer-events: none;
 }
 
+.teamNotesDialogTipTap > * .tiptap {
+  @apply max-h-[250px] !important;
+}
+
+.matchNotesDialogTipTap > * .tiptap {
+  @apply max-h-[150px] !important;
+}
+
 .ProseMirror:focus {
     outline: none;
 }

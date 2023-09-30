@@ -169,7 +169,7 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
           <AlertDialog.Description asChild>
             <div className={`flex flex-col ${loading ? "animate-pulse" : ""}`}>
               <div className="flex flex-col">
-                <h1 className="text-2xl font-semibold text-neutral-200 mb-5">
+                <h1 className="matchNotesDialogTipTap text-2xl font-semibold text-neutral-200 mb-5">
                   {currentMatch?.name} - {currentTeam?.teamNumber}
                 </h1>
                 <Tiptap setEditor={setCurrentEditor} />

@@ -23,7 +23,7 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
 
   const [completedInitialFetch, setCompletedInitialFetch] = useState(false)
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const saveNotes = () => {
     if (!currentEditor || !currentNotesTeam) {
@@ -35,10 +35,11 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
     let notes = currentEditor.getJSON()
 
     if (notes.content.length === 1 && !("content" in notes.content[0])) {
+      console.log("notes was empty");
       notes = null
 
       if (loadedNotesWasEmpty) {
-        setLoading(false)
+        console.log("notes was empty and loadedNotesWasEmpty was true")
         setCurrentTeamNotes(null)
         setCompletedInitialFetch(false)
         setLoadedNotesWasEmpty(false)
@@ -68,11 +69,9 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
         response.json().then((data) => {
           if (data.error) {
             toast.error(data.error);
-            setLoading(false)
             return;
           }
 
-          setLoading(false)
           currentEditor.commands.clearContent()
           setCurrentTeamNotes(null)
           setCompletedInitialFetch(false)
@@ -92,8 +91,6 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
       return;
     }
 
-    const teamNotes: {[key: string]: object} = {}
-
     const searchParams = new URLSearchParams();
 
     searchParams.append("teamNumber", currentNotesTeam.teamNumber)
@@ -109,6 +106,7 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
           }
 
           setCompletedInitialFetch(true)
+          setLoading(false)
 
           console.log(data.notes)
 
@@ -127,13 +125,19 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
   }
 
   useEffect(() => {
-    if (currentNotesTeam) {
+    if (currentNotesTeam && teamNotesDialogOpen) {
       getTeamNotes()
     }
-  }, [currentNotesTeam])
+  }, [currentNotesTeam, teamNotesDialogOpen])
 
   useEffect(() => {
+    console.log("SECOND useEFFECT")
+    console.log(currentTeamNotes)
+    console.log(currentEditor)
+    console.log(completedInitialFetch)
     if (currentTeamNotes && currentEditor && completedInitialFetch) {
+      console.log("setting content")
+      console.log({currentTeamNotes})
       currentEditor.commands.setContent(currentTeamNotes)
     }
   }, [currentTeamNotes, completedInitialFetch, currentEditor])
@@ -151,7 +155,7 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
           </AlertDialog.Title>
           <AlertDialog.Description asChild>
             <div className={`flex flex-col ${loading ? "animate-pulse" : ""}`}>
-              <div className="flex flex-col">
+              <div className="teamNotesDialogTipTap flex flex-col max-h-[300px]">
                 <h1 className="text-2xl font-semibold text-neutral-200 mb-5">
                   {currentNotesTeam?.teamNumber}
                 </h1>

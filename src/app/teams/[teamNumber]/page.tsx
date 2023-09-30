@@ -2,13 +2,21 @@
 import React, {useEffect, useState} from "react";
 import { toast } from "react-toastify";
 import { TeamProfile, TeamSeasonProfile } from "@/app/types";
+import { GiNotebook } from "react-icons/gi";
+import TeamNotesDialog from "@/components/TeamNotesDialog";
+import { useUser } from "@clerk/nextjs";
 
 export default function TeamProfile({ params }: { params: { teamNumber: string } }) {
+  const { isSignedIn } = useUser();
+
   const teamNumber = params.teamNumber
 
   const [teamProfile, setTeamProfile] = useState<TeamProfile | null>(null);
   const [seasonStats, setSeasonStats] = useState<TeamSeasonProfile | null>(null);
   const [seasonId, setSeasonId] = useState< number >(181);
+
+  const [teamNotesDialogOpen, setTeamNotesDialogOpen] = useState<boolean>(false);
+
 
   const getTeam = () => {
     fetch(`/api/teams/${teamNumber.toUpperCase()}`).then((response) => {
@@ -118,19 +126,35 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
           }
           </div>
         <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
-          <div className="mb-10 flex flex-col justify-between md:flex-row">
+          <div className="mb-10 flex flex-col md:flex-row">
             <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl md:mb-0 md:text-3xl lg:text-5xl">
               Season Statistics
             </h3>
-            <select
-              className="h-12 w-48 rounded-lg p-3 text-black sm:w-52 lg:w-80"
-              required
-              value={seasonId}
-              onChange={(event) => setSeasonId(parseInt(event.target.value))}
+            <div className="flex flex-row gap-3 md:ml-auto">
+              <select
+                className="h-12 w-48 md:ml-auto rounded-lg p-3 text-black sm:w-52 lg:w-80"
+                required
+                value={seasonId}
+                onChange={(event) => setSeasonId(parseInt(event.target.value))}
+              >
+                <option value="173">Spin Up 2022-2023</option>
+                <option value="181">Over Under 2023-2024</option>
+              </select>
+              <button
+                className="opacity-50 flex min-w-[50px] min-h-[40px] whitespace-nowrap rounded-md bg-neutral-50 text-xl font-semibold text-black disabled:opacity-50 items-center justify-center"
+                onClick={(e) => {
+                  e.preventDefault()
+                  if (isSignedIn) {
+                    setTeamNotesDialogOpen(true)
+                    return;
+                  } else {
+                    toast.error("You must be signed in to view team notes");
+                  }
+                }}
             >
-              <option value="173">Spin Up 2022-2023</option>
-              <option value="181">Over Under 2023-2024</option>
-            </select>
+              <GiNotebook className="inline-block" />
+            </button>
+            </div>
           </div>
           {seasonStats ? <>
             <div className="mx-2 flex flex-row flex-wrap justify-center gap-5 md:justify-between">
@@ -266,6 +290,14 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                 </div>
               </div>
             </div>
+            {isSignedIn ?
+              <TeamNotesDialog
+                teamNotesDialogOpen={teamNotesDialogOpen}
+                currentNotesTeam={teamProfile}
+                seasonId={seasonId}
+                setTeamNotesDialogOpen={setTeamNotesDialogOpen}
+              />
+            : null}
           </> :
             <h3 className="mx-2 text-xl">
               Season Profile Not Found
