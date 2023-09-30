@@ -74,7 +74,6 @@ async function middleware(request: NextRequest, event: NextFetchEvent): Promise<
 }
 
 export default authMiddleware({
-  debug: true,
   publicRoutes: ["/"],
 
   //@ts-ignore

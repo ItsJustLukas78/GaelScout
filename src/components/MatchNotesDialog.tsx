@@ -28,20 +28,26 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
   const [loading, setLoading] = useState(false)
 
   const changeTeamNotes = (team: TeamIdentifiers) => {
-    if (currentEditor) {
-      setTeamToMatchNotes((prev) => {
-        return {
-          ...prev,
-          [currentTeam?.teamNumber]: currentEditor.getJSON()
-        }
-      });
-      currentEditor.commands.clearContent()
-      currentEditor.commands.setContent(teamToMatchNotes[team.teamNumber])
+    if (!currentEditor) {
+      return;
     }
+
+    setTeamToMatchNotes((prev) => {
+      return {
+        ...prev,
+        [currentTeam?.teamNumber]: currentEditor.getJSON()
+      }
+    });
+    currentEditor.commands.clearContent()
+    currentEditor.commands.setContent(teamToMatchNotes[team.teamNumber])
     setCurrentTeam(team);
   }
 
   const saveNotesAndChangeMatch = (match?: EventMatch) => {
+    if (!currentEditor) {
+      return;
+    }
+
     setLoading(true)
 
     let latestTeamToMatchNotes = {
