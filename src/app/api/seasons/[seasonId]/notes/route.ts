@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 import { NextResponse, NextRequest } from "next/server";
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs";
 import { getTeamObject } from "@/utils/RobotEventsAPI";
 
 export async function POST(
@@ -8,7 +8,7 @@ export async function POST(
   { params }: { params: { seasonId: string} }
 ) {
   const seasonId = parseInt(params.seasonId);
-  const { userId } = await getAuth(request);
+  const { userId } = await auth();
 
   const data = await request.json();
 
@@ -136,7 +136,7 @@ export async function GET(
   { params }: { params: { seasonId: string } }
 ) {
   const seasonId = parseInt(params.seasonId);
-  const {userId} = await getAuth(request);
+  const { userId } = await auth();
 
   const searchParams = new URL(request.url).searchParams;
 

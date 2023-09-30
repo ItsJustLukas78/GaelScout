@@ -69,10 +69,13 @@ async function middleware(request: NextRequest, event: NextFetchEvent): Promise<
     console.log("Rate limit: " + remaining.toString() + "/" + limit.toString() + " resets at " + reset.toString())
     return res;
   }
+
+  return NextResponse.next();
 }
 
 export default authMiddleware({
   debug: true,
+  publicRoutes: ["/"],
 
   afterAuth(auth, request: NextRequest, event: NextFetchEvent) {
     return middleware(request, event);
@@ -80,5 +83,5 @@ export default authMiddleware({
 });
 
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
 };
