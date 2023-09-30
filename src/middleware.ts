@@ -72,6 +72,8 @@ async function middleware(request: NextRequest, event: NextFetchEvent): Promise<
 }
 
 export default authMiddleware({
+  debug: true,
+
   afterAuth(auth, request: NextRequest, event: NextFetchEvent) {
     return middleware(request, event);
   }
