@@ -158,11 +158,11 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
     if (currentEditor) {
       if (currentTeamNotes && completedInitialFetch) {
         currentEditor.commands.setContent(currentTeamNotes)
+        currentEditor.setEditable(true)
       } else if (!currentTeamNotes && completedInitialFetch) {
         currentEditor.commands.clearContent()
-      }
-      currentEditor.setEditable(true)
-    }
+        currentEditor.setEditable(true)
+      }}
   }, [currentTeamNotes, completedInitialFetch, currentEditor])
 
   return (
