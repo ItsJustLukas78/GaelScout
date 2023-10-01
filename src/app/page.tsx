@@ -12,12 +12,12 @@ export default function Home() {
               Scouting Done Easy.
             </h1>
             <p className="text-base sm:text-xl">
-              Providing VEX Robotics Competition teams an accessible resource of data and
-              analysis on other teams to get an upper hand in scouting, and winning competitions.
-              Manage a team page, where you can share more about your team and robot, and communicate with others.
+              Providing participants of the VEX Robotics Competition an accessible resource of data
+              on other teams, and tools to get an upper hand in scouting, and winning competitions.
+              Check team stats beyond what is provided in VEX Via, view match results, efficiently take notes, and more.
             </p>
             <p className="text-base sm:text-xl">
-              Sign up to get access to more features, such as editing your team page after verification, and communicating with other users.
+              Sign up to get access to features such as managing a team profile after verification, taking notes, getting match notifications, and sending communications.
             </p>
             <Link href="sign-up">
               <CorneredButton>Sign Up</CorneredButton>
@@ -36,7 +36,7 @@ export default function Home() {
               Developed by students at GaelSuite.
             </h1>
             <p className="text-base sm:text-xl">
-              GaelScout was developed by Lukas from 5327S with support from GaelSuite, a nonprofit established by members
+              GaelScout was developed by a team led by members of 5327S on GaelSuite, a nonprofit established by members
               of the Gael Force 5327 Organization. Scouting teams can be challenging,
               with a vast amount of participants, few to no reliable methods of communication,
               limited resources, and difficulty distinguishing teams from one another in
