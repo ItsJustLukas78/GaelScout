@@ -23,7 +23,7 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
 
   const [teamToMatchNotes, setTeamToMatchNotes] = useState<{[key: string]: object}>({})
 
-  const [completedinitialFetch, setCompletedInitialFetch] = useState(false)
+  const [completedInitialFetch, setCompletedInitialFetch] = useState(false)
 
   const [loading, setLoading] = useState(false)
 
@@ -48,7 +48,7 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
       return;
     }
 
-    if (!completedinitialFetch) {
+    if (!completedInitialFetch) {
       toast.warn("No changes made because existing notes not loaded.")
       return;
     }
@@ -88,6 +88,7 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
 
           currentEditor.setEditable(false)
           currentEditor.commands.clearContent()
+          setCompletedInitialFetch(false)
 
           if (match) {
             setCurrentMatch(match)
@@ -172,13 +173,13 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
       return;
     }
 
-    if (currentTeam && completedinitialFetch) {
+    if (currentTeam && completedInitialFetch) {
       if (teamToMatchNotes[currentTeam.teamNumber]) {
         currentEditor.commands.setContent(teamToMatchNotes[currentTeam.teamNumber])
       }
       currentEditor.setEditable(true)
     }
-  }, [teamToMatchNotes, completedinitialFetch, currentTeam, currentEditor])
+  }, [teamToMatchNotes, completedInitialFetch, currentTeam, currentEditor])
 
 
   return (
