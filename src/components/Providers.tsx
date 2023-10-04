@@ -7,6 +7,9 @@ const Providers = ({ children } : { children: ReactNode }) => {
     <ClerkProvider
       appearance={{
         baseTheme: dark,
+        layout: {
+          privacyPageUrl: '/privacy'
+        },
       }}
     >
       {children}

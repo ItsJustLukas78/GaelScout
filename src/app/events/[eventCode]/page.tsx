@@ -90,6 +90,11 @@ export default function EventPage({ params }: { params: { eventCode: string } })
 
   useEffect(() => {
     if (currentDivision) {
+      if (currentDivision.name === "Default") {
+        setMatchList([]);
+        return;
+      }
+
       setLoadingMatches(true);
 
       fetch(`/api/events/${eventObject?.id}/${currentDivision.id}/matches`).then((response) => {
@@ -256,6 +261,11 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                     </button>
                   </div>
                 </div>
+                {matchList.length === 0 && !loadingMatches ?
+                  <h1 className="text-2xl font-semibold text-neutral-200">
+                    No matches found
+                  </h1>
+                : null}
                 <div className="flex flex-col gap-4 overflow-auto w-[100%]">
                   {matchList.length !== 0 ? matchList.map((result: EventMatch) => {
                     return (

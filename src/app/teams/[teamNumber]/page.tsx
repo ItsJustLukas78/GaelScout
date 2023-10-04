@@ -60,7 +60,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
       <div className="my-44 flex w-full flex-col items-center justify-center gap-16">
         <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
           <h1 className="mb-10 min-w-fit text-5xl font-bold xs:text-5xl sm:text-8xl md:text-5xl lg:text-8xl">
-            Team #{teamNumber}
+            Team #{teamNumber.toUpperCase()}
           </h1>
           {teamProfile ? <>
             <div className="flex flex-col gap-5 min-w-auto md:flex-row md:gap-14">
