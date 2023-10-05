@@ -15,7 +15,9 @@ export default function MatchResultNavigator(
   const [formattedMatchName, setFormattedMatchName] = useState<string>("")
 
   useEffect(() => {
-    setFormattedMatchName(name.replace("Qualifier", "Q").replace("#", ""));
+    if (name) {
+      setFormattedMatchName(name.replace("Qualifier", "Q").replace("#", ""));
+    }
   }, [name]);
 
   return <>
