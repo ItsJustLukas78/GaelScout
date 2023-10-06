@@ -147,11 +147,12 @@ export default function Verify() {
             >
               <AlertDialog.Trigger asChild>
                 <button
-                  className="mt-10 h-8 w-28 whitespace-nowrap rounded-2xl bg-white text-xl font-semibold text-black"
+                  className="mt-10 h-8 w-28 whitespace-nowrap rounded-2xl bg-white text-xl font-semibold text-black disabled:opacity-50"
                   onClick={(e) => {
                     setDialogOpen(true);
                     generateVerificationCode(e)
                   }}
+                  disabled={isSignedIn && !isLoaded}
                 >
                   Verify
                 </button>
@@ -164,6 +165,15 @@ export default function Verify() {
                   </AlertDialog.Title>
                   <AlertDialog.Description asChild>
                     <div className="flex flex-col">
+                      <p className="mt-5 text-sm font-semibold xs:text-md">
+                        Input the number of the team you are verifying ownership of:
+                      </p>
+                      <input
+                        className="mt-2 h-8 rounded-lg p-1 text-black"
+                        type="text"
+                        placeholder="Team Number"
+                        onChange={(e) => setTeamNumberInput(e.target.value)}
+                      />
                       <p className="text-sm font-semibold xs:text-md">
                         Temporarily change your robot name to:
                       </p>
@@ -182,15 +192,6 @@ export default function Verify() {
                           <FaRegClipboard className="mr-1 inline-block" />
                         </button>
                       </p>
-                      <p className="mt-5 text-sm font-semibold xs:text-md">
-                        Input the number of the team you are verifying ownership of:
-                      </p>
-                      <input
-                        className="mt-2 h-8 rounded-lg p-1 text-black"
-                        type="text"
-                        placeholder="Team Number"
-                        onChange={(e) => setTeamNumberInput(e.target.value)}
-                      />
                       <p className="mt-5 text-sm font-semibold xs:text-md">
                         {"Click confirm once you have changed your robot name and it has been updated on your "}
                         <a

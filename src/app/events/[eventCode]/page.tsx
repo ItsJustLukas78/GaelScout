@@ -24,6 +24,8 @@ export default function EventPage({ params }: { params: { eventCode: string } })
   const [divisionList, setDivisionList] = useState<Division[]>([]);
   const [currentDivision, setCurrentDivision] = useState<Division | null>(null);
   const [matchList, setMatchList] = useState<EventMatch[]>([]);
+  const [fiteredMatches, setFilteredMatches] = useState<EventMatch[]>([]);
+  const [teamNumberFilter, setTeamNumberFilter] = useState<string>("");
 
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
   const [matchNotesDialogOpen, setMatchNotesDialogOpen] = useState(false);
@@ -70,8 +72,6 @@ export default function EventPage({ params }: { params: { eventCode: string } })
             setPaticipatingTeams(data.teams);
           });
         });
-
-
       });
     });
   }
@@ -87,6 +87,24 @@ export default function EventPage({ params }: { params: { eventCode: string } })
   useEffect(() => {
     getEvent();
   }, []);
+
+  useEffect(() => {
+    if (teamNumberFilter !== "") {
+      const newFilteredMatches: EventMatch[] = [];
+
+      matchList.forEach((match) => {
+        if (match.blueTeams.find((team) => team.teamNumber === teamNumberFilter) || match.redTeams.find((team) => team.teamNumber === teamNumberFilter)) {
+          newFilteredMatches.push(match);
+        }
+      });
+
+      console.log({newFilteredMatches});
+      setFilteredMatches(newFilteredMatches);
+    } else {
+      console.log({matchList});
+      setFilteredMatches(matchList);
+    }
+  }, [teamNumberFilter, matchList]);
 
   useEffect(() => {
     if (currentDivision) {
@@ -259,6 +277,12 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                     >
                       Match Notes
                     </button>
+                    <input
+                      className="p-3 h-8 w-44 rounded-lg bg-white text-sm text-black md:h-12 md:w-52 md:text-lg"
+                      type="text"
+                      placeholder="Filter by team..."
+                      onChange={(e) => setTeamNumberFilter(e.target.value)}
+                    />
                   </div>
                 </div>
                 {matchList.length === 0 && !loadingMatches ?
@@ -267,7 +291,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                   </h1>
                 : null}
                 <div className="flex flex-col gap-4 overflow-auto w-[100%]">
-                  {matchList.length !== 0 ? matchList.map((result: EventMatch) => {
+                  {fiteredMatches.length !== 0 ? fiteredMatches.map((result: EventMatch) => {
                     return (
                       <MatchResult
                         key={result.id}
