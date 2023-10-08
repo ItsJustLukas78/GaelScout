@@ -8,6 +8,7 @@ import { getAuth } from "@clerk/nextjs/server";
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
+    // @ts-ignore
     const { userId } = await getAuth(request);
     const teamNumber = data.teamNumber;
 

@@ -1,2 +1,13 @@
+# *
 User-agent: *
-Disallow:
+Disallow: /*.json$
+Disallow: /*_buildManifest.js$
+Disallow: /*_middlewareManifest.js$
+Disallow: /*_ssgManifest.js$
+Disallow: /*.js$
+
+# Host
+Host: https://www.gaelscout.com
+
+# Sitemaps
+Sitemap: https://www.gaelscout.com/sitemap.xml

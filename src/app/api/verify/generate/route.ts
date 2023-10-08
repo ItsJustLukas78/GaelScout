@@ -5,6 +5,7 @@ import { getAuth } from "@clerk/nextjs/server";
 
 export async function POST(request: NextRequest) {
   try {
+    // @ts-ignore
     const { userId } = await getAuth(request);
 
     if (!userId) {
