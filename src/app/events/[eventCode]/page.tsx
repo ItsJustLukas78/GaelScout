@@ -134,7 +134,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
     <main>
       <div className="my-44 flex w-full flex-col items-center justify-center">
         {eventObject ? <>
-          <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] mb-8">
+          <div className="mb-8 flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
             <h1 className="mb-10 min-w-fit text-2xl font-bold xs:text-3xl sm:text-4xl md:text-5xl lg:text-7xl">
               {eventObject.name}
             </h1>
@@ -250,9 +250,9 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                   <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl md:mb-0">
                     Matches
                   </h3>
-                  <div className="flex sm:flex-row flex-col gap-3">
+                  <div className="flex flex-col gap-3 sm:flex-row">
                     <select
-                      className="pl-2 h-8 w-44 rounded-lg bg-white text-sm text-black md:h-12 md:w-52 md:text-lg"
+                      className="h-8 w-44 rounded-lg bg-white pl-2 text-sm text-black md:h-12 md:w-52 md:text-lg"
                       required
                       value={currentDivision?.id}
                       onChange={(event) => {
@@ -268,7 +268,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                       })}
                     </select>
                     <button
-                      className="h-8 w-44 rounded-lg bg-white text-sm text-black md:h-12 md:w-52 md:text-lg disabled:opacity-50"
+                      className="h-8 w-44 rounded-lg bg-white text-sm text-black disabled:opacity-50 md:h-12 md:w-52 md:text-lg"
                       onClick={() => {
                         console.log("clicked")
                         setMatchNotesDialogOpen(true)
@@ -278,7 +278,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                       Match Notes
                     </button>
                     <input
-                      className="p-3 h-8 w-44 rounded-lg bg-white text-sm text-black md:h-12 md:w-52 md:text-lg"
+                      className="h-8 w-44 rounded-lg bg-white p-3 text-sm text-black md:h-12 md:w-52 md:text-lg"
                       type="text"
                       placeholder="Filter by team..."
                       onChange={(e) => setTeamNumberFilter(e.target.value)}

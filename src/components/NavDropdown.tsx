@@ -10,14 +10,14 @@ export default function NavDropDown({ children }: { children: React.ReactNode })
 
   return <>
     <button
-      className="group h-auto w-fit whitespace-nowrap font-semibold text-white lg:text-lg xl:text-xl"
+      className="h-auto w-fit whitespace-nowrap font-semibold text-white group lg:text-lg xl:text-xl"
       onClick={() => setExpanded(!expanded)}
     >
       Tools
-      <BiSolidDownArrow className="inline-flex h-2.5 w-2.5 ml-2"/>
+      <BiSolidDownArrow className="ml-2 inline-flex h-2.5 w-2.5"/>
       {expanded &&
         <div
-          className="group-hover:flex absolute hidden flex-col bg-neutral-800 rounded-md shadow-gray-500 px-5 py-3 translate-x-[-20%]"
+          className="absolute hidden flex-col rounded-md bg-neutral-800 px-5 py-3 shadow-gray-500 translate-x-[-20%] group-hover:flex"
         >
           {children}
         </div>

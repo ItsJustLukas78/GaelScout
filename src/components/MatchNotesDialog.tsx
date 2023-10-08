@@ -196,7 +196,7 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
           <AlertDialog.Description asChild>
             <div className={`flex flex-col ${loading ? "animate-pulse" : ""}`}>
               <div className="flex flex-col">
-                <h1 className="matchNotesDialogTipTap text-2xl font-semibold text-neutral-200 mb-5">
+                <h1 className="mb-5 text-2xl font-semibold text-neutral-200 matchNotesDialogTipTap">
                   {currentMatch?.name} - {currentTeam?.teamNumber}
                 </h1>
                 <Tiptap setEditor={setCurrentEditor} />
@@ -208,9 +208,9 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
                 />
               </div>
               {/* navigate forward or backward through matches */}
-              <div className="flex flex-row justify-center mt-5 ">
+              <div className="mt-5 flex flex-row justify-center">
                 <button
-                  className="h-8 w-14 text-xl font-semibold text-white items-center justify-center flex"
+                  className="flex h-8 w-14 items-center justify-center text-xl font-semibold text-white"
                   onClick={() => {
                     const currentMatchIndex = matchList.indexOf(currentMatch)
                     if (currentMatchIndex !== 0) {
@@ -221,13 +221,13 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
                   <BsArrowReturnLeft />
                 </button>
                 {/* text saying match browser */}
-                <div className="flex flex-col justify-center items-center mx-5">
+                <div className="mx-5 flex flex-col items-center justify-center">
                   <h1 className="text-xl font-semibold text-neutral-200">
                     Match Browser
                   </h1>
                 </div>
                 <button
-                  className="h-8 w-14 text-xl font-semibold text-white items-center justify-center flex"
+                  className="flex h-8 w-14 items-center justify-center text-xl font-semibold text-white"
                   onClick={() => {
                     const currentMatchIndex = matchList.indexOf(currentMatch)
                     if (currentMatchIndex !== matchList.length - 1) {
@@ -243,7 +243,7 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
           <div className="mt-auto flex justify-between">
             <AlertDialog.Action asChild>
               <button
-                className="mt-4 h-8 w-28 whitespace-nowrap rounded-md bg-green-300 text-xl font-semibold text-black disabled:opacity-50 ml-auto"
+                className="mt-4 ml-auto h-8 w-28 whitespace-nowrap rounded-md bg-green-300 text-xl font-semibold text-black disabled:opacity-50"
                 onClick={(e) => saveNotesAndChangeMatch()}
                 disabled={false}
               >

@@ -85,9 +85,9 @@ export default function RankingsPage() {
             <h3 className="my-5 min-w-fit text-3xl font-bold xs:text-5xl lg:my-0">
               Rankings
             </h3>
-            <div className="flex sm:flex-row flex-col gap-4">
+            <div className="flex flex-col gap-4 sm:flex-row">
               <select
-                className="sm:h-12 h-10 sm:w-52 xl:w-48 rounded-lg p-3 text-black sm:text-sm text-xs"
+                className="h-10 rounded-lg p-3 text-xs text-black sm:h-12 sm:w-52 sm:text-sm xl:w-48"
                 required
                 value={rankedStatistic}
                 onChange={(event) => setRankedStatistic(event.target.value as RankableStatistic)}
@@ -99,7 +99,7 @@ export default function RankingsPage() {
                 <option value="topTotalSkills">World Skills</option>
               </select>
               <select
-                className="sm:h-12 h-10 sm:w-52 xl:w-48 rounded-lg p-3 text-black sm:text-sm text-xs"
+                className="h-10 rounded-lg p-3 text-xs text-black sm:h-12 sm:w-52 sm:text-sm xl:w-48"
                 required
                 value={seasonId}
                 onChange={(event) => setSeasonId(parseInt(event.target.value))}
@@ -112,7 +112,7 @@ export default function RankingsPage() {
           <div className="flex flex-col gap-4 overflow-auto w-[100%]">
             <table className="table-auto border-separate rounded-2xl min-w-[100%]">
               <thead>
-                <tr className="[&>th]:text-xs sm:[&>th]:text-sm md:[&>th]:text-md xl:[&>th]:text-xl [&>th]:pb-5 [&>th]:pl-4 [&>th]:text-left">
+                <tr className="md:[&>th]:text-md [&>th]:pb-5 [&>th]:pl-4 [&>th]:text-left [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-xl">
                   <th>Number</th>
                   <th>OPR</th>
                   <th>DPR</th>
@@ -142,13 +142,13 @@ export default function RankingsPage() {
                 }) : loadingTeams ?
                   [0,1,2,3,4].map(() => {
                     return (
-                      <tr className="animate-pulse h-16" key={Math.random()}>
-                        <td className="px-4 py-2 text-sm font-semibold md:text-lg xl:text-2xl bg-gray-400"></td>
-                        <td className="px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl bg-gray-400"></td>
-                        <td className="px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl bg-gray-400"></td>
-                        <td className="px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl bg-gray-400"></td>
-                        <td className="px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl bg-gray-400"></td>
-                        <td className="px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl bg-gray-400"></td>
+                      <tr className="h-16 animate-pulse" key={Math.random()}>
+                        <td className="bg-gray-400 px-4 py-2 text-sm font-semibold md:text-lg xl:text-2xl"></td>
+                        <td className="bg-gray-400 px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl"></td>
+                        <td className="bg-gray-400 px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl"></td>
+                        <td className="bg-gray-400 px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl"></td>
+                        <td className="bg-gray-400 px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl"></td>
+                        <td className="bg-gray-400 px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl"></td>
                       </tr>
                     )
                   }) : null}

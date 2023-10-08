@@ -103,7 +103,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                   <h3 className="text-xl font-bold">
                     Team Name:
                   </h3>
-                  <h3 className="text-md font-normal">
+                  <h3 className="font-normal text-md">
                     {teamProfile.teamName ? teamProfile.teamName : "N/A"}
                   </h3>
                 </div>
@@ -111,7 +111,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                   <h3 className="text-xl font-bold">
                     Robot Name:
                   </h3>
-                  <h3 className="text-md font-normal">
+                  <h3 className="font-normal text-md">
                     {teamProfile.robotName ? teamProfile.robotName : "N/A"}
                   </h3>
                 </div>
@@ -121,7 +121,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                   <h3 className="text-xl font-bold">
                     Organization:
                   </h3>
-                  <h3 className="text-md font-normal">
+                  <h3 className="font-normal text-md">
                     {teamProfile.teamOrg ? teamProfile.teamOrg : "N/A"}
                   </h3>
                 </div>
@@ -129,7 +129,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                   <h3 className="text-xl font-bold">
                     Location:
                   </h3>
-                  <h3 className="text-md font-normal">
+                  <h3 className="font-normal text-md">
                     {teamProfile.teamCity ? teamProfile.teamCity + ", " : ""}{teamProfile.teamRegion ? teamProfile.teamRegion + ", " : ""}{teamProfile.teamCountry ? teamProfile.teamCountry : ""}
                   </h3>
                 </div>
@@ -139,7 +139,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                   <h3 className="text-xl font-bold">
                     Program:
                   </h3>
-                  <h3 className="text-md font-normal">
+                  <h3 className="font-normal text-md">
                     {teamProfile.programCode ? teamProfile.programCode : "N/A"}
                   </h3>
                 </div>
@@ -147,7 +147,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                   <h3 className="text-xl font-bold">
                     Grade:
                   </h3>
-                  <h3 className="text-md font-normal">
+                  <h3 className="font-normal text-md">
                     {teamProfile.teamGrade ? teamProfile.teamGrade : "N/A"}
                   </h3>
                 </div>
@@ -172,7 +172,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                 </h3>
                 <div className="flex flex-row gap-3 md:ml-auto">
                   <select
-                    className="h-12 w-52 md:ml-auto rounded-lg p-3 text-black sm:w-52 lg:w-80"
+                    className="h-12 w-52 rounded-lg p-3 text-black sm:w-52 md:ml-auto lg:w-80"
                     required
                     value={seasonId}
                     onChange={(event) => setSeasonId(parseInt(event.target.value))}
@@ -181,7 +181,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                     <option value="181">Over Under 2023-24</option>
                   </select>
                   <button
-                    className="opacity-50 flex min-w-[50px] min-h-[40px] whitespace-nowrap rounded-md bg-neutral-50 text-xl font-semibold text-black disabled:opacity-50 items-center justify-center"
+                    className="flex items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 text-xl font-semibold text-black opacity-50 min-w-[50px] min-h-[40px] disabled:opacity-50"
                     onClick={(e) => {
                       e.preventDefault()
                       if (isSignedIn) {
@@ -349,9 +349,9 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                 <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl md:mb-0">
                   Events
                 </h3>
-                <div className="flex sm:flex-row flex-col gap-3">
+                <div className="flex flex-col gap-3 sm:flex-row">
                   <select
-                    className="h-12 w-52 md:ml-auto rounded-lg p-3 text-black sm:w-52 lg:w-80"
+                    className="h-12 w-52 rounded-lg p-3 text-black sm:w-52 md:ml-auto lg:w-80"
                     required
                     value={seasonId}
                     onChange={(event) => setSeasonId(parseInt(event.target.value))}

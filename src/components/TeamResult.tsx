@@ -5,7 +5,7 @@ export default function TeamResult({ teamId, teamNumber, teamName, programCode, 
   return (
     <Link
       href={`/teams/${teamNumber}`}
-      className="duration-200 transition-colors hover:bg-gray-400 flex h-auto w-full flex-col rounded-2xl bg-neutral-300 p-3 shadow-lg shadow-neutral-500 min-h-28"
+      className="flex h-auto w-full flex-col rounded-2xl bg-neutral-300 p-3 shadow-lg shadow-neutral-500 transition-colors duration-200 min-h-28 hover:bg-gray-400"
     >
       <h1 className="mb-2 text-sm font-bold text-gray-900 md:text-lg">
         {teamNumber} - {teamName}

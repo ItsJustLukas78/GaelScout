@@ -19,16 +19,16 @@ export default function MatchResult(
         className="flex h-auto w-full flex-col rounded-2xl bg-neutral-700 p-3 shadow-md shadow-neutral-900 min-h-28"
       >
         <div className="flex flex-row justify-between">
-          <div className="flex flex-col gap-3 text-center md:min-w-[150px] min-w-[55px]">
-            <h2 className="text-sm font-semibold md:text-3xl text-blue-600">
+          <div className="flex flex-col gap-3 text-center min-w-[55px] md:min-w-[150px]">
+            <h2 className="text-sm font-semibold text-blue-600 md:text-3xl">
               {blueTeams[0].teamNumber}
             </h2>
-            <h2 className="text-sm font-semibold md:text-3xl text-blue-600">
+            <h2 className="text-sm font-semibold text-blue-600 md:text-3xl">
               {blueTeams[1].teamNumber}
             </h2>
           </div>
-          <div className="flex flex-col text-center justify-center md:min-w-[55px] min-w-[30px]">
-            <h2 className="text-md font-semibold md:text-4xl text-blue-600">
+          <div className="flex flex-col justify-center text-center min-w-[30px] md:min-w-[55px]">
+            <h2 className="font-semibold text-blue-600 text-md md:text-4xl">
               {blueScore > redScore ?
                 <u>{blueScore}</u>
                 :
@@ -36,16 +36,16 @@ export default function MatchResult(
               }
             </h2>
           </div>
-          <div className="flex flex-col gap-1 text-center justify-center md:min-w-[150px] min-w-[55px]">
-            <h2 className="text-sm font-semibold md:text-3xl text-GSGreen">
+          <div className="flex flex-col justify-center gap-1 text-center min-w-[55px] md:min-w-[150px]">
+            <h2 className="text-sm font-semibold text-GSGreen md:text-3xl">
               {formattedMatchName}
             </h2>
-            <h2 className="text-sm font-semibold md:text-3xl text-neutral-200">
+            <h2 className="text-sm font-semibold text-neutral-200 md:text-3xl">
               {field}
             </h2>
           </div>
-          <div className="flex flex-col text-center justify-center md:min-w-[55px] min-w-[30px]">
-            <h2 className="text-md font-semibold md:text-4xl text-red-600">
+          <div className="flex flex-col justify-center text-center min-w-[30px] md:min-w-[55px]">
+            <h2 className="font-semibold text-red-600 text-md md:text-4xl">
               {redScore > blueScore ?
                 <u>{redScore}</u>
                 :
@@ -53,11 +53,11 @@ export default function MatchResult(
               }
             </h2>
           </div>
-          <div className="flex flex-col gap-3 text-center md:min-w-[150px] min-w-[55px]">
-            <h2 className="text-sm font-semibold md:text-3xl text-red-600">
+          <div className="flex flex-col gap-3 text-center min-w-[55px] md:min-w-[150px]">
+            <h2 className="text-sm font-semibold text-red-600 md:text-3xl">
               {redTeams[0].teamNumber}
             </h2>
-            <h2 className="text-sm font-semibold md:text-3xl text-red-600">
+            <h2 className="text-sm font-semibold text-red-600 md:text-3xl">
               {redTeams[1].teamNumber}
             </h2>
           </div>

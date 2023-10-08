@@ -55,7 +55,7 @@ const Tiptap = ({setEditor}: TiptapProps) => {
     <>
       {/* Toolbar */}
       {editor &&
-        <div className="flex flex-row gap-3 bg-neutral-900 rounded-xl p-2 shadow-md shadow-neutral-900 mb-5">
+        <div className="mb-5 flex flex-row gap-3 rounded-xl bg-neutral-900 p-2 shadow-md shadow-neutral-900">
           <button
             onClick={() => editor.chain().focus().toggleBold().run()}
             className={`${editor.isActive('bold') ? 'is-active' : ''} hover:bg-neutral-700 rounded-md p-1`}
@@ -104,32 +104,32 @@ const Tiptap = ({setEditor}: TiptapProps) => {
               onClick={() => editor.chain().focus().toggleHighlight({ color: '#DC262640' }).run()}
               className={editor.isActive('highlight', { color: '#DC262640' }) ? 'is-active' : ''}
             >
-              <div className="w-5 h-5 rounded-full bg-red-600"></div>
+              <div className="h-5 w-5 rounded-full bg-red-600"></div>
             </button>
             <button
               onClick={() => editor.chain().focus().toggleHighlight({ color: '#f1e74040' }).run()}
               className={editor.isActive('highlight', { color: '#f1e74040' }) ? 'is-active' : ''}
             >
-              <div className="w-5 h-5 rounded-full bg-yellow-400"></div>
+              <div className="h-5 w-5 rounded-full bg-yellow-400"></div>
             </button>
             <button
               onClick={() => editor.chain().focus().toggleHighlight({ color: '#2be22240' }).run()}
               className={editor.isActive('highlight', { color: '#2be22240' }) ? 'is-active' : ''}
             >
-              <div className="w-5 h-5 rounded-full bg-green-600"></div>
+              <div className="h-5 w-5 rounded-full bg-green-600"></div>
             </button>
             <button
               onClick={() => editor.chain().focus().toggleHighlight({ color: '#2563eb40' }).run()}
               className={editor.isActive('highlight', { color: '#2563eb40' }) ? 'is-active' : ''}
             >
-              <div className="w-5 h-5 rounded-full bg-blue-600"></div>
+              <div className="h-5 w-5 rounded-full bg-blue-600"></div>
             </button>
           </div>
         </div>
       }
       <EditorContent editor={editor} />
       {editor &&
-        <div className="text-xs bg-neutral-900 p-3 shadow-md shadow-neutral-900 rounded-b-2xl text-gray-500">
+        <div className="rounded-b-2xl bg-neutral-900 p-3 text-xs text-gray-500 shadow-md shadow-neutral-900">
           {editor.storage.characterCount.characters()}/{charLimit} characters
         </div>
       }

@@ -6,23 +6,23 @@ export default function MatchTeamResult({ teamId, teamNumber, teamName, programC
   return (
     <Link
       href={`/teams/${teamNumber}`}
-      className="flex h-auto w-full flex-row rounded-2xl bg-neutral-700 p-3 shadow-md shadow-neutral-900 min-h-28 items-center"
+      className="flex h-auto w-full flex-row items-center rounded-2xl bg-neutral-700 p-3 shadow-md shadow-neutral-900 min-h-28"
     >
       <div className="flex flex-col">
         <h1 className="mb-2 text-lg font-bold md:text-2xl">
           {teamNumber} - {teamName}
         </h1>
         <div className="flex flex-col gap-2">
-          <h2 className="text-2xs font-semibold md:text-sm">
+          <h2 className="font-semibold text-2xs md:text-sm">
             {location}
           </h2>
-          <h2 className="text-2xs font-semibold md:text-sm">
+          <h2 className="font-semibold text-2xs md:text-sm">
             {teamOrg}
           </h2>
         </div>
       </div>
       <button
-        className="opacity-50 flex sm:mr-3 min-w-[50px] min-h-[40px] whitespace-nowrap rounded-md bg-neutral-50 text-xl font-semibold text-black disabled:opacity-50 ml-auto items-center justify-center"
+        className="ml-auto flex items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 text-xl font-semibold text-black opacity-50 min-w-[50px] min-h-[40px] disabled:opacity-50 sm:mr-3"
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()

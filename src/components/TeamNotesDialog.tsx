@@ -178,8 +178,8 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
           </AlertDialog.Title>
           <AlertDialog.Description asChild>
             <div className={`flex flex-col ${loading ? "animate-pulse" : ""}`}>
-              <div className="teamNotesDialogTipTap flex flex-col max-h-[300px]">
-                <h1 className="text-2xl font-semibold text-neutral-200 mb-5">
+              <div className="flex flex-col teamNotesDialogTipTap max-h-[300px]">
+                <h1 className="mb-5 text-2xl font-semibold text-neutral-200">
                   {currentNotesTeam?.teamNumber}
                 </h1>
                 <Tiptap setEditor={setCurrentEditor} />
@@ -189,7 +189,7 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
           <div className="mt-auto flex justify-between">
             <AlertDialog.Action asChild>
               <button
-                className="mt-4 h-8 w-28 whitespace-nowrap rounded-md bg-green-300 text-xl font-semibold text-black disabled:opacity-50 ml-auto"
+                className="mt-4 ml-auto h-8 w-28 whitespace-nowrap rounded-md bg-green-300 text-xl font-semibold text-black disabled:opacity-50"
                 onClick={(e) => saveNotes()}
                 disabled={false}
               >

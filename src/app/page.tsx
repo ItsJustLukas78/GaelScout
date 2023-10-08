@@ -7,7 +7,7 @@ export default function Home() {
     <main>
       <div className="my-28 flex w-full flex-col items-center justify-center gap-20">
         <div className="flex h-auto flex-col items-center justify-center lg:space-x-8 lg:flex-row">
-          <div className="my-16 inline-flex flex-col space-y-8 w-72 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
+          <div className="my-16 inline-flex w-72 flex-col space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
             <h1 className="text-5xl font-bold xs:text-7xl sm:text-8xl">
               Scouting Done Easy.
             </h1>
@@ -26,7 +26,7 @@ export default function Home() {
           <div className="hidden max-w-lg xl:inline-flex">
             <Image priority={true} src="/homeblobs.png" alt="GaelSuite Logo" width="600" height="600"/>
           </div>
-          <div className="lg:inline-flex max-w-lg xl:hidden hidden">
+          <div className="hidden max-w-lg lg:inline-flex xl:hidden">
             <Image priority={true} src="/homeblobs.png" alt="GaelSuite Logo" width="400" height="400"/>
           </div>
         </div>
