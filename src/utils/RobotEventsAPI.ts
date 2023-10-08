@@ -209,39 +209,39 @@ export async function getTeamObject({teamId, teamNumber, onlyActive} : {teamId?:
 //   }
 // }
 //
-// export async function getTeamEvents(team_id: number, season_id?: number): Promise<any[]> {
-//   const url = `https://www.robotevents.com/api/v2/teams/${team_id}/events`;
-//   const new_headers = {
-//     "accept": "application/json",
-//     "Authorization": "Bearer " + API_KEY,
-//   };
-//   const new_params = { season: season_id ? season_id : null};
-//
-//   const team_events: any[] = [];
-//
-//   try {
-//     const response = await apiCall(url, new_headers, new_params);
-//
-//     team_events.push(...response.data);
-//
-//     let next_page_url = response.meta.next_page_url;
-//
-//     while (next_page_url) {
-//       const nextPageResponse = await apiCall(next_page_url, new_headers, new_params);
-//
-//       next_page_url = nextPageResponse.meta.next_page_url;
-//
-//       team_events.push(...nextPageResponse.data);
-//     }
-//
-//     return team_events.filter((event, index, self) => {
-//       return index === self.findIndex((t) => t.id === event.id);
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     return [];
-//   }
-// }
+export async function getTeamEvents(team_id: number, season_id?: number): Promise<any[]> {
+  const url = `https://www.robotevents.com/api/v2/teams/${team_id}/events`;
+  const new_headers = {
+    "accept": "application/json",
+    "Authorization": "Bearer " + API_KEY,
+  };
+  const new_params = { season: season_id ? season_id : null};
+
+  const team_events: any[] = [];
+
+  try {
+    const response = await apiCall(url, new_headers, new_params);
+
+    team_events.push(...response.data);
+
+    let next_page_url = response.meta.next_page_url;
+
+    while (next_page_url) {
+      const nextPageResponse = await apiCall(next_page_url, new_headers, new_params);
+
+      next_page_url = nextPageResponse.meta.next_page_url;
+
+      team_events.push(...nextPageResponse.data);
+    }
+
+    return team_events.filter((event, index, self) => {
+      return index === self.findIndex((t) => t.id === event.id);
+    });
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
 //
 // export async function getTeamMatches(team_id: number, event_id: string): Promise<any[]> {
 //   const url = `https://www.robotevents.com/api/v2/teams/${team_id}/matches`;

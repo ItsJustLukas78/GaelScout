@@ -143,7 +143,7 @@ export const getApiDocs = async () => {
             }
           }
         },
-        "/api/teams/{teamNumber}": {
+        "/api/teams/number/{teamNumber}": {
           "get": {
             "tags": [
               "Teams"

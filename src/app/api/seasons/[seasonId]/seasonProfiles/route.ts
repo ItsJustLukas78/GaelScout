@@ -23,7 +23,7 @@ async function formatTeamSeasonProfile(teamSeasonProfile: any) {
     opr: teamSeasonProfile.opr,
     dpr: teamSeasonProfile.dpr,
     ccwm: teamSeasonProfile.ccwm,
-    openSkill: teamSeasonProfile.openSkill.toFixed(4),
+    openSkill: teamSeasonProfile.openSkill,
     openSkillRank: teamSeasonProfile.openSkillRank,
     eventCount: teamSeasonProfile.eventCount,
     topProgSkills: teamSeasonProfile.topProgSkills,

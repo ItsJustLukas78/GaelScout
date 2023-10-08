@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getEvents } from "@/utils/RobotEventsAPI";
+import { Event } from "@/app/types";
 
 export async function GET(request: NextRequest) {
   try {
@@ -29,7 +30,7 @@ export async function GET(request: NextRequest) {
 
     const foundEvents = await getEvents({eventSKUs: validSKUs});
 
-    const formattedEvents = foundEvents.map((event) => {
+    const formattedEvents: Event[] = foundEvents.map((event) => {
       return {
         id: event.id,
         sku: event.sku,

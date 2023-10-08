@@ -26,13 +26,13 @@ export default function Home() {
           <div className="hidden max-w-lg xl:inline-flex">
             <Image priority={true} src="/homeblobs.png" alt="GaelSuite Logo" width="600" height="600"/>
           </div>
-          <div className="inline-flex max-w-lg xl:hidden">
+          <div className="lg:inline-flex max-w-lg xl:hidden hidden">
             <Image priority={true} src="/homeblobs.png" alt="GaelSuite Logo" width="400" height="400"/>
           </div>
         </div>
         <div className="my-15 flex h-auto flex-col items-center justify-center lg:space-x-8 lg:flex-row">
           <div className="my-16 inline-flex w-72 flex-col space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
-            <h1 className="text-5xl font-bold xs:text-6xl sm:text-8xl">
+            <h1 className="text-4xl font-bold xs:text-5xl sm:text-7xl">
               Developed by students at GaelSuite.
             </h1>
             <p className="text-base sm:text-xl">
@@ -49,16 +49,16 @@ export default function Home() {
             <Image src="/gfold.png" alt="GaelSuite Logo" width="200" height="200"/>
             <Image src="/gfnew.png" alt="GaelSuite Logo" width="200" height="200"/>
           </div>
-          <div className="hidden max-w-sm flex-row flex-wrap sm:flex xl:hidden">
+          <div className="hidden max-w-sm flex-row flex-wrap lg:flex xl:hidden">
             <Image src="/GS_logo.png" alt="GaelSuite Logo" width="175" height="200" />
             <Image src="/gfold.png" alt="GaelSuite Logo" width="175" height="200"/>
             <Image src="/gfnew.png" alt="GaelSuite Logo" width="175" height="200"/>
           </div>
-          <div className="flex flex-row flex-wrap items-center justify-center max-w-80 sm:hidden">
-            <Image src="/GS_logo.png" alt="GaelSuite Logo" width="150" height="100" />
-            <Image src="/gfold.png" alt="GaelSuite Logo" width="150" height="100"/>
-            <Image src="/gfnew.png" alt="GaelSuite Logo" width="150" height="100"/>
-          </div>
+          {/*<div className="flex flex-row flex-wrap items-center justify-center max-w-80 sm:hidden">*/}
+          {/*  <Image src="/GS_logo.png" alt="GaelSuite Logo" width="150" height="100" />*/}
+          {/*  <Image src="/gfold.png" alt="GaelSuite Logo" width="150" height="100"/>*/}
+          {/*  <Image src="/gfnew.png" alt="GaelSuite Logo" width="150" height="100"/>*/}
+          {/*</div>*/}
         </div>
       </div>
     </main>

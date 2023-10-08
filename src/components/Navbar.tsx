@@ -9,6 +9,8 @@ import { UserButton, useUser } from "@clerk/nextjs";
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import NavDropDown from "@/components/NavDropdown";
 import NavDropButton from "@/components/NavDropButton";
+import { Divide as Hamburger } from 'hamburger-react'
+
 
 export default function Navbar() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -17,22 +19,22 @@ export default function Navbar() {
 
   return (
     <div>
-      <div className="z-30 h-20 w-full fixed top-0 bg-GSGray bg-opacity-50 lg:justify-center items-center 2xl:gap-16 xl:gap-12 lg:gap-10 inline-flex bg-gradient-to-b
+      <div className="px-12 z-30 h-20 w-full fixed top-0 bg-GSGray bg-opacity-50 justify-center items-center 2xl:gap-16 xl:gap-12 lg:gap-10 inline-flex bg-gradient-to-b
    from-neutral-800  to-GSGray">
-        <div className="ml-5 inline-flex items-center">
+        <div className="inline-flex items-center">
           <Image src="/GS_logo.png" alt="GaelSuite Logo" width="50" height="50" />
           <NavButton href="/">GaelScout</NavButton>
         </div>
-        <div className="hidden lg:inline-flex lg:gap-9 xl:gap-14 2xl:gap-16">
-          <NavButton href="/">Home</NavButton>
+        <div className="hidden lg:flex lg:gap-9 xl:gap-14 2xl:gap-16">
           <NavButton href="/teams">Teams</NavButton>
           <NavButton href="/events">Events</NavButton>
           <NavButton href="/profiles">Profiles</NavButton>
           <NavButton href="/rankings">Rankings</NavButton>
+          <NavButton href="/predict">Predict</NavButton>
           <NavButton href="/verify">Verify</NavButton>
-          <NavDropDown>
-            <NavDropButton href="/predict">Predict</NavDropButton>
-          </NavDropDown>
+          {/*<NavDropDown>*/}
+          {/*  <NavDropButton href="/predict">Predict</NavDropButton>*/}
+          {/*</NavDropDown>*/}
           {/*<NavButton href="/api-docs">API</NavButton>*/}
           <NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>
           {/*<NavButton href="/about">About</NavButton>*/}
@@ -42,21 +44,14 @@ export default function Navbar() {
             <NavButton href="/sign-in">Sign In</NavButton>
           }
         </div>
-        <div className="mr-10 ml-auto lg:hidden">
-          <button
-              className="inline-flex items-center justify-center w-[35px] h-[35px]"
-              aria-label="Customise options"
-              onClick={() => setExpanded(!expanded)}
-            >
-              <GiHamburgerMenu className="h-6 w-6"/>
-            </button>
+        <div className="ml-auto lg:hidden">
+          <Hamburger toggled={expanded} toggle={setExpanded} />
         </div>
       </div>
       <div className={`${expanded ? "block" : "hidden"} lg:hidden`}>
         <div className="z-50 h-full w-full fixed top-20 bg-GSGray bg-opacity-100 lg:justify-center
          bg-gradient-to-b" >
           <div onClick={() => setExpanded(!expanded)} className="mt-5 ml-10 flex flex-col gap-8">
-            <NavButton href="/">Home</NavButton>
             <NavButton href="/teams">Teams</NavButton>
             <NavButton href="/events">Events</NavButton>
             <NavButton href="/profiles">Profiles</NavButton>

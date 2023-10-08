@@ -99,7 +99,7 @@ export default function Teams() {
     const searchParams = new URLSearchParams();
 
     if (teamNumber && teamNumber !== "") {
-      fetch(`/api/teams/${teamNumber.toUpperCase()}`).then((response) => {
+      fetch(`/api/teams/number/${teamNumber.toUpperCase()}`).then((response) => {
         response.json().then((data) => {
           if (data.error) {
             toast.error(data.error)

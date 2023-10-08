@@ -104,8 +104,8 @@ export default function RankingsPage() {
                 value={seasonId}
                 onChange={(event) => setSeasonId(parseInt(event.target.value))}
               >
-                <option value="173">Spin Up 2022-2023</option>
-                <option value="181">Over Under 2023-2024</option>
+                <option value="173">Spin Up 2022-23</option>
+                <option value="181">Over Under 2023-24</option>
               </select>
             </div>
           </div>
@@ -119,6 +119,8 @@ export default function RankingsPage() {
                   <th>CCWM</th>
                   <th>OpenSkill</th>
                   <th>WorldSkills</th>
+                  <th>Driver</th>
+                  <th>Prog</th>
                 </tr>
               </thead>
               <tbody className="rounded-2xl bg-neutral-700">
@@ -128,11 +130,13 @@ export default function RankingsPage() {
                       <td className="px-4 py-2 text-sm font-semibold md:text-lg xl:text-2xl">
                         <a href={`/teams/${result.teamNumber}`} className="hover:text-blue-500">{result.teamNumber}</a>
                       </td>
-                      <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.opr}</td>
-                      <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.dpr}</td>
-                      <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.ccwm}</td>
-                      <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.openSkill}</td>
+                      <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.opr.toFixed(2)}</td>
+                      <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.dpr.toFixed(2)}</td>
+                      <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.ccwm.toFixed(2)}</td>
+                      <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.openSkill.toFixed(2)}</td>
                       <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.topTotalSkills}</td>
+                      <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.topDriverSkills.toFixed(2)}</td>
+                      <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.topProgSkills.toFixed(2)}</td>
                     </tr>
                   )
                 }) : loadingTeams ?
