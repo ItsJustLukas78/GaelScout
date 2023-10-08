@@ -6,6 +6,7 @@ import Providers from '@/components/Providers'
 import type { Metadata } from 'next'
 import React from "react";
 import {Slide, ToastContainer} from "react-toastify";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -32,6 +33,10 @@ export default function RootLayout({
     <html lang="en">
       <Providers>
         <body>
+          {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS ? (
+            <GoogleAnalytics ga_id=
+            {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS} />
+          ) : null}
           <Navbar />
           <div className="w-full">
             {children}
