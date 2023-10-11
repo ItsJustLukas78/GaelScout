@@ -80,5 +80,15 @@ model TeamNote {
   note       Json
   team       TeamProfile @relation(fields: [teamId, teamNumber], references: [teamId, teamNumber], onUpdate: Cascade)
 
+  // User       User        @relation(fields: [userId], references: [id])
   @@unique([userId, seasonId, teamNumber, teamId])
+}
+
+model User {
+  id        String  @id @default(cuid())
+  username  String? @unique
+  email     String? @unique
+  firstName String?
+  lastName  String?
+  // teamNotes TeamNote[]
 }
