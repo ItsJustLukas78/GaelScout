@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { clerkClient } from "@clerk/nextjs";
 import { getAuth } from "@clerk/nextjs/server";
+import prisma from "@/lib/db";
 
 
 export async function POST(request: NextRequest) {
@@ -13,6 +14,11 @@ export async function POST(request: NextRequest) {
     }
 
     const clerkUser = await clerkClient.users.getUser(userId);
+    // const userObject = prisma.user.findUnique({
+    //   where: {
+    //     id: userId
+    //   }
+    // });
 
     if (!clerkUser) {
       return NextResponse.json({error: 'User not found'}, {status: 404});

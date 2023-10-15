@@ -66,7 +66,6 @@ export default function UserProfile({ params }: { params: { username: string } }
                 >
                   <div className="flex flex-row gap-2 font-bold sm:text-md md:text-lg lg:text-xl">
                     Team: {userProfile.public_metadata.hasOwnProperty("verifiedTeamNumber") ? userProfile.public_metadata["verifiedTeamNumber"] : "N/A"}
-                    <AiOutlineLink className="h-6 w-6 text-blue-600" />
                   </div>
                 </a>
               </div>

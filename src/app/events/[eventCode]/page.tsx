@@ -135,9 +135,12 @@ export default function EventPage({ params }: { params: { eventCode: string } })
       <div className="my-44 flex w-full flex-col items-center justify-center">
         {eventObject ? <>
           <div className="mb-8 flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
-            <h1 className="mb-10 min-w-fit text-2xl font-bold xs:text-3xl sm:text-4xl md:text-5xl lg:text-7xl">
+            <h1 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl sm:text-4xl md:text-5xl lg:text-7xl">
               {eventObject.name}
             </h1>
+            <a href={`https://www.robotevents.com/robot-competitions/vex-robotics-competition/${eventCode}.html`} className="mb-5 min-w-fit text-lg font-bold xs:text-xl hover:text-blue-500">
+              RobotEvents Page
+            </a>
             <div className="flex flex-row gap-5 md:gap-10">
               <div className="flex flex-col gap-5 mim-w-[49%]">
                 <div className="flex flex-col">

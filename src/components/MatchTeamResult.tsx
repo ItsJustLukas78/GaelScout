@@ -6,7 +6,7 @@ export default function MatchTeamResult({ teamId, teamNumber, teamName, programC
   return (
     <Link
       href={`/teams/${teamNumber}`}
-      className="flex h-auto w-full flex-row items-center rounded-2xl bg-neutral-700 p-3 shadow-md shadow-neutral-900 min-h-28"
+      className="flex h-auto w-full flex-row items-center rounded-2xl bg-neutral-700 p-3 shadow-md shadow-neutral-900 min-h-28 transition-colors duration-200 hover:bg-neutral-600"
     >
       <div className="flex flex-col">
         <h1 className="mb-2 text-lg font-bold md:text-2xl">
