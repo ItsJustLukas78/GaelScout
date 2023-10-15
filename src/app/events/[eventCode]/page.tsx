@@ -138,7 +138,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
             <h1 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl sm:text-4xl md:text-5xl lg:text-7xl">
               {eventObject.name}
             </h1>
-            <a href={`https://www.robotevents.com/robot-competitions/vex-robotics-competition/${eventCode}.html`} className="mb-5 min-w-fit text-lg font-bold xs:text-xl hover:text-blue-500">
+            <a href={`https://www.robotevents.com/robot-competitions/vex-robotics-competition/${eventCode}.html`} className="mb-5 max-w-fit text-lg font-bold xs:text-xl hover:text-blue-500">
               RobotEvents Page
             </a>
             <div className="flex flex-row gap-5 md:gap-10">
@@ -192,7 +192,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                     Teams
                   </h3>
                   <button
-                    className="h-8 w-44 rounded-lg bg-white text-sm text-black md:h-12 md:w-52 md:text-lg"
+                    className="h-8 sm:w-44 min-w-max rounded-lg bg-white text-sm text-black md:h-12 md:w-52 md:text-lg"
                     onClick={() => setExportDialogOpen(true)}
                   >
                     Generate Scout Sheet
@@ -249,13 +249,13 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                 : null}
               </TabsContent>
               <TabsContent value="matches">
-                <div className="mb-10 flex flex-col justify-between md:flex-row">
-                  <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl md:mb-0">
+                <div className="mb-10 flex flex-col justify-between xl:flex-row">
+                  <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl xl:mb-0">
                     Matches
                   </h3>
                   <div className="flex flex-col gap-3 sm:flex-row">
                     <select
-                      className="h-8 w-44 rounded-lg bg-white pl-2 text-sm text-black md:h-12 md:w-52 md:text-lg"
+                      className="h-8 sm:w-44 min-w-max rounded-lg bg-white pl-2 text-sm text-black md:h-12 md:w-52 md:text-lg"
                       required
                       value={currentDivision?.id}
                       onChange={(event) => {
@@ -271,7 +271,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                       })}
                     </select>
                     <button
-                      className="h-8 w-44 rounded-lg bg-white text-sm text-black disabled:opacity-50 md:h-12 md:w-52 md:text-lg"
+                      className="h-8 sm:w-44 min-w-max rounded-lg bg-white text-sm text-black disabled:opacity-50 md:h-12 md:w-52 md:text-lg"
                       onClick={() => {
                         console.log("clicked")
                         setMatchNotesDialogOpen(true)
@@ -281,7 +281,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                       Match Notes
                     </button>
                     <input
-                      className="h-8 w-44 rounded-lg bg-white p-3 text-sm text-black md:h-12 md:w-52 md:text-lg"
+                      className="h-8 sm:w-44 min-w-max rounded-lg bg-white p-3 text-sm text-black md:h-12 md:w-52 md:text-lg"
                       type="text"
                       placeholder="Filter by team..."
                       onChange={(e) => setTeamNumberFilter(e.target.value)}

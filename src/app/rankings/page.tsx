@@ -109,6 +109,17 @@ export default function RankingsPage() {
               </select>
             </div>
           </div>
+          {/*<div className="flex lg:flex-row flex-col gap-5 mb-10">*/}
+          {/*  <h3 className="font-light text-md sm:text-xl">*/}
+          {/*    Teams Analyzed: 1623*/}
+          {/*  </h3>*/}
+          {/*  <h3 className="font-light text-md sm:text-xl">*/}
+          {/*    Qualled to Worlds: 23*/}
+          {/*  </h3>*/}
+          {/*  <h3 className="font-light text-md sm:text-xl">*/}
+          {/*    Qualled to Regionals: 234*/}
+          {/*  </h3>*/}
+          {/*</div>*/}
           <div className="flex flex-col gap-4 overflow-auto w-[100%]">
             <table className="table-auto border-separate rounded-2xl min-w-[100%]">
               <thead>
