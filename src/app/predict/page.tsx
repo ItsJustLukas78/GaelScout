@@ -11,7 +11,7 @@ export default function Teams() {
   const [b1Team, setB1Team] = useState< string | null >(null);
   const [b2Team, setB2Team] = useState< string | null >(null);
 
-  const [seasonId, setSeasonId] = useState< number >(181);
+  const [seasonId, setSeasonId] = useState<number>(181);
 
   const [prediction, setPrediction] = useState< any >(null);
 
@@ -159,16 +159,15 @@ export default function Teams() {
             <Form.Label>
               Season
             </Form.Label>
-            <Form.Control asChild>
-              <select
-                className="h-15 w-36 rounded-lg p-3 text-black sm:w-full"
-                required
-                onChange={(event) => setSeasonId(parseInt(event.target.value))}
-              >
-                <option id="173" value="173">Spin Up 2022-2023</option>
-                <option id="181" value="181">Over Under 2023-2024</option>
-              </select>
-            </Form.Control>
+            <select
+              className="h-15 w-36 rounded-lg p-3 text-black sm:w-full"
+              required
+              value={seasonId}
+              onChange={(event) => setSeasonId(parseInt(event.target.value))}
+            >
+              <option value="173">Spin Up 2022-23</option>
+              <option value="181">Over Under 2023-24</option>
+            </select>
           </Form.Field>
           <Form.Submit asChild>
             <CorneredButton className={`sm:mt-5 ${allInputsProvided ? "" : "bg-gray-500"}`} disabled={!allInputsProvided}>
@@ -282,16 +281,15 @@ export default function Teams() {
               <Form.Label>
                 Season
               </Form.Label>
-              <Form.Control asChild>
-                <select
-                  className="h-15 rounded-lg p-3 text-black"
-                  required
-                  onChange={(event) => setSeasonId(parseInt(event.target.value))}
-                >
-                  <option id="173" value="173">Spin Up 2022-2023</option>
-                  <option id="181" value="181">Over Under 2023-2024</option>
-                </select>
-              </Form.Control>
+              <select
+                className="h-15 rounded-lg p-3 text-black"
+                required
+                value={seasonId}
+                onChange={(event) => setSeasonId(parseInt(event.target.value))}
+              >
+                <option value="173">Spin Up 2022-23</option>
+                <option value="181">Over Under 2023-24</option>
+              </select>
             </Form.Field>
             <Form.Submit asChild>
               <CorneredButton className={`sm:mt-5 disabled:bg-gray-500`} disabled={!allInputsProvided}>

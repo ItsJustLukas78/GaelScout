@@ -9,6 +9,7 @@ import MatchResult from "@/components/MatchResult";
 import { useUser } from "@clerk/nextjs";
 import MatchTeamResult from "@/components/MatchTeamResult";
 import TeamNotesDialog from "@/components/TeamNotesDialog";
+import {AiFillStar, AiOutlineStar} from "react-icons/ai";
 
 export default function EventPage({ params }: { params: { eventCode: string } }) {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -32,6 +33,8 @@ export default function EventPage({ params }: { params: { eventCode: string } })
   const [teamNotesDialogOpen, setTeamNotesDialogOpen] = useState(false);
 
   const [currentNotesTeam, setCurrentNotesTeam] = useState<TeamProfile | null>(null);
+
+  const [favorited, setFavorited] = useState(false);
 
   const getEvent = () => {
     const skuSearchParams = new URLSearchParams();
@@ -130,14 +133,119 @@ export default function EventPage({ params }: { params: { eventCode: string } })
     }
   }, [currentDivision]);
 
+  const getFavoriteStatus = () => {
+    if (!eventObject) {
+      return;
+    }
+
+    const searchParams = new URLSearchParams();
+
+    searchParams.append("eventId", eventObject.id.toString());
+    searchParams.append("favoriteType", "event");
+
+    fetch(`/api/favorites/?${searchParams.toString()}`).then((response) => {
+      response.json().then((data) => {
+        if (data.error) {
+          toast.error(data.error)
+          setFavorited(false);
+          return;
+        }
+
+        setFavorited(data.favorites.length > 0);
+      }).catch((error) => {
+        toast.error(error)
+        setFavorited(false);
+      });
+    }).catch((error) => {
+      toast.error(error)
+      setFavorited(false);
+    });
+  }
+
+  const changeFavoriteStatus = (favorite: boolean) => {
+    if (!eventObject) {
+      return;
+    }
+
+    if (favorite) {
+      fetch(`/api/favorites/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          eventId: eventObject.id,
+          favoriteType: "event",
+        }),
+      }).then((response) => {
+        response.json().then((data) => {
+          if (data?.error) {
+            toast.error(data.error)
+            return;
+          }
+
+          setFavorited(data.success);
+        }).catch((error) => {
+          toast.error(error)
+        });
+      }).catch((error) => {
+        toast.error(error)
+      });
+    } else {
+      fetch(`/api/favorites/`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          eventId: eventObject.id,
+          favoriteType: "event",
+        }),
+      }).then((response) => {
+        response.json().then((data) => {
+          if (data?.error) {
+            toast.error(data.error)
+            return;
+          }
+
+          setFavorited(!data.success);
+        });
+      }).catch((error) => {
+        toast.error(error)
+      });
+    }
+  }
+
+  useEffect(() => {
+    if (isSignedIn && eventObject) {
+      getFavoriteStatus();
+    }
+  }, [isSignedIn, eventObject]);
+
   return (
     <main>
       <div className="my-44 flex w-full flex-col items-center justify-center">
         {eventObject ? <>
-          <div className="mb-8 flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+          <div className="relative mb-8 flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
             <h1 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl sm:text-4xl md:text-5xl lg:text-7xl">
               {eventObject.name}
             </h1>
+            <div className="absolute max-w-max top-0.5 right-0.5 xl:top-2 xl:right-2">
+              <button
+                className="flex items-center justify-center text-2xl font-extrabold min-w-[50px] min-h-[50px]"
+                onClick={(e) => {
+                  e.preventDefault()
+                  if (isSignedIn) {
+                    changeFavoriteStatus(!favorited);
+                    return;
+                  } else {
+                    toast.error("You must be signed in to favorite an event");
+                  }
+                }}
+              >
+                {favorited ? <AiFillStar className="inline-block" /> : <AiOutlineStar className="inline-block" />}
+              </button>
+            </div>
             <a href={`https://www.robotevents.com/robot-competitions/vex-robotics-competition/${eventCode}.html`} className="mb-5 max-w-fit text-lg font-bold xs:text-xl hover:text-blue-500">
               RobotEvents Page
             </a>

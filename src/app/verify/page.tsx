@@ -165,7 +165,7 @@ export default function Verify() {
                   </AlertDialog.Title>
                   <AlertDialog.Description asChild>
                     <div className="flex flex-col">
-                      <p className="mt-5 text-sm font-semibold xs:text-md">
+                      <p className="text-sm font-semibold xs:text-md">
                         Input the number of the team you are verifying ownership of:
                       </p>
                       <input
@@ -174,7 +174,7 @@ export default function Verify() {
                         placeholder="Team Number"
                         onChange={(e) => setTeamNumberInput(e.target.value)}
                       />
-                      <p className="text-sm font-semibold xs:text-md">
+                      <p className="mt-5 text-sm font-semibold xs:text-md">
                         Temporarily change your robot name to:
                       </p>
                       <p className="mt-2 flex flex-row items-center rounded-md bg-neutral-600 p-2 text-sm font-semibold xs:text-md">

@@ -7,6 +7,7 @@ import TeamNotesDialog from "@/components/TeamNotesDialog";
 import { useUser } from "@clerk/nextjs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import EventResult from "@/components/EventResult";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
 export default function TeamProfile({ params }: { params: { teamNumber: string } }) {
   const { isSignedIn } = useUser();
@@ -21,6 +22,8 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
 
   const [currentEvents, setCurrentEvents] = useState<Event[]>([]);
 
+  const [favorited, setFavorited] = useState<boolean>(false);
+
   const getTeam = () => {
     fetch(`/api/teams/number/${teamNumber.toUpperCase()}`).then((response) => {
       response.json().then((data) => {
@@ -29,21 +32,28 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
           return;
         }
         setTeamProfile(data.team)
+      }).catch((error) => {
+        console.log(error);
+        toast.error(error)
       });
     }).catch((error) => {
       console.log(error);
+      toast.error(error)
     });
   }
 
   const getSeasonStats = () => {
     fetch(`/api/seasons/${seasonId}/seasonProfile/${teamNumber.toUpperCase()}`).then((response) => {
       response.json().then((data) => {
-        if (data?.error) {
+        if (data.error) {
           setSeasonStats(null);
           return;
         }
         setSeasonStats(data);
-      });
+      }).catch((error) => {
+        console.log(error);
+        setSeasonStats(null);
+      })
     }).catch((error) => {
       console.log(error);
       setSeasonStats(null);
@@ -75,6 +85,91 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
     });
   }
 
+  const getFavoriteStatus = () => {
+    if (!teamProfile) {
+      return;
+    }
+
+    const searchParams = new URLSearchParams();
+
+    searchParams.append("teamId", teamProfile.teamId.toString());
+    searchParams.append("favoriteType", "team");
+
+    fetch(`/api/favorites/?${searchParams.toString()}`).then((response) => {
+      response.json().then((data) => {
+        if (data.error) {
+          toast.error(data.error)
+          setFavorited(false);
+          return;
+        }
+
+        setFavorited(data.favorites.length > 0);
+      }).catch((error) => {
+        toast.error(error)
+        setFavorited(false);
+      });
+    }).catch((error) => {
+      toast.error(error)
+      setFavorited(false);
+    });
+  }
+
+  const changeFavoriteStatus = (favorite: boolean) => {
+    if (!teamProfile) {
+      return;
+    }
+
+    if (favorite) {
+      fetch(`/api/favorites/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          teamId: teamProfile.teamId,
+          teamNumber: teamProfile.teamNumber,
+          favoriteType: "team",
+        }),
+      }).then((response) => {
+        response.json().then((data) => {
+          if (data?.error) {
+            toast.error(data.error)
+            return;
+          }
+
+          setFavorited(data.success);
+        }).catch((error) => {
+          toast.error(error)
+        });
+      }).catch((error) => {
+        toast.error(error)
+      });
+    } else {
+      fetch(`/api/favorites/`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          teamId: teamProfile.teamId,
+          teamNumber: teamProfile.teamNumber,
+          favoriteType: "team",
+        }),
+      }).then((response) => {
+        response.json().then((data) => {
+          if (data?.error) {
+            toast.error(data.error)
+            return;
+          }
+
+          setFavorited(!data.success);
+        });
+      }).catch((error) => {
+        toast.error(error)
+      });
+    }
+  }
+
   useEffect(() => {
     getTeam();
   }, []);
@@ -86,17 +181,34 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
   useEffect(() => {
     if (teamProfile) {
       getEvents();
+      getFavoriteStatus();
     }
   } , [teamProfile, seasonId]);
 
   return (
     <main>
       <div className="my-44 flex w-full flex-col items-center justify-center">
-        <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
-          <h1 className="mb-10 min-w-fit text-5xl font-bold xs:text-5xl sm:text-8xl md:text-5xl lg:text-8xl">
+        <div className="relative flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+          <h1 className="mb-10 min-w-fit text-5xl font-bold xs:text-5xl sm:text-8xl md:text-5xl lg:text-8xl max-w-max">
             Team #{teamNumber.toUpperCase()}
           </h1>
           {teamProfile ? <>
+            <div className="absolute max-w-max top-0.5 right-0.5 xl:top-2 xl:right-2">
+              <button
+                className="flex items-center justify-center text-2xl font-extrabold min-w-[50px] min-h-[50px]"
+                onClick={(e) => {
+                  e.preventDefault()
+                  if (isSignedIn) {
+                    changeFavoriteStatus(!favorited);
+                    return;
+                  } else {
+                    toast.error("You must be signed in to favorite a team");
+                  }
+                }}
+              >
+                {favorited ? <AiFillStar className="inline-block" /> : <AiOutlineStar className="inline-block" />}
+              </button>
+            </div>
             <div className="flex flex-col gap-5 min-w-auto md:flex-row md:gap-14">
               <div className="flex min-w-fit flex-row gap-5 md:flex-col">
                 <div className="flex flex-col w-[49%] md:w-auto">

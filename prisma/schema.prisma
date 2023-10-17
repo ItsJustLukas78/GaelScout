@@ -19,8 +19,9 @@ model TeamProfile {
   teamCountry        String?             @default("No country")
   programCode        String              @default("No program")
   programId          Int                 @default(0)
-  TeamSeasonProfiles TeamSeasonProfile[]
   TeamNotes          TeamNote[]
+  TeamSeasonProfiles TeamSeasonProfile[]
+  FavoriteTeam       FavoriteTeam[]
 
   @@unique([teamId, teamNumber])
 }
@@ -64,31 +65,54 @@ model TeamSeasonProfile {
 }
 
 model SeasonAnalysis {
-  seasonId       Int      @id
-  seasonName     String   @unique
-  numberOfTeams  Int
-  numberOfEvents Int
-  lastEventDate  DateTime
+  seasonId                   Int      @id
+  seasonName                 String   @unique
+  numberOfTeams              Int
+  numberOfEvents             Int
+  lastEventDate              DateTime
+  numberOfRegionalQualifiers Int?
+  numberOfWorldsQualifiers   Int?
 }
 
 model TeamNote {
   id         Int         @id @default(autoincrement())
-  userId     String
   teamId     Int
-  teamNumber String
-  seasonId   Int
   note       Json
-  team       TeamProfile @relation(fields: [teamId, teamNumber], references: [teamId, teamNumber], onUpdate: Cascade)
+  userId     String
+  seasonId   Int
+  teamNumber String
+  team       TeamProfile @relation(fields: [teamId, teamNumber], references: [teamId, teamNumber])
 
-  // User       User        @relation(fields: [userId], references: [id])
   @@unique([userId, seasonId, teamNumber, teamId])
 }
 
 model User {
-  id        String  @id @default(cuid())
-  username  String? @unique
-  email     String? @unique
-  firstName String?
-  lastName  String?
+  id             String          @id
+  username       String?         @unique
+  email          String?         @unique
+  firstName      String?
+  lastName       String?
   // teamNotes TeamNote[]
+  favoriteTeams  FavoriteTeam[]
+  favoriteEvents FavoriteEvent[]
+}
+
+model FavoriteTeam {
+  id         Int         @id @default(autoincrement())
+  userId     String
+  user       User        @relation(fields: [userId], references: [id])
+  teamId     Int
+  teamNumber String
+  team       TeamProfile @relation(fields: [teamId, teamNumber], references: [teamId, teamNumber], onUpdate: Cascade)
+
+  @@unique([userId, teamNumber, teamId])
+}
+
+model FavoriteEvent {
+  id      Int    @id @default(autoincrement())
+  userId  String
+  user    User   @relation(fields: [userId], references: [id])
+  eventId Int
+
+  @@unique([userId, eventId])
 }

@@ -31,7 +31,8 @@ export default function Navbar() {
           <NavButton href="/profiles">Profiles</NavButton>
           <NavButton href="/rankings">Rankings</NavButton>
           <NavButton href="/predict">Predict</NavButton>
-          <NavButton href="/verify">Verify</NavButton>
+          <NavButton href="/favorites">Favorites</NavButton>
+          {/*<NavButton href="/verify">Verify</NavButton>*/}
           {/*<NavDropDown>*/}
           {/*  <NavDropButton href="/predict">Predict</NavDropButton>*/}
           {/*</NavDropDown>*/}
@@ -56,8 +57,9 @@ export default function Navbar() {
             <NavButton href="/events">Events</NavButton>
             <NavButton href="/profiles">Profiles</NavButton>
             <NavButton href="/rankings">Rankings</NavButton>
+            <NavButton href="/favorites">Favorites</NavButton>
             <NavButton href="/predict">Predict</NavButton>
-            <NavButton href="/verify">Verify</NavButton>
+            {/*<NavButton href="/verify">Verify</NavButton>*/}
             {/*<NavButton href="/api-docs">API</NavButton>*/}
             <NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>
             {/*<NavButton href="/about">About</NavButton>*/}

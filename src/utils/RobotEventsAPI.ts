@@ -338,13 +338,13 @@ export async function getTeamEvents(team_id: number, season_id?: number): Promis
 //   }
 // }
 
-export async function getEvents({seasonId, eventSKUs, eventId} : {seasonId?: number, eventSKUs?: string[], eventId?: number}): Promise<any[]> {
+export async function getEvents({seasonId, eventSKUs, eventIds} : {seasonId?: number, eventSKUs?: string[], eventIds?: number[]}): Promise<any[]> {
   const url = `https://www.robotevents.com/api/v2/events`;
   const new_headers = {
     "accept": "application/json",
     "Authorization": "Bearer " + API_KEY,
   };
-  const new_params = { season: seasonId, sku: eventSKUs, id: eventId };
+  const new_params = { season: seasonId, sku: eventSKUs, id: eventIds };
 
   const events: any[] = [];
 

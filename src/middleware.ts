@@ -2,6 +2,7 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
 import { authMiddleware } from "@clerk/nextjs/server";
+import { pathToRegexp, match, parse, compile } from "path-to-regexp";
 
 const generalRatelimit = new Ratelimit({
   redis: Redis.fromEnv(),
@@ -24,7 +25,15 @@ const verifyGenRatelimit = new Ratelimit({
   analytics: true,
 });
 
-async function middleware(request: NextRequest, event: NextFetchEvent): Promise<Response | undefined> {
+async function middleware(auth: any, request: NextRequest, event: NextFetchEvent): Promise<Response | undefined> {
+  if (!(auth.userId || auth.isPublicRoute)) {
+    console.log({auth})
+    console.log("hi")
+    // redirect to /login
+
+    return NextResponse.redirect(new URL("/sign-in", request.url));
+  }
+
   const ip = request.ip ?? "127.0.0.1";
 
   if (request.nextUrl.pathname === "/api/blocked") {
@@ -74,11 +83,22 @@ async function middleware(request: NextRequest, event: NextFetchEvent): Promise<
 }
 
 export default authMiddleware({
-  publicRoutes: ["/"],
+  publicRoutes: [
+    '/',
+    '/teams/:teamId*',
+    '/events/:eventId*',
+    '/profiles/:profileId*',
+    '/rankings',
+    '/predict',
+    '/sign-in',
+    '/sign-up',
+    '/api/:route*',
+  ],
+  apiRoutes: ['/api/:route*'],
 
   //@ts-ignore
   afterAuth(auth, request: NextRequest, event: NextFetchEvent) {
-    return middleware(request, event);
+    return middleware(auth, request, event);
   }
 });
 
