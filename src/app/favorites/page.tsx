@@ -22,7 +22,7 @@ export default function Favorites({ params }: { params: { teamNumber: string } }
   const [seasonId, setSeasonId] = useState<number>(181);
 
   const getFavorites = () => {
-    fetch(`/api/favorites/?favoriteType=team`).then((response) => {
+    fetch(`/api/favorites?favoriteType=team`).then((response) => {
       response.json().then((data) => {
         if (data.error) {
           toast.error(data.error)
@@ -39,7 +39,7 @@ export default function Favorites({ params }: { params: { teamNumber: string } }
       toast.error("Error getting favorite teams");
     });
 
-    fetch(`/api/favorites/?favoriteType=event`).then((response) => {
+    fetch(`/api/favorites?favoriteType=event`).then((response) => {
       response.json().then((data) => {
         if (data.error) {
           toast.error(data.error)

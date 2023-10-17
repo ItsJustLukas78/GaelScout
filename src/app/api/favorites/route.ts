@@ -51,6 +51,10 @@ export async function GET(
           }
         });
 
+        if (favorites.length === 0) {
+          break;
+        }
+
         favorites = await getEvents({eventIds: favorites.map((favorite: any) => favorite.eventId)});
 
         break;
