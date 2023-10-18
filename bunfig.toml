@@ -3,3 +3,4 @@ registry = "https://registry.npmjs.org" # redeclare default!
 
 [install.scopes]
 "@tiptap-pro" = { token = "$TIPTAP_PRO_TOKEN", url = "https://registry.tiptap.dev/" }
+"@gsap" = { token = "$GSAP_CLUB_TOKEN", url = "https://npm.greensock.com" }
