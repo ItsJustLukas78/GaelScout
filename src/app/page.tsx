@@ -55,7 +55,7 @@ export default function Home() {
               Check team stats beyond what is provided in VEX Via, view match results, efficiently take notes, and more.
             </p>
             <p className="text-base sm:text-xl">
-              Sign up to access all of GaelScout's features for a better scouting experience.
+              Sign up to access all of GaelScouts features for a better scouting experience.
             </p>
             <Link href="sign-up">
               <CorneredButton className="text-2xl font-semibold">
