@@ -40,6 +40,10 @@
 --background-end-rgb: 20, 20, 20;
 }
 
+html {
+    scroll-snap-type: y mandatory;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(

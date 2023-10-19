@@ -5,7 +5,7 @@ import React, {useEffect, useState} from "react";
 export default function Verify() {
   return <>
     <main>
-      <div className="my-44 flex w-full items-center justify-center">
+      <div className="sm:py-32 py-32 flex w-full items-center justify-center">
         <div className="flex flex-col gap-2 p-4 w-[90%] xs:w-[70%]">
           <h1>Privacy Policy</h1>
           <p>Last updated: October 04, 2023</p>

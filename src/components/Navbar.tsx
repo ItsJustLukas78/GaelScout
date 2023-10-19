@@ -19,7 +19,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <div className="px-12 z-30 h-20 w-full fixed top-0 bg-GSGray bg-opacity-50 justify-center items-center 2xl:gap-16 xl:gap-12 lg:gap-10 inline-flex bg-gradient-to-b
+      <div className="px-5 md:px-12 z-30 h-20 w-full fixed top-0 bg-GSGray bg-opacity-50 justify-center items-center 2xl:gap-16 xl:gap-12 lg:gap-10 inline-flex bg-gradient-to-b
    from-neutral-800  to-GSGray">
         <div className="inline-flex items-center">
           <Image src="/GS_logo.png" alt="GaelSuite Logo" width="50" height="50" />

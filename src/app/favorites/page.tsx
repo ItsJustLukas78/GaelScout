@@ -66,7 +66,7 @@ export default function Favorites({ params }: { params: { teamNumber: string } }
 
   return (
     <main>
-      <div className="my-44 flex w-full flex-col items-center justify-center">
+      <div className="sm:py-32 py-32 flex w-full flex-col items-center justify-center">
         <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
           <h1 className="mb-5 min-w-fit text-5xl font-bold xs:text-5xl sm:text-8xl md:text-5xl lg:text-8xl">
             Favorites

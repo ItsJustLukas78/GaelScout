@@ -7,57 +7,55 @@ import React from "react";
 import { useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import { TextPlugin } from "gsap/dist/TextPlugin";
 
 gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(TextPlugin)
 
 export default function Home() {
 
-  const comp = useRef(null); // create a ref for the root level element (we'll use it later)
-
   useLayoutEffect(() => {
+    let ctx = gsap.context(() => {
+      let sections = gsap.utils.toArray(".animHeading");
 
-    // -- ANIMATION CODE HERE --
-
-    // snap from "headingOne" to "headingTwo" using ScrollTrigger and timeline
-
-    let sections = gsap.utils.toArray(".animHeading");
-
-    ScrollTrigger.create({
-      start: 0,
-      end: 'max',
-      snap: {
+      ScrollTrigger.create({
+        start: 0,
+        end: 'max',
+        snap: {
           snapTo: 1 / (sections.length - 1),
-          duration: 1.2,
+          duration: 1.5,
           ease: 'power3.inOut',
-          delay: 0.05,
+          delay: 0.00,
           directional: true
-      },
+        },
+      });
+
+      // gsap.to(".firstP", {
+      //   duration: 10,
+      //   text: "This is the new text",
+      //   ease: "none",
+      //   delay: 2,
+      // });
     });
 
-    // -- END ANIMATION CODE --
-
-
-    return () => {
-      // cleanup code (optional)
-    }
-
+    return () => ctx.revert();
   }, []);
 
   return (
     <main>
-      <div className="my-28 flex w-full flex-col items-center justify-center gap-20">
+      <div className="sm:py-32 py-32 flex w-full flex-col items-center justify-center sm:gap-28 gap-56">
         <div className="animHeading flex h-auto flex-col items-center justify-center lg:space-x-8 lg:flex-row">
-          <div className="my-16 inline-flex w-72 flex-col space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
-            <h1 className="text-5xl font-bold xs:text-7xl sm:text-8xl" ref={comp}>
+          <div className="inline-flex w-72 flex-col space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
+            <h1 className="text-5xl font-bold xs:text-7xl sm:text-8xl">
               Scouting Done Easy.
             </h1>
             <p className="text-base sm:text-xl">
-              Providing participants of the VEX Robotics Competition an accessible resource of data
+              Improve your scouting experience in the VEX Robotics competition with all the tools you need in one place. Access data
               on other teams, and tools to get an upper hand in scouting, and winning competitions.
               Check team stats beyond what is provided in VEX Via, view match results, efficiently take notes, and more.
             </p>
             <p className="text-base sm:text-xl">
-              Sign up to get access to features such as managing a team profile after verification, taking notes, getting match notifications, and sending communications.
+              Sign up to access all of GaelScout's features for a better scouting experience.
             </p>
             <Link href="sign-up">
               <CorneredButton className="text-2xl font-semibold">
@@ -71,13 +69,13 @@ export default function Home() {
                 tiltMaxAngleX={20}
                 tiltMaxAngleY={20}
               >
-                <Image priority={true} src="/homeblob1.svg" alt="GaelSuite Logo" width="425" height="500"/>
+                <Image priority={true} src="/homeblob1.svg" alt="GaelSuite Logo" width="400" height="500"/>
               </Tilt>
               <Tilt
                 tiltMaxAngleX={20}
                 tiltMaxAngleY={20}
               >
-                <Image priority={true} src="/homeblob2.svg" alt="GaelSuite Logo" width="425" height="500"/>
+                <Image priority={true} src="/homeblob2.svg" alt="GaelSuite Logo" width="400" height="500"/>
               </Tilt>
             </div>
           </div>
@@ -98,17 +96,22 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="animHeading my-15 flex h-auto flex-col items-center justify-center lg:space-x-8 lg:flex-row">
-          <div className="my-16 inline-flex w-72 flex-col space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
+        <div className="animHeading flex h-auto flex-col items-center justify-center lg:space-x-8 lg:flex-row">
+          <div className="inline-flex w-72 flex-col space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
             <h1 className="text-4xl font-bold xs:text-5xl sm:text-7xl">
               Developed by students at GaelSuite.
             </h1>
             <p className="text-base sm:text-xl">
-              GaelScout was developed by a team led by members of 5327S on GaelSuite, a nonprofit established by members
-              of the Gael Force 5327 Organization. Scouting teams can be challenging,
-              with a vast amount of participants, few to no reliable methods of communication,
-              limited resources, and difficulty distinguishing teams from one another in
-              competition. Our members have created GaelScout in order to tackle that
+              GaelScout was developed by GaelSuite, a nonprofit established by members
+              of the Gael Force 5327 Organization.
+            </p>
+            <p className="text-base sm:text-xl">
+              Scouting teams can be challenging, with a vast amount of participants,
+              few to no reliable methods of communication, limited resources, and
+              difficulty distinguishing teams from one another in competition.
+            </p>
+            <p className="text-base sm:text-xl">
+              Our members have created GaelScout in order to tackle that
               challenge, and wanted to bring it to the VRC community.
             </p>
           </div>

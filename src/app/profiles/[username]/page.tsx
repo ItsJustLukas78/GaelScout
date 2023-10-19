@@ -31,7 +31,7 @@ export default function UserProfile({ params }: { params: { username: string } }
   // @ts-ignore
   return (
     <main>
-      <div className="my-44 flex w-full flex-col items-center justify-center gap-16">
+      <div className="sm:py-32 py-32 flex w-full flex-col items-center justify-center gap-16">
         {userProfile ? <>
           <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
             <div className="mb-5 flex flex-row items-center gap-5">
@@ -57,7 +57,7 @@ export default function UserProfile({ params }: { params: { username: string } }
               </div>
             </div>
             <div className="flex flex-col gap-5 min-w-auto md:flex-row md:gap-14">
-              <div className="flex min-w-fit flex-row gap-5 md:flex-col">
+              <div className="flex min-w-fit gap-5 flex-col">
                 <h3 className="font-bold sm:text-lg md:text-xl lg:text-3xl">
                   {userProfile.firstName ? userProfile.firstName : ""} {userProfile.lastName ? userProfile.lastName : ""}
                 </h3>
