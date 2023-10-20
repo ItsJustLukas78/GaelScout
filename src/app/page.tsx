@@ -43,7 +43,7 @@ export default function Home() {
 
   return (
     <main>
-      <div className="sm:py-32 py-32 flex w-full flex-col items-center justify-center sm:gap-28 gap-56">
+      <div className="sm:py-32 py-32 flex w-full flex-col items-center justify-center gap-56">
         <div className="animHeading flex h-auto flex-col items-center justify-center lg:space-x-8 lg:flex-row">
           <div className="inline-flex w-72 flex-col space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
             <h1 className="text-5xl font-bold xs:text-7xl sm:text-8xl">
