@@ -132,7 +132,7 @@ export async function getTeamObject({teamId, teamNumber, onlyActive} : {teamId?:
     "Authorization": "Bearer " + API_KEY,
   };
 
-  let new_params = (!teamNumber && !onlyActive) ? { number: teamNumber ? teamNumber : null, registered: onlyActive ? true : null } : undefined;
+  let new_params = (teamNumber || onlyActive) ? { number: teamNumber ? teamNumber : null, registered: onlyActive ? true : null } : undefined;
 
   try {
     const team = await apiCall(url, new_headers, new_params);

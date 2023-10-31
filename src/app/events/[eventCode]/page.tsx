@@ -21,9 +21,11 @@ export default function EventPage({ params }: { params: { eventCode: string } })
 
   const [eventObject, setEventObject] = useState<Event | null>(null);
   const [paticipatingTeams, setPaticipatingTeams] = useState<TeamProfile[]>([]);
+  const [divisionFilteredTeams, setDivisionFilteredTeams] = useState<TeamProfile[]>([]);
 
   const [divisionList, setDivisionList] = useState<Division[]>([]);
   const [currentDivision, setCurrentDivision] = useState<Division | null>(null);
+  const [currentTeamsDivision, setCurrentTeamsDivision] = useState<Division | null >({id: -1, name: "All"});
   const [matchList, setMatchList] = useState<EventMatch[]>([]);
   const [fiteredMatches, setFilteredMatches] = useState<EventMatch[]>([]);
   const [teamNumberFilter, setTeamNumberFilter] = useState<string>("");
@@ -96,7 +98,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
       const newFilteredMatches: EventMatch[] = [];
 
       matchList.forEach((match) => {
-        if (match.blueTeams.find((team) => team.teamNumber === teamNumberFilter) || match.redTeams.find((team) => team.teamNumber === teamNumberFilter)) {
+        if (match.blueTeams.find((team) => team.teamNumber.startsWith(teamNumberFilter)) || match.redTeams.find((team) => team.teamNumber.startsWith(teamNumberFilter))) {
           newFilteredMatches.push(match);
         }
       });
@@ -222,6 +224,43 @@ export default function EventPage({ params }: { params: { eventCode: string } })
     }
   }, [isSignedIn, eventObject]);
 
+
+  useEffect(() => {
+    console.log({currentTeamsDivision})
+    if (currentTeamsDivision) {
+      if (currentTeamsDivision.id === -1) {
+        setDivisionFilteredTeams(paticipatingTeams);
+        return;
+      }
+
+
+      if (currentTeamsDivision.id === currentDivision?.id) {
+        const teamIdsFoundFromMatches: number[] = [];
+
+        matchList.forEach((match) => {
+          match.blueTeams.forEach((team) => {
+            if (!teamIdsFoundFromMatches.includes(team.teamId)) {
+              teamIdsFoundFromMatches.push(team.teamId);
+            }
+          });
+          match.redTeams.forEach((team) => {
+            if (!teamIdsFoundFromMatches.includes(team.teamId)) {
+              teamIdsFoundFromMatches.push(team.teamId);
+            }
+          });
+        });
+
+        setDivisionFilteredTeams(
+          paticipatingTeams.filter((team: TeamProfile) => teamIdsFoundFromMatches.includes(team.teamId))
+        );
+
+        return;
+      } else {
+        setCurrentDivision(currentTeamsDivision);
+      }
+    }
+  }, [currentTeamsDivision, matchList, paticipatingTeams]);
+
   return (
     <main>
       <div className="sm:py-32 py-32 flex w-full flex-col items-center justify-center">
@@ -247,7 +286,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
               </button>
             </div>
             <a href={`https://www.robotevents.com/robot-competitions/vex-robotics-competition/${eventCode}.html`} className="mb-5 max-w-fit text-lg font-bold xs:text-xl hover:text-blue-500">
-              RobotEvents Page
+              <u>RobotEvents Page</u>
             </a>
             <div className="flex flex-row gap-5 md:gap-10">
               <div className="flex flex-col gap-5 mim-w-[49%]">
@@ -295,19 +334,41 @@ export default function EventPage({ params }: { params: { eventCode: string } })
             </TabsList>
             <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
               <TabsContent value="teams">
-                <div className="mb-10 flex flex-col justify-between md:flex-row">
-                  <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl md:mb-0">
+                <div className="mb-10 flex flex-col justify-between xl:flex-row">
+                  <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl xl:mb-0">
                     Teams
                   </h3>
-                  <button
-                    className="h-8 sm:w-44 min-w-max rounded-lg bg-white text-sm text-black md:h-12 md:w-52 md:text-lg"
-                    onClick={() => setExportDialogOpen(true)}
-                  >
-                    Generate Scout Sheet
-                  </button>
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <select
+                      className="h-8 sm:w-44 min-w-max rounded-lg bg-white pl-2 text-sm text-black md:h-12 md:w-52 md:text-lg"
+                      required
+                      value={currentTeamsDivision?.id}
+                      onChange={(event) => {
+                        console.log(typeof event.target.value);
+                        console.log({divisionList})
+                        // @ts-ignore
+                        const newValue = (parseInt(event.target.id) === -1 ? {id:-1, name:"All"} : divisionList.find((division) => division.id === parseInt(event.target.value)) || null);
+                        console.log({newValue})
+                        setCurrentTeamsDivision(newValue);
+                      }}
+                    >
+                      <option value={-1} key={-1}>All</option>
+                      {divisionList.map((division) => {
+                        return (
+                          <option key={division.id} value={division.id}>{division.name}</option>
+                        )
+                      })}
+                    </select>
+                    <button
+                      className="h-8 sm:w-44 min-w-max rounded-lg bg-white text-sm text-black md:h-12 md:w-52 md:text-lg"
+                      onClick={() => setExportDialogOpen(true)}
+                    >
+                      Generate Scout Sheet
+                    </button>
+                  </div>
                 </div>
                 <div className="flex flex-col gap-4 overflow-auto w-[100%]">
-                  {paticipatingTeams.length !== 0 ? paticipatingTeams.map((result: TeamProfile) => {
+                  {divisionFilteredTeams.length !== 0 ? divisionFilteredTeams.map((result: TeamProfile) => {
                     const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
 
                     return (
@@ -381,10 +442,13 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                     <button
                       className="h-8 sm:w-44 min-w-max rounded-lg bg-white text-sm text-black disabled:opacity-50 md:h-12 md:w-52 md:text-lg"
                       onClick={() => {
-                        console.log("clicked")
-                        setMatchNotesDialogOpen(true)
+                        if (!isSignedIn) {
+                          toast.error("You must be signed in to view match notes");
+                          return;
+                        } else {
+                          setMatchNotesDialogOpen(true)
+                        }
                       }}
-                      disabled={!isSignedIn}
                     >
                       Match Notes
                     </button>

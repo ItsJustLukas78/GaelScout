@@ -90,6 +90,11 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
       return;
     }
 
+    if (!isSignedIn) {
+      setFavorited(false);
+      return;
+    }
+
     const searchParams = new URLSearchParams();
 
     searchParams.append("teamId", teamProfile.teamId.toString());
@@ -189,9 +194,12 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
     <main>
       <div className="sm:py-32 py-32 flex w-full flex-col items-center justify-center">
         <div className="relative flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
-          <h1 className="mb-10 min-w-fit text-5xl font-bold xs:text-5xl sm:text-8xl md:text-5xl lg:text-8xl max-w-max">
-            Team #{teamNumber.toUpperCase()}
+          <h1 className="mb-5 min-w-fit text-5xl font-bold xs:text-5xl sm:text-8xl md:text-5xl lg:text-8xl max-w-max">
+            #{teamNumber.toUpperCase()}
           </h1>
+          <a href={`https://www.robotevents.com/teams/VRC/${teamNumber.toUpperCase()}`} className="mb-5 max-w-fit text-lg font-bold xs:text-xl hover:text-blue-500">
+            <u>RobotEvents Page</u>
+          </a>
           {teamProfile ? <>
             <div className="absolute max-w-max top-0.5 right-0.5 xl:top-2 xl:right-2">
               <button
