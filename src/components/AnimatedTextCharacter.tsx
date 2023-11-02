@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const AnimatedTextWord = ({ text, className, delay }: { text: string, className?: string, delay: number }) => {
+const AnimatedTextWord = ({ text, className, delay, interval = 0.04 }: { text: string, className?: string, delay: number, interval?: number }) => {
   let words = text.split(" ");
 
   words = words.map((word) => word + "\u00A0");
@@ -11,7 +11,7 @@ const AnimatedTextWord = ({ text, className, delay }: { text: string, className?
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.04, delayChildren: delay },
+      transition: { staggerChildren: interval, delayChildren: delay },
     }
   }
 

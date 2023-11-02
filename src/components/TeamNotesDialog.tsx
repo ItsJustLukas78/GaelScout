@@ -27,6 +27,16 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
 
   const saveNotes = () => {
     if (!currentEditor || !currentNotesTeam) {
+      toast.warn("No changes made because the editor or team did not load.")
+      setCurrentTeamNotes(null)
+      setCompletedInitialFetch(false)
+      setLoadedNotesWasEmpty(false)
+      setTeamNotesDialogOpen(false)
+
+      if (currentEditor) {
+        currentEditor.setEditable(false)
+      }
+
       return;
     }
 

@@ -8,7 +8,6 @@ import Placeholder from '@tiptap/extension-placeholder'
 import CharacterCount from "@tiptap/extension-character-count";
 import Highlight from '@tiptap/extension-highlight';
 import Underline from '@tiptap/extension-underline';
-// import FileHandler from "@tiptap-pro/extension-file-handler";
 import React, { useEffect, useState } from 'react'
 import {
   StrikethroughIcon,
@@ -27,7 +26,7 @@ const charLimit = 500
 const Tiptap = ({setEditor}: TiptapProps) => {
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit as any,
       Placeholder.configure({
         placeholder: 'Write match notes here...',
       }),
@@ -46,10 +45,11 @@ const Tiptap = ({setEditor}: TiptapProps) => {
     },
     content: '<p></p>',
     editable: false,
-    onCreate: () => {
-      setEditor(editor)
-    },
   })
+
+  useEffect(() => {
+    setEditor(editor)
+  }, [editor])
 
   return (
     <>
