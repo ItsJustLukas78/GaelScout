@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Providers>
-        <body>
+        <body className="min-h-screen relative">
           {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS ? (
             <GoogleAnalytics ga_id=
             {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS} />
@@ -42,7 +42,6 @@ export default function RootLayout({
             {children}
             <Analytics />
           </div>
-          <Footer />
           <ToastContainer
             position="bottom-right"
             autoClose={5000}
@@ -56,6 +55,7 @@ export default function RootLayout({
             pauseOnHover
             theme="dark"
           />
+          <Footer />
         </body>
       </Providers>
     </html>

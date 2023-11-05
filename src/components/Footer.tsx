@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 export default function Footer() {
   return (
-    <div className="h-20 w-full items-center justify-center gap-16 flex bg-gradient-to-t
+    <div className="absolute bottom-0 h-20 w-full items-center justify-center gap-16 flex bg-gradient-to-t
    from-neutral-800 to-GSGray">
       {/*<div className="inline-flex items-center">*/}
       {/*  <Image src="/GS_logo.png" alt="GaelSuite Logo" width="50" height="50" />*/}

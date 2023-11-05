@@ -38,11 +38,11 @@
 --foreground-rgb: 255, 255, 255;
 --background-start-rgb: 20, 20, 20;
 --background-end-rgb: 20, 20, 20;
-    overflow-x: hidden;
 }
 
 html {
     scroll-snap-type: y mandatory;
+    height: 100%;
 }
 
 body {
