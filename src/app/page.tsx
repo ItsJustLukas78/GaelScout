@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <main>
-      <div className="py-20 xs:py-32 flex w-full items-center justify-center">
+      <div className="py-28 xs:py-32 flex w-full items-center justify-center">
         <div className="flex flex-col gap-72">
           <div className="animHeading items-center flex h-auto flex-col lg:space-x-8 lg:flex-row">
             <div className="flex flex-col space-y-8 w-72 xs:w-96 sm:w-144 lg:w-128 xl:w-144 p-1">

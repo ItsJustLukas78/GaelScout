@@ -42,7 +42,7 @@ export default function RootLayout({
             {children}
             <Analytics />
           </div>
-          {/*<Footer />*/}
+          <Footer />
           <ToastContainer
             position="bottom-right"
             autoClose={5000}
