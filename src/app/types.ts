@@ -11,6 +11,12 @@ export interface UserProfile {
   unsafe_metadata: {}
 }
 
+export interface NotesGroup {
+  id: number;
+  name: string;
+  joinCode: string;
+}
+
 export interface TeamProfile {
   teamId: number,
   teamName: string,
@@ -120,5 +126,6 @@ export enum RankableStatistic {
   OPENSKILL = "openSkill",
   TOTALSKILLS = "topTotalSkills",
 }
+
 
 

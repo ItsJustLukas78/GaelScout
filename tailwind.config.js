@@ -14,7 +14,8 @@ module.exports = {
     },
     extend: {
       fontSize: {
-        '2xs': '.625rem',
+        '2xs': ['.625rem', '.75rem'],
+        '3xs': ['.5rem', '.75rem'],
       },
       spacing: {
         "112": "28rem",

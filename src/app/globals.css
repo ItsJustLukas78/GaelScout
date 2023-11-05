@@ -102,11 +102,11 @@ li {
 }
 
 .teamNotesDialogTipTap > * .tiptap {
-  @apply max-h-[250px] !important;
+  @apply max-h-[220px] !important;
 }
 
 .matchNotesDialogTipTap > * .tiptap {
-  @apply max-h-[150px] !important;
+  @apply max-h-[100px] !important;
 }
 
 .ProseMirror:focus {

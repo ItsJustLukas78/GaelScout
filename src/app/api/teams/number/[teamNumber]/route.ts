@@ -43,13 +43,11 @@ export async function GET(
       teamNumber: teamNumber,
     }
   });
-  console.log({team})
 
   // update if last updated date is old ?? cache!!
 
   if (!team) {
     team = await getTeamObject({teamNumber: teamNumber, onlyActive: true});
-    console.log({team})
 
     if (!team) {
       return NextResponse.json({ error: 'Team not found' }, { status: 404 });

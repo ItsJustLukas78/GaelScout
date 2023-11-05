@@ -122,7 +122,6 @@ export default function Favorites({ params }: { params: { teamNumber: string } }
                             return;
                           }
                           setCurrentNotesTeam(foundTeamProfile);
-                          console.log("set open")
                           setTeamNotesDialogOpen(true);
                         } else {
                           toast.error("You must be signed in to view match notes");

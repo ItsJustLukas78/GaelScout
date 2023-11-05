@@ -4,7 +4,7 @@ import {toast} from "react-toastify";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import CheckboxDiv from "@/components/CheckboxDiv";
 import * as RadioGroup from '@radix-ui/react-radio-group';
-import { Event, TeamProfile, TeamSeasonProfile, EventMatch, TeamIdentifiers } from "@/app/types";
+import {Event, TeamProfile, TeamSeasonProfile, EventMatch, TeamIdentifiers, NotesGroup} from "@/app/types";
 import Tiptap from "@/components/Tiptap";
 import MatchResultNavigator from "@/components/MatchResultNavigator";
 import {
@@ -12,9 +12,16 @@ import {
   BsArrowReturnRight,
 } from "react-icons/bs";
 import { useAuth } from "@clerk/nextjs";
+import {useGlobalStore} from "@/state/globalState";
+import NotesGroupComponent from "@/components/NotesGroupComponent";
 
 export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, matchList, setMatchNotesDialogOpen }: { matchNotesDialogOpen: boolean, eventObject: Event | null, matchList: EventMatch[], setMatchNotesDialogOpen: (open: boolean) => void }) {
   const { getToken } = useAuth();
+
+  const currentNotesGroup = useGlobalStore((state) => state.currentNotesGroup);
+  const currentNotesGroups = useGlobalStore((state) => state.currentNotesGroups);
+
+  const [previousNotesGroup, setPreviousNotesGroup] = useState<NotesGroup | null>(null)
 
   const [currentMatch, setCurrentMatch] = useState<EventMatch>(matchList[0])
   const [currentTeam, setCurrentTeam] = useState(currentMatch?.blueTeams[0])
@@ -43,13 +50,17 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
     setCurrentTeam(team);
   }
 
-  const saveNotesAndChangeMatch = (match?: EventMatch) => {
+  const saveNotesAndChangeMatch = async(changeGroup: boolean, match?: EventMatch) => {
     if (!currentEditor) {
       return;
     }
 
     if (!completedInitialFetch) {
       toast.warn("No changes made because existing notes not loaded.")
+      if (!changeGroup && !match) {
+        setTeamToMatchNotes({})
+        setMatchNotesDialogOpen(false)
+      }
       return;
     }
 
@@ -69,52 +80,67 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
       }
     }
 
-    getToken().then((token) => {
-      fetch(`/api/seasons/${eventObject?.season.id}/notes`, {
+    // check if previousNotesGroup is no longer in currentNotesGroups because of a leave
+    if (previousNotesGroup) {
+      const previousNotesGroupInCurrentNotesGroups = currentNotesGroups.find((group) => group.id === previousNotesGroup.id)
+
+      if (!previousNotesGroupInCurrentNotesGroups) {
+        currentEditor.setEditable(false)
+        currentEditor.commands.clearContent()
+        setPreviousNotesGroup(null)
+        setCompletedInitialFetch(false)
+        setLoading(false)
+        return;
+      }
+    }
+
+    try {
+      const token = await getToken()
+
+      const response = await fetch(`/api/seasons/${eventObject?.season.id}/notes`, {
         method: "POST",
         body: JSON.stringify({
+          notesGroupId: previousNotesGroup?.id,
           notes: latestTeamToMatchNotes
         }),
         headers: {
           Authorization: `Bearer ${token}`
         }
-      }).then((response) => {
-        response.json().then((data) => {
-          if (data.error) {
-            toast.error(data.error);
-            setLoading(false)
-            return;
-          }
+      })
 
-          currentEditor.setEditable(false)
-          currentEditor.commands.clearContent()
-          setCompletedInitialFetch(false)
+      const data = await response.json()
 
-          if (match) {
-            setCurrentMatch(match)
-          } else {
-            setMatchNotesDialogOpen(false)
-          }
-          setLoading(false)
-        }).catch((error) => {
-          console.log(error);
-          toast.error("An error occurred while saving team notes.");
-          setLoading(false)
-        });
-      }).catch((error) => {
-        console.log(error);
-        toast.error("An error occurred while saving team notes.");
+      if (data.error) {
+        toast.error(data.error);
         setLoading(false)
-      });
-    }).catch((error) => {
+        return;
+      }
+
+      currentEditor.setEditable(false)
+      currentEditor.commands.clearContent()
+      setCompletedInitialFetch(false)
+
+      if (match) {
+        setCurrentMatch(match)
+      } else if (changeGroup) {
+        // do nothing
+      } else {
+        setMatchNotesDialogOpen(false)
+        setTeamToMatchNotes({})
+      }
+
+      setLoading(false)
+    } catch (error) {
       console.log(error);
       toast.error("An error occurred while saving team notes.");
       setLoading(false)
-    });
+    }
   }
 
-  const getMatchTeamNotes = (teams: TeamIdentifiers[]) => {
-    const teamNotes: {[key: string]: object} = {}
+  const getMatchTeamNotes = async(teams: TeamIdentifiers[]) => {
+    setLoading(true)
+
+    const teamNotes: { [key: string]: object } = {}
 
     const searchParams = new URLSearchParams();
 
@@ -122,51 +148,56 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
       searchParams.append("teamNumber", team.teamNumber)
     }
 
-    getToken().then((token) => {
-      fetch(`/api/seasons/${eventObject?.season.id}/notes?${searchParams.toString()}`, {
+    searchParams.append("notesGroupId", currentNotesGroup?.id.toString() || '')
+
+    try {
+      const token = await getToken()
+
+      const response = await fetch(`/api/seasons/${eventObject?.season.id}/notes?${searchParams.toString()}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`
         }
-      }).then((response) => {
-        response.json().then((data) => {
-          if (data.error) {
-            toast.error(data.error);
-            return;
-          }
+      })
 
-          setCurrentTeam(currentMatch?.blueTeams[0])
+      const data = await response.json()
 
-          setCompletedInitialFetch(true)
+      if (data.error) {
+        toast.error(data.error);
+        setLoading(false);
+        return;
+      }
 
-          if (data.notes.length === 0) {
-            return;
-          }
+      if (data.notes.length === 0) {
+        setCompletedInitialFetch(true)
+        setCurrentTeam(currentMatch?.blueTeams[0])
+        setPreviousNotesGroup(currentNotesGroup)
+        setTeamToMatchNotes(teamNotes)
+        setLoading(false)
+        return;
+      }
 
-          for (const teamNote of data.notes) {
-            teamNotes[teamNote.teamNumber as string] = teamNote.note
-          }
+      for (const teamNote of data.notes) {
+        teamNotes[teamNote.teamNumber as string] = teamNote.note
+      }
 
-          setTeamToMatchNotes(teamNotes)
-        }).catch((error) => {
-          console.log(error);
-          toast.error("An error occurred while fetching team notes.");
-        });
-      }).catch((error) => {
-        console.log(error);
-        toast.error("An error occurred while fetching team notes.");
-      });
-    }).catch((error) => {
+      setCurrentTeam(currentMatch?.blueTeams[0])
+      setPreviousNotesGroup(currentNotesGroup)
+      setTeamToMatchNotes(teamNotes)
+      setCompletedInitialFetch(true)
+      setLoading(false)
+    } catch (error) {
       console.log(error);
       toast.error("An error occurred while fetching team notes.");
-    });
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
-    if (currentMatch) {
+    if (currentMatch && matchNotesDialogOpen) {
       getMatchTeamNotes([...currentMatch.blueTeams, ...currentMatch.redTeams])
     }
-  }, [currentMatch])
+  }, [currentMatch, matchNotesDialogOpen])
 
   useEffect(() => {
     if (!currentEditor) {
@@ -179,8 +210,29 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
       }
       currentEditor.setEditable(true)
     }
-  }, [teamToMatchNotes, completedInitialFetch, currentTeam, currentEditor])
+  }, [teamToMatchNotes, completedInitialFetch, currentTeam, currentEditor, matchNotesDialogOpen])
 
+  useEffect(() => {
+    if (completedInitialFetch && matchNotesDialogOpen) {
+      saveNotesAndChangeMatch(true).then(() => {
+        getMatchTeamNotes([...currentMatch.blueTeams, ...currentMatch.redTeams])
+      })
+    }
+  }, [currentNotesGroup])
+
+  // useEffect(() => {
+  //   console.log({
+  //     currentMatch,
+  //     currentTeam,
+  //     currentEditor,
+  //     teamToMatchNotes,
+  //     completedInitialFetch,
+  //     loading,
+  //     previousNotesGroup,
+  //     currentNotesGroup,
+  //     matchNotesDialogOpen
+  //   })
+  // }, [currentMatch, currentTeam, currentEditor, teamToMatchNotes, completedInitialFetch, loading, previousNotesGroup, currentNotesGroup, matchNotesDialogOpen])
 
   return (
     <AlertDialog.Root
@@ -189,14 +241,14 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
     >
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="z-40 bg-black opacity-70 data-[state=open]:animate-overlayShow fixed inset-0" />
-        <AlertDialog.Content className="flex flex-col z-50 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] min-h-[650px] min-w-[350px] max-h-full translate-x-[-50%] translate-y-[-50%] rounded-[10px] bg-neutral-800 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+        <AlertDialog.Content className="flex flex-col z-50 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] min-h-[650px] w-[350px] max-h-full translate-x-[-50%] translate-y-[-50%] rounded-[10px] bg-neutral-800 p-[22px] focus:outline-none">
           <AlertDialog.Title className="mb-5 text-xl font-bold">
             Match Notes
           </AlertDialog.Title>
           <AlertDialog.Description asChild>
             <div className={`flex flex-col ${loading ? "animate-pulse" : ""}`}>
-              <div className="flex flex-col">
-                <h1 className="mb-5 text-2xl font-semibold text-neutral-200 matchNotesDialogTipTap">
+              <div className="flex flex-col matchNotesDialogTipTap max-h-[300px]">
+                <h1 className="mb-3 text-2xl font-semibold text-neutral-200">
                   {currentMatch?.name} - {currentTeam?.teamNumber}
                 </h1>
                 <Tiptap setEditor={setCurrentEditor} />
@@ -206,37 +258,37 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
                   {...currentMatch}
                   teamSetter={changeTeamNotes}
                 />
-              </div>
-              {/* navigate forward or backward through matches */}
-              <div className="mt-5 flex flex-row justify-center">
-                <button
-                  className="flex h-8 w-14 items-center justify-center text-xl font-semibold text-white"
-                  onClick={() => {
-                    const currentMatchIndex = matchList.indexOf(currentMatch)
-                    if (currentMatchIndex !== 0) {
-                      saveNotesAndChangeMatch(matchList[currentMatchIndex - 1])
-                    }
-                  }}
-                >
-                  <BsArrowReturnLeft />
-                </button>
-                {/* text saying match browser */}
-                <div className="mx-5 flex flex-col items-center justify-center">
-                  <h1 className="text-xl font-semibold text-neutral-200">
-                    Match Browser
-                  </h1>
+                <div className="mt-2 flex flex-row justify-center">
+                  <button
+                    className="flex h-5 w-10 items-center justify-center text-xl font-semibold text-white"
+                    onClick={() => {
+                      const currentMatchIndex = matchList.indexOf(currentMatch)
+                      if (currentMatchIndex !== 0) {
+                        saveNotesAndChangeMatch(false, matchList[currentMatchIndex - 1])
+                      }
+                    }}
+                  >
+                    <BsArrowReturnLeft />
+                  </button>
+                  {/* text saying match browser */}
+                  <div className="mx-5 flex flex-col items-center justify-center">
+                    <h1 className="text-xs font-semibold text-neutral-200">
+                      Match Browser
+                    </h1>
+                  </div>
+                  <button
+                    className="flex h-5 w-10 items-center justify-center text-xl font-semibold text-white"
+                    onClick={() => {
+                      const currentMatchIndex = matchList.indexOf(currentMatch)
+                      if (currentMatchIndex !== matchList.length - 1) {
+                        saveNotesAndChangeMatch(false, matchList[currentMatchIndex + 1])
+                      }
+                    }}
+                  >
+                    <BsArrowReturnRight />
+                  </button>
                 </div>
-                <button
-                  className="flex h-8 w-14 items-center justify-center text-xl font-semibold text-white"
-                  onClick={() => {
-                    const currentMatchIndex = matchList.indexOf(currentMatch)
-                    if (currentMatchIndex !== matchList.length - 1) {
-                      saveNotesAndChangeMatch(matchList[currentMatchIndex + 1])
-                    }
-                  }}
-                >
-                  <BsArrowReturnRight />
-                </button>
+                <NotesGroupComponent/>
               </div>
             </div>
           </AlertDialog.Description>
@@ -244,7 +296,7 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
             <AlertDialog.Action asChild>
               <button
                 className="mt-4 ml-auto h-8 w-28 whitespace-nowrap rounded-md bg-green-300 text-xl font-semibold text-black disabled:opacity-50"
-                onClick={(e) => saveNotesAndChangeMatch()}
+                onClick={(e) => saveNotesAndChangeMatch(false)}
                 disabled={false}
               >
                 Save

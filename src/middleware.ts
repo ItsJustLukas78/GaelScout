@@ -4,31 +4,25 @@ import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server
 import { authMiddleware } from "@clerk/nextjs/server";
 import { pathToRegexp, match, parse, compile } from "path-to-regexp";
 
-const generalRatelimit = new Ratelimit({
-  redis: Redis.fromEnv(),
-  limiter: Ratelimit.cachedFixedWindow(15, "10s"),
-  ephemeralCache: new Map(),
-  analytics: true,
-});
+type Unit = "ms" | "s" | "m" | "h" | "d";
+type Duration = `${number} ${Unit}` | `${number}${Unit}`;
 
-const verifyRatelimit = new Ratelimit({
-  redis: Redis.fromEnv(),
-  limiter: Ratelimit.cachedFixedWindow(1, "30s"),
-  ephemeralCache: new Map(),
-  analytics: true,
-});
+const createLimit = (limit: number, duration: Duration) => {
+  return new Ratelimit({
+    redis: Redis.fromEnv(),
+    limiter: Ratelimit.cachedFixedWindow(limit, duration),
+    ephemeralCache: new Map(),
+    analytics: true,
+  });
+}
 
-const verifyGenRatelimit = new Ratelimit({
-  redis: Redis.fromEnv(),
-  limiter: Ratelimit.cachedFixedWindow(3, "30s"),
-  ephemeralCache: new Map(),
-  analytics: true,
-});
+const generalRatelimit = createLimit(15, "10s");
+const verifyRatelimit = createLimit(1, "30s");
+const verifyGenRatelimit = createLimit(3, "30s");
+const notesGroupCreateRatelimit = createLimit(3, "60s");
 
 async function middleware(auth: any, request: NextRequest, event: NextFetchEvent): Promise<Response | undefined> {
   if (!(auth.userId || auth.isPublicRoute)) {
-    console.log({auth})
-    console.log("hi")
     // redirect to /login
 
     return NextResponse.redirect(new URL("/sign-in", request.url));
@@ -38,9 +32,7 @@ async function middleware(auth: any, request: NextRequest, event: NextFetchEvent
 
   if (request.nextUrl.pathname === "/api/blocked") {
     return NextResponse.next();
-  }
-
-  if (request.nextUrl.pathname.startsWith('/api/predict') || request.nextUrl.pathname.startsWith('/api/seasons') || request.nextUrl.pathname.startsWith('/api/teams') || request.nextUrl.pathname.startsWith('/api/events')) {
+  } else if (request.nextUrl.pathname.startsWith('/api/predict') || request.nextUrl.pathname.startsWith('/api/seasons') || request.nextUrl.pathname.startsWith('/api/teams') || request.nextUrl.pathname.startsWith('/api/events') || request.nextUrl.pathname.startsWith('/api/notesGroups/join') || request.nextUrl.pathname.startsWith('/api/notesGroups/leave')) {
     const { success, pending, limit, reset, remaining } = await generalRatelimit.limit(`ratelimit_middleware_${ip}`);
     event.waitUntil(pending);
 
@@ -51,9 +43,7 @@ async function middleware(auth: any, request: NextRequest, event: NextFetchEvent
     res.headers.set("X-RateLimit-Reset", reset.toString());
     console.log("Rate limit: " + remaining.toString() + "/" + limit.toString() + " resets at " + reset.toString())
     return res;
-  }
-
-  if (request.nextUrl.pathname.startsWith('/api/verify/generate')) {
+  } else if (request.nextUrl.pathname.startsWith('/api/verify/generate')) {
     const { success, pending, limit, reset, remaining } = await verifyGenRatelimit.limit(`ratelimit_middleware_verify_gen_${ip}`);
     event.waitUntil(pending);
 
@@ -77,6 +67,19 @@ async function middleware(auth: any, request: NextRequest, event: NextFetchEvent
     res.headers.set("X-RateLimit-Reset", reset.toString());
     console.log("Rate limit: " + remaining.toString() + "/" + limit.toString() + " resets at " + reset.toString())
     return res;
+    // only check post requests
+  } else if (request.nextUrl.pathname.startsWith('/api/notesGroups') && request.method === 'POST') {
+    const { success, pending, limit, reset, remaining } = await notesGroupCreateRatelimit.limit(`ratelimit_middleware_notesgroup_${ip}`);
+    event.waitUntil(pending);
+
+    // instead of redirecting to /api/blocked, we return a 429 error
+    const res = success ? NextResponse.next() : NextResponse.json({error: 'Too many requests'}, {status: 429});
+
+    res.headers.set("X-RateLimit-Limit", limit.toString());
+    res.headers.set("X-RateLimit-Remaining", remaining.toString());
+    res.headers.set("X-RateLimit-Reset", reset.toString());
+    console.log("Rate limit: " + remaining.toString() + "/" + limit.toString() + " resets at " + reset.toString())
+    return res;
   }
 
   return NextResponse.next();
@@ -85,6 +88,7 @@ async function middleware(auth: any, request: NextRequest, event: NextFetchEvent
 export default authMiddleware({
   publicRoutes: [
     '/',
+    '/privacy',
     '/teams/:teamId*',
     '/events/:eventId*',
     '/profiles/:profileId*',

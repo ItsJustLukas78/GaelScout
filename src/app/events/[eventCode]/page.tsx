@@ -98,15 +98,13 @@ export default function EventPage({ params }: { params: { eventCode: string } })
       const newFilteredMatches: EventMatch[] = [];
 
       matchList.forEach((match) => {
-        if (match.blueTeams.find((team) => team.teamNumber.startsWith(teamNumberFilter)) || match.redTeams.find((team) => team.teamNumber.startsWith(teamNumberFilter))) {
+        if (match.blueTeams.find((team) => team.teamNumber.startsWith(teamNumberFilter.toUpperCase())) || match.redTeams.find((team) => team.teamNumber.startsWith(teamNumberFilter.toUpperCase()))) {
           newFilteredMatches.push(match);
         }
       });
 
-      console.log({newFilteredMatches});
       setFilteredMatches(newFilteredMatches);
     } else {
-      console.log({matchList});
       setFilteredMatches(matchList);
     }
   }, [teamNumberFilter, matchList]);
@@ -226,7 +224,6 @@ export default function EventPage({ params }: { params: { eventCode: string } })
 
 
   useEffect(() => {
-    console.log({currentTeamsDivision})
     if (currentTeamsDivision) {
       if (currentTeamsDivision.id === -1) {
         setDivisionFilteredTeams(paticipatingTeams);
@@ -344,11 +341,8 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                       required
                       value={currentTeamsDivision?.id}
                       onChange={(event) => {
-                        console.log(typeof event.target.value);
-                        console.log({divisionList})
                         // @ts-ignore
                         const newValue = (parseInt(event.target.id) === -1 ? {id:-1, name:"All"} : divisionList.find((division) => division.id === parseInt(event.target.value)) || null);
-                        console.log({newValue})
                         setCurrentTeamsDivision(newValue);
                       }}
                     >
@@ -391,7 +385,6 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                               return;
                             }
                             setCurrentNotesTeam(foundTeamProfile);
-                            console.log("set open")
                             setTeamNotesDialogOpen(true);
                           } else {
                             toast.error("You must be signed in to view match notes");

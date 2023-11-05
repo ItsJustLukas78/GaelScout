@@ -1,20 +1,19 @@
 "use client"
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {toast} from "react-toastify";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
-import CheckboxDiv from "@/components/CheckboxDiv";
-import * as RadioGroup from '@radix-ui/react-radio-group';
-import { Event, TeamProfile, TeamSeasonProfile, EventMatch, TeamIdentifiers } from "@/app/types";
+import {NotesGroup, TeamProfile} from "@/app/types";
 import Tiptap from "@/components/Tiptap";
-import MatchResultNavigator from "@/components/MatchResultNavigator";
-import {
-  BsArrowReturnLeft,
-  BsArrowReturnRight,
-} from "react-icons/bs";
 import {useAuth} from "@clerk/nextjs";
+import NotesGroupComponent from "@/components/NotesGroupComponent";
+import {useGlobalStore} from "@/state/globalState";
 
 export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam, seasonId, setTeamNotesDialogOpen }: { teamNotesDialogOpen: boolean, currentNotesTeam: TeamProfile | null, seasonId: number, setTeamNotesDialogOpen: (open: boolean) => void }) {
   const { getToken } = useAuth();
+
+  const currentNotesGroup = useGlobalStore((state) => state.currentNotesGroup);
+
+  const [previousNotesGroup, setPreviousNotesGroup] = useState<NotesGroup | null>(null)
 
   const [currentEditor, setCurrentEditor] = useState<any>(null)
 
@@ -25,7 +24,7 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
 
   const [loading, setLoading] = useState(true)
 
-  const saveNotes = () => {
+  const saveNotes = async(changeGroup = false) => {
     if (!currentEditor || !currentNotesTeam) {
       toast.warn("No changes made because the editor or team did not load.")
       setCurrentTeamNotes(null)
@@ -58,12 +57,21 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
       notes = null
 
       if (loadedNotesWasEmpty) {
-        currentEditor.setEditable(false)
-        setCurrentTeamNotes(null)
-        setCompletedInitialFetch(false)
-        setLoadedNotesWasEmpty(false)
-        setTeamNotesDialogOpen(false)
-        return;
+        setLoading(false)
+        if (!changeGroup) {
+          currentEditor.setEditable(false)
+          setCurrentTeamNotes(null)
+          setCompletedInitialFetch(false)
+          setLoadedNotesWasEmpty(false)
+          setTeamNotesDialogOpen(false)
+          return;
+        } else {
+          currentEditor.setEditable(false)
+          setCurrentTeamNotes(null)
+          setCompletedInitialFetch(false)
+          setLoadedNotesWasEmpty(false)
+          return;
+        }
       }
     }
 
@@ -73,89 +81,94 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
 
     notesPostBody[teamNumber] = notes
 
-    console.log(notesPostBody)
+    try {
+      const token = await getToken()
 
-    getToken().then((token) => {
-      fetch(`/api/seasons/${seasonId}/notes`, {
+      const response = await fetch(`/api/seasons/${seasonId}/notes`, {
         method: "POST",
         body: JSON.stringify({
+          notesGroupId: previousNotesGroup?.id,
           notes: notesPostBody
         }),
         headers: {
           "Authorization": `Bearer ${token}`
         }
-      }).then((response) => {
-        response.json().then((data) => {
-          console.log({data})
-          if (data.error) {
-            toast.error(data.error);
-            setLoading(false);
-            return;
-          }
+      })
 
-          currentEditor.setEditable(false)
-          currentEditor.commands.clearContent();
-          setCurrentTeamNotes(null);
-          setCompletedInitialFetch(false);
-          setLoadedNotesWasEmpty(false);
-          setTeamNotesDialogOpen(false);
-        }).catch((error) => {
-          console.log(error);
-          toast.error("An error occurred while saving team notes.");
-          setLoading(false);
-        });
-      }).catch((error) => {
-        console.log(error);
-        toast.error("An error occurred while saving team notes.");
+      const data = await response.json()
+
+      if (data.error) {
+        toast.error(data.error);
         setLoading(false);
-      });
-    }).catch((error) => {
+        return;
+      }
+
+      if (changeGroup) {
+        currentEditor.setEditable(false)
+        currentEditor.commands.clearContent();
+        setCurrentTeamNotes(null)
+        setCompletedInitialFetch(false)
+        setLoadedNotesWasEmpty(false)
+        setLoading(false)
+        return;
+      }
+
+      currentEditor.setEditable(false)
+      currentEditor.commands.clearContent();
+      setCurrentTeamNotes(null);
+      setCompletedInitialFetch(false);
+      setLoadedNotesWasEmpty(false);
+      setTeamNotesDialogOpen(false);
+      setLoading(false);
+    } catch (error) {
       console.log(error);
       toast.error("An error occurred while saving team notes.");
       setLoading(false);
-    });
+    }
   }
 
-  const getTeamNotes = () => {
+  const getTeamNotes = async() => {
     if (!currentNotesTeam) {
       return;
     }
 
+    setLoading(true)
+
     const searchParams = new URLSearchParams();
 
     searchParams.append("teamNumber", currentNotesTeam.teamNumber)
+    searchParams.append("notesGroupId", currentNotesGroup?.id.toString() || '')
 
-    getToken().then((token) => {
-      fetch(`/api/seasons/${seasonId}/notes?${searchParams.toString()}`, {
+    try {
+      const token = await getToken()
+
+      const response = await fetch(`/api/seasons/${seasonId}/notes?${searchParams.toString()}`, {
         method: "GET",
-      }).then((response) => {
-        response.json().then((data) => {
-          if (data.error) {
-            toast.error(data.error);
-            return;
-          }
+      })
 
-          setCompletedInitialFetch(true)
-          setLoading(false)
+      const data = await response.json()
 
-          if (data.notes.length === 0) {
-            setLoadedNotesWasEmpty(true)
-            return;
-          }
+      if (data.error) {
+        toast.error(data.error);
+        setLoading(false);
+        return;
+      }
 
-          setCurrentTeamNotes(data.notes[0].note)
-        }).catch((error) => {
-          console.log(error);
-          toast.error("An error occurred while fetching team notes.");
-        });
-      }).catch((error) => {
-        console.log(error);
-        toast.error("An error occurred while fetching team notes.");
-      });
-    }).catch((error) => {
+      setCompletedInitialFetch(true)
+      setLoading(false)
+      setPreviousNotesGroup(currentNotesGroup)
+
+      if (data.notes.length === 0) {
+        setLoadedNotesWasEmpty(true)
+        return;
+      }
+
+      setCurrentTeamNotes(data.notes[0].note)
+    } catch (error) {
       console.log(error);
-      toast.error("An error occurred while fetching team notes.");
-    })
+      toast.error("An error occurred while loading team notes.");
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -173,7 +186,16 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
         currentEditor.commands.clearContent()
         currentEditor.setEditable(true)
       }}
-  }, [currentTeamNotes, completedInitialFetch, currentEditor])
+  }, [currentTeamNotes, completedInitialFetch, currentEditor, currentNotesTeam])
+
+
+  useEffect(() => {
+    if (completedInitialFetch) {
+      saveNotes(true).then(() => {
+        getTeamNotes()
+      })
+    }
+  } , [currentNotesGroup])
 
   return (
     <AlertDialog.Root
@@ -182,7 +204,7 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
     >
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="z-40 bg-black opacity-70 data-[state=open]:animate-overlayShow fixed inset-0" />
-        <AlertDialog.Content className="flex flex-col z-50 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] min-h-[650px] min-w-[350px] max-h-full translate-x-[-50%] translate-y-[-50%] rounded-[10px] bg-neutral-800 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
+        <AlertDialog.Content className="flex flex-col z-50 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] min-h-[650px] w-[350px] max-h-full translate-x-[-50%] translate-y-[-50%] rounded-[10px] bg-neutral-800 p-[22px] focus:outline-none">
           <AlertDialog.Title className="mb-5 text-xl font-bold">
             Match Notes
           </AlertDialog.Title>
@@ -193,6 +215,7 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
                   {currentNotesTeam?.teamNumber}
                 </h1>
                 <Tiptap setEditor={setCurrentEditor} />
+                <NotesGroupComponent/>
               </div>
             </div>
           </AlertDialog.Description>

@@ -5,12 +5,16 @@ import { getTeamObject } from "@/utils/RobotEventsAPI";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { seasonId: string} }
+  { params }: { params: { seasonId: string } }
 ) {
+  console.log('POST /api/seasons/[seasonId]/notes');
   const seasonId = parseInt(params.seasonId);
+
   const { userId } = await auth();
 
   const data = await request.json();
+
+  const notesGroupId = data.notesGroupId;
 
   // [{
   //   teamNumber: string;
@@ -33,6 +37,25 @@ export async function POST(
 
     if (Object.keys(newTeamsToNotes).length === 0) {
       return NextResponse.json({ error: 'Notes not provided' }, { status: 400 });
+    }
+
+    if (notesGroupId) {
+      const notesGroup = await prisma.notesGroup.findFirst({
+        where: {
+          id: notesGroupId
+        },
+        include: {
+          users: true
+        }
+      });
+
+      if (!notesGroup) {
+        return NextResponse.json({ error: 'Invalid notes group id' }, { status: 400 });
+      }
+
+      if (!notesGroup.users.find((user: any) => user.id === userId)) {
+        return NextResponse.json({ error: 'You are not in this group' }, { status: 400 });
+      }
     }
 
     const notes = await Promise.all(Object.keys(newTeamsToNotes).map(async (teamNumber: string) => {
@@ -69,50 +92,99 @@ export async function POST(
       }
 
       if (!newNotes) {
-        const existingNote = await prisma.teamNote.findFirst({
-          where: {
-            userId: userId,
-            seasonId: seasonId,
-            teamNumber: teamNumber,
-            teamId: team.teamId,
-          }
-        });
+        let existingNote = null;
+
+        if (notesGroupId) {
+          existingNote = await prisma.teamNote.findFirst({
+            where: {
+              notesGroupId: notesGroupId,
+              seasonId: seasonId,
+              teamNumber: teamNumber,
+              teamId: team.teamId,
+            }
+          });
+        } else {
+          existingNote = await prisma.teamNote.findFirst({
+            where: {
+              userId: userId,
+              seasonId: seasonId,
+              teamNumber: teamNumber,
+              teamId: team.teamId,
+            }
+          });
+        }
 
         if (!existingNote) {
           return null;
         }
 
-        return prisma.teamNote.delete({
-          where: {
-            userId_seasonId_teamNumber_teamId : {
-              userId: userId,
-              seasonId: seasonId,
-              teamNumber: teamNumber,
-              teamId: team.teamId,
+        if (notesGroupId) {
+          return prisma.teamNote.delete({
+            where: {
+              notesGroupId_seasonId_teamNumber_teamId : {
+                notesGroupId: notesGroupId,
+                seasonId: seasonId,
+                teamNumber: teamNumber,
+                teamId: team.teamId,
+              }
             }
-          }
-        });
+          });
+        } else {
+          return prisma.teamNote.delete({
+            where: {
+              userId_seasonId_teamNumber_teamId: {
+                userId: userId,
+                seasonId: seasonId,
+                teamNumber: teamNumber,
+                teamId: team.teamId,
+              }
+            }
+          });
+        }
       } else {
-        return prisma.teamNote.upsert({
-          where: {
-            userId_seasonId_teamNumber_teamId : {
-              userId: userId,
-              seasonId: seasonId,
-              teamNumber: teamNumber,
+        if (notesGroupId) {
+          return prisma.teamNote.upsert({
+            where: {
+              notesGroupId_seasonId_teamNumber_teamId : {
+                notesGroupId: notesGroupId,
+                seasonId: seasonId,
+                teamNumber: teamNumber,
+                teamId: team.teamId,
+              }
+            },
+            update: {
+              note: newNotes,
+            },
+            create: {
+              notesGroupId: notesGroupId,
               teamId: team.teamId,
+              teamNumber: teamNumber,
+              seasonId: seasonId,
+              note: newNotes,
             }
-          },
-          update: {
-            note: newNotes,
-          },
-          create: {
-            teamId: team.teamId,
-            teamNumber: teamNumber,
-            seasonId: seasonId,
-            userId: userId,
-            note: newNotes,
-          }
-        })
+          });
+        } else {
+          return prisma.teamNote.upsert({
+            where: {
+              userId_seasonId_teamNumber_teamId: {
+                userId: userId,
+                seasonId: seasonId,
+                teamNumber: teamNumber,
+                teamId: team.teamId,
+              }
+            },
+            update: {
+              note: newNotes,
+            },
+            create: {
+              teamId: team.teamId,
+              teamNumber: teamNumber,
+              seasonId: seasonId,
+              userId: userId,
+              note: newNotes,
+            }
+          })
+        }
       }
     }));
 
@@ -134,9 +206,12 @@ export async function GET(
   { params }: { params: { seasonId: string } }
 ) {
   const seasonId = parseInt(params.seasonId);
+
   const { userId } = await auth();
 
   const searchParams = new URL(request.url).searchParams;
+
+  const notesGroupId = searchParams.get('notesGroupId');
 
   const teamNumbers: string[] = [];
 
@@ -159,14 +234,43 @@ export async function GET(
       return NextResponse.json({error: 'Team numbers not provided'}, {status: 400});
     }
 
-    let notes = await Promise.all(teamNumbers.map(async (teamNumber: string) => {
-      return prisma.teamNote.findFirst({
+    if (notesGroupId) {
+      const notesGroup = await prisma.notesGroup.findFirst({
         where: {
-          teamNumber: teamNumber,
-          seasonId: seasonId,
-          userId: userId,
+          id: parseInt(notesGroupId)
+        },
+        include: {
+          users: true
         }
       });
+
+      if (!notesGroup) {
+        return NextResponse.json({ error: 'Invalid notes group id' }, { status: 400 });
+      }
+
+      if (!notesGroup.users.find((user: any) => user.id === userId)) {
+        return NextResponse.json({ error: 'You are not in this group' }, { status: 400 });
+      }
+    }
+
+    let notes = await Promise.all(teamNumbers.map(async (teamNumber: string) => {
+      if (notesGroupId) {
+        return prisma.teamNote.findFirst({
+          where: {
+            notesGroupId: parseInt(notesGroupId),
+            seasonId: seasonId,
+            teamNumber: teamNumber,
+          }
+        });
+      } else {
+        return prisma.teamNote.findFirst({
+          where: {
+            teamNumber: teamNumber,
+            seasonId: seasonId,
+            userId: userId,
+          }
+        });
+      }
     }));
 
     notes = notes.filter((note) => note !== null);
