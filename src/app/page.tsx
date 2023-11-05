@@ -59,11 +59,10 @@ export default function Home() {
           <SpringAnimatedElement className="animHeading pb-16 flex h-auto flex-col items-center justify-center lg:space-x-8 lg:flex-row" delay={4.5}>
             <div className="flex flex-col space-y-8 w-72 xs:w-96 sm:w-144 lg:w-128 xl:w-144 p-1">
               <div className="text-4xl font-bold xs:text-5xl sm:text-7xl">
-                Developed by students at GaelSuite.
+                Developed by Gael Force Robotics
               </div>
               <p className="text-base sm:text-xl">
-                GaelScout was developed by GaelSuite, a nonprofit established by members
-                of the Gael Force 5327 Organization.
+                GaelScout was developed by Gael Force Robotics students, for students.
               </p>
               <p className="text-base sm:text-xl">
                 Scouting teams can be challenging, with a vast amount of participants,

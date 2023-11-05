@@ -32,7 +32,7 @@ export default function Navbar() {
           {/*  <NavDropButton href="/predict">Predict</NavDropButton>*/}
           {/*</NavDropDown>*/}
           {/*<NavButton href="/api-docs">API</NavButton>*/}
-          <NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>
+          {/*<NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>*/}
           {/*<NavButton href="/about">About</NavButton>*/}
           {/*{isLoaded && isSignedIn ? <UserButton*/}
           {/*    afterSignOutUrl="/"*/}
@@ -85,7 +85,7 @@ export default function Navbar() {
             <NavButton href="/predict">Predict</NavButton>
             {/*<NavButton href="/verify">Verify</NavButton>*/}
             {/*<NavButton href="/api-docs">API</NavButton>*/}
-            <NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>
+            {/*<NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>*/}
             {/*<NavButton href="/about">About</NavButton>*/}
             {/*<button*/}
             {/*  className="h-auto w-fit whitespace-nowrap text-2xl font-semibold text-white"*/}
