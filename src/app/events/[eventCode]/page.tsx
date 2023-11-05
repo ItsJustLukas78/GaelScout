@@ -38,47 +38,52 @@ export default function EventPage({ params }: { params: { eventCode: string } })
 
   const [favorited, setFavorited] = useState(false);
 
-  const getEvent = () => {
+  const getEvent = async() => {
     const skuSearchParams = new URLSearchParams();
 
     skuSearchParams.append("eventSKU[]", eventCode);
 
-    fetch(`/api/events/?${skuSearchParams.toString()}`).then((response) => {
-      response.json().then((data) => {
-        if (data.error) {
-          toast.error(data.error);
-          return;
-        }
+    try {
+      const response = await fetch(`/api/events/?${skuSearchParams.toString()}`);
 
-        if (data.events.length === 0) {
-          toast.error("Event not found");
-          return;
-        }
+      const data = await response.json();
 
-        setEventObject(data.events[0]);
+      if (data.error) {
+        toast.error(data.error);
+        return;
+      }
 
-        setDivisionList(data.events[0].divisions);
+      if (data.events.length === 0) {
+        toast.error("Event not found");
+        return;
+      }
 
-        if (data.events[0].divisions.length !== 0) {
-          setCurrentDivision(data.events[0].divisions[0]);
-        }
+      setEventObject(data.events[0]);
 
-        setLoadingTeams(true);
+      setDivisionList(data.events[0].divisions);
 
-        fetch(`/api/events/${data.events[0].id}/teams`).then((response) => {
-          response.json().then((data) => {
-            if (data.error) {
-              toast.error(data.error);
-              setLoadingTeams(false);
-              return;
-            }
+      if (data.events[0].divisions.length !== 0) {
+        setCurrentDivision(data.events[0].divisions[0]);
+      }
 
-            setLoadingTeams(false);
-            setPaticipatingTeams(data.teams);
-          });
-        });
-      });
-    });
+      setLoadingTeams(true);
+
+      const response2 = await fetch(`/api/events/${data.events[0].id}/teams`)
+
+      const data2 = await response2.json();
+
+      if (data2.error) {
+        toast.error(data2.error);
+        setLoadingTeams(false);
+        return;
+      }
+
+      setLoadingTeams(false);
+      setPaticipatingTeams(data2.teams);
+    } catch (err) {
+      console.log(err);
+      toast.error("Error getting event data");
+    }
   }
 
   const formatDate = (date: string) => {
@@ -133,7 +138,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
     }
   }, [currentDivision]);
 
-  const getFavoriteStatus = () => {
+  const getFavoriteStatus = async() => {
     if (!eventObject) {
       return;
     }
@@ -143,76 +148,77 @@ export default function EventPage({ params }: { params: { eventCode: string } })
     searchParams.append("eventId", eventObject.id.toString());
     searchParams.append("favoriteType", "event");
 
-    fetch(`/api/favorites/?${searchParams.toString()}`).then((response) => {
-      response.json().then((data) => {
-        if (data.error) {
-          toast.error(data.error)
-          setFavorited(false);
-          return;
-        }
+    try {
+      const response = await fetch(`/api/favorites/?${searchParams.toString()}`);
 
-        setFavorited(data.favorites.length > 0);
-      }).catch((error) => {
-        toast.error(error)
+      const data = await response.json();
+
+      if (data.error) {
+        toast.error(data.error)
         setFavorited(false);
-      });
-    }).catch((error) => {
-      toast.error(error)
+        return;
+      }
+
+      setFavorited(data.favorites.length > 0);
+    } catch (err) {
+      toast.error(err as any)
       setFavorited(false);
-    });
+    }
   }
 
-  const changeFavoriteStatus = (favorite: boolean) => {
+  const changeFavoriteStatus = async(favorite: boolean) => {
     if (!eventObject) {
       return;
     }
 
     if (favorite) {
-      fetch(`/api/favorites/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          eventId: eventObject.id,
-          favoriteType: "event",
-        }),
-      }).then((response) => {
-        response.json().then((data) => {
-          if (data?.error) {
-            toast.error(data.error)
-            return;
-          }
+      try {
+        const response = await fetch(`/api/favorites/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            eventId: eventObject.id,
+            favoriteType: "event",
+          }),
+        })
 
-          setFavorited(data.success);
-        }).catch((error) => {
-          toast.error(error)
-        });
-      }).catch((error) => {
-        toast.error(error)
-      });
+        const data = await response.json();
+
+        if (data?.error) {
+          toast.error(data.error)
+          return;
+        }
+
+        setFavorited(data.success);
+      } catch (err) {
+        toast.error(err as any)
+      }
     } else {
-      fetch(`/api/favorites/`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          eventId: eventObject.id,
-          favoriteType: "event",
-        }),
-      }).then((response) => {
-        response.json().then((data) => {
-          if (data?.error) {
-            toast.error(data.error)
-            return;
-          }
-
-          setFavorited(!data.success);
+      try {
+        const response = await fetch(`/api/favorites/`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            eventId: eventObject.id,
+            favoriteType: "event",
+          })
         });
-      }).catch((error) => {
-        toast.error(error)
-      });
+
+        const data = await response.json();
+
+        if (data?.error) {
+          toast.error(data.error)
+          return;
+        }
+
+        setFavorited(!data.success);
+      } catch (err) {
+        toast.error(err as any)
+      }
     }
   }
 

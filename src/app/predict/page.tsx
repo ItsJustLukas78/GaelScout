@@ -40,7 +40,7 @@ export default function Teams() {
     }
   }, [prediction]);
 
-  const predictMatch = (event: any) => {
+  const predictMatch = async(event: any) => {
     event.preventDefault();
 
     if (!r1Team || !r2Team || !b1Team || !b2Team) {
@@ -58,18 +58,19 @@ export default function Teams() {
     searchParams.append('b2Team', b2Team.toUpperCase());
     searchParams.append('seasonId', String(seasonId));
 
+    try {
+      const response = await fetch(`/api/predict?${searchParams.toString()}`);
 
-    fetch(`/api/predict?${searchParams.toString()}`).then((response) => {
-      response.json().then((data) => {
-        if (data.error) {
-          toast.error(data.error);
-          return;
-        }
-        setPrediction(data);
-      });
-    }).catch((error) => {
-      console.log(error);
-    });
+      const data = await response.json();
+
+      if (data.error) {
+        toast.error(data.error);
+        return;
+      }
+      setPrediction(data);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   useEffect(() => {

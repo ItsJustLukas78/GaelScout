@@ -31,7 +31,7 @@ export default function Verify() {
   }, []);
 
 
-  const generateVerificationCode = (e: any) => {
+  const generateVerificationCode = async(e: any) => {
     if (verificationCode !== "" && verificationCode !== null) {
       return;
     }
@@ -40,40 +40,43 @@ export default function Verify() {
       return;
     }
 
-    getToken().then((token) => {
-      fetch(`/api/verify/generate`,
+    try {
+      const token = await getToken();
+
+      const response = await fetch(`/api/verify/generate`,
         {
           method: "POST",
         },
-      ).then((response) => {
-        response.json().then((data) => {
-          if (data.error) {
-            toast.error(data.error);
-            if (response.headers.get("X-RateLimit-Reset")) {
-              const resetTime = parseInt(response.headers.get("X-RateLimit-Reset") as string);
+      );
 
-              const currentTime = Date.now()
-              const timeToWait = resetTime - currentTime
+      const data = await response.json();
 
-              const timeToWaitSeconds = Math.floor(timeToWait / 1000) + 1
+      if (data.error) {
+        toast.error(data.error);
+        if (response.headers.get("X-RateLimit-Reset")) {
+          const resetTime = parseInt(response.headers.get("X-RateLimit-Reset") as string);
 
-              toast.info(`Your code will generate in: ${timeToWaitSeconds}`);
+          const currentTime = Date.now()
+          const timeToWait = resetTime - currentTime
 
-              setTimeout(() => {
-                return generateVerificationCode(e);
-              } , timeToWaitSeconds * 1000);
-            }
-            return;
-          }
-          setVerificationCode(data.verificationCode);
-        });
-      }).catch((error) => {
-        console.log(error);
-      });
-    })
+          const timeToWaitSeconds = Math.floor(timeToWait / 1000) + 1
+
+          toast.info(`Your code will generate in: ${timeToWaitSeconds}`);
+
+          setTimeout(() => {
+            return generateVerificationCode(e);
+          } , timeToWaitSeconds * 1000);
+        }
+        return;
+      }
+
+      setVerificationCode(data.verificationCode);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  const confirmVerification = (e: any) => {
+  const confirmVerification = async(e: any) => {
     if (e) {
       e.preventDefault();
     }
@@ -88,48 +91,50 @@ export default function Verify() {
 
     toast.info("Verifying...");
 
-    getToken().then((token) => {
-      fetch(`/api/verify`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            teamNumber: teamNumberInput,
-          }),
-        },
-      ).then((response) => {
-        response.json().then((data) => {
-          if (data.error) {
-            toast.error(data.error);
+    try {
+      const token = await getToken();
 
-            // check X-RateLimit-Reset header
-            if (response.headers.get("X-RateLimit-Reset")) {
-              const resetTime = parseInt(response.headers.get("X-RateLimit-Reset") as string);
-
-              const currentTime = Date.now()
-              const timeToWait = resetTime - currentTime
-
-              const timeToWaitSeconds = Math.floor(timeToWait / 1000) + 1
-
-              setTimeLeft(timeToWaitSeconds);
-            }
-
-            if (data.error === "Verification code does not match") {
-              // TODO: show error with toast
-              return;
-            } else {
-              return;
-            }
-          } else {
-            toast.success(`Verified with team: ${data.verifiedTeamNumber}!`);
-
-            setDialogOpen(false);
-          }
-        });
-      }).catch((error) => {
-        console.log(error);
+      const response = await fetch(`/api/verify`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          teamNumber: teamNumberInput,
+        }),
       });
-    })
+
+      const data = await response.json();
+
+      if (data.error) {
+        toast.error(data.error);
+
+        // check X-RateLimit-Reset header
+        if (response.headers.get("X-RateLimit-Reset")) {
+          const resetTime = parseInt(response.headers.get("X-RateLimit-Reset") as string);
+
+          const currentTime = Date.now()
+          const timeToWait = resetTime - currentTime
+
+          const timeToWaitSeconds = Math.floor(timeToWait / 1000) + 1
+
+          setTimeLeft(timeToWaitSeconds);
+        }
+
+        if (data.error === "Verification code does not match") {
+          // TODO: show error with toast
+          return;
+        } else {
+          return;
+        }
+      } else {
+        toast.success(`Verified with team: ${data.verifiedTeamNumber}!`);
+
+        setDialogOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
+
   return <>
     <main>
       <div className="sm:py-32 py-32 flex w-full flex-col items-center justify-center gap-16 md:flex-row md:gap-12 lg:gap-20">

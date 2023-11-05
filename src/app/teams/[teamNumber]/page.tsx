@@ -24,43 +24,41 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
 
   const [favorited, setFavorited] = useState<boolean>(false);
 
-  const getTeam = () => {
-    fetch(`/api/teams/number/${teamNumber.toUpperCase()}`).then((response) => {
-      response.json().then((data) => {
-        if (data.error) {
-          toast.error(data.error)
-          return;
-        }
-        setTeamProfile(data.team)
-      }).catch((error) => {
-        console.log(error);
-        toast.error(error)
-      });
-    }).catch((error) => {
-      console.log(error);
-      toast.error(error)
-    });
+  const getTeam = async() => {
+    try {
+      const response = await fetch(`/api/teams/number/${teamNumber.toUpperCase()}`)
+
+      const data = await response.json()
+
+      if (data.error) {
+        toast.error(data.error)
+        return;
+      }
+      setTeamProfile(data.team)
+
+    } catch (err) {
+      toast.error(err as any)
+    }
   }
 
-  const getSeasonStats = () => {
-    fetch(`/api/seasons/${seasonId}/seasonProfile/${teamNumber.toUpperCase()}`).then((response) => {
-      response.json().then((data) => {
-        if (data.error) {
-          setSeasonStats(null);
-          return;
-        }
-        setSeasonStats(data);
-      }).catch((error) => {
-        console.log(error);
+  const getSeasonStats = async() => {
+    try {
+      const response = await fetch(`/api/seasons/${seasonId}/seasonProfile/${teamNumber.toUpperCase()}`);
+
+      const data = await response.json();
+
+      if (data.error) {
         setSeasonStats(null);
-      })
-    }).catch((error) => {
-      console.log(error);
+        return;
+      }
+      setSeasonStats(data);
+    } catch (err) {
+      console.log(err);
       setSeasonStats(null);
-    });
+    }
   }
 
-  const getEvents = () => {
+  const getEvents = async() => {
     if (!teamProfile) {
       return;
     }
@@ -69,23 +67,25 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
 
     searchParams.append("seasonId", seasonId.toString());
 
-    fetch(`/api/teams/${teamProfile.teamId}/events/?${searchParams.toString()}`).then((response) => {
-      response.json().then((data) => {
-        if (data?.error) {
-          toast.error(data.error)
-          setCurrentEvents([]);
-          return;
-        }
+    try {
+      const response = await fetch(`/api/teams/${teamProfile.teamId}/events/?${searchParams.toString()}`)
 
-        setCurrentEvents(data.events);
-      });
-    }).catch((error) => {
-      toast.error(error)
+      const data = await response.json()
+
+      if (data?.error) {
+        toast.error(data.error)
+        setCurrentEvents([]);
+        return;
+      }
+
+      setCurrentEvents(data.events);
+    } catch (err) {
+      toast.error(err as any)
       setCurrentEvents([]);
-    });
+    }
   }
 
-  const getFavoriteStatus = () => {
+  const getFavoriteStatus = async() => {
     if (!teamProfile) {
       return;
     }
@@ -100,78 +100,80 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
     searchParams.append("teamId", teamProfile.teamId.toString());
     searchParams.append("favoriteType", "team");
 
-    fetch(`/api/favorites/?${searchParams.toString()}`).then((response) => {
-      response.json().then((data) => {
-        if (data.error) {
-          toast.error(data.error)
-          setFavorited(false);
-          return;
-        }
+    try {
+      const response = await fetch(`/api/favorites/?${searchParams.toString()}`)
 
-        setFavorited(data.favorites.length > 0);
-      }).catch((error) => {
-        toast.error(error)
+      const data = await response.json()
+
+      if (data.error) {
+        toast.error(data.error)
         setFavorited(false);
-      });
-    }).catch((error) => {
-      toast.error(error)
+        return;
+      }
+
+      setFavorited(data.favorites.length > 0);
+    } catch (err) {
+      toast.error(err as any)
       setFavorited(false);
-    });
+    }
   }
 
-  const changeFavoriteStatus = (favorite: boolean) => {
+  const changeFavoriteStatus = async(favorite: boolean) => {
     if (!teamProfile) {
       return;
     }
 
     if (favorite) {
-      fetch(`/api/favorites/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          teamId: teamProfile.teamId,
-          teamNumber: teamProfile.teamNumber,
-          favoriteType: "team",
-        }),
-      }).then((response) => {
-        response.json().then((data) => {
-          if (data?.error) {
-            toast.error(data.error)
-            return;
-          }
-
-          setFavorited(data.success);
-        }).catch((error) => {
-          toast.error(error)
+      try {
+        const response = await fetch(`/api/favorites/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            teamId: teamProfile.teamId,
+            teamNumber: teamProfile.teamNumber,
+            favoriteType: "team",
+          })
         });
-      }).catch((error) => {
-        toast.error(error)
-      });
+
+        const data = await response.json();
+
+
+        if (data?.error) {
+          toast.error(data.error)
+          return;
+        }
+
+        setFavorited(data.success);
+      } catch (err) {
+        toast.error(err as any)
+      }
     } else {
-      fetch(`/api/favorites/`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          teamId: teamProfile.teamId,
-          teamNumber: teamProfile.teamNumber,
-          favoriteType: "team",
-        }),
-      }).then((response) => {
-        response.json().then((data) => {
-          if (data?.error) {
-            toast.error(data.error)
-            return;
-          }
-
-          setFavorited(!data.success);
+      try {
+        const response = await fetch(`/api/favorites/`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            teamId: teamProfile.teamId,
+            teamNumber: teamProfile.teamNumber,
+            favoriteType: "team",
+          })
         });
-      }).catch((error) => {
-        toast.error(error)
-      });
+
+        const data = await response.json();
+
+        if (data?.error) {
+          toast.error(data.error)
+          return;
+        }
+
+        setFavorited(!data.success);
+      } catch (err) {
+        toast.error(err as any)
+      }
     }
   }
 

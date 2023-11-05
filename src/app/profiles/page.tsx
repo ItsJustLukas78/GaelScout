@@ -12,7 +12,7 @@ export default function Profiles() {
 
   const [resultsLoading, setResultsLoading] = useState(false);
 
-  const getProfiles = (e: any) => {
+  const getProfiles = async(e: any) => {
     if (e) {
       e.preventDefault();
     }
@@ -28,15 +28,17 @@ export default function Profiles() {
 
     setResultsLoading(true);
 
-    fetch(`/api/users?query=${usernameSearch}`).then((response) => {
-      response.json().then((data) => {
-        setCurrentResults(data.users);
-        setResultsLoading(false);
-      });
-    }).catch((error) => {
+    try {
+      const response = await fetch(`/api/users?query=${usernameSearch}`)
+
+      const data = await response.json();
+
+      setCurrentResults(data.users);
+      setResultsLoading(false);
+    } catch (err) {
       setResultsLoading(false)
-      console.log(error);
-    });
+      console.log(err);
+    }
   }
 
   // debounce search when usernameSearch changes

@@ -21,40 +21,44 @@ export default function Favorites({ params }: { params: { teamNumber: string } }
 
   const [seasonId, setSeasonId] = useState<number>(181);
 
-  const getFavorites = () => {
-    fetch(`/api/favorites?favoriteType=team`).then((response) => {
-      response.json().then((data) => {
+  const getFavorites = async() => {
+    const promises = [];
+
+    promises.push(async() => {
+      try {
+        const response = await fetch(`/api/favorites?favoriteType=team`);
+
+        const data = await response.json();
+
         if (data.error) {
           toast.error(data.error)
           return;
         }
 
         setFavoriteTeams(data.favorites);
-      }).catch((error) => {
-        console.log(error);
+      } catch (err) {
+        console.log(err);
         toast.error("Error getting favorite teams");
-      });
-    }).catch((error) => {
-      console.log(error);
-      toast.error("Error getting favorite teams");
-    });
+      }
+    }, async() => {
+      try {
+        const response = await fetch(`/api/favorites?favoriteType=event`);
 
-    fetch(`/api/favorites?favoriteType=event`).then((response) => {
-      response.json().then((data) => {
+        const data = await response.json();
+
         if (data.error) {
           toast.error(data.error)
           return;
         }
 
         setFavoriteEvents(data.favorites);
-      }).catch((error) => {
-        console.log(error);
+      } catch (err) {
+        console.log(err);
         toast.error("Error getting favorite events");
-      });
-    }).catch((error) => {
-      console.log(error);
-      toast.error("Error getting favorite events");
+      }
     });
+
+    await Promise.all(promises);
   }
 
   useEffect(() => {

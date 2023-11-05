@@ -14,7 +14,7 @@ export default function RankingsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const getRankedTeams = (event: any, page?: number) => {
+  const getRankedTeams = async(event: any, page?: number) => {
     if (event) {
       event.preventDefault();
     }
@@ -34,43 +34,45 @@ export default function RankingsPage() {
     searchParams.append("perPage", "50");
     searchParams.append("page", page ? page.toString() : "1");
 
-    fetch(`/api/seasons/${seasonId}/seasonProfiles?${searchParams.toString()}`).then((response) => {
-      response.json().then((data) => {
-        if (data.error) {
-          toast.error(data.error);
-          setTopRatedTeams([]);
-          setLoadingTeams(false);
-          setCurrentResultsCount(0);
-          setTotalPages(0);
-          return;
-        }
+    try {
+      const response = await fetch(`/api/seasons/${seasonId}/seasonProfiles?${searchParams.toString()}`)
 
-        const meta = data.meta;
-        const totalResults = meta.total;
-        const results = data.data;
-        const resultCount = results.length;
+      const data = await response.json();
 
-        if (resultCount === 0) {
-          toast.info("No teams found");
-          setTopRatedTeams([]);
-          setCurrentResultsCount(0);
-          setTotalPages(0);
-        } else {
-          setTopRatedTeams(results);
-          setCurrentResultsCount(resultCount);
-          setTotalPages(Math.ceil(totalResults / 100));
-          setLoadingTeams(false);
-        }
-
+      if (data.error) {
+        toast.error(data.error);
+        setTopRatedTeams([]);
         setLoadingTeams(false);
-      });
-    }).catch((error) => {
-      toast.error(error);
+        setCurrentResultsCount(0);
+        setTotalPages(0);
+        return;
+      }
+
+      const meta = data.meta;
+      const totalResults = meta.total;
+      const results = data.data;
+      const resultCount = results.length;
+
+      if (resultCount === 0) {
+        toast.info("No teams found");
+        setTopRatedTeams([]);
+        setCurrentResultsCount(0);
+        setTotalPages(0);
+      } else {
+        setTopRatedTeams(results);
+        setCurrentResultsCount(resultCount);
+        setTotalPages(Math.ceil(totalResults / 100));
+        setLoadingTeams(false);
+      }
+
+      setLoadingTeams(false);
+    } catch (error) {
+      toast.error(error as any);
       setTopRatedTeams([]);
       setLoadingTeams(false);
       setCurrentResultsCount(0);
       setTotalPages(0);
-    });
+    }
   }
 
   useEffect(() => {

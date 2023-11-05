@@ -88,7 +88,7 @@ export default function Teams() {
     }
   }, [country]);
 
-  const getTeams = (event: any, page?: number) => {
+  const getTeams = async(event: any, page?: number) => {
     if (event) {
       event.preventDefault();
     }
@@ -99,32 +99,33 @@ export default function Teams() {
     const searchParams = new URLSearchParams();
 
     if (teamNumber && teamNumber !== "") {
-      fetch(`/api/teams/number/${teamNumber.toUpperCase()}`).then((response) => {
-        response.json().then((data) => {
-          if (data.error) {
-            toast.error(data.error)
-            setResultsLoading(false);
-            setCurrentResults([]);
-            setCurrentResultsCount(0);
-            setTotalPages(Math.ceil(0 / 15));
-            return;
-          }
+      try {
+        const response = await fetch(`/api/teams/number/${teamNumber.toUpperCase()}`)
+
+        const data = await response.json();
+
+        if (data.error) {
+          toast.error(data.error)
           setResultsLoading(false);
-          setCurrentResults([data.team]);
-          setCurrentResultsCount(1);
-          setTotalPages(Math.ceil(1 / 15));
+          setCurrentResults([]);
+          setCurrentResultsCount(0);
+          setTotalPages(Math.ceil(0 / 15));
           return;
-        });
-      }).catch((error) => {
+        }
+
+        setResultsLoading(false);
+        setCurrentResults([data.team]);
+        setCurrentResultsCount(1);
+        setTotalPages(Math.ceil(1 / 15));
+        return;
+      } catch (error) {
         console.log(error);
         setResultsLoading(false);
         setCurrentResults([]);
         setCurrentResultsCount(0);
         setTotalPages(Math.ceil(0 / 15));
         return;
-      });
-
-      return;
+      }
     }
 
     if (country !== "All") {
@@ -154,42 +155,44 @@ export default function Teams() {
 
     searchParams.append("page", page.toString());
 
-    fetch(`/api/teams?${searchParams.toString()}`).then((response) => {
-     response.json().then((data) => {
-       if (data.error) {
-         toast.error(data.error)
-         setResultsLoading(false);
-         setCurrentResults([]);
-         setCurrentResultsCount(0);
-         setTotalPages(Math.ceil(0 / 15));
-         return;
-       }
+    try {
+      const response = await fetch(`/api/teams?${searchParams.toString()}`)
 
-       const meta = data.meta;
-       const totalResults = meta.total;
-       const results = data.data;
-       const resultCount = results.length;
+      const data = await response.json()
 
-       if (resultCount === 0) {
-         setCurrentResults([]);
-         setCurrentResultsCount(0);
-         setTotalPages(0);
-         setResultsLoading(false);
-       } else {
-         setResultsLoading(false);
-         setCurrentResults(results);
-         setCurrentResultsCount(totalResults);
-         setTotalPages(Math.ceil(totalResults / 15));
-       }
-     }).catch((error) => {
-        toast.error(error);
+      if (data.error) {
+        toast.error(data.error)
         setResultsLoading(false);
         setCurrentResults([]);
         setCurrentResultsCount(0);
         setTotalPages(Math.ceil(0 / 15));
         return;
-     });
-    });
+      }
+
+      const meta = data.meta;
+      const totalResults = meta.total;
+      const results = data.data;
+      const resultCount = results.length;
+
+      if (resultCount === 0) {
+        setCurrentResults([]);
+        setCurrentResultsCount(0);
+        setTotalPages(0);
+        setResultsLoading(false);
+      } else {
+        setResultsLoading(false);
+        setCurrentResults(results);
+        setCurrentResultsCount(totalResults);
+        setTotalPages(Math.ceil(totalResults / 15));
+      }
+    } catch(error) {
+      toast.error(error as any)
+      setResultsLoading(false);
+      setCurrentResults([]);
+      setCurrentResultsCount(0);
+      setTotalPages(Math.ceil(0 / 15));
+      return;
+    }
   }
 
   return (

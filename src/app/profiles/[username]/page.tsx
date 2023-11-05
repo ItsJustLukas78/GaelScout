@@ -11,17 +11,19 @@ export default function UserProfile({ params }: { params: { username: string } }
 
   const [userProfile, setUserProfile] = useState<null | UserProfile >(null);
  
-  const getUserProfile = () => {
-    fetch(`/api/users/${username.toLowerCase()}`).then((response) => {
-      response.json().then((data) => {
-        if (data.error) {
-          toast.error(data.error)
-        }
-        setUserProfile(data.user)
-      });
-    }).catch((error) => {
-      console.log(error);
-    });
+  const getUserProfile = async() => {
+    try {
+      const response = await fetch(`/api/users/${username.toLowerCase()}`);
+
+      const data = await response.json();
+
+      if (data.error) {
+        toast.error(data.error)
+      }
+      setUserProfile(data.user)
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   useEffect(() => {

@@ -86,7 +86,7 @@ export default function Teams() {
     }
   }, [country]);
 
-  const getEvents = (event: any, page?: number) => {
+  const getEvents = async(event: any, page?: number) => {
     if (event) {
       event.preventDefault();
     }
@@ -101,17 +101,21 @@ export default function Teams() {
 
       skuSearchParams.append("eventSKU[]", eventSKU);
 
-      fetch(`/api/events/?${skuSearchParams.toString()}`).then((response) => {
-        response.json().then((data) => {
-          if (data.error) {
-            toast.error(data.error);
-            return;
-          }
+      try {
+        const response = await fetch(`/api/events/?${skuSearchParams.toString()}`)
 
-          setCurrentResults(data.events);
-          setResultsLoading(false);
-        });
-      });
+        const data = await response.json();
+
+        if (data.error) {
+          toast.error(data.error);
+          return;
+        }
+
+        setCurrentResults(data.events);
+        setResultsLoading(false);
+      } catch (error) {
+        toast.error(error as any);
+      }
 
       return;
     }
@@ -152,41 +156,45 @@ export default function Teams() {
 
     searchParams.append("page", page.toString());
 
-    fetch(`/api/events/eventCodes/?${searchParams.toString()}`).then((response) => {
-      response.json().then((data) => {
+    try {
+      const response = await fetch(`/api/events/eventCodes/?${searchParams.toString()}`);
+
+      const data = await response.json();
+
+      if (data.error) {
+       toast.error(data.error);
+       return;
+      }
+
+      const eventCodes = data.eventSKUs;
+      const eventCodesCount = eventCodes.length;
+
+      if (eventCodesCount === 0) {
+       setCurrentResults([]);
+       setResultsLoading(false);
+       toast.info("No events found");
+      } else {
+        const searchParams = new URLSearchParams();
+
+        eventCodes.forEach((value: any) => {
+          searchParams.append('eventSKU[]', value);
+        });
+
+        const response = await fetch(`/api/events/?${searchParams.toString()}`);
+
+        const data = await response.json();
+
         if (data.error) {
-         toast.error(data.error);
-         return;
+          toast.error(data.error);
+          return;
         }
 
-        const eventCodes = data.eventSKUs;
-        const eventCodesCount = eventCodes.length;
-
-        if (eventCodesCount === 0) {
-         setCurrentResults([]);
-         setResultsLoading(false);
-         toast.info("No events found");
-        } else {
-          const searchParams = new URLSearchParams();
-
-          eventCodes.forEach((value: any) => {
-            searchParams.append('eventSKU[]', value);
-          });
-
-          fetch(`/api/events/?${searchParams.toString()}`).then((response) => {
-            response.json().then((data) => {
-              if (data.error) {
-                toast.error(data.error);
-                return;
-              }
-
-              setCurrentResults(data.events);
-              setResultsLoading(false);
-            });
-          });
-        }
-     });
-    });
+        setCurrentResults(data.events);
+        setResultsLoading(false);
+      }
+    } catch (error) {
+      toast.error(error as any);
+    }
   }
 
   return (
