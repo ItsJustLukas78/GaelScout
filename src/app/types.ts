@@ -39,6 +39,7 @@ export interface TeamIdentifiers {
 export interface EventMatch {
   id: number,
   eventId: number,
+  started: Date,
   divisionId: number,
   round: number,
   instance: number,

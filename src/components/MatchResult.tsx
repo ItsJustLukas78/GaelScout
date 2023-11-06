@@ -2,7 +2,7 @@ import { EventMatch } from '@/app/types'
 import {useEffect, useState} from "react";
 
 export default function MatchResult(
-  {id, eventId, divisionId, round, instance, matchnum, field, name, blueTeams, redTeams, redScore, blueScore} : EventMatch
+  {id, eventId, started, divisionId, round, instance, matchnum, field, name, blueTeams, redTeams, redScore, blueScore} : EventMatch
 ) {
 
   const [formattedMatchName, setFormattedMatchName] = useState<string>("")

@@ -132,7 +132,12 @@ export default function EventPage({ params }: { params: { eventCode: string } })
           }
 
           setLoadingMatches(false);
-          setMatchList(data.matches);
+
+          const dateSortedMatches = data.matches.sort((a: EventMatch, b: EventMatch) => {
+            return (new Date(a.started)).getTime() - (new Date(b.started)).getTime();
+          });
+
+          setMatchList(dateSortedMatches);
         });
       });
     }

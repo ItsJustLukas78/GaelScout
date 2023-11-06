@@ -31,6 +31,7 @@ export async function GET(
       return {
         id: match.id,
         eventId: match.event.id,
+        started: match.started,
         divisionId: match.division.id,
         round: match.round,
         instance: match.instance,
