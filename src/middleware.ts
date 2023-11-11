@@ -96,6 +96,7 @@ export default authMiddleware({
     '/predict',
     '/sign-in',
     '/sign-up',
+    '/predictionModel/:route*',
     '/api/:route*',
   ],
   apiRoutes: ['/api/:route*'],

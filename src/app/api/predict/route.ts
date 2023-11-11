@@ -3,7 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { rating, predictWin } from 'openskill'
 // import * as tf from '@tensorflow/tfjs-node'
 import { ExtendedTeamSeasonProfile } from "@/app/types";
-import { predictMatch } from "@/models/predictionModel";
+// import { predictMatchWithModel } from "@/models/predictionModel";
 
 // const model = await tf.loadLayersModel('file://../../../models/predictionModel/model.json');
 
@@ -139,34 +139,34 @@ export async function GET(request: NextRequest) {
 
     // use the model to predict the outcome of the match
 
-    let red_opr = 0;
-    let red_dpr = 0;
-    let red_ccwm = 0;
-    let red_openSkill = 0;
-    let blue_opr = 0;
-    let blue_dpr = 0;
-    let blue_ccwm = 0;
-    let blue_openSkill = 0;
+    // let red_opr = 0;
+    // let red_dpr = 0;
+    // let red_ccwm = 0;
+    // let red_openSkill = 0;
+    // let blue_opr = 0;
+    // let blue_dpr = 0;
+    // let blue_ccwm = 0;
+    // let blue_openSkill = 0;
+    //
+    // red_opr = Math.round((r1TeamData.opr + r2TeamData.opr) * 10000) / 10000;
+    // red_dpr = Math.round((r1TeamData.dpr + r2TeamData.dpr) * 10000) / 10000;
+    // red_ccwm = Math.round((r1TeamData.ccwm + r2TeamData.ccwm) * 10000) / 10000;
+    // red_openSkill = Math.round((r1TeamData.openSkill + r2TeamData.openSkill) * 10000) / 10000;
+    //
+    // blue_opr = Math.round((b1TeamData.opr + b2TeamData.opr) * 10000) / 10000;
+    // blue_dpr = Math.round((b1TeamData.dpr + b2TeamData.dpr) * 10000) / 10000;
+    // blue_ccwm = Math.round((b1TeamData.ccwm + b2TeamData.ccwm) * 10000) / 10000;
+    // blue_openSkill = Math.round((b1TeamData.openSkill + b2TeamData.openSkill) * 10000) / 10000;
 
-    red_opr = Math.round((r1TeamData.opr + r2TeamData.opr) * 10000) / 10000;
-    red_dpr = Math.round((r1TeamData.dpr + r2TeamData.dpr) * 10000) / 10000;
-    red_ccwm = Math.round((r1TeamData.ccwm + r2TeamData.ccwm) * 10000) / 10000;
-    red_openSkill = Math.round((r1TeamData.openSkill + r2TeamData.openSkill) * 10000) / 10000;
+    // let predictedValue = 0;
+    //
+    // predictedValue = await predictMatch(red_opr, red_dpr, red_ccwm, red_openSkill, blue_opr, blue_dpr, blue_ccwm, blue_openSkill);
+    //
+    // // set the predicted value to a whole number 0-100
+    //
+    // predictedValue = Math.round(predictedValue * 100);
 
-    blue_opr = Math.round((b1TeamData.opr + b2TeamData.opr) * 10000) / 10000;
-    blue_dpr = Math.round((b1TeamData.dpr + b2TeamData.dpr) * 10000) / 10000;
-    blue_ccwm = Math.round((b1TeamData.ccwm + b2TeamData.ccwm) * 10000) / 10000;
-    blue_openSkill = Math.round((b1TeamData.openSkill + b2TeamData.openSkill) * 10000) / 10000;
-
-    let predictedValue = 0;
-
-    predictedValue = await predictMatch(red_opr, red_dpr, red_ccwm, red_openSkill, blue_opr, blue_dpr, blue_ccwm, blue_openSkill);
-
-    // set the predicted value to a whole number 0-100
-
-    predictedValue = Math.round(predictedValue * 100);
-
-    return NextResponse.json({ rChance, bChance, rChance2: predictedValue, bChance2: 100 - predictedValue }, {
+    return NextResponse.json({ rChance, bChance }, {
       status: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',

@@ -4,8 +4,22 @@ import * as Form from '@radix-ui/react-form';
 import * as Progress from '@radix-ui/react-progress';
 import React, {useEffect, useState} from "react";
 import { toast } from "react-toastify";
+import { rating, predictWin } from 'openskill'
+import * as tf from '@tensorflow/tfjs';
+// import {predictionModel} from "@/models/predictionModel";
 
 export default function Teams() {
+  const [model, setModel] = useState< any >(null);
+
+  useEffect(() => {
+    async function loadModel() {
+      const model = await tf.loadLayersModel('/predictionModel/model.json');
+      setModel(model);
+    }
+
+    loadModel();
+  }, []);
+
   const [r1Team, setR1Team] = useState< string | null >(null);
   const [r2Team, setR2Team] = useState< string | null >(null);
   const [b1Team, setB1Team] = useState< string | null >(null);
@@ -69,14 +83,18 @@ export default function Teams() {
 
     const searchParams = new URLSearchParams();
 
-    searchParams.append('r1Team', r1Team.toUpperCase());
-    searchParams.append('r2Team', r2Team.toUpperCase());
-    searchParams.append('b1Team', b1Team.toUpperCase());
-    searchParams.append('b2Team', b2Team.toUpperCase());
-    searchParams.append('seasonId', String(seasonId));
+    searchParams.append('teamNumber[]', r1Team.toUpperCase());
+    searchParams.append('teamNumber[]', r2Team.toUpperCase());
+    searchParams.append('teamNumber[]', b1Team.toUpperCase());
+    searchParams.append('teamNumber[]', b2Team.toUpperCase());
 
     try {
-      const response = await fetch(`/api/predict?${searchParams.toString()}`);
+      const response = await fetch(`/api/seasons/${seasonId}/seasonProfiles/?${searchParams.toString()}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
 
       const data = await response.json();
 
@@ -84,7 +102,77 @@ export default function Teams() {
         toast.error(data.error);
         return;
       }
-      setPrediction(data);
+
+      const teams = data.data;
+
+      const r1TeamData = teams.find((team: any) => team.teamNumber === r1Team.toUpperCase());
+      const r2TeamData = teams.find((team: any) => team.teamNumber === r2Team.toUpperCase());
+      const b1TeamData = teams.find((team: any) => team.teamNumber === b1Team.toUpperCase());
+      const b2TeamData = teams.find((team: any) => team.teamNumber === b2Team.toUpperCase());
+
+      const rRatings = [r1TeamData, r2TeamData].map(t => (rating({
+        mu: t.opr,
+        sigma: t.sigma
+      })));
+
+      const bRatings = [b1TeamData, b2TeamData].map(t => (rating({
+        mu: t.opr,
+        sigma: t.sigma
+      })));
+
+      const prediction = predictWin([rRatings, bRatings]);
+
+      const rChance = Math.round(prediction[0] * 100);
+      const bChance = Math.round(prediction[1] * 100);
+
+      let red_opr = 0;
+      let red_dpr = 0;
+      let red_ccwm = 0;
+      let red_openSkill = 0;
+      let blue_opr = 0;
+      let blue_dpr = 0;
+      let blue_ccwm = 0;
+      let blue_openSkill = 0;
+
+      red_opr = Math.round((r1TeamData.opr + r2TeamData.opr) * 10000) / 10000;
+      red_dpr = Math.round((r1TeamData.dpr + r2TeamData.dpr) * 10000) / 10000;
+      red_ccwm = Math.round((r1TeamData.ccwm + r2TeamData.ccwm) * 10000) / 10000;
+      red_openSkill = Math.round((r1TeamData.openSkill + r2TeamData.openSkill) * 10000) / 10000;
+
+      blue_opr = Math.round((b1TeamData.opr + b2TeamData.opr) * 10000) / 10000;
+      blue_dpr = Math.round((b1TeamData.dpr + b2TeamData.dpr) * 10000) / 10000;
+      blue_ccwm = Math.round((b1TeamData.ccwm + b2TeamData.ccwm) * 10000) / 10000;
+      blue_openSkill = Math.round((b1TeamData.openSkill + b2TeamData.openSkill) * 10000) / 10000;
+
+      console.log({
+        red_opr,
+        red_dpr,
+        red_ccwm,
+        red_openSkill,
+        blue_opr,
+        blue_dpr,
+        blue_ccwm,
+        blue_openSkill
+      })
+
+      const resultTensor: any = model.predict(tf.tensor2d([red_opr, red_dpr, red_ccwm, red_openSkill, blue_opr, blue_dpr, blue_ccwm, blue_openSkill], [1, 8]));
+      let predictedValue: number = resultTensor.arraySync()[0][0];
+
+      predictedValue = Math.round(predictedValue * 100);
+
+      let rChance2 = 0;
+      let bChance2 = 0;
+
+      rChance2 = predictedValue
+      bChance2 = 100 - predictedValue
+
+      setPrediction({
+        rChance,
+        bChance,
+        rChance2,
+        bChance2
+      });
+
     } catch (err) {
       console.log(err);
     }
@@ -229,16 +317,16 @@ export default function Teams() {
               </div>
             </div>
             <div className="flex h-auto flex-col items-center justify-center">
-              <div className="p-10 flex h-40 w-64 flex-col justify-between items-center rounded-2xl bg-neutral-800 shadow-lg shadow-neutral-700 sm:w-144 sm:h-64">
+              <div className="p-5 sm:p-10 flex h-60 w-64 flex-col gap-5 items-center rounded-2xl bg-neutral-800 shadow-lg shadow-neutral-700 sm:w-144 sm:h-72">
                 <div className="flex flex-col items-center">
                   <div className="flex flex-row items-center justify-center gap-20 sm:gap-44">
                     <div className="flex flex-col items-center justify-center">
-                      <h1 className="text-4xl font-bold text-red-600 sm:text-2xl">
+                      <h1 className="text-xl font-bold text-red-600 sm:text-2xl">
                         {redChance}%
                       </h1>
                     </div>
                     <div className="flex flex-col items-center justify-center">
-                      <h1 className="text-4xl font-bold text-blue-600 sm:text-2xl">
+                      <h1 className="text-xl font-bold text-blue-600 sm:text-2xl">
                         {blueChance}%
                       </h1>
                     </div>
@@ -259,19 +347,19 @@ export default function Teams() {
                       />
                     </Progress.Root>
                   </div>
-                  <h1 className="text-sm font-bold text-neutral-400 sm:text-sm">
-                    Considered: match history
+                  <h1 className="text-xs font-bold text-neutral-400 sm:text-sm">
+                    OpenSkill Prediction
                   </h1>
                 </div>
                 <div className="flex flex-col items-center">
                   <div className="flex flex-row items-center justify-center gap-20 sm:gap-44">
                     <div className="flex flex-col items-center justify-center">
-                      <h1 className="text-4xl font-bold text-red-600 sm:text-2xl">
+                      <h1 className="text-xl font-bold text-red-600 sm:text-2xl">
                         {redChance2}%
                       </h1>
                     </div>
                     <div className="flex flex-col items-center justify-center">
-                      <h1 className="text-4xl font-bold text-blue-600 sm:text-2xl">
+                      <h1 className="text-xl font-bold text-blue-600 sm:text-2xl">
                         {blueChance2}%
                       </h1>
                     </div>
@@ -292,8 +380,14 @@ export default function Teams() {
                       />
                     </Progress.Root>
                   </div>
-                  <h1 className="text-sm font-bold text-neutral-400 sm:text-sm">
-                    Considered: match history, OPR, DPR, and CCWM
+                  <h1 className="text-center text-xs font-bold text-neutral-400 sm:text-sm">
+                    Model trained using OpenSkill, OPR, DPR, and CCWM
+                  </h1>
+                  <h1 className="text-2xs font-bold text-neutral-400 sm:text-xs">
+                    Not good with outlying scenarios
+                  </h1>
+                  <h1 className="text-2xs font-bold text-neutral-400 sm:text-xs">
+                    85% accuracy otherwise
                   </h1>
                 </div>
               </div>

@@ -10,9 +10,21 @@ import { useUser } from "@clerk/nextjs";
 import MatchTeamResult from "@/components/MatchTeamResult";
 import TeamNotesDialog from "@/components/TeamNotesDialog";
 import {AiFillStar, AiOutlineStar} from "react-icons/ai";
+import * as tf from '@tensorflow/tfjs';
 
 export default function EventPage({ params }: { params: { eventCode: string } }) {
   const { isLoaded, isSignedIn, user } = useUser();
+
+  const [model, setModel] = useState< any >(null);
+
+  useEffect(() => {
+    async function loadModel() {
+      const model = await tf.loadLayersModel('/predictionModel/model.json');
+      setModel(model);
+    }
+
+    loadModel();
+  }, []);
 
   const eventCode = params.eventCode
 
@@ -476,6 +488,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                         key={result.id}
                         seasonId={eventObject.season.id}
                         eventMatch={result}
+                        model={model}
                       />
                     )
                   }) : null}

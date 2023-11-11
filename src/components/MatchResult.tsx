@@ -2,10 +2,13 @@ import { EventMatch } from '@/app/types'
 import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import Link from "next/link";
+import {predictWin, rating} from "openskill";
+import * as tf from "@tensorflow/tfjs";
 
 interface MatchResultProps {
   eventMatch: EventMatch
   seasonId: number
+  model: any
 }
 
 export default function MatchResult({
@@ -24,7 +27,8 @@ export default function MatchResult({
     redScore,
     blueScore
   },
-  seasonId
+  seasonId,
+  model
 } : MatchResultProps
 ) {
 
@@ -48,10 +52,10 @@ export default function MatchResult({
       const redChance = prediction.rChance2;
       const blueChance = prediction.bChance2;
 
-      setRedWins(redChance > blueChance);
+      setRedWins(redChance >= blueChance);
       setRedWinPercentage(redChance);
 
-      setBlueWins(blueChance > redChance);
+      setBlueWins(blueChance >= redChance);
       setBlueWinPercentage(blueChance);
     }
   }, [prediction]);
@@ -69,14 +73,18 @@ export default function MatchResult({
 
     const searchParams = new URLSearchParams();
 
-    searchParams.append('r1Team', r1Team.toUpperCase());
-    searchParams.append('r2Team', r2Team.toUpperCase());
-    searchParams.append('b1Team', b1Team.toUpperCase());
-    searchParams.append('b2Team', b2Team.toUpperCase());
-    searchParams.append('seasonId', String(seasonId));
+    searchParams.append('teamNumber[]', r1Team.toUpperCase());
+    searchParams.append('teamNumber[]', r2Team.toUpperCase());
+    searchParams.append('teamNumber[]', b1Team.toUpperCase());
+    searchParams.append('teamNumber[]', b2Team.toUpperCase());
 
     try {
-      const response = await fetch(`/api/predict?${searchParams.toString()}`);
+      const response = await fetch(`/api/seasons/${seasonId}/seasonProfiles/?${searchParams.toString()}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
 
       const data = await response.json();
 
@@ -84,7 +92,77 @@ export default function MatchResult({
         toast.error(data.error);
         return;
       }
-      setPrediction(data);
+
+      const teams = data.data;
+
+      const r1TeamData = teams.find((team: any) => team.teamNumber === r1Team.toUpperCase());
+      const r2TeamData = teams.find((team: any) => team.teamNumber === r2Team.toUpperCase());
+      const b1TeamData = teams.find((team: any) => team.teamNumber === b1Team.toUpperCase());
+      const b2TeamData = teams.find((team: any) => team.teamNumber === b2Team.toUpperCase());
+
+      const rRatings = [r1TeamData, r2TeamData].map(t => (rating({
+        mu: t.opr,
+        sigma: t.sigma
+      })));
+
+      const bRatings = [b1TeamData, b2TeamData].map(t => (rating({
+        mu: t.opr,
+        sigma: t.sigma
+      })));
+
+      const prediction = predictWin([rRatings, bRatings]);
+
+      const rChance = Math.round(prediction[0] * 100);
+      const bChance = Math.round(prediction[1] * 100);
+
+      let red_opr = 0;
+      let red_dpr = 0;
+      let red_ccwm = 0;
+      let red_openSkill = 0;
+      let blue_opr = 0;
+      let blue_dpr = 0;
+      let blue_ccwm = 0;
+      let blue_openSkill = 0;
+
+      red_opr = Math.round((r1TeamData.opr + r2TeamData.opr) * 10000) / 10000;
+      red_dpr = Math.round((r1TeamData.dpr + r2TeamData.dpr) * 10000) / 10000;
+      red_ccwm = Math.round((r1TeamData.ccwm + r2TeamData.ccwm) * 10000) / 10000;
+      red_openSkill = Math.round((r1TeamData.openSkill + r2TeamData.openSkill) * 10000) / 10000;
+
+      blue_opr = Math.round((b1TeamData.opr + b2TeamData.opr) * 10000) / 10000;
+      blue_dpr = Math.round((b1TeamData.dpr + b2TeamData.dpr) * 10000) / 10000;
+      blue_ccwm = Math.round((b1TeamData.ccwm + b2TeamData.ccwm) * 10000) / 10000;
+      blue_openSkill = Math.round((b1TeamData.openSkill + b2TeamData.openSkill) * 10000) / 10000;
+
+      console.log({
+        red_opr,
+        red_dpr,
+        red_ccwm,
+        red_openSkill,
+        blue_opr,
+        blue_dpr,
+        blue_ccwm,
+        blue_openSkill
+      })
+
+      const resultTensor: any = model.predict(tf.tensor2d([red_opr, red_dpr, red_ccwm, red_openSkill, blue_opr, blue_dpr, blue_ccwm, blue_openSkill], [1, 8]));
+      let predictedValue: number = resultTensor.arraySync()[0][0];
+
+      predictedValue = Math.round(predictedValue * 100);
+
+      let rChance2 = 0;
+      let bChance2 = 0;
+
+      rChance2 = predictedValue
+      bChance2 = 100 - predictedValue
+
+      setPrediction({
+        rChance,
+        bChance,
+        rChance2,
+        bChance2
+      });
+
     } catch (err) {
       console.log(err);
     }

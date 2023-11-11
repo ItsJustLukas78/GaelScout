@@ -14,18 +14,6 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config, { isServer }) => {
-    config.module.rules.push({
-      test: /\.html$/,
-      loader: 'html-loader',
-    });
-
-    config.externals.push({
-      "@tensorflow/tfjs-node": "@tensorflow/tfjs-node",
-    });
-
-    return config;
-  },
 }
 
 module.exports = nextConfig;
