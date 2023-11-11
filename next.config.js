@@ -3,6 +3,9 @@
 
 const nextConfig = {
   reactStrictMode: false,
+  experimental: {
+    webpackBuildWorker: true,
+  },
   images: {
     remotePatterns: [
       {
@@ -17,12 +20,12 @@ const nextConfig = {
       loader: 'html-loader',
     });
 
-    config.externals = {
+    config.externals.push({
       "@tensorflow/tfjs-node": "@tensorflow/tfjs-node",
-    }
+    });
 
     return config;
-  }
+  },
 }
 
 module.exports = nextConfig;
