@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { getEventMatches } from "@/utils/RobotEventsAPI";
 import { EventMatch } from "@/app/types";
+import prisma from "@/lib/db";
 
 export async function GET(
   request: NextRequest,

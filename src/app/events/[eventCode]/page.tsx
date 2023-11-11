@@ -474,7 +474,8 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                     return (
                       <MatchResult
                         key={result.id}
-                        {...result}
+                        seasonId={eventObject.season.id}
+                        eventMatch={result}
                       />
                     )
                   }) : null}

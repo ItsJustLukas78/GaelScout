@@ -8,11 +8,18 @@ import { useUser } from "@clerk/nextjs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import EventResult from "@/components/EventResult";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import { useRouter } from 'next/navigation'
 
 export default function TeamProfile({ params }: { params: { teamNumber: string } }) {
+  const router = useRouter();
+
+  const inputTeamRef = React.useRef<HTMLInputElement>(null);
+
   const { isSignedIn } = useUser();
 
   const teamNumber = params.teamNumber
+
+  const [teamNumberInput, setTeamNumberInput] = useState<string>(teamNumber);
 
   const [teamProfile, setTeamProfile] = useState<TeamProfile | null>(null);
   const [seasonStats, setSeasonStats] = useState<TeamSeasonProfile | null>(null);
@@ -24,16 +31,21 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
 
   const [favorited, setFavorited] = useState<boolean>(false);
 
-  const getTeam = async() => {
+  const getTeam = async(controler: AbortController) => {
     try {
-      const response = await fetch(`/api/teams/number/${teamNumber.toUpperCase()}`)
+      const response = await fetch(`/api/teams/number/${teamNumberInput.toUpperCase()}`, {
+        signal: controler.signal,
+      });
 
       const data = await response.json()
 
       if (data.error) {
-        toast.error(data.error)
+        // toast.error(data.error)
+        console.log(data.error);
+        setTeamProfile(null);
         return;
       }
+
       setTeamProfile(data.team)
 
     } catch (err) {
@@ -41,16 +53,20 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
     }
   }
 
-  const getSeasonStats = async() => {
+  const getSeasonStats = async(controller : AbortController) => {
     try {
-      const response = await fetch(`/api/seasons/${seasonId}/seasonProfile/${teamNumber.toUpperCase()}`);
+      const response = await fetch(`/api/seasons/${seasonId}/seasonProfile/${teamNumberInput.toUpperCase()}`, {
+        signal: controller.signal,
+      });
 
       const data = await response.json();
 
       if (data.error) {
+        console.log(data.error);
         setSeasonStats(null);
         return;
       }
+
       setSeasonStats(data);
     } catch (err) {
       console.log(err);
@@ -80,7 +96,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
 
       setCurrentEvents(data.events);
     } catch (err) {
-      toast.error(err as any)
+      console.log(err);
       setCurrentEvents([]);
     }
   }
@@ -113,7 +129,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
 
       setFavorited(data.favorites.length > 0);
     } catch (err) {
-      toast.error(err as any)
+      console.log(err);
       setFavorited(false);
     }
   }
@@ -178,12 +194,20 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
   }
 
   useEffect(() => {
-    getTeam();
-  }, []);
+    const controller = new AbortController();
+    getTeam(controller);
+    return () => {
+      controller.abort("Cancelling override fetch");
+    }
+  } , [teamNumberInput]);
 
   useEffect(() => {
-    getSeasonStats();
-  }, [seasonId]);
+    const controller = new AbortController();
+    getSeasonStats(controller);
+    return () => {
+      controller.abort("Cancelling override fetch");
+    }
+  }, [seasonId, teamNumberInput]);
 
   useEffect(() => {
     if (teamProfile) {
@@ -196,10 +220,20 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
     <main>
       <div className="sm:py-32 py-32 flex w-full flex-col items-center justify-center">
         <div className="relative flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
-          <h1 className="mb-5 min-w-fit text-5xl font-bold xs:text-5xl sm:text-8xl md:text-5xl lg:text-8xl max-w-max">
-            #{teamNumber.toUpperCase()}
-          </h1>
-          <a href={`https://www.robotevents.com/teams/VRC/${teamNumber.toUpperCase()}`} className="mb-5 max-w-fit text-lg font-bold xs:text-xl hover:text-blue-500">
+          <input
+            type="text"
+            key="teamInput"
+            defaultValue={teamNumberInput}
+            ref={inputTeamRef}
+            className="mb-5 min-w-fit text-5xl font-bold xs:text-5xl sm:text-8xl bg-transparent border-none outline-none w-min"
+            onChange={(event) => {
+              event.preventDefault();
+              window.history.pushState({}, '', `/teams/${event.target.value.toUpperCase()}`);
+              setTeamNumberInput(event.target.value.toUpperCase());
+            }}
+          >
+          </input>
+          <a href={`https://www.robotevents.com/teams/VRC/${teamNumberInput.toUpperCase()}`} className="mb-5 max-w-fit text-lg font-bold xs:text-xl hover:text-blue-500">
             <u>RobotEvents Page</u>
           </a>
           {teamProfile ? <>
@@ -219,9 +253,9 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                 {favorited ? <AiFillStar className="inline-block" /> : <AiOutlineStar className="inline-block" />}
               </button>
             </div>
-            <div className="flex flex-col gap-5 min-w-auto md:flex-row md:gap-14">
-              <div className="flex min-w-fit flex-row gap-5 md:flex-col">
-                <div className="flex flex-col w-[49%] md:w-auto">
+            <div className="flex flex-col gap-5 min-w-auto lg:flex-row lg:gap-14">
+              <div className="flex min-w-fit flex-row gap-5 lg:flex-col">
+                <div className="flex flex-col w-[49%] lg:w-auto">
                   <h3 className="text-xl font-bold">
                     Team Name:
                   </h3>
@@ -229,7 +263,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                     {teamProfile.teamName ? teamProfile.teamName : "N/A"}
                   </h3>
                 </div>
-                <div className="flex flex-col w-[49%] md:w-auto">
+                <div className="flex flex-col w-[49%] lg:w-auto">
                   <h3 className="text-xl font-bold">
                     Robot Name:
                   </h3>
@@ -238,8 +272,8 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                   </h3>
                 </div>
               </div>
-              <div className="flex min-w-fit flex-row gap-5 md:flex-col">
-                <div className="flex flex-col w-[49%] md:w-auto">
+              <div className="flex min-w-fit flex-row gap-5 lg:flex-col">
+                <div className="flex flex-col w-[49%] lg:w-auto">
                   <h3 className="text-xl font-bold">
                     Organization:
                   </h3>
@@ -247,7 +281,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                     {teamProfile.teamOrg ? teamProfile.teamOrg : "N/A"}
                   </h3>
                 </div>
-                <div className="flex flex-col w-[49%] md:w-auto">
+                <div className="flex flex-col w-[49%] lg:w-auto">
                   <h3 className="text-xl font-bold">
                     Location:
                   </h3>
@@ -256,8 +290,8 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                   </h3>
                 </div>
               </div>
-              <div className="flex min-w-fit flex-row gap-5 md:flex-col">
-                <div className="flex flex-col w-[49%] md:w-auto">
+              <div className="flex min-w-fit flex-row gap-5 lg:flex-col">
+                <div className="flex flex-col w-[49%] lg:w-auto">
                   <h3 className="text-xl font-bold">
                     Program:
                   </h3>
@@ -265,7 +299,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                     {teamProfile.programCode ? teamProfile.programCode : "N/A"}
                   </h3>
                 </div>
-                <div className="flex flex-col w-[49%] md:w-auto">
+                <div className="flex flex-col w-[49%] lg:w-auto">
                   <h3 className="text-xl font-bold">
                     Grade:
                   </h3>

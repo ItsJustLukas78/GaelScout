@@ -20,6 +20,11 @@ export default function Teams() {
   const [redChance, setRedChance] = useState< number >(0);
   const [blueChance, setBlueChance] = useState< number >(0);
 
+  const [progress2, setProgress2] = useState< number >(50);
+
+  const [redChance2, setRedChance2] = useState< number >(0);
+  const [blueChance2, setBlueChance2] = useState< number >(0);
+
   const [allInputsProvided, setAllInputsProvided] = useState< boolean >(false);
 
   useEffect(() => {
@@ -27,16 +32,28 @@ export default function Teams() {
       setProgress(50);
       setRedChance(0);
       setBlueChance(0);
+
+      setProgress2(50);
+      setRedChance2(0);
+      setBlueChance2(0);
     } else {
       setProgress(prediction.rChance)
       setRedChance(prediction.rChance)
       setBlueChance(prediction.bChance)
+
+      setProgress2(prediction.rChance2)
+      setRedChance2(prediction.rChance2)
+      setBlueChance2(prediction.bChance2)
     }
 
     return () => {
       setProgress(50);
       setRedChance(0);
       setBlueChance(0);
+
+      setProgress2(50);
+      setRedChance2(0);
+      setBlueChance2(0);
     }
   }, [prediction]);
 
@@ -212,34 +229,72 @@ export default function Teams() {
               </div>
             </div>
             <div className="flex h-auto flex-col items-center justify-center">
-              <div className="flex h-40 w-64 flex-col rounded-2xl bg-neutral-800 shadow-lg shadow-neutral-700 sm:w-144 sm:h-64">
-                <div className="mt-10 mb-auto flex flex-row items-center justify-center gap-20 sm:mt-16 sm:gap-44">
-                  <div className="flex flex-col items-center justify-center">
-                    <h1 className="text-4xl font-bold text-red-600 sm:text-6xl">
-                      {redChance}%
-                    </h1>
+              <div className="p-10 flex h-40 w-64 flex-col justify-between items-center rounded-2xl bg-neutral-800 shadow-lg shadow-neutral-700 sm:w-144 sm:h-64">
+                <div className="flex flex-col items-center">
+                  <div className="flex flex-row items-center justify-center gap-20 sm:gap-44">
+                    <div className="flex flex-col items-center justify-center">
+                      <h1 className="text-4xl font-bold text-red-600 sm:text-2xl">
+                        {redChance}%
+                      </h1>
+                    </div>
+                    <div className="flex flex-col items-center justify-center">
+                      <h1 className="text-4xl font-bold text-blue-600 sm:text-2xl">
+                        {blueChance}%
+                      </h1>
+                    </div>
                   </div>
-                  <div className="flex flex-col items-center justify-center">
-                    <h1 className="text-4xl font-bold text-blue-600 sm:text-6xl">
-                      {blueChance}%
-                    </h1>
+                  <div className="flex flex-row items-center justify-center gap-72">
+                    <Progress.Root
+                      className="relative overflow-hidden rounded-full bg-blue-600 w-[200px] h-[15px] sm:w-[400px] sm:h-[25px]"
+                      style={{
+                        // Fix overflow clipping in Safari
+                        // https://gist.github.com/domske/b66047671c780a238b51c51ffde8d3a0
+                        transform: 'translateZ(0)',
+                      }}
+                      value={progress}
+                    >
+                      <Progress.Indicator
+                        className="bg-red-600 w-full h-full transition-transform duration-[660ms] ease-[cubic-bezier(0.65, 0, 0.35, 1)]"
+                        style={{ transform: `translateX(-${100 - progress}%)` }}
+                      />
+                    </Progress.Root>
                   </div>
+                  <h1 className="text-sm font-bold text-neutral-400 sm:text-sm">
+                    Considered: match history
+                  </h1>
                 </div>
-                <div className="mt-2 mb-auto flex flex-row items-center justify-center gap-72 sm:mt-5">
-                  <Progress.Root
-                    className="relative overflow-hidden rounded-full bg-blue-600 w-[200px] h-[15px] sm:w-[400px] sm:h-[25px]"
-                    style={{
-                      // Fix overflow clipping in Safari
-                      // https://gist.github.com/domske/b66047671c780a238b51c51ffde8d3a0
-                      transform: 'translateZ(0)',
-                    }}
-                    value={progress}
-                  >
-                    <Progress.Indicator
-                      className="bg-red-600 w-full h-full transition-transform duration-[660ms] ease-[cubic-bezier(0.65, 0, 0.35, 1)]"
-                      style={{ transform: `translateX(-${100 - progress}%)` }}
-                    />
-                  </Progress.Root>
+                <div className="flex flex-col items-center">
+                  <div className="flex flex-row items-center justify-center gap-20 sm:gap-44">
+                    <div className="flex flex-col items-center justify-center">
+                      <h1 className="text-4xl font-bold text-red-600 sm:text-2xl">
+                        {redChance2}%
+                      </h1>
+                    </div>
+                    <div className="flex flex-col items-center justify-center">
+                      <h1 className="text-4xl font-bold text-blue-600 sm:text-2xl">
+                        {blueChance2}%
+                      </h1>
+                    </div>
+                  </div>
+                  <div className="flex flex-row items-center justify-center gap-72">
+                    <Progress.Root
+                      className="relative overflow-hidden rounded-full bg-blue-600 w-[200px] h-[15px] sm:w-[400px] sm:h-[25px]"
+                      style={{
+                        // Fix overflow clipping in Safari
+                        // https://gist.github.com/domske/b66047671c780a238b51c51ffde8d3a0
+                        transform: 'translateZ(0)',
+                      }}
+                      value={progress2}
+                    >
+                      <Progress.Indicator
+                        className="bg-red-600 w-full h-full transition-transform duration-[660ms] ease-[cubic-bezier(0.65, 0, 0.35, 1)]"
+                        style={{ transform: `translateX(-${100 - progress2}%)` }}
+                      />
+                    </Progress.Root>
+                  </div>
+                  <h1 className="text-sm font-bold text-neutral-400 sm:text-sm">
+                    Considered: match history, OPR, DPR, and CCWM
+                  </h1>
                 </div>
               </div>
             </div>

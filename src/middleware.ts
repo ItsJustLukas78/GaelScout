@@ -16,7 +16,7 @@ const createLimit = (limit: number, duration: Duration) => {
   });
 }
 
-const generalRatelimit = createLimit(15, "10s");
+const generalRatelimit = createLimit(20, "10s");
 const verifyRatelimit = createLimit(1, "30s");
 const verifyGenRatelimit = createLimit(3, "30s");
 const notesGroupCreateRatelimit = createLimit(3, "60s");

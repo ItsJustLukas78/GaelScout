@@ -32,6 +32,7 @@ module.exports = {
         "googleBlue": "#4285F4",
         "discordBlue": "#5865F2",
         "GSGreen": "#2be222",
+        "GSGreenDark": "#1e9e1e",
       },
 
       keyframes: {
