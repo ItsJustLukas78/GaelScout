@@ -40,6 +40,7 @@ export interface EventMatch {
   id: number,
   eventId: number,
   started: Date,
+  scheduled: Date,
   divisionId: number,
   round: number,
   instance: number,
@@ -50,6 +51,29 @@ export interface EventMatch {
   redTeams: TeamIdentifiers[],
   blueScore: number,
   redScore: number,
+}
+
+export interface EventRank {
+  id: number,
+  eventId: number,
+  divisionId: number,
+  rank: number,
+  team: TeamIdentifiers,
+  wins: number,
+  losses: number,
+  ties: number,
+  wp: number,
+  ap: number,
+  sp: number,
+  high_score: number,
+  average_points: number,
+  total_points: number,
+}
+
+export interface EventRankWithMetrics extends EventRank {
+  opr: number,
+  dpr: number,
+  ccwm: number,
 }
 
 export interface TeamSeasonProfile {

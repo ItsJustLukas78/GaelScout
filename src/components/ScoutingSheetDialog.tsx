@@ -12,7 +12,7 @@ enum sortMethod {
   "ccwm" = "ccwm",
 }
 
-export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, paticipatingTeams, loadingTeams, setExportDialogOpen }: { exportDialogOpen: boolean, eventObject: Event | null, paticipatingTeams: TeamProfile[], loadingTeams: boolean, setExportDialogOpen: (open: boolean) => void }) {
+export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, participatingTeams, loadingTeams, setExportDialogOpen }: { exportDialogOpen: boolean, eventObject: Event | null, participatingTeams: TeamProfile[], loadingTeams: boolean, setExportDialogOpen: (open: boolean) => void }) {
 
   const [numberChecked, setNumberChecked] = useState(true);
   const [nameChecked, setNameChecked] = useState(true);
@@ -132,7 +132,7 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, pat
       interface TeamProfileWithTeamSeasonProfile extends TeamProfile, TeamSeasonProfile {}
 
       // make a list of objects representing both the team and their season profile
-      const teamSeasonProfilesWithTeam: TeamProfile[] | TeamProfileWithTeamSeasonProfile[] = paticipatingTeams.map((team) => {
+      const teamSeasonProfilesWithTeam: TeamProfile[] | TeamProfileWithTeamSeasonProfile[] = participatingTeams.map((team) => {
         const currentTeamNumber = team.teamNumber;
 
         const currentTeamSeasonProfile = teamSeasonProfiles.find((teamSeasonProfile) => {

@@ -33,6 +33,7 @@ export async function GET(
         id: match.id,
         eventId: match.event.id,
         started: match.started,
+        scheduled: match.scheduled,
         divisionId: match.division.id,
         round: match.round,
         instance: match.instance,

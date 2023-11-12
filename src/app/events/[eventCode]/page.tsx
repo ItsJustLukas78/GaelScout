@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {Event, EventMatch, TeamProfile, Division, TeamIdentifiers} from "@/app/types";
+import {Event, EventMatch, TeamProfile, Division, EventRank, TeamIdentifiers, EventRankWithMetrics } from "@/app/types";
 import ScoutingSheetDialog from "@/components/ScoutingSheetDialog";
 import MatchNotesDialog from "@/components/MatchNotesDialog";
 import MatchResult from "@/components/MatchResult";
@@ -10,17 +10,28 @@ import { useUser } from "@clerk/nextjs";
 import MatchTeamResult from "@/components/MatchTeamResult";
 import TeamNotesDialog from "@/components/TeamNotesDialog";
 import {AiFillStar, AiOutlineStar} from "react-icons/ai";
+import EventRankComponent from "@/components/EventRankComponent";
 import * as tf from '@tensorflow/tfjs';
+import {
+  matrix,
+  multiply,
+  pinv,
+  concat,
+} from "mathjs";
 
 export default function EventPage({ params }: { params: { eventCode: string } }) {
   const { isLoaded, isSignedIn, user } = useUser();
 
-  const [model, setModel] = useState< any >(null);
+  const [worldModel, setWorldModel] = useState< any >(null);
+  const [eventModel, setEventModel] = useState< any >(null);
 
   useEffect(() => {
     async function loadModel() {
       const model = await tf.loadLayersModel('/predictionModel/model.json');
-      setModel(model);
+      const model2 = await tf.loadLayersModel('/eventPredictionModel/model.json');
+
+      setWorldModel(model);
+      setEventModel(model2);
     }
 
     loadModel();
@@ -28,11 +39,11 @@ export default function EventPage({ params }: { params: { eventCode: string } })
 
   const eventCode = params.eventCode
 
-  const [loadingTeams, setLoadingTeams] = useState(false);
+  const [loadingTeams, setLoadingTeams] = useState(true);
   const [loadingMatches, setLoadingMatches] = useState(false);
 
   const [eventObject, setEventObject] = useState<Event | null>(null);
-  const [paticipatingTeams, setPaticipatingTeams] = useState<TeamProfile[]>([]);
+  const [participatingTeams, setParticipatingTeams] = useState<TeamProfile[]>([]);
   const [divisionFilteredTeams, setDivisionFilteredTeams] = useState<TeamProfile[]>([]);
 
   const [divisionList, setDivisionList] = useState<Division[]>([]);
@@ -42,6 +53,11 @@ export default function EventPage({ params }: { params: { eventCode: string } })
   const [fiteredMatches, setFilteredMatches] = useState<EventMatch[]>([]);
   const [teamNumberFilter, setTeamNumberFilter] = useState<string>("");
 
+  const [loadingRankings, setLoadingRankings] = useState(true);
+  const [rankings, setRankings] = useState<EventRank[]>([]);
+
+  const [rankingsWithMetrics, setRankingsWithMetrics] = useState<EventRankWithMetrics[]>([]);
+
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
   const [matchNotesDialogOpen, setMatchNotesDialogOpen] = useState(false);
   const [teamNotesDialogOpen, setTeamNotesDialogOpen] = useState(false);
@@ -49,6 +65,8 @@ export default function EventPage({ params }: { params: { eventCode: string } })
   const [currentNotesTeam, setCurrentNotesTeam] = useState<TeamProfile | null>(null);
 
   const [favorited, setFavorited] = useState(false);
+
+  const [rankedStatistic, setRankedStatistic] = useState("rank")
 
   const getEvent = async() => {
     const skuSearchParams = new URLSearchParams();
@@ -91,7 +109,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
       }
 
       setLoadingTeams(false);
-      setPaticipatingTeams(data2.teams);
+      setParticipatingTeams(data2.teams);
     } catch (err) {
       console.log(err);
       toast.error("Error getting event data");
@@ -130,10 +148,12 @@ export default function EventPage({ params }: { params: { eventCode: string } })
     if (currentDivision) {
       if (currentDivision.name === "Default") {
         setMatchList([]);
+        setRankings([]);
         return;
       }
 
       setLoadingMatches(true);
+      setLoadingRankings(true);
 
       fetch(`/api/events/${eventObject?.id}/${currentDivision.id}/matches`).then((response) => {
         response.json().then((data) => {
@@ -145,11 +165,55 @@ export default function EventPage({ params }: { params: { eventCode: string } })
 
           setLoadingMatches(false);
 
-          const dateSortedMatches = data.matches.sort((a: EventMatch, b: EventMatch) => {
-            return (new Date(a.started)).getTime() - (new Date(b.started)).getTime();
-          });
+          function customSort(a: EventMatch, b: EventMatch) {
+            // Adjust the order of "round" values
+            const roundOrder: Record<number, number> = {
+                1: 1, // Practice
+                2: 2, // Qualification
+                6: 3, // Round of 16
+                3: 4, // Quarter-Finals
+                4: 5, // Semi-Finals
+                5: 6, // Finals
+            };
+
+            // First, sort by adjusted "round" values
+            if (roundOrder[a.round] !== roundOrder[b.round]) {
+                return roundOrder[a.round] - roundOrder[b.round];
+            }
+
+            // If "round" is the same, sort by "matchnum"
+            if (a.matchnum !== b.matchnum) {
+                return a.matchnum - b.matchnum;
+            }
+
+            if (a.instance !== b.instance) {
+                return a.instance - b.instance;
+            }
+
+            return 0;
+        }
+
+          const dateSortedMatches = data.matches.sort(customSort);
 
           setMatchList(dateSortedMatches);
+        });
+      });
+
+      fetch(`/api/events/${eventObject?.id}/${currentDivision.id}/rankings`).then((response) => {
+        response.json().then((data) => {
+          if (data.error) {
+            toast.error(data.error);
+            setLoadingRankings(false);
+            return;
+          }
+
+          setLoadingRankings(false);
+
+          const rankSortedRankings = data.rankings.sort((a: EventRank, b: EventRank) => {
+            return a.rank - b.rank;
+          });
+
+          setRankings(rankSortedRankings);
         });
       });
     }
@@ -249,10 +313,9 @@ export default function EventPage({ params }: { params: { eventCode: string } })
   useEffect(() => {
     if (currentTeamsDivision) {
       if (currentTeamsDivision.id === -1) {
-        setDivisionFilteredTeams(paticipatingTeams);
+        setDivisionFilteredTeams(participatingTeams);
         return;
       }
-
 
       if (currentTeamsDivision.id === currentDivision?.id) {
         const teamIdsFoundFromMatches: number[] = [];
@@ -271,7 +334,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
         });
 
         setDivisionFilteredTeams(
-          paticipatingTeams.filter((team: TeamProfile) => teamIdsFoundFromMatches.includes(team.teamId))
+          participatingTeams.filter((team: TeamProfile) => teamIdsFoundFromMatches.includes(team.teamId))
         );
 
         return;
@@ -279,7 +342,236 @@ export default function EventPage({ params }: { params: { eventCode: string } })
         setCurrentDivision(currentTeamsDivision);
       }
     }
-  }, [currentTeamsDivision, matchList, paticipatingTeams]);
+  }, [currentTeamsDivision, matchList, participatingTeams]);
+
+
+  useEffect(() => {
+    if (matchList.length !== 0 && participatingTeams.length !== 0) {
+
+      const completedMatches = matchList.filter((match) => {
+        return match.blueScore !== 0 && match.redScore !== 0;
+      });
+
+      if (completedMatches.length === 0) {
+        return;
+      }
+
+      const playingTeams: (TeamIdentifiers | null)[] = [];
+
+      completedMatches.forEach((match: EventMatch) => {
+        [...match.redTeams, ...match.blueTeams].forEach((team: TeamIdentifiers | null) => {
+          if (!team) {
+            return null;
+          }
+
+          const existingTeam = !playingTeams.some((existingTeam: TeamIdentifiers | null): boolean => {
+            return (existingTeam != null && existingTeam.teamId === team.teamId)
+          });
+
+          if (existingTeam) {
+            playingTeams.push(team);
+          }
+        });
+      });
+
+      let matchScoresMatrix = matrix()
+      let matchOpponentScoresMatrix = matrix()
+
+      const matchTeamsMatrix = matrix(
+        completedMatches.flatMap((match: EventMatch) => {
+          const redRow = playingTeams.map((team: TeamIdentifiers | null) => {
+            if (!team) {
+              return 0;
+            }
+
+            const teamHere = match.redTeams.some((redTeam: TeamIdentifiers | null) => {
+              if (!redTeam) {
+                return false;
+              } else {
+                return redTeam.teamId === team.teamId
+              }
+            })
+
+            if (teamHere) {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
+
+          const blueRow = playingTeams.map((team: TeamIdentifiers | null) => {
+            if (!team) {
+              return 0;
+            }
+
+            const teamHere = match.blueTeams.some((blueTeam: TeamIdentifiers | null) => {
+              if (!blueTeam) {
+                return false;
+              } else {
+                return blueTeam.teamId === team.teamId
+              }
+            })
+
+            if (teamHere) {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
+
+          matchScoresMatrix = matrix(
+            concat(matchScoresMatrix, [match.redScore], [match.blueScore], 0)
+          );
+          matchOpponentScoresMatrix = matrix(
+            concat(matchOpponentScoresMatrix, [match.blueScore], [match.redScore], 0)
+          );
+
+          return [redRow, blueRow];
+        })
+      );
+
+      try {
+        const matchTeamsPseudoInverse = pinv(matchTeamsMatrix);
+
+        const oprMatrix = multiply(matchTeamsPseudoInverse, matchScoresMatrix);
+        const dprMatrix = multiply(matchTeamsPseudoInverse, matchOpponentScoresMatrix);
+
+
+        const newRankingsWithMetrics: EventRankWithMetrics[] = [];
+
+        for (let j = 0; j < oprMatrix.size()[0]; j++) {
+          const team: TeamIdentifiers | null = playingTeams[j];
+
+          if (!team) {
+            continue;
+          }
+
+          const opr: number = +oprMatrix.get([j]).toFixed(4);
+          const dpr: number = +dprMatrix.get([j]).toFixed(4);
+          const ccwm: number = +(opr - dpr).toFixed(4);
+
+          const foundRanking = rankings.find((ranking) => ranking.team.teamId === team.teamId);
+
+          if (!foundRanking) {
+            continue;
+          }
+
+          const newRanking: EventRankWithMetrics = {
+            ...foundRanking,
+            opr,
+            dpr,
+            ccwm,
+          };
+
+          newRankingsWithMetrics.push(newRanking);
+        }
+
+        newRankingsWithMetrics.sort((a: EventRankWithMetrics, b: EventRankWithMetrics) => {
+          return a.rank - b.rank;
+        });
+
+        setRankingsWithMetrics(newRankingsWithMetrics);
+
+      } catch (err) {
+        console.log(err);
+        setRankingsWithMetrics([
+          ...rankings.map((ranking) => {
+            return {
+              ...ranking,
+              opr: 0,
+              dpr: 0,
+              ccwm: 0,
+            }
+          })
+        ]);
+      }
+    }
+  }, [matchList, participatingTeams]);
+
+  useEffect(() => {
+    if (rankingsWithMetrics.length !== 0) {
+      const newRankingsWithMetrics = [...rankingsWithMetrics];
+
+      if (rankedStatistic === "rank") {
+        newRankingsWithMetrics.sort((a: EventRankWithMetrics, b: EventRankWithMetrics) => {
+          return a.rank - b.rank;
+        });
+      } else if (rankedStatistic === "opr") {
+        newRankingsWithMetrics.sort((a: EventRankWithMetrics, b: EventRankWithMetrics) => {
+          return b.opr - a.opr;
+        });
+      } else if (rankedStatistic === "dpr") {
+        newRankingsWithMetrics.sort((a: EventRankWithMetrics, b: EventRankWithMetrics) => {
+          return a.dpr - b.dpr;
+        });
+      } else if (rankedStatistic === "ccwm") {
+        newRankingsWithMetrics.sort((a: EventRankWithMetrics, b: EventRankWithMetrics) => {
+          return b.ccwm - a.ccwm;
+        });
+      } else if (rankedStatistic === "ap") {
+        newRankingsWithMetrics.sort((a: EventRankWithMetrics, b: EventRankWithMetrics) => {
+          return b.ap - a.ap;
+        });
+      } else if (rankedStatistic === "sp") {
+        newRankingsWithMetrics.sort((a: EventRankWithMetrics, b: EventRankWithMetrics) => {
+          return b.sp - a.sp;
+        });
+      }
+
+      setRankingsWithMetrics(newRankingsWithMetrics);
+    }
+  }, [rankedStatistic, rankingsWithMetrics]);
+
+
+  // Collect data for training when needed
+  // useEffect(() => {
+  //   if (rankingsWithMetrics.length !== 0) {
+  //     console.log("red_opr,red_dpr,red_ccwm,blue_opr,blue_dpr,blue_ccwm,red_won")
+  //
+  //     for (const match of matchList) {
+  //       let red_opr = 0;
+  //       let red_dpr = 0;
+  //       let red_ccwm = 0;
+  //       let blue_opr = 0;
+  //       let blue_dpr = 0;
+  //       let blue_ccwm = 0;
+  //
+  //       for (const team of match.redTeams) {
+  //         const teamData = rankingsWithMetrics.find((ranking) => ranking.team.teamId === team?.teamId);
+  //
+  //         if (teamData) {
+  //           red_opr += teamData.opr;
+  //           red_dpr += teamData.dpr;
+  //           red_ccwm += teamData.ccwm;
+  //         }
+  //       }
+  //
+  //       for (const team of match.blueTeams) {
+  //         const teamData = rankingsWithMetrics.find((ranking) => ranking.team.teamId === team?.teamId);
+  //
+  //         if (teamData) {
+  //           blue_opr += teamData.opr;
+  //           blue_dpr += teamData.dpr;
+  //           blue_ccwm += teamData.ccwm;
+  //         }
+  //       }
+  //
+  //       red_opr = Math.round(red_opr * 10000) / 10000;
+  //       red_dpr = Math.round(red_dpr * 10000) / 10000;
+  //       red_ccwm = Math.round(red_ccwm * 10000) / 10000;
+  //       blue_opr = Math.round(blue_opr * 10000) / 10000;
+  //       blue_dpr = Math.round(blue_dpr * 10000) / 10000;
+  //       blue_ccwm = Math.round(blue_ccwm * 10000) / 10000;
+  //
+  //       if (match.redScore == match.blueScore) {
+  //         continue;
+  //       }
+  //
+  //       console.log(red_opr + "," + red_dpr + "," + red_ccwm + "," + blue_opr + "," + blue_dpr + "," + blue_ccwm + "," + (match.redScore > match.blueScore ? 1 : 0))
+  //     }
+  //   }
+  // }, [rankingsWithMetrics]);
+
 
   return (
     <main>
@@ -350,6 +642,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
           <Tabs defaultValue="teams">
             <TabsList className="bg-neutral-800 flex min-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] mb-8 [&>*]:flex-1">
               <TabsTrigger value="teams">Teams</TabsTrigger>
+              <TabsTrigger value="rankings">Rankings</TabsTrigger>
               <TabsTrigger value="matches">Matches</TabsTrigger>
             </TabsList>
             <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
@@ -400,7 +693,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                         teamOrg={result.teamOrg}
                         openMatchNotes={(teamId: number) => {
                           if (isSignedIn) {
-                            const foundTeamProfile = paticipatingTeams.find((team) => team.teamId === teamId);
+                            const foundTeamProfile = participatingTeams.find((team) => team.teamId === teamId);
                             if (!foundTeamProfile) {
                               toast.error("Team not found");
                               setCurrentNotesTeam(null)
@@ -420,7 +713,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                 <ScoutingSheetDialog
                   exportDialogOpen={exportDialogOpen}
                   eventObject={eventObject}
-                  paticipatingTeams={paticipatingTeams}
+                  participatingTeams={participatingTeams}
                   loadingTeams={loadingTeams}
                   setExportDialogOpen={setExportDialogOpen}
                 />
@@ -432,6 +725,72 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                     setTeamNotesDialogOpen={setTeamNotesDialogOpen}
                   />
                 : null}
+              </TabsContent>
+              <TabsContent value="rankings">
+                <div className="mb-10 flex flex-col justify-between xl:flex-row">
+                  <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl xl:mb-0">
+                    Rankings
+                  </h3>
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <select
+                      className="h-8 sm:w-44 min-w-max rounded-lg bg-white pl-2 text-sm text-black md:h-12 md:w-52 md:text-lg"
+                      required
+                      value={rankedStatistic}
+                      onChange={(event) => {
+                        setRankedStatistic(event.target.value);
+                      }}
+                    >
+                      <option value="rank">Rank</option>
+                      <option value="opr">OPR (Contrib. to score)</option>
+                      <option value="dpr">DPR (Contrib. to opponent score)</option>
+                      <option value="ccwm">CCWM (OPR - DPR)</option>
+                      <option value="ap">AP (Auton Win Points)</option>
+                      <option value="sp">SP (Opponent Strength)</option>
+                    </select>
+                    <select
+                        className="h-8 sm:w-44 min-w-max rounded-lg bg-white pl-2 text-sm text-black md:h-12 md:w-52 md:text-lg"
+                        required
+                        value={currentDivision?.id}
+                        onChange={(event) => {
+                          // @ts-ignore
+                          setCurrentDivision(divisionList.find((division) => division.id === event.target.value) || null);
+                        }}
+                      >
+                        <option value={999} disabled hidden>Select Division</option>
+                        {divisionList.map((division) => {
+                          return (
+                            <option key={division.id} value={division.id}>{division.name}</option>
+                          )
+                        })}
+                    </select>
+                  </div>
+                </div>
+                {loadingRankings ?
+                  <h1 className="text-2xl font-semibold text-neutral-200">
+                    Loading...
+                  </h1>
+                : null}
+                {rankings.length === 0 && !loadingRankings ?
+                  <h1 className="text-2xl font-semibold text-neutral-200">
+                    No rankings found
+                  </h1>
+                : null}
+                <div className="flex flex-col gap-4 overflow-auto w-[100%]">
+                  {rankingsWithMetrics.length !== 0 ? rankingsWithMetrics.map((result: EventRankWithMetrics) => {
+                    const foundTeamProfile = participatingTeams.find((team) => team.teamId === result.team.teamId);
+                    if (!foundTeamProfile) {
+                      return null;
+                    }
+
+                    return (
+                      <EventRankComponent
+                        key={foundTeamProfile.teamId}
+                        rank={result}
+                        team={foundTeamProfile}
+                      />
+                    )
+                  }) : null}
+                </div>
               </TabsContent>
               <TabsContent value="matches">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
@@ -488,7 +847,9 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                         key={result.id}
                         seasonId={eventObject.season.id}
                         eventMatch={result}
-                        model={model}
+                        eventModel={eventModel}
+                        worldModel={worldModel}
+                        eventRankings={rankingsWithMetrics}
                       />
                     )
                   }) : null}

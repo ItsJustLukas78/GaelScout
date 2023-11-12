@@ -1,4 +1,4 @@
-import { EventMatch } from '@/app/types'
+import {EventMatch, EventRankWithMetrics} from '@/app/types'
 import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import Link from "next/link";
@@ -8,7 +8,14 @@ import * as tf from "@tensorflow/tfjs";
 interface MatchResultProps {
   eventMatch: EventMatch
   seasonId: number
-  model: any
+  worldModel: any
+  eventModel: any
+  eventRankings: EventRankWithMetrics[]
+}
+
+enum ModelType {
+  'worldModel' = 'worldModel',
+  'eventModel' = 'eventModel'
 }
 
 export default function MatchResult({
@@ -16,6 +23,7 @@ export default function MatchResult({
     id,
     eventId,
     started,
+    scheduled,
     divisionId,
     round,
     instance,
@@ -28,7 +36,9 @@ export default function MatchResult({
     blueScore
   },
   seasonId,
-  model
+  worldModel,
+  eventModel,
+  eventRankings
 } : MatchResultProps
 ) {
 
@@ -49,8 +59,8 @@ export default function MatchResult({
 
   useEffect(() => {
     if (prediction) {
-      const redChance = prediction.rChance2;
-      const blueChance = prediction.bChance2;
+      const redChance = prediction.rChance;
+      const blueChance = prediction.bChance;
 
       setRedWins(redChance >= blueChance);
       setRedWinPercentage(redChance);
@@ -60,16 +70,20 @@ export default function MatchResult({
     }
   }, [prediction]);
 
-  const predictMatch = async(event: any) => {
+  const predictMatch = async(event: any, usedModel: ModelType) => {
     event.preventDefault();
+
+    if (usedModel === ModelType.worldModel) {
+      toast.info("Predicting match using world stats...");
+    } else if (usedModel === ModelType.eventModel) {
+      toast.info("Predicting match using event stats...");
+    }
 
     const r1Team = redTeams[0].teamNumber;
     const r2Team = redTeams[1].teamNumber;
 
     const b1Team = blueTeams[0].teamNumber;
     const b2Team = blueTeams[1].teamNumber;
-
-    toast.info("Predicting match...");
 
     const searchParams = new URLSearchParams();
 
@@ -95,72 +109,84 @@ export default function MatchResult({
 
       const teams = data.data;
 
-      const r1TeamData = teams.find((team: any) => team.teamNumber === r1Team.toUpperCase());
-      const r2TeamData = teams.find((team: any) => team.teamNumber === r2Team.toUpperCase());
-      const b1TeamData = teams.find((team: any) => team.teamNumber === b1Team.toUpperCase());
-      const b2TeamData = teams.find((team: any) => team.teamNumber === b2Team.toUpperCase());
+      let r1TeamData: any = null;
+      let r2TeamData: any = null;
+      let b1TeamData: any = null;
+      let b2TeamData: any = null;
 
-      const rRatings = [r1TeamData, r2TeamData].map(t => (rating({
-        mu: t.opr,
-        sigma: t.sigma
-      })));
+      if (usedModel === ModelType.worldModel) {
+        r1TeamData = teams.find((team: any) => team.teamNumber === r1Team.toUpperCase());
+        r2TeamData = teams.find((team: any) => team.teamNumber === r2Team.toUpperCase());
+        b1TeamData = teams.find((team: any) => team.teamNumber === b1Team.toUpperCase());
+        b2TeamData = teams.find((team: any) => team.teamNumber === b2Team.toUpperCase());
 
-      const bRatings = [b1TeamData, b2TeamData].map(t => (rating({
-        mu: t.opr,
-        sigma: t.sigma
-      })));
+        if (!r1TeamData || !r2TeamData || !b1TeamData || !b2TeamData) {
+          toast.error("One of the teams have not been added to the world model yet");
+          return;
+        }
+      } else if (usedModel === ModelType.eventModel) {
+        r1TeamData = eventRankings.find((team: any) => team.team.teamNumber === r1Team.toUpperCase());
+        r2TeamData = eventRankings.find((team: any) => team.team.teamNumber === r2Team.toUpperCase());
+        b1TeamData = eventRankings.find((team: any) => team.team.teamNumber === b1Team.toUpperCase());
+        b2TeamData = eventRankings.find((team: any) => team.team.teamNumber === b2Team.toUpperCase());
 
-      const prediction = predictWin([rRatings, bRatings]);
-
-      const rChance = Math.round(prediction[0] * 100);
-      const bChance = Math.round(prediction[1] * 100);
+        if (!r1TeamData || !r2TeamData || !b1TeamData || !b2TeamData) {
+          toast.error("Metrics for one of the teams could not be found");
+          return;
+        }
+      } else {
+        toast.error("Invalid model type");
+        return;
+      }
 
       let red_opr = 0;
       let red_dpr = 0;
       let red_ccwm = 0;
-      let red_openSkill = 0;
       let blue_opr = 0;
       let blue_dpr = 0;
       let blue_ccwm = 0;
+
+      let red_openSkill = 0;
       let blue_openSkill = 0;
 
-      red_opr = Math.round((r1TeamData.opr + r2TeamData.opr) * 10000) / 10000;
-      red_dpr = Math.round((r1TeamData.dpr + r2TeamData.dpr) * 10000) / 10000;
-      red_ccwm = Math.round((r1TeamData.ccwm + r2TeamData.ccwm) * 10000) / 10000;
-      red_openSkill = Math.round((r1TeamData.openSkill + r2TeamData.openSkill) * 10000) / 10000;
+      red_opr = r1TeamData.opr + r2TeamData.opr
+      red_dpr = r1TeamData.dpr + r2TeamData.dpr
+      red_ccwm = r1TeamData.ccwm + r2TeamData.ccwm
 
-      blue_opr = Math.round((b1TeamData.opr + b2TeamData.opr) * 10000) / 10000;
-      blue_dpr = Math.round((b1TeamData.dpr + b2TeamData.dpr) * 10000) / 10000;
-      blue_ccwm = Math.round((b1TeamData.ccwm + b2TeamData.ccwm) * 10000) / 10000;
-      blue_openSkill = Math.round((b1TeamData.openSkill + b2TeamData.openSkill) * 10000) / 10000;
+      blue_opr = b1TeamData.opr + b2TeamData.opr
+      blue_dpr = b1TeamData.dpr + b2TeamData.dpr
+      blue_ccwm = b1TeamData.ccwm + b2TeamData.ccwm
 
-      console.log({
-        red_opr,
-        red_dpr,
-        red_ccwm,
-        red_openSkill,
-        blue_opr,
-        blue_dpr,
-        blue_ccwm,
-        blue_openSkill
-      })
+      if (usedModel === ModelType.worldModel) {
+        red_openSkill = Math.round((r1TeamData.openSkill + r2TeamData.openSkill) * 10000) / 10000;
+        blue_openSkill = Math.round((b1TeamData.openSkill + b2TeamData.openSkill) * 10000) / 10000;
+      }
 
-      const resultTensor: any = model.predict(tf.tensor2d([red_opr, red_dpr, red_ccwm, red_openSkill, blue_opr, blue_dpr, blue_ccwm, blue_openSkill], [1, 8]));
-      let predictedValue: number = resultTensor.arraySync()[0][0];
+      let predictedValue: number = 0;
+
+      if (usedModel === ModelType.worldModel) {
+        const resultTensor: any = worldModel.predict(tf.tensor2d([red_opr, red_dpr, red_ccwm, red_openSkill, blue_opr, blue_dpr, blue_ccwm, blue_openSkill], [1, 8]));
+        predictedValue = resultTensor.arraySync()[0][0];
+      } else if (usedModel === ModelType.eventModel) {
+        const resultTensor: any = eventModel.predict(tf.tensor2d([red_opr, red_dpr, red_ccwm, blue_opr, blue_dpr, blue_ccwm], [1, 6]));
+        predictedValue = resultTensor.arraySync()[0][0];
+      }
+
+      console.log({predictedValue})
 
       predictedValue = Math.round(predictedValue * 100);
 
-      let rChance2 = 0;
-      let bChance2 = 0;
+      console.log(predictedValue);
 
-      rChance2 = predictedValue
-      bChance2 = 100 - predictedValue
+      let rChance = 0;
+      let bChance = 0;
+
+      rChance = predictedValue
+      bChance = 100 - predictedValue
 
       setPrediction({
         rChance,
-        bChance,
-        rChance2,
-        bChance2
+        bChance
       });
 
     } catch (err) {
@@ -229,7 +255,7 @@ export default function MatchResult({
             </Link>
           </div>
         </div>
-        <div className="mt-1 flex flex-row justify-between">
+        <div className="mt-1 gap-2 flex flex-row justify-between sm:justify-center">
           {/*two colored lines indicating predicted winner*/}
           {prediction ? <>
             <div className={`flex flex-row w-[47%] text-xs lg:text-md justify-center rounded-2xl text-black font-medium ${blueWins ? "bg-GSGreen" : "bg-gray-600"}`}>
@@ -238,14 +264,20 @@ export default function MatchResult({
             <div className={`flex flex-row w-[47%] text-xs lg:text-md justify-center rounded-2xl text-black font-medium ${redWins ? "bg-GSGreen" : "bg-gray-600"}`}>
               {redWins ? `Predicted ${Math.abs(redWinPercentage)}%` : null}
             </div>
-          </> : (
+          </> : <>
             <button
-              className="mx-auto flex flex-row w-[47%] sm:w-28 lg:w-48 text-xs lg:text-md justify-center rounded-2xl text-black font-medium bg-GSGreen transition-colors duration-200 hover:bg-GSGreenDark shadow-md"
-              onClick={predictMatch}
+              className="ml-auto sm:p-1 p-0.5 flex flex-row w-[47%] sm:w-28 lg:w-48 text-2xs lg:text-md justify-center rounded-2xl text-black font-medium bg-GSGreen transition-colors duration-200 hover:bg-GSGreenDark shadow-md"
+              onClick={(event) => predictMatch(event, ModelType.worldModel)}
             >
-              Predict Match
+              Predict (World)
             </button>
-          )}
+            <button
+              className="mr-auto sm:p-1 p-0.5 flex flex-row w-[47%] sm:w-28 lg:w-48 text-2xs lg:text-md justify-center rounded-2xl text-black font-medium bg-GSGreen transition-colors duration-200 hover:bg-GSGreenDark shadow-md"
+              onClick={(event) => predictMatch(event, ModelType.eventModel)}
+            >
+              Predict (Event)
+            </button>
+          </>}
         </div>
       </div>
     ) : null}
