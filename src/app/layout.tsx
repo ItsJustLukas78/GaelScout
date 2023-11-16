@@ -8,6 +8,8 @@ import React from "react";
 import { Slide, ToastContainer } from "react-toastify";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import QuickSearch from "@/components/QuickSearch";
+import { GeistSans } from 'geist/font/sans';
+
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -31,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={GeistSans.variable}>
       <Providers>
         <body className="min-h-screen relative">
           {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS ? (
