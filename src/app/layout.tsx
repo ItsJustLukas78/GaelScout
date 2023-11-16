@@ -15,14 +15,14 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 export const metadata: Metadata = {
-  manifest: '/manifest.json',
+  manifest: 'https://gaelscout.com/manifest.json',
   title: 'GaelScout',
   description: 'Scouting for VRC made easy',
   appleWebApp: {
     title: 'GaelScout',
     statusBarStyle: 'black',
     startupImage: [
-      '/iphone14portrait.png',
+      '/public/iphone14portrait.png',
     ],
   },
 }
