@@ -36,7 +36,7 @@ export default function QuickSearch() {
         className="relative flex justify-center"
       >
         <button
-          className={`absolute flex items-center bg-transparent text-white justify-center bg-neutral-500 w-10 h-5 ${hidden ? "-top-16 rounded-t-lg" : "-bottom-5 rounded-b-lg"}`}
+          className={`absolute flex items-center text-white justify-center bg-neutral-500 w-10 h-5 ${hidden ? "-top-16 rounded-t-lg" : "-bottom-5 rounded-b-lg"}`}
           onClick={() => {
             setHidden(!hidden);
           }}
