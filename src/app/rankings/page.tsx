@@ -1,7 +1,7 @@
 "use client"
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
-import { Event, TeamProfile, TeamSeasonProfile, RankableStatistic } from "@/app/types";
+import { TeamSeasonProfile, RankableStatistic } from "@/app/types";
 import {AiOutlineDoubleLeft, AiOutlineDoubleRight, AiOutlineLeft, AiOutlineRight} from "react-icons/ai";
 
 export default function RankingsPage() {

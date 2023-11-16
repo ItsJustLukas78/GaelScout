@@ -5,8 +5,9 @@ import Footer from '@/components/Footer'
 import Providers from '@/components/Providers'
 import type { Metadata } from 'next'
 import React from "react";
-import {Slide, ToastContainer} from "react-toastify";
+import { Slide, ToastContainer } from "react-toastify";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import QuickSearch from "@/components/QuickSearch";
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -38,7 +39,8 @@ export default function RootLayout({
             {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS} />
           ) : null}
           <Navbar />
-          <div className="w-full">
+          <div className="w-full flex justify-center">
+            <QuickSearch />
             {children}
             <Analytics />
           </div>

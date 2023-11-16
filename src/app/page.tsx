@@ -4,17 +4,15 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Tilt from 'react-parallax-tilt';
 import React, {useEffect} from "react";
-import { useLayoutEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { TextPlugin } from "gsap/dist/TextPlugin";
-import { motion } from "framer-motion"
-import useResizeObserver from '@react-hook/resize-observer'
 import AnimatedTextCharacter from "@/components/AnimatedTextCharacter";
 import SpringAnimatedElement from "@/components/SpringAnimatedElement";
 
-gsap.registerPlugin(ScrollTrigger);
-gsap.registerPlugin(TextPlugin);
+// Z indexes
+// 50 - Modals
+// 40 - Navbar
+
+
+
 
 export default function Home() {
 
@@ -25,13 +23,15 @@ export default function Home() {
           <div className="animHeading items-center flex h-auto flex-col lg:space-x-8 lg:flex-row">
             <div className="flex flex-col space-y-8 w-72 xs:w-96 sm:w-144 lg:w-128 xl:w-144 p-1">
               <AnimatedTextCharacter className="text-5xl font-bold xs:text-7xl sm:text-8xl" delay={0.4} interval={0.4} text="Scouting Done Easy."/>
-              <AnimatedTextCharacter className="text-base sm:text-xl" delay={1.2} text="Improve your scouting experience in the VEX Robotics competition with all the tools you need in one place. Access data
+              <SpringAnimatedElement className="text-base sm:text-xl" delay={1.2}>
+                Improve your scouting experience in the VEX Robotics competition with all the tools you need in one place. Access data
                 on other teams, and tools to get an upper hand in scouting, and winning competitions.
                 Check team stats beyond what is provided in VEX Via, view match results, efficiently take notes, and more.
-              "/>
-              <AnimatedTextCharacter className="text-base sm:text-xl" delay={3.7} text="Sign up to access all of GaelScouts features for a better scouting experience.
-              "/>
-              <SpringAnimatedElement delay={4.5} className="">
+              </SpringAnimatedElement>
+              <SpringAnimatedElement className="text-base sm:text-xl" delay={1.2}>
+                Sign up to access all of GaelScouts features for a better scouting experience.
+              </SpringAnimatedElement>
+              <SpringAnimatedElement delay={1.2} className="">
                 <Link href="sign-up">
                   <CorneredButton className="text-2xl font-semibold">
                     Sign-Up
@@ -40,7 +40,7 @@ export default function Home() {
               </SpringAnimatedElement>
             </div>
             <div className="hidden lg:block max-w-[600px]">
-              <SpringAnimatedElement className="hidden max-w-lg lg:flex-col lg:flex" delay={4.5}>
+              <SpringAnimatedElement className="hidden max-w-lg lg:flex-col lg:flex" delay={1.2}>
                  <Tilt
                   tiltMaxAngleX={20}
                   tiltMaxAngleY={20}
@@ -56,10 +56,10 @@ export default function Home() {
               </SpringAnimatedElement>
             </div>
           </div>
-          <SpringAnimatedElement className="animHeading pb-16 flex h-auto flex-col items-center justify-center lg:space-x-8 lg:flex-row" delay={4.5}>
+          <SpringAnimatedElement className="animHeading pb-16 flex h-auto flex-col items-center justify-center lg:space-x-8 lg:flex-row" delay={1.2}>
             <div className="flex flex-col space-y-8 w-72 xs:w-96 sm:w-144 lg:w-128 xl:w-144 p-1">
               <div className="text-4xl font-bold xs:text-5xl sm:text-7xl">
-                Developed by Gael Force Robotics
+                Developed by members of Gael Force Robotics
               </div>
               <p className="text-base sm:text-xl">
                 GaelScout was developed by Gael Force Robotics students, for students.

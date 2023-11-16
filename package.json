@@ -46,6 +46,7 @@
     "encoding": "^0.1.13",
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
+    "eslint-plugin-unused-imports": "^3.0.0",
     "framer-motion": "^10.16.4",
     "fs": "^0.0.1-security",
     "graphql": "^16.7.1",

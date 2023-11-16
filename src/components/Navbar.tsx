@@ -13,8 +13,8 @@ export default function Navbar() {
   const [expanded, setExpanded] = React.useState(false);
 
   return (
-    <SpringAnimatedElement delay={0.04}>
-      <div className="px-5 md:px-12 z-30 h-20 w-full fixed top-0 bg-GSGray bg-opacity-50 justify-center lg:justify-center items-center 2xl:gap-16 xl:gap-12 lg:gap-10 flex bg-gradient-to-b
+    <div>
+      <div className="px-5 md:px-12 z-40 h-20 w-full fixed top-0 bg-GSGray bg-opacity-50 justify-center lg:justify-center items-center 2xl:gap-16 xl:gap-12 lg:gap-10 flex bg-gradient-to-b
    from-neutral-800 to-GSGray">
         <div className="hidden lg:flex lg:gap-9 xl:gap-14 2xl:gap-16 items-center">
           <div onClick={() => setExpanded(false)} className="inline-flex items-center justify-center">
@@ -100,6 +100,6 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-    </SpringAnimatedElement>
+    </div>
   )
 }

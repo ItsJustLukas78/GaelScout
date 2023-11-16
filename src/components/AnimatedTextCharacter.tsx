@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import {LazyMotion, domAnimation, m as motion} from "framer-motion"
 
 const AnimatedTextWord = ({ text, className, delay, interval = 0.04 }: { text: string, className?: string, delay: number, interval?: number }) => {
   let words = text.split(" ");
@@ -39,21 +39,23 @@ const AnimatedTextWord = ({ text, className, delay, interval = 0.04 }: { text: s
   };
 
   return (
-    <motion.div
-      className={`flex flex-wrap ${className}`}
-      variants={container}
-      initial="hidden"
-      animate="visible"
-    >
-      {words.map((word, index) => (
-        <motion.span
-          variants={child}
-          key={index}
-        >
-          {word}
-        </motion.span>
-      ))}
-    </motion.div>
+    <LazyMotion features={domAnimation} strict>
+      <motion.div
+        className={`flex flex-wrap ${className}`}
+        variants={container}
+        initial="hidden"
+        animate="visible"
+      >
+        {words.map((word, index) => (
+          <motion.span
+            variants={child}
+            key={index}
+          >
+            {word}
+          </motion.span>
+        ))}
+      </motion.div>
+    </LazyMotion>
   );
 };
 

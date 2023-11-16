@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { LazyMotion, domAnimation, m as motion } from "framer-motion";
 
 const SpringAnimatedElement = ({ children, className, delay }: { children: React.ReactNode, className?: string, delay: number }) => {
   //use delay to stagger the animation
@@ -35,22 +35,24 @@ const SpringAnimatedElement = ({ children, className, delay }: { children: React
   };
 
   return (
-    <motion.div
-      className={`${className}`}
-      variants={container}
-      initial="hidden"
-      animate="visible"
-    >
-      {//for element in children, create sep div, children can be string or element
-      React.Children.map(children, (element, index) => (
-        <motion.div
-          variants={child}
-          key={index}
-        >
-          {element}
-        </motion.div>
-      ))}
-    </motion.div>
+    <LazyMotion features={domAnimation} strict>
+      <motion.div
+        className={`${className}`}
+        variants={container}
+        initial="hidden"
+        animate="visible"
+      >
+        {//for element in children, create sep div, children can be string or element
+        React.Children.map(children, (element, index) => (
+          <motion.div
+            variants={child}
+            key={index}
+          >
+            {element}
+          </motion.div>
+        ))}
+      </motion.div>
+    </LazyMotion>
   );
 };
 
