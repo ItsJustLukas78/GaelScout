@@ -70,9 +70,9 @@ export default function Verify() {
                 Service or from the Service infrastructure itself (for example, the duration of a page visit).</p>
             </li>
             <li>
-              <p><strong>Website</strong> refers to GaelScout, accessible from <a href="https://gaelscout.com"
+              <p><strong>Website</strong> refers to GaelScout, accessible from <a href="https://www.gaelscout.com"
                                                                                   rel="external nofollow noopener"
-                                                                                  target="_blank">https://gaelscout.com</a>
+                                                                                  target="_blank">https://www.gaelscout.com</a>
               </p>
             </li>
             <li>

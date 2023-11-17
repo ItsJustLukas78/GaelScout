@@ -156,9 +156,9 @@ export async function GET(
   const meta = {
     currentPage: page,
     lastPage: lastPage,
-    firstPageUrl: 'https://gaelscout.com/api/seasons/{seasonId}/seasonProfiles?page=1',
-    nextPageUrl: page < lastPage ? `https://gaelscout.com/api/seasons/{seasonId}/seasonProfiles?page=${page + 1}` :
-      'https://gaelscout.com/api/seasons/{seasonId}/seasonProfiles?page=1',
+    firstPageUrl: 'https://www.gaelscout.com/api/seasons/{seasonId}/seasonProfiles?page=1',
+    nextPageUrl: page < lastPage ? `https://www.gaelscout.com/api/seasons/{seasonId}/seasonProfiles?page=${page + 1}` :
+      'https://www.gaelscout.com/api/seasons/{seasonId}/seasonProfiles?page=1',
     total: count,
     perPage: 15,
   }

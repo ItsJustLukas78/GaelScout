@@ -12,7 +12,7 @@ import { GeistSans } from 'geist/font/sans';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata: Metadata = {
-  manifest: 'https://gaelscout.com/manifest.json',
+  manifest: 'https://www.gaelscout.com/manifest.json',
   title: 'GaelScout',
   description: 'Scouting for VRC made easy',
   appleWebApp: {
