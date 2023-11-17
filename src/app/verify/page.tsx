@@ -5,7 +5,6 @@ import { FaRegClipboard } from "react-icons/fa";
 import {useAuth, useUser} from "@clerk/nextjs";
 import { toast } from 'react-toastify';
 
-
 export default function Verify() {
   const { getToken } = useAuth();
 
@@ -137,7 +136,7 @@ export default function Verify() {
 
   return <>
     <main>
-      <div className="sm:py-32 py-32 flex w-full flex-col items-center justify-center gap-16 md:flex-row md:gap-12 lg:gap-20">
+      <div className="flex w-full flex-col items-center justify-center gap-16 py-32 sm:py-32 md:flex-row md:gap-12 lg:gap-20">
         <div className="flex h-auto max-w-min flex-col items-center justify-center lg:flex-row lg:items-start">
           <div className="h-auto min-w-[350px] sm:min-w-[400px] lg:min-w-[800px] xl:min-w-[1000px]">
             <h1 className="mb-10 max-w-min text-8xl font-bold">

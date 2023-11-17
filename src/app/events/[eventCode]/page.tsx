@@ -1,12 +1,12 @@
 "use client"
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {Event, EventMatch, TeamProfile, Division, EventRank, TeamIdentifiers, EventRankWithMetrics } from "@/app/types";
+import React, {useEffect, useState} from "react";
+import {toast} from "react-toastify";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
+import {Event, EventMatch, TeamProfile, Division, EventRank, TeamIdentifiers, EventRankWithMetrics} from "@/app/types";
 import ScoutingSheetDialog from "@/components/ScoutingSheetDialog";
 import MatchNotesDialog from "@/components/MatchNotesDialog";
 import MatchResult from "@/components/MatchResult";
-import { useUser } from "@clerk/nextjs";
+import {useUser} from "@clerk/nextjs";
 import MatchTeamResult from "@/components/MatchTeamResult";
 import TeamNotesDialog from "@/components/TeamNotesDialog";
 import {AiFillStar, AiOutlineStar} from "react-icons/ai";
@@ -19,11 +19,11 @@ import {
   concat,
 } from "mathjs";
 
-export default function EventPage({ params }: { params: { eventCode: string } }) {
-  const { isLoaded, isSignedIn, user } = useUser();
+export default function EventPage({params}: { params: { eventCode: string } }) {
+  const {isLoaded, isSignedIn, user} = useUser();
 
-  const [worldModel, setWorldModel] = useState< any >(null);
-  const [eventModel, setEventModel] = useState< any >(null);
+  const [worldModel, setWorldModel] = useState<any>(null);
+  const [eventModel, setEventModel] = useState<any>(null);
 
   useEffect(() => {
     async function loadModel() {
@@ -48,7 +48,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
 
   const [divisionList, setDivisionList] = useState<Division[]>([]);
   const [currentDivision, setCurrentDivision] = useState<Division | null>(null);
-  const [currentTeamsDivision, setCurrentTeamsDivision] = useState<Division | null >({id: -1, name: "All"});
+  const [currentTeamsDivision, setCurrentTeamsDivision] = useState<Division | null>({id: -1, name: "All"});
   const [matchList, setMatchList] = useState<EventMatch[]>([]);
   const [fiteredMatches, setFilteredMatches] = useState<EventMatch[]>([]);
   const [teamNumberFilter, setTeamNumberFilter] = useState<string>("");
@@ -68,7 +68,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
 
   const [rankedStatistic, setRankedStatistic] = useState("rank")
 
-  const getEvent = async() => {
+  const getEvent = async () => {
     const skuSearchParams = new URLSearchParams();
 
     skuSearchParams.append("eventSKU[]", eventCode);
@@ -168,30 +168,30 @@ export default function EventPage({ params }: { params: { eventCode: string } })
           function customSort(a: EventMatch, b: EventMatch) {
             // Adjust the order of "round" values
             const roundOrder: Record<number, number> = {
-                1: 1, // Practice
-                2: 2, // Qualification
-                6: 3, // Round of 16
-                3: 4, // Quarter-Finals
-                4: 5, // Semi-Finals
-                5: 6, // Finals
+              1: 1, // Practice
+              2: 2, // Qualification
+              6: 3, // Round of 16
+              3: 4, // Quarter-Finals
+              4: 5, // Semi-Finals
+              5: 6, // Finals
             };
 
             // First, sort by adjusted "round" values
             if (roundOrder[a.round] !== roundOrder[b.round]) {
-                return roundOrder[a.round] - roundOrder[b.round];
+              return roundOrder[a.round] - roundOrder[b.round];
             }
 
             // If "round" is the same, sort by "matchnum"
             if (a.matchnum !== b.matchnum) {
-                return a.matchnum - b.matchnum;
+              return a.matchnum - b.matchnum;
             }
 
             if (a.instance !== b.instance) {
-                return a.instance - b.instance;
+              return a.instance - b.instance;
             }
 
             return 0;
-        }
+          }
 
           const dateSortedMatches = data.matches.sort(customSort);
 
@@ -219,7 +219,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
     }
   }, [currentDivision]);
 
-  const getFavoriteStatus = async() => {
+  const getFavoriteStatus = async () => {
     if (!eventObject) {
       return;
     }
@@ -247,7 +247,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
     }
   }
 
-  const changeFavoriteStatus = async(favorite: boolean) => {
+  const changeFavoriteStatus = async (favorite: boolean) => {
     if (!eventObject) {
       return;
     }
@@ -575,9 +575,10 @@ export default function EventPage({ params }: { params: { eventCode: string } })
 
   return (
     <main>
-      <div className="sm:py-32 py-32 flex w-full flex-col items-center justify-center">
+      <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
         {eventObject ? <>
-          <div className="relative mb-8 flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+          <div
+            className="relative mb-8 flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
             <h1 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl sm:text-4xl md:text-5xl lg:text-7xl">
               {eventObject.name}
             </h1>
@@ -594,10 +595,11 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                   }
                 }}
               >
-                {favorited ? <AiFillStar className="inline-block" /> : <AiOutlineStar className="inline-block" />}
+                {favorited ? <AiFillStar className="inline-block"/> : <AiOutlineStar className="inline-block"/>}
               </button>
             </div>
-            <a href={`https://www.robotevents.com/robot-competitions/vex-robotics-competition/${eventCode}.html`} className="mb-5 max-w-fit text-lg font-bold xs:text-xl hover:text-blue-500">
+            <a href={`https://www.robotevents.com/robot-competitions/vex-robotics-competition/${eventCode}.html`}
+               className="mb-5 max-w-fit text-lg font-bold hover:text-blue-500 xs:text-xl">
               <u>RobotEvents Page</u>
             </a>
             <div className="flex flex-row gap-5 md:gap-10">
@@ -640,12 +642,14 @@ export default function EventPage({ params }: { params: { eventCode: string } })
             </div>
           </div>
           <Tabs defaultValue="teams">
-            <TabsList className="bg-neutral-800 flex min-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] mb-8 [&>*]:flex-1">
+            <TabsList
+              className="bg-neutral-800 flex min-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] mb-8 [&>*]:flex-1">
               <TabsTrigger value="teams">Teams</TabsTrigger>
               <TabsTrigger value="rankings">Rankings</TabsTrigger>
               <TabsTrigger value="matches">Matches</TabsTrigger>
             </TabsList>
-            <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+            <div
+              className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
               <TabsContent value="teams">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
                   <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl xl:mb-0">
@@ -653,12 +657,15 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                   </h3>
                   <div className="flex flex-col gap-3 sm:flex-row">
                     <select
-                      className="h-8 sm:w-44 min-w-max rounded-lg bg-white pl-2 text-sm text-black md:h-12 md:w-52 md:text-lg"
+                      className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
                       required
                       value={currentTeamsDivision?.id}
                       onChange={(event) => {
                         // @ts-ignore
-                        const newValue = (parseInt(event.target.id) === -1 ? {id:-1, name:"All"} : divisionList.find((division) => division.id === parseInt(event.target.value)) || null);
+                        const newValue = (parseInt(event.target.id) === -1 ? {
+                          id: -1,
+                          name: "All"
+                        } : divisionList.find((division) => division.id === parseInt(event.target.value)) || null);
                         setCurrentTeamsDivision(newValue);
                       }}
                     >
@@ -670,7 +677,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                       })}
                     </select>
                     <button
-                      className="h-8 sm:w-44 min-w-max rounded-lg bg-white text-sm text-black md:h-12 md:w-52 md:text-lg"
+                      className="h-8 min-w-max rounded-lg bg-white text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
                       onClick={() => setExportDialogOpen(true)}
                     >
                       Generate Scout Sheet
@@ -724,7 +731,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                     seasonId={eventObject.season.id}
                     setTeamNotesDialogOpen={setTeamNotesDialogOpen}
                   />
-                : null}
+                  : null}
               </TabsContent>
               <TabsContent value="rankings">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
@@ -733,7 +740,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                   </h3>
                   <div className="flex flex-col gap-3 sm:flex-row">
                     <select
-                      className="h-8 sm:w-44 min-w-max rounded-lg bg-white pl-2 text-sm text-black md:h-12 md:w-52 md:text-lg"
+                      className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
                       required
                       value={rankedStatistic}
                       onChange={(event) => {
@@ -748,20 +755,20 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                       <option value="sp">SP (Opponent Strength)</option>
                     </select>
                     <select
-                        className="h-8 sm:w-44 min-w-max rounded-lg bg-white pl-2 text-sm text-black md:h-12 md:w-52 md:text-lg"
-                        required
-                        value={currentDivision?.id}
-                        onChange={(event) => {
-                          // @ts-ignore
-                          setCurrentDivision(divisionList.find((division) => division.id === event.target.value) || null);
-                        }}
-                      >
-                        <option value={999} disabled hidden>Select Division</option>
-                        {divisionList.map((division) => {
-                          return (
-                            <option key={division.id} value={division.id}>{division.name}</option>
-                          )
-                        })}
+                      className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      required
+                      value={currentDivision?.id}
+                      onChange={(event) => {
+                        // @ts-ignore
+                        setCurrentDivision(divisionList.find((division) => division.id === event.target.value) || null);
+                      }}
+                    >
+                      <option value={999} disabled hidden>Select Division</option>
+                      {divisionList.map((division) => {
+                        return (
+                          <option key={division.id} value={division.id}>{division.name}</option>
+                        )
+                      })}
                     </select>
                   </div>
                 </div>
@@ -769,12 +776,12 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                   <h1 className="text-2xl font-semibold text-neutral-200">
                     Loading...
                   </h1>
-                : null}
+                  : null}
                 {rankings.length === 0 && !loadingRankings ?
                   <h1 className="text-2xl font-semibold text-neutral-200">
                     No rankings found
                   </h1>
-                : null}
+                  : null}
                 <div className="flex flex-col gap-4 overflow-auto w-[100%]">
                   {rankingsWithMetrics.length !== 0 ? rankingsWithMetrics.map((result: EventRankWithMetrics) => {
                     const foundTeamProfile = participatingTeams.find((team) => team.teamId === result.team.teamId);
@@ -799,7 +806,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                   </h3>
                   <div className="flex flex-col gap-3 sm:flex-row">
                     <select
-                      className="h-8 sm:w-44 min-w-max rounded-lg bg-white pl-2 text-sm text-black md:h-12 md:w-52 md:text-lg"
+                      className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
                       required
                       value={currentDivision?.id}
                       onChange={(event) => {
@@ -815,7 +822,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                       })}
                     </select>
                     <button
-                      className="h-8 sm:w-44 min-w-max rounded-lg bg-white text-sm text-black disabled:opacity-50 md:h-12 md:w-52 md:text-lg"
+                      className="h-8 min-w-max rounded-lg bg-white text-sm text-black disabled:opacity-50 sm:w-44 md:h-12 md:w-52 md:text-lg"
                       onClick={() => {
                         if (!isSignedIn) {
                           toast.error("You must be signed in to view match notes");
@@ -828,7 +835,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                       Match Notes
                     </button>
                     <input
-                      className="h-8 sm:w-44 min-w-max rounded-lg bg-white p-3 text-sm text-black md:h-12 md:w-52 md:text-lg"
+                      className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
                       type="text"
                       placeholder="Filter by team..."
                       onChange={(e) => setTeamNumberFilter(e.target.value)}
@@ -839,7 +846,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                   <h1 className="text-2xl font-semibold text-neutral-200">
                     No matches found
                   </h1>
-                : null}
+                  : null}
                 <div className="flex flex-col gap-4 overflow-auto w-[100%]">
                   {fiteredMatches.length !== 0 ? fiteredMatches.map((result: EventMatch) => {
                     return (
@@ -861,7 +868,7 @@ export default function EventPage({ params }: { params: { eventCode: string } })
                     matchList={matchList}
                     setMatchNotesDialogOpen={setMatchNotesDialogOpen}
                   />
-                : null}
+                  : null}
               </TabsContent>
             </div>
           </Tabs>

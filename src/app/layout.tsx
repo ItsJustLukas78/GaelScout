@@ -9,10 +9,7 @@ import { Slide, ToastContainer } from "react-toastify";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import QuickSearch from "@/components/QuickSearch";
 import { GeistSans } from 'geist/font/sans';
-
-
 import 'react-toastify/dist/ReactToastify.css';
-
 
 export const metadata: Metadata = {
   manifest: 'https://gaelscout.com/manifest.json',
@@ -35,13 +32,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={GeistSans.variable}>
       <Providers>
-        <body className="min-h-screen relative">
+        <body className="relative min-h-screen">
           {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS ? (
             <GoogleAnalytics ga_id=
             {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS} />
           ) : null}
           <Navbar />
-          <div className="w-full flex justify-center">
+          <div className="flex w-full justify-center">
             <QuickSearch />
             {children}
             <Analytics />

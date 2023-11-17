@@ -2,7 +2,6 @@ import {BsCheckLg} from "react-icons/bs";
 import React from "react";
 import * as Checkbox from '@radix-ui/react-checkbox';
 
-
 export default function CheckboxDiv({ children, checked, onCheckedChange } : { children: string, checked: boolean, onCheckedChange: (e: any) => void }) {
   return (
     <div className="mt-5 flex flex-row items-center">

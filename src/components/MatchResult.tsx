@@ -2,7 +2,6 @@ import {EventMatch, EventRankWithMetrics} from '@/app/types'
 import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import Link from "next/link";
-import {predictWin, rating} from "openskill";
 import * as tf from "@tensorflow/tfjs";
 
 interface MatchResultProps {
@@ -203,19 +202,19 @@ export default function MatchResult({
           <div className="flex flex-col gap-3 text-center min-w-[55px] md:min-w-[150px]">
             <Link
               href={`/teams/${blueTeams[0].teamNumber}`}
-              className="text-xs font-semibold text-blue-600 md:text-3xl hover:text-blue-700"
+              className="text-xs font-semibold text-blue-600 hover:text-blue-700 md:text-3xl"
             >
               {blueTeams[0].teamNumber}
             </Link>
             <Link
               href={`/teams/${blueTeams[1].teamNumber}`}
-              className="text-xs font-semibold text-blue-600 md:text-3xl hover:text-blue-700"
+              className="text-xs font-semibold text-blue-600 hover:text-blue-700 md:text-3xl"
             >
               {blueTeams[1].teamNumber}
             </Link>
           </div>
           <div className="flex flex-col justify-center text-center min-w-[30px] md:min-w-[55px]">
-            <h2 className="font-medium text-blue-600 text-sm md:text-4xl">
+            <h2 className="text-sm font-medium text-blue-600 md:text-4xl">
               {blueScore > redScore ?
                 <u className="font-bold">{blueScore}</u>
                 :
@@ -232,7 +231,7 @@ export default function MatchResult({
             </h2>
           </div>
           <div className="flex flex-col justify-center text-center min-w-[30px] md:min-w-[55px]">
-            <h2 className="font-medium text-red-600 text-sm md:text-4xl">
+            <h2 className="text-sm font-medium text-red-600 md:text-4xl">
               {redScore > blueScore ?
                 <u className="font-bold">{redScore}</u>
                 :
@@ -243,19 +242,19 @@ export default function MatchResult({
           <div className="flex flex-col gap-3 text-center min-w-[55px] md:min-w-[150px]">
             <Link
               href={`/teams/${redTeams[0].teamNumber}`}
-              className="text-xs font-semibold text-red-600 md:text-3xl hover:text-red-700"
+              className="text-xs font-semibold text-red-600 hover:text-red-700 md:text-3xl"
             >
               {redTeams[0].teamNumber}
             </Link>
             <Link
               href={`/teams/${redTeams[1].teamNumber}`}
-              className="text-xs font-semibold text-red-600 md:text-3xl hover:text-red-700"
+              className="text-xs font-semibold text-red-600 hover:text-red-700 md:text-3xl"
             >
               {redTeams[1].teamNumber}
             </Link>
           </div>
         </div>
-        <div className="mt-1 gap-2 flex flex-row justify-between sm:justify-center">
+        <div className="mt-1 flex flex-row justify-between gap-2 sm:justify-center">
           {/*two colored lines indicating predicted winner*/}
           {prediction ? <>
             <div className={`flex flex-row w-[47%] text-xs lg:text-md justify-center rounded-2xl text-black font-medium ${blueWins ? "bg-GSGreen" : "bg-gray-600"}`}>
@@ -266,13 +265,13 @@ export default function MatchResult({
             </div>
           </> : <>
             <button
-              className="ml-auto sm:p-1 p-0.5 flex flex-row w-[47%] sm:w-28 lg:w-48 text-2xs lg:text-md justify-center rounded-2xl text-black font-medium bg-GSGreen transition-colors duration-200 hover:bg-GSGreenDark shadow-md"
+              className="ml-auto flex flex-row justify-center rounded-2xl font-medium text-black shadow-md transition-colors duration-200 p-0.5 w-[47%] text-2xs bg-GSGreen hover:bg-GSGreenDark sm:w-28 sm:p-1 lg:text-md lg:w-48"
               onClick={(event) => predictMatch(event, ModelType.worldModel)}
             >
               Predict (World)
             </button>
             <button
-              className="mr-auto sm:p-1 p-0.5 flex flex-row w-[47%] sm:w-28 lg:w-48 text-2xs lg:text-md justify-center rounded-2xl text-black font-medium bg-GSGreen transition-colors duration-200 hover:bg-GSGreenDark shadow-md"
+              className="mr-auto flex flex-row justify-center rounded-2xl font-medium text-black shadow-md transition-colors duration-200 p-0.5 w-[47%] text-2xs bg-GSGreen hover:bg-GSGreenDark sm:w-28 sm:p-1 lg:text-md lg:w-48"
               onClick={(event) => predictMatch(event, ModelType.eventModel)}
             >
               Predict (Event)

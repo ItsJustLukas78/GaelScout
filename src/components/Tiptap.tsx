@@ -1,5 +1,4 @@
 'use client'
-
 import {
   EditorContent, useEditor
 } from '@tiptap/react'
@@ -8,7 +7,7 @@ import Placeholder from '@tiptap/extension-placeholder'
 import CharacterCount from "@tiptap/extension-character-count";
 import Highlight from '@tiptap/extension-highlight';
 import Underline from '@tiptap/extension-underline';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
   StrikethroughIcon,
   FontBoldIcon,

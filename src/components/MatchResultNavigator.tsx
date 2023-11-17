@@ -1,8 +1,6 @@
 import { EventMatch, TeamIdentifiers } from '@/app/types'
 import { useEffect, useState } from "react";
 
-// props interface
-
 interface MatchResultNavigatorProps extends EventMatch {
   className?: string
   teamSetter: (team: TeamIdentifiers) => void
@@ -28,7 +26,7 @@ export default function MatchResultNavigator(
         <div className="flex flex-row justify-between">
           <div className="flex flex-col gap-3 text-center w-[55px]">
             <button
-              className="text-sm font-semibold text-blue-600 hover:text-blue-400 "
+              className="text-sm font-semibold text-blue-600 hover:text-blue-400"
               onClick={() => teamSetter(blueTeams[0])}
             >
               {blueTeams[0].teamNumber}

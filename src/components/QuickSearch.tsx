@@ -25,25 +25,25 @@ export default function QuickSearch() {
       className={`fixed z-50 items-center justify-center bg-neutral-700 rounded-full w-72 h-12 p-1 transition-all duration-500 ${hidden ? "-bottom-9" : "bottom-20"} ${fullyHidden ? "hidden" : ""}`}
     >
       <form
-        className="relative w-full h-full"
+        className="relative h-full w-full"
         onSubmit={(e) => {
           e.preventDefault();
           window.location.href = `/teams/${(document.querySelector("input") as HTMLInputElement).value}`
         }}
       >
         <input
-          className="bg-white text-black text-center text-xl font-semibold placeholder-neutral-400 placeholder-opacity-100 rounded-full w-full h-full"
+          className="h-full w-full rounded-full bg-white text-center text-xl font-semibold text-black placeholder-neutral-400 placeholder-opacity-100"
           type="text"
           disabled={hidden}
           placeholder="Team Quicksearch"
         />
         <button
-          className="absolute right-0.5 bottom-0.5 bg-transparent text-black justify-center items-center"
+          className="absolute items-center justify-center bg-transparent text-black right-0.5 bottom-0.5"
           onClick={() => {
             window.location.href = `/teams/${(document.querySelector("input") as HTMLInputElement).value}`
           }}
         >
-          <MdSearch className="absolute right-1 bottom-1 w-6 h-6"/>
+          <MdSearch className="absolute right-1 bottom-1 h-6 w-6"/>
         </button>
       </form>
       <div
@@ -56,8 +56,8 @@ export default function QuickSearch() {
           }}
         >
           {hidden ?
-            <FaAngleDoubleUp className="w-5 h-5"/> :
-            <FaAngleDoubleDown className="w-5 h-5"/>
+            <FaAngleDoubleUp className="h-5 w-5"/> :
+            <FaAngleDoubleDown className="h-5 w-5"/>
           }
         </button>
       </div>

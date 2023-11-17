@@ -6,7 +6,6 @@ import React, {useEffect, useState} from "react";
 import { toast } from "react-toastify";
 import { rating, predictWin } from 'openskill'
 import * as tf from '@tensorflow/tfjs';
-// import {predictionModel} from "@/models/predictionModel";
 
 export default function Teams() {
   const [model, setModel] = useState< any >(null);
@@ -317,7 +316,7 @@ export default function Teams() {
               </div>
             </div>
             <div className="flex h-auto flex-col items-center justify-center">
-              <div className="p-5 sm:p-10 flex h-60 w-64 flex-col gap-5 items-center rounded-2xl bg-neutral-800 shadow-lg shadow-neutral-700 sm:w-144 sm:h-72">
+              <div className="flex h-60 w-64 flex-col items-center gap-5 rounded-2xl bg-neutral-800 p-5 shadow-lg shadow-neutral-700 sm:w-144 sm:h-72 sm:p-10">
                 <div className="flex flex-col items-center">
                   <div className="flex flex-row items-center justify-center gap-20 sm:gap-44">
                     <div className="flex flex-col items-center justify-center">
@@ -383,10 +382,10 @@ export default function Teams() {
                   <h1 className="text-center text-xs font-bold text-neutral-400 sm:text-sm">
                     Model trained using OpenSkill, OPR, DPR, and CCWM
                   </h1>
-                  <h1 className="text-2xs font-bold text-neutral-400 sm:text-xs">
+                  <h1 className="font-bold text-neutral-400 text-2xs sm:text-xs">
                     Not good with outlying scenarios
                   </h1>
-                  <h1 className="text-2xs font-bold text-neutral-400 sm:text-xs">
+                  <h1 className="font-bold text-neutral-400 text-2xs sm:text-xs">
                     85% accuracy otherwise
                   </h1>
                 </div>

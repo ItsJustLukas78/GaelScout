@@ -19,7 +19,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
 
   const teamNumber = params.teamNumber
 
-  const [teamNumberInput, setTeamNumberInput] = useState<string>(teamNumber);
+  const [teamNumberInput, setTeamNumberInput] = useState<string>(teamNumber ? teamNumber.toUpperCase() : "");
 
   const [teamProfile, setTeamProfile] = useState<TeamProfile | null>(null);
   const [seasonStats, setSeasonStats] = useState<TeamSeasonProfile | null>(null);
@@ -218,14 +218,14 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
 
   return (
     <main>
-      <div className="sm:py-32 py-32 flex w-full flex-col items-center justify-center">
+      <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
         <div className="relative flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
           <input
             type="text"
             key="teamInput"
             defaultValue={teamNumberInput}
             ref={inputTeamRef}
-            className="mb-5 text-5xl font-bold xs:text-5xl sm:text-8xl bg-transparent border-none outline-none"
+            className="mb-5 border-none bg-transparent text-5xl font-bold outline-none xs:text-5xl sm:text-8xl"
             onChange={(event) => {
               event.preventDefault();
               window.history.pushState({}, '', `/teams/${event.target.value.toUpperCase()}`);
@@ -233,7 +233,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
             }}
           >
           </input>
-          <a href={`https://www.robotevents.com/teams/VRC/${teamNumberInput.toUpperCase()}`} className="mb-5 max-w-fit text-lg font-bold xs:text-xl hover:text-blue-500">
+          <a href={`https://www.robotevents.com/teams/VRC/${teamNumberInput.toUpperCase()}`} className="mb-5 max-w-fit text-lg font-bold hover:text-blue-500 xs:text-xl">
             <u>RobotEvents Page</u>
           </a>
           {teamProfile ? <>

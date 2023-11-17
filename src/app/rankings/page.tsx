@@ -81,7 +81,7 @@ export default function RankingsPage() {
 
   return (
     <main>
-      <div className="sm:py-32 py-32 flex w-full flex-col items-center justify-center">
+      <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
         <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
           <div className="mb-10 flex flex-col justify-between lg:flex-row">
             <h3 className="my-5 min-w-fit text-3xl font-bold xs:text-5xl lg:my-0">
@@ -111,7 +111,7 @@ export default function RankingsPage() {
               </select>
             </div>
           </div>
-          {/*<div className="flex lg:flex-row flex-col gap-5 mb-10">*/}
+          {/*<div className="mb-10 flex flex-col gap-5 lg:flex-row">*/}
           {/*  <h3 className="font-light text-md sm:text-xl">*/}
           {/*    Teams Analyzed: 1623*/}
           {/*  </h3>*/}

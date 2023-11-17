@@ -1,10 +1,8 @@
 "use client"
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {toast} from "react-toastify";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
-import CheckboxDiv from "@/components/CheckboxDiv";
-import * as RadioGroup from '@radix-ui/react-radio-group';
-import {Event, TeamProfile, TeamSeasonProfile, EventMatch, TeamIdentifiers, NotesGroup} from "@/app/types";
+import {Event, EventMatch, TeamIdentifiers, NotesGroup} from "@/app/types";
 import Tiptap from "@/components/Tiptap";
 import MatchResultNavigator from "@/components/MatchResultNavigator";
 import {

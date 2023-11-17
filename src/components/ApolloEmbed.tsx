@@ -1,6 +1,5 @@
 "use client"
 import {ApolloSandbox} from "@apollo/sandbox/react";
-
 export default function ApolloEmbed() {
 	return (
 		<div className="flex h-auto flex-row justify-center">

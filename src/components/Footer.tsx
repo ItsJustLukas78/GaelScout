@@ -1,5 +1,4 @@
 import NavButton from './NavButton'
-import Image from 'next/image'
 
 export default function Footer() {
   return (
@@ -9,8 +8,8 @@ export default function Footer() {
       {/*  <Image src="/GS_logo.png" alt="GaelSuite Logo" width="50" height="50" />*/}
       {/*  <NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>*/}
       {/*</div>*/}
-      <div className="flex lg:gap-20 items-center gap-5">
-        <p className="sm:text-lg text-xs">
+      <div className="flex items-center gap-5 lg:gap-20">
+        <p className="text-xs sm:text-lg">
           Copyright © 2023 Lukas Somwong
         </p>
         <NavButton href="/privacy">Privacy</NavButton>

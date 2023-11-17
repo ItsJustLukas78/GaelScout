@@ -1,6 +1,5 @@
 import React from 'react'
 import { useState } from 'react'
-import Link from 'next/link'
 import { BiSolidDownArrow } from "react-icons/bi";
 
 export default function NavDropDown({ children }: { children: React.ReactNode }) {

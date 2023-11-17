@@ -1,11 +1,10 @@
-'use client'
-import React, {useEffect, useState} from "react";
+import React from "react";
 
 
 export default function Verify() {
   return <>
     <main>
-      <div className="sm:py-32 py-32 flex w-full items-center justify-center">
+      <div className="flex w-full items-center justify-center py-32 sm:py-32">
         <div className="flex flex-col gap-2 p-4 w-[90%] xs:w-[70%]">
           <h1>Privacy Policy</h1>
           <p>Last updated: October 04, 2023</p>

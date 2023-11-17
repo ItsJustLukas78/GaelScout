@@ -181,10 +181,10 @@ export default function NotesGroupComponent() {
   } , [])
 
   return <>
-    <div className="px-3 flex flex-row justify-between mt-5 rounded-xl bg-neutral-900 p-2 shadow-md shadow-neutral-900">
+    <div className="mt-5 flex flex-row justify-between rounded-xl bg-neutral-900 p-2 px-3 shadow-md shadow-neutral-900">
       <div className="relative flex flex-row items-center">
         <select
-          className="pr-6 rounded-md bg-neutral-900 text-sm text-neutral-200 appearance-none"
+          className="appearance-none rounded-md bg-neutral-900 pr-6 text-sm text-neutral-200"
           value={currentNotesGroup ? currentNotesGroup.id : "me"}
           onChange={(e) => {
             if (e.target.value === "me") {
@@ -203,10 +203,10 @@ export default function NotesGroupComponent() {
             return <option key={group.id} value={group.id}>{group.name}</option>
           })}
         </select>
-        <HiSelector className="absolute right-0 text-xl font-bold text-green-600 pointer-events-none" />
+        <HiSelector className="pointer-events-none absolute right-0 text-xl font-bold text-green-600" />
       </div>
       <button
-        className="px-0.5 text-center bg-neutral-900 text-2xs pt-0.5 border-neutral-600 text-green-500 hover:text-green-400"
+        className="border-neutral-600 bg-neutral-900 text-center text-green-500 px-0.5 text-2xs pt-0.5 hover:text-green-400"
         onClick={() => {
           navigator.clipboard.writeText(currentNotesGroup ? currentNotesGroup.joinCode : "")
         }}
@@ -220,10 +220,10 @@ export default function NotesGroupComponent() {
         {checkLeaveConfirmation ? "Sure?" : "Leave"}
       </button>
     </div>
-    <div className="px-2 flex flex-row gap-3 mt-5 rounded-xl bg-neutral-900 p-2 shadow-md shadow-neutral-900">
+    <div className="mt-5 flex flex-row gap-3 rounded-xl bg-neutral-900 p-2 px-2 shadow-md shadow-neutral-900">
       <div className="flex flex-row items-center">
         <input
-          className="px-0.5 ml-auto bg-neutral-900 text-sm text-neutral-200 w-28 border-b-2 border-neutral-600"
+          className="ml-auto w-28 border-b-2 border-neutral-600 bg-neutral-900 text-sm text-neutral-200 px-0.5"
           type="text"
           placeholder="Join Code"
           value={enteredJoinCode}
@@ -232,16 +232,16 @@ export default function NotesGroupComponent() {
           }}
         />
         <button
-          className="pl-1 text-xl font-bold text-green-600 disabled:opacity-50 hover:text-green-400 hover:rotate-6"
+          className="pl-1 text-xl font-bold text-green-600 hover:rotate-6 hover:text-green-400 disabled:opacity-50"
           disabled={enteredJoinCode === ""}
           onClick={joinNotesGroup}
         >
           <BsCheck />
         </button>
-        <div className="mx-3 border-l-2 border-neutral-600 h-6"></div>
+        <div className="mx-3 h-6 border-l-2 border-neutral-600"></div>
         <div className="relative flex flex-col">
           <input
-            className="pl-0.5 pr-7 ml-auto bg-neutral-900 text-sm text-neutral-200 w-28 border-b-2 border-neutral-600"
+            className="ml-auto w-28 border-b-2 border-neutral-600 bg-neutral-900 pr-7 text-sm text-neutral-200 pl-0.5"
             type="text"
             placeholder="New Group"
             maxLength={40}
@@ -250,10 +250,10 @@ export default function NotesGroupComponent() {
               setEnteredNewGroup(e.target.value)
             }}
           />
-          <p className="absolute right-0.5 bottom-0.5 text-3xs text-right text-neutral-400">{enteredNewGroup.length}/40</p>
+          <p className="absolute text-right text-neutral-400 right-0.5 bottom-0.5 text-3xs">{enteredNewGroup.length}/40</p>
         </div>
         <button
-          className="pl-1 text-xl font-bold text-green-600 disabled:opacity-50 hover:text-green-400 hover:rotate-6"
+          className="pl-1 text-xl font-bold text-green-600 hover:rotate-6 hover:text-green-400 disabled:opacity-50"
           disabled={enteredNewGroup === ""}
           onClick={createNotesGroup}
         >

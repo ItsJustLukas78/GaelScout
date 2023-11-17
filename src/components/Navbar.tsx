@@ -18,7 +18,7 @@ export default function Navbar() {
     <div>
       <div className="px-5 md:px-12 z-40 h-20 w-full fixed top-0 bg-GSGray bg-opacity-50 justify-center lg:justify-center items-center 2xl:gap-16 xl:gap-12 lg:gap-10 flex bg-gradient-to-b
    from-neutral-800 to-GSGray">
-        <div className="hidden lg:flex lg:gap-9 xl:gap-14 2xl:gap-16 items-center">
+        <div className="hidden items-center lg:flex lg:gap-9 xl:gap-14 2xl:gap-16">
           <div onClick={() => setExpanded(false)} className="inline-flex items-center justify-center">
             <Image src="/GS_logo.png" alt="GaelSuite Logo" width="50" height="50" />
             <NavButton href="/">GaelScout</NavButton>
@@ -43,7 +43,7 @@ export default function Navbar() {
           {/*    href="/sign-in"*/}
           {/*    transitionGray={false}*/}
           {/*  >*/}
-          {/*    <div className="GSColorGradient bg-clip-text text-transparent">*/}
+          {/*    <div className="bg-clip-text text-transparent GSColorGradient">*/}
           {/*      Sign In*/}
           {/*    </div>*/}
           {/*  </NavButton>*/}
@@ -58,14 +58,14 @@ export default function Navbar() {
             </NavButton>
           }
         </div>
-        <div className="lg:hidden mr-auto">
+        <div className="mr-auto lg:hidden">
           <Hamburger toggled={expanded} toggle={setExpanded} />
         </div>
-        <div onClick={() => setExpanded(false)} className="lg:hidden inline-flex items-center justify-center pr-7">
+        <div onClick={() => setExpanded(false)} className="inline-flex items-center justify-center pr-7 lg:hidden">
           <Image src="/GS_logo.png" alt="GaelSuite Logo" width="50" height="50" />
           <NavButton href="/">GaelScout</NavButton>
         </div>
-        <div className="lg:hidden ml-auto">
+        <div className="ml-auto lg:hidden">
           {isLoaded && isSignedIn ? <UserButton
                 afterSignOutUrl="/"
               /> :

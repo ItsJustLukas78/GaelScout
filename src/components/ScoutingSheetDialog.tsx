@@ -1,5 +1,5 @@
 "use client"
-import React, {useEffect, useState} from "react";
+import React, { useState } from "react";
 import {toast} from "react-toastify";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import CheckboxDiv from "@/components/CheckboxDiv";
