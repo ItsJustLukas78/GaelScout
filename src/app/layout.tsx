@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     title: 'GaelScout',
     statusBarStyle: 'black',
     startupImage: [
-      '/public/iphone14portrait.png',
+      '/iphone14portrait.png',
     ],
   },
 }
