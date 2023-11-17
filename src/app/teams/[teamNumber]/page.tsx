@@ -225,7 +225,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
             key="teamInput"
             defaultValue={teamNumberInput}
             ref={inputTeamRef}
-            className="mb-5 min-w-fit text-5xl font-bold xs:text-5xl sm:text-8xl bg-transparent border-none outline-none w-min"
+            className="mb-5 text-5xl font-bold xs:text-5xl sm:text-8xl bg-transparent border-none outline-none"
             onChange={(event) => {
               event.preventDefault();
               window.history.pushState({}, '', `/teams/${event.target.value.toUpperCase()}`);
@@ -257,7 +257,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
               <div className="flex min-w-fit flex-row gap-5 lg:flex-col">
                 <div className="flex flex-col w-[49%] lg:w-auto">
                   <h3 className="text-xl font-bold">
-                    Team Name:
+                    Name:
                   </h3>
                   <h3 className="font-normal text-md">
                     {teamProfile.teamName ? teamProfile.teamName : "N/A"}
@@ -275,10 +275,12 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
               <div className="flex min-w-fit flex-row gap-5 lg:flex-col">
                 <div className="flex flex-col w-[49%] lg:w-auto">
                   <h3 className="text-xl font-bold">
-                    Organization:
+                    Org:
                   </h3>
                   <h3 className="font-normal text-md">
-                    {teamProfile.teamOrg ? teamProfile.teamOrg : "N/A"}
+                    {teamProfile.teamOrg ? (
+                      teamProfile.teamOrg.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')
+                    ) : "N/A"}
                   </h3>
                 </div>
                 <div className="flex flex-col w-[49%] lg:w-auto">

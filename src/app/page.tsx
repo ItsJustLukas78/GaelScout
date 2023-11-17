@@ -22,16 +22,16 @@ export default function Home() {
         <div className="flex flex-col gap-72">
           <div className="animHeading items-center flex h-auto flex-col lg:space-x-8 lg:flex-row">
             <div className="flex flex-col space-y-8 w-72 xs:w-96 sm:w-144 lg:w-128 xl:w-144 p-1">
-              <AnimatedTextCharacter className="text-5xl font-bold xs:text-7xl sm:text-8xl" delay={0.4} interval={0.4} text="Scouting Done Easy."/>
-              <SpringAnimatedElement className="text-base sm:text-xl" delay={1.2}>
+              <AnimatedTextCharacter className="text-5xl font-bold xs:text-7xl sm:text-8xl" delay={0.4} interval={0.6} text="Scouting Done Easy."/>
+              <SpringAnimatedElement className="text-base sm:text-xl" delay={1.6}>
                 Improve your scouting experience in the VEX Robotics competition with all the tools you need in one place. Access data
                 on other teams, and tools to get an upper hand in scouting, and winning competitions.
                 Check team stats beyond what is provided in VEX Via, view match results, efficiently take notes, and more.
               </SpringAnimatedElement>
-              <SpringAnimatedElement className="text-base sm:text-xl" delay={1.2}>
+              <SpringAnimatedElement className="text-base sm:text-xl" delay={1.6}>
                 Sign up to access all of GaelScouts features for a better scouting experience.
               </SpringAnimatedElement>
-              <SpringAnimatedElement delay={1.2} className="">
+              <SpringAnimatedElement delay={1.6} className="">
                 <Link href="sign-up">
                   <CorneredButton className="text-2xl font-semibold">
                     Sign-Up
@@ -40,7 +40,7 @@ export default function Home() {
               </SpringAnimatedElement>
             </div>
             <div className="hidden lg:block max-w-[600px]">
-              <SpringAnimatedElement className="hidden max-w-lg lg:flex-col lg:flex" delay={1.2}>
+              <SpringAnimatedElement className="hidden max-w-lg lg:flex-col lg:flex" delay={1.6}>
                  <Tilt
                   tiltMaxAngleX={20}
                   tiltMaxAngleY={20}
@@ -56,7 +56,7 @@ export default function Home() {
               </SpringAnimatedElement>
             </div>
           </div>
-          <SpringAnimatedElement className="animHeading pb-16 flex h-auto flex-col items-center justify-center lg:space-x-8 lg:flex-row" delay={1.2}>
+          <SpringAnimatedElement className="animHeading pb-16 flex h-auto flex-col items-center justify-center lg:space-x-8 lg:flex-row" delay={1.6}>
             <div className="flex flex-col space-y-8 w-72 xs:w-96 sm:w-144 lg:w-128 xl:w-144 p-1">
               <div className="text-4xl font-bold xs:text-5xl sm:text-7xl">
                 Developed by members of Gael Force Robotics

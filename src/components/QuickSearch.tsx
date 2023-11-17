@@ -1,14 +1,28 @@
 "use client"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { MdSearch } from "react-icons/md";
 import { FaAngleDoubleDown, FaAngleDoubleUp } from "react-icons/fa";
 
 export default function QuickSearch() {
+  const path = usePathname();
+
+  const [fullyHidden, setFullyHidden] = useState(false);
   const [hidden, setHidden] = useState(false);
+
+  useEffect(() => {
+    if (path === "/sign-in" || path === "/sign-up") {
+      setFullyHidden(true);
+    } else {
+      setFullyHidden(false);
+    }
+  }, [path]);
+
+
 
   return (
     <div
-      className={`fixed z-50 items-center justify-center bg-neutral-700 rounded-full w-72 h-12 p-1 transition-all duration-500 ${hidden ? "-bottom-9" : "bottom-20"}`}
+      className={`fixed z-50 items-center justify-center bg-neutral-700 rounded-full w-72 h-12 p-1 transition-all duration-500 ${hidden ? "-bottom-9" : "bottom-20"} ${fullyHidden ? "hidden" : ""}`}
     >
       <form
         className="relative w-full h-full"

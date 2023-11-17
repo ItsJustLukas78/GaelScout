@@ -5,9 +5,11 @@ import React from "react";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { Divide as Hamburger } from 'hamburger-react'
 import { VscAccount } from "react-icons/vsc";
-import SpringAnimatedElement from "@/components/SpringAnimatedElement";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
+  const path = usePathname();
+
   const { isLoaded, isSignedIn, user } = useUser();
 
   const [expanded, setExpanded] = React.useState(false);
@@ -50,7 +52,7 @@ export default function Navbar() {
               afterSignOutUrl="/"
             /> :
             <NavButton
-              href="/sign-in"
+              href={`/sign-in?redirect_url=${path ? path : "/"}`}
             >
               Sign In
             </NavButton>
