@@ -139,9 +139,14 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
       return;
     }
 
+    if (!isSignedIn) {
+      toast.error("You must be signed in to favorite a team");
+      return;
+    }
+
     if (favorite) {
       try {
-        const response = await fetch(`/api/favorites/`, {
+        const response = await fetch(`/api/favorites`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -167,7 +172,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
       }
     } else {
       try {
-        const response = await fetch(`/api/favorites/`, {
+        const response = await fetch(`/api/favorites`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",

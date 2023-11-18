@@ -9,8 +9,8 @@ import EventResult from "@/components/EventResult";
 import MatchTeamResult from "@/components/MatchTeamResult";
 
 
-export default function Favorites({ params }: { params: { teamNumber: string } }) {
-  const { isSignedIn, user } = useUser();
+export default function Favorites() {
+  const {isLoaded, isSignedIn, user} = useUser();
 
   const [favoriteTeams, setFavoriteTeams] = useState<TeamProfile[]>([]);
   const [favoriteEvents, setFavoriteEvents] = useState<Event[]>([]);
@@ -18,15 +18,20 @@ export default function Favorites({ params }: { params: { teamNumber: string } }
   const [teamNotesDialogOpen, setTeamNotesDialogOpen] = useState<boolean>(false);
   const [currentNotesTeam, setCurrentNotesTeam] = useState<TeamProfile | null>(null);
 
+  const [loadingFavorites, setLoadingFavorites] = useState<boolean>(true);
 
   const [seasonId, setSeasonId] = useState<number>(181);
 
   const getFavorites = async() => {
+    if (!isSignedIn) return;
+
+    setLoadingFavorites(true);
+
     const promises = [];
 
     promises.push(async() => {
       try {
-        const response = await fetch(`/api/favorites?favoriteType=team`);
+        const response = await fetch(`/api/favorites/?favoriteType=team`);
 
         const data = await response.json();
 
@@ -42,7 +47,7 @@ export default function Favorites({ params }: { params: { teamNumber: string } }
       }
     }, async() => {
       try {
-        const response = await fetch(`/api/favorites?favoriteType=event`);
+        const response = await fetch(`/api/favorites/?favoriteType=event`);
 
         const data = await response.json();
 
@@ -58,14 +63,18 @@ export default function Favorites({ params }: { params: { teamNumber: string } }
       }
     });
 
-    await Promise.all(promises);
+    await Promise.all(promises.map(async(promise) => {
+      await promise();
+    }));
+
+    setLoadingFavorites(false);
   }
 
   useEffect(() => {
     if (isSignedIn) {
       getFavorites();
     }
-  }, [isSignedIn]);
+  }, [isSignedIn, seasonId, isLoaded]);
 
 
   return (
@@ -103,6 +112,20 @@ export default function Favorites({ params }: { params: { teamNumber: string } }
                 </div>
               </div>
               <div className="flex flex-col gap-4 overflow-auto w-[100%]">
+                {favoriteTeams.length === 0 && !loadingFavorites ? (
+                  <h1 className="text-3xl font-semibold text-center text-gray-300">
+                    No favorite teams found
+                  </h1>
+                ) : null}
+                {loadingFavorites && isSignedIn ? (
+                  <h1 className="text-3xl font-semibold text-center text-gray-300">
+                    Loading...
+                  </h1>
+                ) : loadingFavorites && !isSignedIn ? (
+                  <h1 className="text-3xl font-semibold text-center text-gray-300">
+                    You must be signed in to view your favorites
+                  </h1>
+                ) : null}
                 {favoriteTeams.length !== 0 ? favoriteTeams.map((result: TeamProfile) => {
                   const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
 
@@ -145,8 +168,8 @@ export default function Favorites({ params }: { params: { teamNumber: string } }
               : null}
             </TabsContent>
             <TabsContent value="matches">
-              <div className="mb-10 flex flex-col justify-between xl:flex-row">
-                <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl xl:mb-0">
+              <div className="mb-10 flex flex-col justify-between md:flex-row">
+                <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl md:mb-0">
                   Events
                 </h3>
                 <div className="flex flex-col gap-3 sm:flex-row">
@@ -162,7 +185,23 @@ export default function Favorites({ params }: { params: { teamNumber: string } }
                 </div>
               </div>
               <div className="flex flex-col gap-4 overflow-auto w-[100%]">
+                {favoriteEvents.length === 0 && !loadingFavorites ? (
+                  <h1 className="text-3xl font-semibold text-center text-gray-300">
+                    No favorite events found
+                  </h1>
+                ) : null}
+                {loadingFavorites && isSignedIn ? (
+                  <h1 className="text-3xl font-semibold text-center text-gray-300">
+                    Loading...
+                  </h1>
+                ) : loadingFavorites && !isSignedIn ? (
+                  <h1 className="text-3xl font-semibold text-center text-gray-300">
+                    You must be signed in to view your favorites
+                  </h1>
+                ) : null}
                 {favoriteEvents.length !== 0 ? favoriteEvents.map((result: Event) => {
+                  if (result.season.id !== seasonId) return null;
+
                   const locationString = `${result.location.city ? result.location.city + ", " : ""}${result.location.region ? result.location.region + ", " : ""}${result.location.country}`;
 
                   return (

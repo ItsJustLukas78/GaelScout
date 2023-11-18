@@ -6,34 +6,42 @@ import Tilt from 'react-parallax-tilt';
 import React from "react";
 import AnimatedTextCharacter from "@/components/AnimatedTextCharacter";
 import SpringAnimatedElement from "@/components/SpringAnimatedElement";
+import {useUser} from "@clerk/nextjs";
 
 // Z indexes
 // 50 - Modals
 // 40 - Navbar
 
 export default function Home() {
+  const { isSignedIn, user, isLoaded } = useUser();
 
   return (
     <main>
       <div className="flex w-full items-center justify-center py-28 xs:py-32">
         <div className="flex flex-col gap-72">
-          <div className="flex h-auto flex-col items-center animHeading lg:space-x-8 lg:flex-row">
+          <div className="flex h-auto flex-col lg:items-start items-center animHeading lg:space-x-8 lg:flex-row">
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
-              <AnimatedTextCharacter className="text-5xl font-bold xs:text-7xl sm:text-8xl" delay={0.4} interval={0.6} text="Scouting Done Easy."/>
+              <AnimatedTextCharacter className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl" delay={0.4} interval={0.6} text="Scouting Done Easy."/>
               <SpringAnimatedElement className="text-base sm:text-xl" delay={1.6}>
-                Improve your scouting experience in the VEX Robotics competition with all the tools you need in one place. Access data
-                on other teams, and tools to get an upper hand in scouting, and winning competitions.
-                Check team stats beyond what is provided in VEX Via, view match results, efficiently take notes, and more.
-              </SpringAnimatedElement>
-              <SpringAnimatedElement className="text-base sm:text-xl" delay={1.6}>
-                Sign up to access all of GaelScouts features for a better scouting experience.
+                Enhance your VEX Robotics scouting with GaelScout – your all-in-one solution for team data, match results, rankings, efficient note-taking, and a competitive edge.
               </SpringAnimatedElement>
               <SpringAnimatedElement delay={1.6} className="">
-                <Link href="sign-up">
-                  <CorneredButton className="text-2xl font-semibold">
-                    Sign-Up
-                  </CorneredButton>
-                </Link>
+                {isSignedIn ? (
+                  <p className="text-base sm:text-xl">
+                    Enjoy your smooth scouting experience with GaelScout, {user.firstName}!
+                  </p>
+                  )
+                : <>
+                  <SpringAnimatedElement className="text-base sm:text-xl mb-8" delay={1.6}>
+                    Sign up to access all of GaelScout&apos;s features.
+                  </SpringAnimatedElement>
+                  <Link href="sign-up">
+                    <CorneredButton className="h-8 w-33 text-2xl font-semibold">
+                      Sign Up
+                    </CorneredButton>
+                  </Link>
+                  </>
+                }
               </SpringAnimatedElement>
             </div>
             <div className="hidden max-w-[600px] lg:block">

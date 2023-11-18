@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-export default function TeamResult({ id, sku, name, start, location } :
+export default function EventResult({ id, sku, name, start, location } :
 { id: number, sku: string, name: string, start: string, location: string }) {
   return (
     <Link

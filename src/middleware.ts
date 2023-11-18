@@ -2,7 +2,6 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
 import { authMiddleware } from "@clerk/nextjs/server";
-import { pathToRegexp, match, parse, compile } from "path-to-regexp";
 
 type Unit = "ms" | "s" | "m" | "h" | "d";
 type Duration = `${number} ${Unit}` | `${number}${Unit}`;
@@ -98,6 +97,7 @@ export default authMiddleware({
     '/sign-up',
     '/predictionModel/:route*',
     '/api/:route*',
+    '/favorites/:route*',
   ],
   apiRoutes: ['/api/:route*'],
 

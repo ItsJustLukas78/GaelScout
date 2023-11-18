@@ -40,7 +40,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
   const eventCode = params.eventCode
 
   const [loadingTeams, setLoadingTeams] = useState(true);
-  const [loadingMatches, setLoadingMatches] = useState(false);
+  const [loadingMatches, setLoadingMatches] = useState(true);
 
   const [eventObject, setEventObject] = useState<Event | null>(null);
   const [participatingTeams, setParticipatingTeams] = useState<TeamProfile[]>([]);
@@ -147,6 +147,8 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
   useEffect(() => {
     if (currentDivision) {
       if (currentDivision.name === "Default") {
+        setLoadingMatches(false);
+        setLoadingRankings(false);
         setMatchList([]);
         setRankings([]);
         return;
@@ -252,9 +254,14 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       return;
     }
 
+    if (!isSignedIn) {
+      toast.error("You must be signed in to favorite an event");
+      return;
+    }
+
     if (favorite) {
       try {
-        const response = await fetch(`/api/favorites/`, {
+        const response = await fetch(`/api/favorites`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -278,7 +285,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       }
     } else {
       try {
-        const response = await fetch(`/api/favorites/`, {
+        const response = await fetch(`/api/favorites`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -684,7 +691,17 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     </button>
                   </div>
                 </div>
-                <div className="flex flex-col gap-4 overflow-auto w-[100%]">
+                <div className="flex flex-col gap-4 w-[100%]">
+                  {loadingTeams ?
+                    <h1 className="text-2xl font-semibold text-neutral-200">
+                      Loading...
+                    </h1>
+                    : null}
+                  {divisionFilteredTeams.length === 0 && !loadingTeams ?
+                    <h1 className="text-2xl font-semibold text-neutral-200">
+                      No teams found
+                    </h1>
+                    : null}
                   {divisionFilteredTeams.length !== 0 ? divisionFilteredTeams.map((result: TeamProfile) => {
                     const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
 
@@ -770,6 +787,13 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         )
                       })}
                     </select>
+                    <input
+                      className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      type="text"
+                      value={teamNumberFilter}
+                      placeholder="Filter by team..."
+                      onChange={(e) => setTeamNumberFilter(e.target.value)}
+                    />
                   </div>
                 </div>
                 {loadingRankings ?
@@ -779,13 +803,17 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   : null}
                 {rankings.length === 0 && !loadingRankings ?
                   <h1 className="text-2xl font-semibold text-neutral-200">
-                    No rankings found
+                    No rankings found, insufficient match data to calculate rankings
                   </h1>
                   : null}
                 <div className="flex flex-col gap-4 overflow-auto w-[100%]">
                   {rankingsWithMetrics.length !== 0 ? rankingsWithMetrics.map((result: EventRankWithMetrics) => {
                     const foundTeamProfile = participatingTeams.find((team) => team.teamId === result.team.teamId);
                     if (!foundTeamProfile) {
+                      return null;
+                    }
+
+                    if (teamNumberFilter !== "" && !foundTeamProfile.teamNumber.startsWith(teamNumberFilter.toUpperCase())) {
                       return null;
                     }
 
@@ -805,6 +833,19 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     Matches
                   </h3>
                   <div className="flex flex-col gap-3 sm:flex-row">
+                    <button
+                      className="h-8 min-w-max rounded-lg bg-white text-sm text-black disabled:opacity-50 sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      onClick={() => {
+                        if (!isSignedIn) {
+                          toast.error("You must be signed in to view match notes");
+                          return;
+                        } else {
+                          setMatchNotesDialogOpen(true)
+                        }
+                      }}
+                    >
+                      Match Notes
+                    </button>
                     <select
                       className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
                       required
@@ -821,22 +862,10 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         )
                       })}
                     </select>
-                    <button
-                      className="h-8 min-w-max rounded-lg bg-white text-sm text-black disabled:opacity-50 sm:w-44 md:h-12 md:w-52 md:text-lg"
-                      onClick={() => {
-                        if (!isSignedIn) {
-                          toast.error("You must be signed in to view match notes");
-                          return;
-                        } else {
-                          setMatchNotesDialogOpen(true)
-                        }
-                      }}
-                    >
-                      Match Notes
-                    </button>
                     <input
                       className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
                       type="text"
+                      value={teamNumberFilter}
                       placeholder="Filter by team..."
                       onChange={(e) => setTeamNumberFilter(e.target.value)}
                     />
@@ -846,7 +875,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   <h1 className="text-2xl font-semibold text-neutral-200">
                     No matches found
                   </h1>
-                  : null}
+                : null}
                 <div className="flex flex-col gap-4 overflow-auto w-[100%]">
                   {fiteredMatches.length !== 0 ? fiteredMatches.map((result: EventMatch) => {
                     return (
@@ -872,7 +901,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </TabsContent>
             </div>
           </Tabs>
-        </> : <></>}
+        </> : null}
       </div>
     </main>
   )
