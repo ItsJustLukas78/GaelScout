@@ -121,6 +121,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
+      timeZone: 'GMT',
     })
   }
 
