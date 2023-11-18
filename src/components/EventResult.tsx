@@ -19,11 +19,12 @@ export default function EventResult({ id, sku, name, start, location } :
         </h2>
         <h2 className="text-xs font-semibold text-gray-900 md:text-sm">
           {(new Date(start)).toLocaleString(undefined, {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })
-        }
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              timeZone: 'GMT',
+            })
+          }
         </h2>
       </div>
     </Link>

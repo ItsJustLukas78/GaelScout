@@ -357,8 +357,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
 
 
   useEffect(() => {
-    if (matchList.length !== 0 && participatingTeams.length !== 0) {
-
+    if (matchList.length !== 0 && participatingTeams.length !== 0 && rankings.length !== 0) {
       const completedMatches = matchList.filter((match) => {
         return match.blueScore !== 0 && match.redScore !== 0;
       });
