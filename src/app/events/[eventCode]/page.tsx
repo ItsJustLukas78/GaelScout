@@ -667,6 +667,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     Teams
                   </h3>
                   <div className="flex flex-col gap-3 sm:flex-row">
+                    <button
+                      className="h-8 min-w-max rounded-lg bg-white text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      onClick={() => setExportDialogOpen(true)}
+                    >
+                      Generate Scout Sheet
+                    </button>
                     <select
                       className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
                       required
@@ -687,12 +693,13 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         )
                       })}
                     </select>
-                    <button
-                      className="h-8 min-w-max rounded-lg bg-white text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
-                      onClick={() => setExportDialogOpen(true)}
-                    >
-                      Generate Scout Sheet
-                    </button>
+                    <input
+                      className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      type="text"
+                      value={teamNumberFilter}
+                      placeholder="Filter by team..."
+                      onChange={(e) => setTeamNumberFilter(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="flex flex-col gap-4 w-[100%]">
@@ -707,6 +714,10 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     </h1>
                     : null}
                   {divisionFilteredTeams.length !== 0 ? divisionFilteredTeams.map((result: TeamProfile) => {
+                    if (teamNumberFilter !== "" && !result.teamNumber.startsWith(teamNumberFilter.toUpperCase())) {
+                      return null;
+                    }
+
                     const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
 
                     return (
@@ -760,6 +771,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     Rankings
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
+                    <button
+                      className="h-8 min-w-max rounded-lg bg-white text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
+                      onClick={() => setRankingsExportDialogOpen(true)}
+                    >
+                      Generate Scout Sheet
+                    </button>
                     <select
                       className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
                       required
@@ -775,12 +792,6 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       <option value="ap">AP (Auton Win Points)</option>
                       <option value="sp">SP (Opponent Strength)</option>
                     </select>
-                    <button
-                      className="h-8 min-w-max rounded-lg bg-white text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
-                      onClick={() => setRankingsExportDialogOpen(true)}
-                    >
-                      Generate Scout Sheet
-                    </button>
                     <select
                       className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
                       required
