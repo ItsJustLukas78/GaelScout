@@ -171,11 +171,7 @@ export default function MatchResult({
         predictedValue = resultTensor.arraySync()[0][0];
       }
 
-      console.log({predictedValue})
-
       predictedValue = Math.round(predictedValue * 100);
-
-      console.log(predictedValue);
 
       let rChance = 0;
       let bChance = 0;

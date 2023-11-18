@@ -4,6 +4,7 @@ import {toast} from "react-toastify";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
 import {Event, EventMatch, TeamProfile, Division, EventRank, TeamIdentifiers, EventRankWithMetrics} from "@/app/types";
 import ScoutingSheetDialog from "@/components/ScoutingSheetDialog";
+import RankingsScoutingSheetDialog from "@/components/RankingsScoutingSheetDialog";
 import MatchNotesDialog from "@/components/MatchNotesDialog";
 import MatchResult from "@/components/MatchResult";
 import {useUser} from "@clerk/nextjs";
@@ -57,8 +58,10 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
   const [rankings, setRankings] = useState<EventRank[]>([]);
 
   const [rankingsWithMetrics, setRankingsWithMetrics] = useState<EventRankWithMetrics[]>([]);
+  const [rankingsWithMetricsSorted, setRankingsWithMetricsSorted] = useState<EventRankWithMetrics[]>([]);
 
   const [exportDialogOpen, setExportDialogOpen] = useState(false);
+  const [rankingsExportDialogOpen, setRankingsExportDialogOpen] = useState(false);
   const [matchNotesDialogOpen, setMatchNotesDialogOpen] = useState(false);
   const [teamNotesDialogOpen, setTeamNotesDialogOpen] = useState(false);
 
@@ -526,7 +529,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
         });
       }
 
-      setRankingsWithMetrics(newRankingsWithMetrics);
+      setRankingsWithMetricsSorted(newRankingsWithMetrics);
     }
   }, [rankedStatistic, rankingsWithMetrics]);
 
@@ -752,13 +755,13 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   : null}
               </TabsContent>
               <TabsContent value="rankings">
-                <div className="mb-10 flex flex-col justify-between xl:flex-row">
-                  <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl xl:mb-0">
+                <div className="mb-10 flex flex-col">
+                  <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl">
                     Rankings
                   </h3>
-                  <div className="flex flex-col gap-3 sm:flex-row">
+                  <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
                     <select
-                      className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
                       required
                       value={rankedStatistic}
                       onChange={(event) => {
@@ -767,13 +770,19 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     >
                       <option value="rank">Rank</option>
                       <option value="opr">OPR (Contrib. to score)</option>
-                      <option value="dpr">DPR (Contrib. to opponent score)</option>
+                      <option value="dpr">DPR (Contrib. to opp score)</option>
                       <option value="ccwm">CCWM (OPR - DPR)</option>
                       <option value="ap">AP (Auton Win Points)</option>
                       <option value="sp">SP (Opponent Strength)</option>
                     </select>
+                    <button
+                      className="h-8 min-w-max rounded-lg bg-white text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
+                      onClick={() => setRankingsExportDialogOpen(true)}
+                    >
+                      Generate Scout Sheet
+                    </button>
                     <select
-                      className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
                       required
                       value={currentDivision?.id}
                       onChange={(event) => {
@@ -789,7 +798,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       })}
                     </select>
                     <input
-                      className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
                       type="text"
                       value={teamNumberFilter}
                       placeholder="Filter by team..."
@@ -808,7 +817,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   </h1>
                   : null}
                 <div className="flex flex-col gap-4 overflow-auto w-[100%]">
-                  {rankingsWithMetrics.length !== 0 ? rankingsWithMetrics.map((result: EventRankWithMetrics) => {
+                  {rankingsWithMetricsSorted.length !== 0 ? rankingsWithMetricsSorted.map((result: EventRankWithMetrics) => {
                     const foundTeamProfile = participatingTeams.find((team) => team.teamId === result.team.teamId);
                     if (!foundTeamProfile) {
                       return null;
@@ -827,13 +836,20 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     )
                   }) : null}
                 </div>
+                <RankingsScoutingSheetDialog
+                  exportDialogOpen={rankingsExportDialogOpen}
+                  eventObject={eventObject}
+                  rankingsWithMetrics={rankingsWithMetricsSorted}
+                  teamProfiles={divisionFilteredTeams}
+                  setExportDialogOpen={setRankingsExportDialogOpen}
+                />
               </TabsContent>
               <TabsContent value="matches">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
                   <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl xl:mb-0">
                     Matches
                   </h3>
-                  <div className="flex flex-col gap-3 sm:flex-row">
+                  <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
                     <button
                       className="h-8 min-w-max rounded-lg bg-white text-sm text-black disabled:opacity-50 sm:w-44 md:h-12 md:w-52 md:text-lg"
                       onClick={() => {

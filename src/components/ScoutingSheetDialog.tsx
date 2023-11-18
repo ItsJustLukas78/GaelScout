@@ -183,7 +183,7 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
             const enumKey = key as keyof typeof team;
             let teamValue: string | number | undefined = team[enumKey] as string | number | undefined;
 
-            if (!teamValue || teamValue === "") {
+            if ((!teamValue || teamValue === "") && typeof teamValue !== 'number') {
               csvRow += "N/A" + ","
               continue;
             }
@@ -193,7 +193,11 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
             } else if (typeof teamValue === 'number') {
               // @ts-ignore
               if (!Number.isInteger(teamValue)) {
-                teamValue = teamValue.toFixed(4)
+                if (teamValue % 1 !== 0) {
+                  teamValue = teamValue.toFixed(4)
+                } else {
+                  teamValue = teamValue.toString()
+                }
               }
             }
 
@@ -213,7 +217,7 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
       const a = document.createElement('a');
       a.setAttribute('hidden', '');
       a.setAttribute('href', url);
-      a.setAttribute('download', `${eventObject.name} - ${eventObject.sku}.csv`);
+      a.setAttribute('download', `${eventObject.name} - ${eventObject.sku} - GaelScout Export.csv`);
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -242,7 +246,7 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
               <p className="text-sm font-semibold xs:text-md">
                 Select all the information you want to be included in the sheet for each team:
               </p>
-              <div className="mt-3 flex flex-row justify-between overflow-scroll overflow-x-hidden h-[300px]">
+              <div className="mt-3 flex flex-row justify-between overflow-scroll overflow-x-hidden h-[275px]">
                 <div className="flex flex-col">
                   <CheckboxDiv checked={numberChecked} onCheckedChange={(e) => setNumberChecked((numberChecked) => (!numberChecked))}>
                     Number
