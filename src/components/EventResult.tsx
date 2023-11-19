@@ -1,23 +1,23 @@
 import Link from 'next/link'
 
-export default function EventResult({ id, sku, name, start, location } :
-{ id: number, sku: string, name: string, start: string, location: string }) {
+export default function EventResult({ id, sku, name, start, location, dark=false }:
+{ id: number, sku: string, name: string, start: string, location: string, dark?: boolean }) {
   return (
     <Link
       href={`/events/${sku}`}
-      className="flex h-auto w-full flex-col rounded-2xl bg-neutral-300 p-3 shadow-lg shadow-neutral-500 transition-colors duration-200 min-h-28 hover:bg-gray-400"
+      className={`flex h-auto w-full flex-col rounded-2xl p-3 shadow-lg transition-colors duration-200 min-h-28 ${dark ? 'bg-neutral-700 shadow-neutral-900 hover:bg-neutral-600' : 'bg-neutral-300 shadow-neutral-500 hover:bg-gray-400 [&>*]:text-gray-900'}`}
     >
-      <h1 className="mb-2 text-sm font-bold text-gray-900 md:text-lg">
+      <h1 className="mb-2 text-sm font-bold md:text-lg">
         {name}
       </h1>
       <div className="flex flex-col gap-2">
-        <h2 className="text-xs font-semibold text-gray-900 md:text-sm">
+        <h2 className="text-xs font-semibold md:text-sm">
           {sku}
         </h2>
-        <h2 className="text-xs font-semibold text-gray-900 md:text-sm">
+        <h2 className="text-xs font-semibold md:text-sm">
           {location}
         </h2>
-        <h2 className="text-xs font-semibold text-gray-900 md:text-sm">
+        <h2 className="text-xs font-semibold md:text-sm">
           {(new Date(start)).toLocaleString(undefined, {
               year: 'numeric',
               month: 'long',

@@ -2,7 +2,16 @@
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
-import {Event, EventMatch, TeamProfile, Division, EventRank, TeamIdentifiers, EventRankWithMetrics} from "@/app/types";
+import {
+  Event,
+  EventMatch,
+  TeamProfile,
+  Division,
+  EventRank,
+  TeamIdentifiers,
+  EventRankWithMetrics,
+  EventAward, SkillsRun, CombinedTeamSkills
+} from "@/app/types";
 import ScoutingSheetDialog from "@/components/ScoutingSheetDialog";
 import RankingsScoutingSheetDialog from "@/components/RankingsScoutingSheetDialog";
 import MatchNotesDialog from "@/components/MatchNotesDialog";
@@ -12,6 +21,8 @@ import MatchTeamResult from "@/components/MatchTeamResult";
 import TeamNotesDialog from "@/components/TeamNotesDialog";
 import {AiFillStar, AiOutlineStar} from "react-icons/ai";
 import EventRankComponent from "@/components/EventRankComponent";
+import AwardResult from "@/components/AwardResult";
+import SkillsResult from "@/components/SkillsResult";
 import * as tf from '@tensorflow/tfjs';
 import {
   matrix,
@@ -19,6 +30,11 @@ import {
   pinv,
   concat,
 } from "mathjs";
+import useSWR from 'swr'
+
+
+// @ts-ignore
+const fetcher = (...args: any[]) => fetch(...args).then(res => res.json())
 
 export default function EventPage({params}: { params: { eventCode: string } }) {
   const {isLoaded, isSignedIn, user} = useUser();
@@ -40,9 +56,6 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
 
   const eventCode = params.eventCode
 
-  const [loadingTeams, setLoadingTeams] = useState(true);
-  const [loadingMatches, setLoadingMatches] = useState(true);
-
   const [eventObject, setEventObject] = useState<Event | null>(null);
   const [participatingTeams, setParticipatingTeams] = useState<TeamProfile[]>([]);
   const [divisionFilteredTeams, setDivisionFilteredTeams] = useState<TeamProfile[]>([]);
@@ -54,7 +67,6 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
   const [fiteredMatches, setFilteredMatches] = useState<EventMatch[]>([]);
   const [teamNumberFilter, setTeamNumberFilter] = useState<string>("");
 
-  const [loadingRankings, setLoadingRankings] = useState(true);
   const [rankings, setRankings] = useState<EventRank[]>([]);
 
   const [rankingsWithMetrics, setRankingsWithMetrics] = useState<EventRankWithMetrics[]>([]);
@@ -71,255 +83,43 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
 
   const [rankedStatistic, setRankedStatistic] = useState("rank")
 
-  const getEvent = async () => {
-    const skuSearchParams = new URLSearchParams();
+  const [awards, setAwards] = useState<EventAward[]>([])
 
-    skuSearchParams.append("eventSKU[]", eventCode);
+  const [skills, setSkills] = useState<CombinedTeamSkills[]>([])
 
-    try {
-      const response = await fetch(`/api/events/?${skuSearchParams.toString()}`);
-
-      const data = await response.json();
-
-      if (data.error) {
-        toast.error(data.error);
-        return;
-      }
-
-      if (data.events.length === 0) {
-        toast.error("Event not found");
-        return;
-      }
-
-      setEventObject(data.events[0]);
-
-      setDivisionList(data.events[0].divisions);
-
-      if (data.events[0].divisions.length !== 0) {
-        setCurrentDivision(data.events[0].divisions[0]);
-      }
-
-      setLoadingTeams(true);
-
-      const response2 = await fetch(`/api/events/${data.events[0].id}/teams`)
-
-      const data2 = await response2.json();
-
-      if (data2.error) {
-        toast.error(data2.error);
-        setLoadingTeams(false);
-        return;
-      }
-
-      setLoadingTeams(false);
-      setParticipatingTeams(data2.teams);
-    } catch (err) {
-      console.log(err);
-      toast.error("Error getting event data");
-    }
-  }
-
-  const formatDate = (date: string) => {
-    return (new Date(date)).toLocaleString(undefined, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      timeZone: 'GMT',
-    })
-  }
+  const { data: awardsData, error: awardsError, isLoading: awardsIsLoading } = useSWR(eventObject ? `/api/events/${eventObject.id}/awards` : null, fetcher)
 
   useEffect(() => {
-    getEvent();
-  }, []);
+    if (awardsData) {
+      setAwards(awardsData.awards)
+    }
+  }, [awardsData])
+
+  const { data: eventData, error: eventDataError, isLoading: eventDataIsLoading } = useSWR(`/api/events/?eventSKU=${eventCode}`, fetcher)
 
   useEffect(() => {
-    if (teamNumberFilter !== "") {
-      const newFilteredMatches: EventMatch[] = [];
-
-      matchList.forEach((match) => {
-        if (match.blueTeams.find((team) => team.teamNumber.startsWith(teamNumberFilter.toUpperCase())) || match.redTeams.find((team) => team.teamNumber.startsWith(teamNumberFilter.toUpperCase()))) {
-          newFilteredMatches.push(match);
-        }
-      });
-
-      setFilteredMatches(newFilteredMatches);
-    } else {
-      setFilteredMatches(matchList);
+    if (eventData) {
+      setEventObject(eventData.events[0])
+      setDivisionList(eventData.events[0].divisions)
+      setCurrentDivision(eventData.events[0].divisions[0])
     }
-  }, [teamNumberFilter, matchList]);
+  }, [eventData])
+
+  const { data: teamsData, error: teamsError, isLoading: teamsIsLoading } = useSWR(eventObject ? `/api/events/${eventObject.id}/teams` : null, fetcher)
 
   useEffect(() => {
-    if (currentDivision) {
-      if (currentDivision.name === "Default") {
-        setLoadingMatches(false);
-        setLoadingRankings(false);
-        setMatchList([]);
-        setRankings([]);
-        return;
-      }
-
-      setLoadingMatches(true);
-      setLoadingRankings(true);
-
-      fetch(`/api/events/${eventObject?.id}/${currentDivision.id}/matches`).then((response) => {
-        response.json().then((data) => {
-          if (data.error) {
-            toast.error(data.error);
-            setLoadingMatches(false);
-            return;
-          }
-
-          setLoadingMatches(false);
-
-          function customSort(a: EventMatch, b: EventMatch) {
-            // Adjust the order of "round" values
-            const roundOrder: Record<number, number> = {
-              1: 1, // Practice
-              2: 2, // Qualification
-              6: 3, // Round of 16
-              3: 4, // Quarter-Finals
-              4: 5, // Semi-Finals
-              5: 6, // Finals
-            };
-
-            // First, sort by adjusted "round" values
-            if (roundOrder[a.round] !== roundOrder[b.round]) {
-              return roundOrder[a.round] - roundOrder[b.round];
-            }
-
-            // If "round" is the same, sort by "matchnum"
-            if (a.matchnum !== b.matchnum) {
-              return a.matchnum - b.matchnum;
-            }
-
-            if (a.instance !== b.instance) {
-              return a.instance - b.instance;
-            }
-
-            return 0;
-          }
-
-          const dateSortedMatches = data.matches.sort(customSort);
-
-          setMatchList(dateSortedMatches);
-        });
-      });
-
-      fetch(`/api/events/${eventObject?.id}/${currentDivision.id}/rankings`).then((response) => {
-        response.json().then((data) => {
-          if (data.error) {
-            toast.error(data.error);
-            setLoadingRankings(false);
-            return;
-          }
-
-          setLoadingRankings(false);
-
-          const rankSortedRankings = data.rankings.sort((a: EventRank, b: EventRank) => {
-            return a.rank - b.rank;
-          });
-
-          setRankings(rankSortedRankings);
-        });
-      });
+    if (teamsData) {
+      setParticipatingTeams(teamsData.teams)
     }
-  }, [currentDivision]);
+  }, [teamsData])
 
-  const getFavoriteStatus = async () => {
-    if (!eventObject) {
-      return;
-    }
-
-    const searchParams = new URLSearchParams();
-
-    searchParams.append("eventId", eventObject.id.toString());
-    searchParams.append("favoriteType", "event");
-
-    try {
-      const response = await fetch(`/api/favorites/?${searchParams.toString()}`);
-
-      const data = await response.json();
-
-      if (data.error) {
-        toast.error(data.error)
-        setFavorited(false);
-        return;
-      }
-
-      setFavorited(data.favorites.length > 0);
-    } catch (err) {
-      toast.error(err as any)
-      setFavorited(false);
-    }
-  }
-
-  const changeFavoriteStatus = async (favorite: boolean) => {
-    if (!eventObject) {
-      return;
-    }
-
-    if (!isSignedIn) {
-      toast.error("You must be signed in to favorite an event");
-      return;
-    }
-
-    if (favorite) {
-      try {
-        const response = await fetch(`/api/favorites`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            eventId: eventObject.id,
-            favoriteType: "event",
-          }),
-        })
-
-        const data = await response.json();
-
-        if (data?.error) {
-          toast.error(data.error)
-          return;
-        }
-
-        setFavorited(data.success);
-      } catch (err) {
-        toast.error(err as any)
-      }
-    } else {
-      try {
-        const response = await fetch(`/api/favorites`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            eventId: eventObject.id,
-            favoriteType: "event",
-          })
-        });
-
-        const data = await response.json();
-
-        if (data?.error) {
-          toast.error(data.error)
-          return;
-        }
-
-        setFavorited(!data.success);
-      } catch (err) {
-        toast.error(err as any)
-      }
-    }
-  }
+  const { data: favoritesData, error: favoritesError, isLoading: favoritesIsLoading } = useSWR(isSignedIn && eventObject ? `/api/favorites/?eventId=${eventObject?.id}&favoriteType=event` : null, fetcher)
 
   useEffect(() => {
-    if (isSignedIn && eventObject) {
-      getFavoriteStatus();
+    if (favoritesData) {
+      setFavorited(favoritesData.favorites.length > 0)
     }
-  }, [isSignedIn, eventObject]);
-
+  }, [favoritesData])
 
   useEffect(() => {
     if (currentTeamsDivision) {
@@ -354,7 +154,6 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       }
     }
   }, [currentTeamsDivision, matchList, participatingTeams]);
-
 
   useEffect(() => {
     if (matchList.length !== 0 && participatingTeams.length !== 0 && rankings.length !== 0) {
@@ -496,7 +295,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
         ]);
       }
     }
-  }, [matchList, participatingTeams]);
+  }, [matchList, participatingTeams, rankings]);
 
   useEffect(() => {
     if (rankingsWithMetrics.length !== 0) {
@@ -532,56 +331,201 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [rankedStatistic, rankingsWithMetrics]);
 
+  useEffect(() => {
+    if (teamNumberFilter !== "") {
+      const newFilteredMatches: EventMatch[] = [];
 
-  // Collect data for training when needed
-  // useEffect(() => {
-  //   if (rankingsWithMetrics.length !== 0) {
-  //     console.log("red_opr,red_dpr,red_ccwm,blue_opr,blue_dpr,blue_ccwm,red_won")
-  //
-  //     for (const match of matchList) {
-  //       let red_opr = 0;
-  //       let red_dpr = 0;
-  //       let red_ccwm = 0;
-  //       let blue_opr = 0;
-  //       let blue_dpr = 0;
-  //       let blue_ccwm = 0;
-  //
-  //       for (const team of match.redTeams) {
-  //         const teamData = rankingsWithMetrics.find((ranking) => ranking.team.teamId === team?.teamId);
-  //
-  //         if (teamData) {
-  //           red_opr += teamData.opr;
-  //           red_dpr += teamData.dpr;
-  //           red_ccwm += teamData.ccwm;
-  //         }
-  //       }
-  //
-  //       for (const team of match.blueTeams) {
-  //         const teamData = rankingsWithMetrics.find((ranking) => ranking.team.teamId === team?.teamId);
-  //
-  //         if (teamData) {
-  //           blue_opr += teamData.opr;
-  //           blue_dpr += teamData.dpr;
-  //           blue_ccwm += teamData.ccwm;
-  //         }
-  //       }
-  //
-  //       red_opr = Math.round(red_opr * 10000) / 10000;
-  //       red_dpr = Math.round(red_dpr * 10000) / 10000;
-  //       red_ccwm = Math.round(red_ccwm * 10000) / 10000;
-  //       blue_opr = Math.round(blue_opr * 10000) / 10000;
-  //       blue_dpr = Math.round(blue_dpr * 10000) / 10000;
-  //       blue_ccwm = Math.round(blue_ccwm * 10000) / 10000;
-  //
-  //       if (match.redScore == match.blueScore) {
-  //         continue;
-  //       }
-  //
-  //       console.log(red_opr + "," + red_dpr + "," + red_ccwm + "," + blue_opr + "," + blue_dpr + "," + blue_ccwm + "," + (match.redScore > match.blueScore ? 1 : 0))
-  //     }
-  //   }
-  // }, [rankingsWithMetrics]);
+      matchList.forEach((match) => {
+        if (match.blueTeams.find((team) => team.teamNumber.startsWith(teamNumberFilter.toUpperCase())) || match.redTeams.find((team) => team.teamNumber.startsWith(teamNumberFilter.toUpperCase()))) {
+          newFilteredMatches.push(match);
+        }
+      });
 
+      setFilteredMatches(newFilteredMatches);
+    } else {
+      setFilteredMatches(matchList);
+    }
+  }, [teamNumberFilter, matchList]);
+
+  const { data: matchData, error: matchDataError, isLoading: matchDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/matches` : null, fetcher)
+
+  useEffect(() => {
+    if (matchData) {
+      const dateSortedMatches = matchData.matches.sort(customSort);
+      setMatchList(dateSortedMatches);
+    }
+  }, [matchData])
+
+  const { data: rankingsData, error: rankingsDataError, isLoading: rankingsDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/rankings` : null, fetcher)
+
+  useEffect(() => {
+    if (rankingsData) {
+      const rankSortedRankings = rankingsData.rankings.sort((a: EventRank, b: EventRank) => {
+        return a.rank - b.rank;
+      });
+
+      setRankings(rankSortedRankings);
+    }
+  }, [rankingsData])
+
+  const { data: skillsData, error: skillsDataError, isLoading: skillsDataIsLoading } = useSWR(eventObject ? `/api/events/${eventObject?.id}/skills` : null, fetcher)
+
+  useEffect(() => {
+    if (skillsData && participatingTeams.length !== 0) {
+      const teamSkills: CombinedTeamSkills[] = [];
+      const teamToSkills: Record<number, SkillsRun[]> = {};
+
+      skillsData.skills.forEach((skill: SkillsRun) => {
+        if (!teamToSkills[skill.team.teamId]) {
+          teamToSkills[skill.team.teamId] = [];
+        }
+
+        teamToSkills[skill.team.teamId].push(skill);
+      });
+
+      Object.keys(teamToSkills).forEach((teamId) => {
+        const team = participatingTeams.find((team) => team.teamId === parseInt(teamId));
+
+        if (!team) {
+          return;
+        }
+
+        const greatestDriverScore = teamToSkills[team.teamId].reduce((greatestScore: number, skill: SkillsRun) => {
+          if (skill.type === "driver" && skill.score > greatestScore) {
+            return skill.score;
+          }
+
+          return greatestScore;
+        }, 0);
+
+        const greatestProgrammingScore = teamToSkills[team.teamId].reduce((greatestScore: number, skill: SkillsRun) => {
+          if (skill.type === "programming" && skill.score > greatestScore) {
+            return skill.score;
+          }
+
+          return greatestScore;
+        }, 0);
+
+        teamSkills.push({
+          teamId: team.teamId,
+          teamName: team.teamName,
+          teamNumber: team.teamNumber,
+          progSkills: greatestProgrammingScore,
+          driverSkills: greatestDriverScore,
+          totalSkills: greatestDriverScore + greatestProgrammingScore,
+          rank: 0,
+        });
+      });
+
+      teamSkills.sort((a: CombinedTeamSkills, b: CombinedTeamSkills) => {
+        return b.totalSkills - a.totalSkills;
+      });
+
+      teamSkills.forEach((teamSkill: CombinedTeamSkills, index: number) => {
+        teamSkill.rank = index + 1;
+      });
+
+      setSkills(teamSkills);
+    }
+  }, [skillsData, participatingTeams])
+
+  const changeFavoriteStatus = async (favorite: boolean) => {
+    if (!eventObject) {
+      return;
+    }
+
+    if (!isSignedIn) {
+      toast.error("You must be signed in to favorite an event");
+      return;
+    }
+
+    if (favorite) {
+      try {
+        const response = await fetch(`/api/favorites`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            eventId: eventObject.id,
+            favoriteType: "event",
+          }),
+        })
+
+        const data = await response.json();
+
+        if (data?.error) {
+          toast.error(data.error)
+          return;
+        }
+
+        setFavorited(data.success);
+      } catch (err) {
+        toast.error(err as any)
+      }
+    } else {
+      try {
+        const response = await fetch(`/api/favorites`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            eventId: eventObject.id,
+            favoriteType: "event",
+          })
+        });
+
+        const data = await response.json();
+
+        if (data?.error) {
+          toast.error(data.error)
+          return;
+        }
+
+        setFavorited(!data.success);
+      } catch (err) {
+        toast.error(err as any)
+      }
+    }
+  }
+
+  const customSort = (a: EventMatch, b: EventMatch) => {
+    // Adjust the order of "round" values
+    const roundOrder: Record<number, number> = {
+      1: 1, // Practice
+      2: 2, // Qualification
+      6: 3, // Round of 16
+      3: 4, // Quarter-Finals
+      4: 5, // Semi-Finals
+      5: 6, // Finals
+    };
+
+    // First, sort by adjusted "round" values
+    if (roundOrder[a.round] !== roundOrder[b.round]) {
+      return roundOrder[a.round] - roundOrder[b.round];
+    }
+
+    // If "round" is the same, sort by "matchnum"
+    if (a.matchnum !== b.matchnum) {
+      return a.matchnum - b.matchnum;
+    }
+
+    if (a.instance !== b.instance) {
+      return a.instance - b.instance;
+    }
+
+    return 0;
+  }
+
+  const formatDate = (date: string) => {
+    return (new Date(date)).toLocaleString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      timeZone: 'GMT',
+    })
+  }
 
   return (
     <main>
@@ -657,6 +601,8 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               <TabsTrigger value="teams">Teams</TabsTrigger>
               <TabsTrigger value="rankings">Rankings</TabsTrigger>
               <TabsTrigger value="matches">Matches</TabsTrigger>
+              <TabsTrigger value="skills">Skills</TabsTrigger>
+              <TabsTrigger value="awards">Awards</TabsTrigger>
             </TabsList>
             <div
               className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
@@ -702,12 +648,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   </div>
                 </div>
                 <div className="flex flex-col gap-4 w-[100%]">
-                  {loadingTeams ?
+                  {teamsIsLoading ?
                     <h1 className="text-2xl font-semibold text-neutral-200">
                       Loading...
                     </h1>
                     : null}
-                  {divisionFilteredTeams.length === 0 && !loadingTeams ?
+                  {divisionFilteredTeams.length === 0 && !teamsIsLoading ?
                     <h1 className="text-2xl font-semibold text-neutral-200">
                       No teams found
                     </h1>
@@ -752,7 +698,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   exportDialogOpen={exportDialogOpen}
                   eventObject={eventObject}
                   participatingTeams={participatingTeams}
-                  loadingTeams={loadingTeams}
+                  loadingTeams={teamsIsLoading}
                   setExportDialogOpen={setExportDialogOpen}
                 />
                 {isSignedIn ?
@@ -816,12 +762,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     />
                   </div>
                 </div>
-                {loadingRankings ?
+                {rankingsDataIsLoading ?
                   <h1 className="text-2xl font-semibold text-neutral-200">
                     Loading...
                   </h1>
                   : null}
-                {rankings.length === 0 && !loadingRankings ?
+                {rankings.length === 0 && !rankingsDataIsLoading ?
                   <h1 className="text-2xl font-semibold text-neutral-200">
                     No rankings found, insufficient match data to calculate rankings
                   </h1>
@@ -898,7 +844,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     />
                   </div>
                 </div>
-                {matchList.length === 0 && !loadingMatches ?
+                {matchList.length === 0 && !matchDataIsLoading ?
                   <h1 className="text-2xl font-semibold text-neutral-200">
                     No matches found
                   </h1>
@@ -925,6 +871,93 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     setMatchNotesDialogOpen={setMatchNotesDialogOpen}
                   />
                   : null}
+              </TabsContent>
+              <TabsContent value="skills">
+                <div className="mb-10 flex flex-col justify-between xl:flex-row">
+                  <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl xl:mb-0">
+                    Skills
+                  </h3>
+                  <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
+                    <input
+                      className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      type="text"
+                      value={teamNumberFilter}
+                      placeholder="Filter by team..."
+                      onChange={(e) => setTeamNumberFilter(e.target.value)}
+                    />
+                  </div>
+                </div>
+                {skillsDataIsLoading ?
+                  <h1 className="text-2xl font-semibold text-neutral-200">
+                    Loading...
+                  </h1>
+                  : null}
+                {skills.length === 0 && !skillsDataIsLoading ?
+                  <h1 className="text-2xl font-semibold text-neutral-200">
+                    No skills runs found
+                  </h1>
+                  : null}
+                <div className="flex flex-col gap-4 overflow-auto w-[100%]">
+                  {skills.length !== 0 ? skills.map((result: CombinedTeamSkills) => {
+                    if (teamNumberFilter !== "" && !result.teamNumber.startsWith(teamNumberFilter.toUpperCase())) {
+                      return null;
+                    }
+
+                    return (
+                      <SkillsResult
+                        key={result.teamId}
+                        skills={result}
+                      />
+                    )
+                  }) : null}
+                </div>
+              </TabsContent>
+              <TabsContent value="awards">
+                <div className="mb-10 flex flex-col justify-between xl:flex-row">
+                  <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl xl:mb-0">
+                    Awards
+                  </h3>
+                  <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
+                    <input
+                      className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      type="text"
+                      value={teamNumberFilter}
+                      placeholder="Filter by team..."
+                      onChange={(e) => setTeamNumberFilter(e.target.value)}
+                    />
+                  </div>
+                </div>
+                {awardsIsLoading ?
+                  <h1 className="text-2xl font-semibold text-neutral-200">
+                    Loading...
+                  </h1>
+                  : null}
+                {awards.length === 0 && !awardsIsLoading ?
+                  <h1 className="text-2xl font-semibold text-neutral-200">
+                    No awards found
+                  </h1>
+                  : null}
+                <div className="flex flex-col gap-4 overflow-auto w-[100%]">
+                  {awards.length !== 0 ? awards.map((result: EventAward) => {
+                    const foundTeamProfile = participatingTeams.find((team) => team.teamId === result.team.teamId);
+
+                    if (!foundTeamProfile) {
+                      return null;
+                    }
+
+                    if (teamNumberFilter !== "" && !foundTeamProfile.teamNumber.startsWith(teamNumberFilter.toUpperCase())) {
+                      return null;
+                    }
+
+                    return (
+                      <AwardResult
+                        key={result.id}
+                        award={result}
+                        team={foundTeamProfile}
+                      />
+                    )
+                  }) : null}
+                </div>
               </TabsContent>
             </div>
           </Tabs>

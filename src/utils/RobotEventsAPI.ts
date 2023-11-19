@@ -466,7 +466,66 @@ export async function getEventRankings(event_id: number, division_id: number) {
   } catch (error) {
     return [];
   }
+}
 
+export async function getEventSkills(event_id: number) {
+  const url = `https://www.robotevents.com/api/v2/events/${event_id}/skills`;
+  const new_headers = {
+    "accept": "application/json",
+    "Authorization": "Bearer " + API_KEY,
+  };
+
+  const event_skills: any[] = [];
+
+  try {
+    const response = await apiCall(url, new_headers);
+
+    event_skills.push(...response.data);
+
+    let next_page_url = response.meta.next_page_url;
+
+    while (next_page_url) {
+      const nextPageResponse = await apiCall(next_page_url, new_headers);
+
+      next_page_url = nextPageResponse.meta.next_page_url;
+
+      event_skills.push(...nextPageResponse.data);
+    }
+
+    return event_skills;
+  } catch (error) {
+    return [];
+  }
+}
+
+export async function getEventAwards(event_id: number) {
+  const url = `https://www.robotevents.com/api/v2/events/${event_id}/awards`;
+  const new_headers = {
+    "accept": "application/json",
+    "Authorization": "Bearer " + API_KEY,
+  };
+
+  const event_awards: any[] = [];
+
+  try {
+    const response = await apiCall(url, new_headers);
+
+    event_awards.push(...response.data);
+
+    let next_page_url = response.meta.next_page_url;
+
+    while (next_page_url) {
+      const nextPageResponse = await apiCall(next_page_url, new_headers);
+
+      next_page_url = nextPageResponse.meta.next_page_url;
+
+      event_awards.push(...nextPageResponse.data);
+    }
+
+    return event_awards;
+  } catch (error) {
+    return [];
+  }
 }
 
 // export async function getSeason(seasonId: number) {

@@ -143,17 +143,6 @@ export default function Teams() {
       blue_ccwm = Math.round((b1TeamData.ccwm + b2TeamData.ccwm) * 10000) / 10000;
       blue_openSkill = Math.round((b1TeamData.openSkill + b2TeamData.openSkill) * 10000) / 10000;
 
-      console.log({
-        red_opr,
-        red_dpr,
-        red_ccwm,
-        red_openSkill,
-        blue_opr,
-        blue_dpr,
-        blue_ccwm,
-        blue_openSkill
-      })
-
       const resultTensor: any = model.predict(tf.tensor2d([red_opr, red_dpr, red_ccwm, red_openSkill, blue_opr, blue_dpr, blue_ccwm, blue_openSkill], [1, 8]));
       let predictedValue: number = resultTensor.arraySync()[0][0];
 

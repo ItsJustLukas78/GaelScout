@@ -76,6 +76,36 @@ export interface EventRankWithMetrics extends EventRank {
   ccwm: number,
 }
 
+export interface EventAward {
+  id: number,
+  eventId: number,
+  divisionId: number,
+  name: string,
+  qualification: string,
+  team: TeamIdentifiers,
+  order: number,
+}
+
+export interface SkillsRun {
+  id: number,
+  eventId: number,
+  team: TeamIdentifiers,
+  type: string,
+  attempts: number,
+  score: number,
+  rank: number,
+}
+
+export interface CombinedTeamSkills {
+  teamId: number,
+  teamName: string,
+  teamNumber: string,
+  progSkills: number,
+  driverSkills: number,
+  totalSkills: number,
+  rank: number,
+}
+
 export interface TeamSeasonProfile {
   teamId: number,
   teamName: string,
