@@ -54,50 +54,51 @@ const Tiptap = ({setEditor}: TiptapProps) => {
     <>
       {/* Toolbar */}
       {editor &&
-        <div className="mb-5 flex flex-row gap-3 rounded-xl bg-neutral-900 p-2 shadow-md shadow-neutral-900">
-          <button
-            onClick={() => editor.chain().focus().toggleBold().run()}
-            className={`${editor.isActive('bold') ? 'is-active' : ''} hover:bg-neutral-700 rounded-md p-1`}
-          >
-            <FontBoldIcon/>
-          </button>
-          <button
-            onClick={() => editor.chain().focus().toggleItalic().run()}
-            className={editor.isActive('italic') ? 'is-active' : ''}
-          >
-            <FontItalicIcon/>
-          </button>
-          <button
-            onClick={() => editor.chain().focus().toggleUnderline().run()}
-            className={editor.isActive('underline') ? 'is-active' : ''}
-          >
-            <UnderlineIcon/>
-          </button>
-          <button
-            onClick={() => editor.chain().focus().toggleStrike().run()}
-            className={editor.isActive('strike') ? 'is-active' : ''}
-          >
-            <StrikethroughIcon/>
-          </button>
-          <button
-            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-            className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
-          >
-            h1
-          </button>
-          <button
-            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-            className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
-          >
-            h2
-          </button>
-          <button
-            onClick={() => editor.chain().focus().toggleBulletList().run()}
-            className={editor.isActive('bulletList') ? 'is-active' : ''}
-          >
-            <ListBulletIcon/>
-          </button>
-          {/* Highlight color picker with yellow, green, red, and blue only */}
+        <div className="mb-5 flex 2xs:flex-row flex-col gap-3 rounded-xl bg-neutral-900 p-2 shadow-md shadow-neutral-900">
+          <div className="flex flex-row gap-3">
+            <button
+              onClick={() => editor.chain().focus().toggleBold().run()}
+              className={`${editor.isActive('bold') ? 'is-active' : ''} hover:bg-neutral-700 rounded-md p-1`}
+            >
+              <FontBoldIcon/>
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleItalic().run()}
+              className={editor.isActive('italic') ? 'is-active' : ''}
+            >
+              <FontItalicIcon/>
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleUnderline().run()}
+              className={editor.isActive('underline') ? 'is-active' : ''}
+            >
+              <UnderlineIcon/>
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleStrike().run()}
+              className={editor.isActive('strike') ? 'is-active' : ''}
+            >
+              <StrikethroughIcon/>
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+              className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
+            >
+              h1
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+              className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+            >
+              h2
+            </button>
+            <button
+              onClick={() => editor.chain().focus().toggleBulletList().run()}
+              className={editor.isActive('bulletList') ? 'is-active' : ''}
+            >
+              <ListBulletIcon/>
+            </button>
+          </div>
           <div className="flex flex-row gap-1">
             <button
               onClick={() => editor.chain().focus().toggleHighlight({ color: '#DC262640' }).run()}

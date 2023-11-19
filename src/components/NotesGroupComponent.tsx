@@ -221,44 +221,48 @@ export default function NotesGroupComponent() {
       </button>
     </div>
     <div className="mt-5 flex flex-row gap-3 rounded-xl bg-neutral-900 p-2 px-2 shadow-md shadow-neutral-900">
-      <div className="flex flex-row items-center">
-        <input
-          className="ml-auto w-28 border-b-2 border-neutral-600 bg-neutral-900 text-sm text-neutral-200 px-0.5"
-          type="text"
-          placeholder="Join Code"
-          value={enteredJoinCode}
-          onChange={(e) => {
-            setEnteredJoinCode(e.target.value)
-          }}
-        />
-        <button
-          className="pl-1 text-xl font-bold text-green-600 hover:rotate-6 hover:text-green-400 disabled:opacity-50"
-          disabled={enteredJoinCode === ""}
-          onClick={joinNotesGroup}
-        >
-          <BsCheck />
-        </button>
-        <div className="mx-3 h-6 border-l-2 border-neutral-600"></div>
-        <div className="relative flex flex-col">
+      <div className="flex flex-row items-center justify-between w-full">
+        <div className="flex flex-row items-center justify-between">
           <input
-            className="ml-auto w-28 border-b-2 border-neutral-600 bg-neutral-900 pr-7 text-sm text-neutral-200 pl-0.5"
+            className="w-20 2xs:w-28 border-b-2 border-neutral-600 bg-neutral-900 text-xs 2xs:text-sm text-neutral-200 px-0.5"
             type="text"
-            placeholder="New Group"
-            maxLength={40}
-            value={enteredNewGroup}
+            placeholder="Join Code"
+            value={enteredJoinCode}
             onChange={(e) => {
-              setEnteredNewGroup(e.target.value)
+              setEnteredJoinCode(e.target.value)
             }}
           />
-          <p className="absolute text-right text-neutral-400 right-0.5 bottom-0.5 text-3xs">{enteredNewGroup.length}/40</p>
+          <button
+            className="pl-1 text-xl font-bold text-green-600 hover:rotate-6 hover:text-green-400 disabled:opacity-50"
+            disabled={enteredJoinCode === ""}
+            onClick={joinNotesGroup}
+          >
+            <BsCheck />
+          </button>
         </div>
-        <button
-          className="pl-1 text-xl font-bold text-green-600 hover:rotate-6 hover:text-green-400 disabled:opacity-50"
-          disabled={enteredNewGroup === ""}
-          onClick={createNotesGroup}
-        >
-          <BsCheck />
-        </button>
+        <div className="h-6 border-l-2 border-neutral-600"></div>
+        <div className="flex flex-row items-center justify-between">
+          <div className="relative flex flex-col">
+            <input
+              className="w-24 2xs:w-28 border-b-2 border-neutral-600 bg-neutral-900 pr-7 text-xs 2xs:text-sm text-neutral-200 pl-0.5"
+              type="text"
+              placeholder="New Group"
+              maxLength={40}
+              value={enteredNewGroup}
+              onChange={(e) => {
+                setEnteredNewGroup(e.target.value)
+              }}
+            />
+            <p className="absolute text-right text-neutral-400 right-0.5 bottom-0.5 text-3xs">{enteredNewGroup.length}/40</p>
+          </div>
+          <button
+            className="pl-1 text-xl font-bold text-green-600 hover:rotate-6 hover:text-green-400 disabled:opacity-50"
+            disabled={enteredNewGroup === ""}
+            onClick={createNotesGroup}
+          >
+            <BsCheck />
+          </button>
+        </div>
       </div>
     </div>
   </>

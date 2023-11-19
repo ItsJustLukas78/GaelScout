@@ -22,7 +22,7 @@ export default function QuickSearch() {
 
   return (
     <div
-      className={`fixed z-50 items-center justify-center bg-neutral-700 rounded-full w-72 h-12 p-1 transition-all duration-500 ${hidden ? "-bottom-9" : "bottom-20"} ${fullyHidden ? "hidden" : ""}`}
+      className={`fixed z-50 items-center justify-center bg-neutral-700 rounded-full w-52 h-10 2xs:w-72 2xs:h-12 p-1 transition-all duration-500 ${hidden ? "-bottom-9" : "bottom-20"} ${fullyHidden ? "hidden" : ""}`}
     >
       <form
         className="relative h-full w-full"
@@ -32,7 +32,7 @@ export default function QuickSearch() {
         }}
       >
         <input
-          className="h-full w-full rounded-full bg-white text-center text-xl font-semibold text-black placeholder-neutral-400 placeholder-opacity-100"
+          className="h-full w-full rounded-full bg-white text-center text-md 2xs:text-xl font-semibold text-black placeholder-neutral-400 placeholder-opacity-100"
           type="text"
           disabled={hidden}
           placeholder="Team Quicksearch"
@@ -43,7 +43,7 @@ export default function QuickSearch() {
             window.location.href = `/teams/${(document.querySelector("input") as HTMLInputElement).value}`
           }}
         >
-          <MdSearch className="absolute right-1 bottom-1 h-6 w-6"/>
+          <MdSearch className="absolute right-1 bottom-1 2xs:h-6 2xs:w-6 h-5 w-5"/>
         </button>
       </form>
       <div
