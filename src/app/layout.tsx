@@ -19,9 +19,9 @@ export const metadata: Metadata = {
   appleWebApp: {
     title: 'GaelScout',
     statusBarStyle: 'black',
-    startupImage: [
-      '/iphone14portrait.png',
-    ],
+    // startupImage: [
+    //   // '/iphone14portrait.png',
+    // ],
   },
 }
 

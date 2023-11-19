@@ -50,13 +50,13 @@ export default function Home() {
                   tiltMaxAngleX={20}
                   tiltMaxAngleY={20}
                 >
-                  <Image priority={true} src="/homeblob1.svg" alt="GaelSuite Logo" width="400" height="200" className="transition-all hover:rotate-6"/>
+                  <Image priority={true} src="/homeblob1.svg" alt="Robotics Students" width="400" height="200" className="transition-all hover:rotate-6"/>
                 </Tilt>
                 <Tilt
                   tiltMaxAngleX={20}
                   tiltMaxAngleY={20}
                 >
-                  <Image priority={true} src="/homeblob2.svg" alt="GaelSuite Logo" width="400" height="200" className="transition-all hover:rotate-6"/>
+                  <Image priority={true} src="/homeblob2.svg" alt="Robotics Students" width="400" height="200" className="transition-all hover:rotate-6"/>
                 </Tilt>
               </SpringAnimatedElement>
             </div>
@@ -85,14 +85,12 @@ export default function Home() {
                   tiltMaxAngleX={20}
                   tiltMaxAngleY={20}
                 >
-                  <Image src="/GS_logo.png" alt="GaelSuite Logo" width="200" height="200" className="transition-all hover:rotate-12"/>
                 </Tilt>
-                {/*<Image src="/gfold.png" alt="GaelSuite Logo" width="200" height="200"/>*/}
                 <Tilt
                   tiltMaxAngleX={20}
                   tiltMaxAngleY={20}
                 >
-                  <Image src="/gfnew.png" alt="GaelSuite Logo" width="200" height="200" className="transition-all hover:rotate-12"/>
+                  <Image src="/gfnew.png" alt="GFR logo" width="200" height="200" className="transition-all hover:rotate-12"/>
                 </Tilt>
               </div>
             </div>
@@ -102,14 +100,12 @@ export default function Home() {
                   tiltMaxAngleX={20}
                   tiltMaxAngleY={20}
                 >
-                  <Image src="/GS_logo.png" alt="GaelSuite Logo" width="200" height="200" className="transition-all hover:rotate-12"/>
                 </Tilt>
-                {/*<Image src="/gfold.png" alt="GaelSuite Logo" width="200" height="200"/>*/}
                 <Tilt
                   tiltMaxAngleX={20}
                   tiltMaxAngleY={20}
                 >
-                  <Image src="/gfnew.png" alt="GaelSuite Logo" width="200" height="200" className="transition-all hover:rotate-12"/>
+                  <Image src="/gfnew.png" alt="GFR Logo" width="200" height="200" className="transition-all hover:rotate-12"/>
                 </Tilt>
               </div>
             </div>

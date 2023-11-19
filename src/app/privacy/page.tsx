@@ -33,8 +33,7 @@ export default function Verify() {
             </li>
             <li>
               <p><strong>Company</strong> (referred to as either &quot;the
-                Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in this Agreement) refers to GaelSuite,
-                2566 CIPRIANI WAY.</p>
+                Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in this Agreement) refers to Lukas Somwong</p>
             </li>
             <li>
               <p><strong>Cookies</strong> are small files that are placed on Your computer, mobile device or any other
@@ -317,7 +316,7 @@ export default function Verify() {
           <h1>Contact Us</h1>
           <p>If you have any questions about this Privacy Policy, You can contact us:</p>
           <ul>
-            <li>By email: lukas.somwong@gaelsuite.com</li>
+            <li>By email: lukasdoingbusiness@gmail.com</li>
           </ul>
         </div>
       </div>
