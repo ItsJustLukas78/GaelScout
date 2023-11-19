@@ -8,6 +8,7 @@ import React from "react";
 import { Slide, ToastContainer } from "react-toastify";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import QuickSearch from "@/components/QuickSearch";
+import MobileNav from "@/components/MobileNav";
 import { GeistSans } from 'geist/font/sans';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -40,6 +41,7 @@ export default function RootLayout({
           <Navbar />
           <div className="flex w-full justify-center">
             <QuickSearch />
+            <MobileNav />
             {children}
             <Analytics />
           </div>
