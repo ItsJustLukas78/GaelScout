@@ -165,7 +165,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
         return;
       }
 
-      const playingTeams: (TeamIdentifiers | null)[] = [];
+      const playingTeams: TeamIdentifiers[] = [];
 
       completedMatches.forEach((match: EventMatch) => {
         [...match.redTeams, ...match.blueTeams].forEach((team: TeamIdentifiers | null) => {
@@ -173,11 +173,11 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
             return null;
           }
 
-          const existingTeam = !playingTeams.some((existingTeam: TeamIdentifiers | null): boolean => {
-            return (existingTeam != null && existingTeam.teamId === team.teamId)
+          const existingTeam = playingTeams.some((existingTeam: TeamIdentifiers): boolean => {
+            return (existingTeam.teamId === team.teamId)
           });
 
-          if (existingTeam) {
+          if (!existingTeam) {
             playingTeams.push(team);
           }
         });
@@ -188,12 +188,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
 
       const matchTeamsMatrix = matrix(
         completedMatches.flatMap((match: EventMatch) => {
-          const redRow = playingTeams.map((team: TeamIdentifiers | null) => {
+          const redRow = playingTeams.map((team: TeamIdentifiers) => {
             if (!team) {
               return 0;
             }
 
-            const teamHere = match.redTeams.some((redTeam: TeamIdentifiers | null) => {
+            const teamHere = match.redTeams.some((redTeam: TeamIdentifiers) => {
               if (!redTeam) {
                 return false;
               } else {
@@ -208,12 +208,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
             }
           });
 
-          const blueRow = playingTeams.map((team: TeamIdentifiers | null) => {
+          const blueRow = playingTeams.map((team: TeamIdentifiers) => {
             if (!team) {
               return 0;
             }
 
-            const teamHere = match.blueTeams.some((blueTeam: TeamIdentifiers | null) => {
+            const teamHere = match.blueTeams.some((blueTeam: TeamIdentifiers) => {
               if (!blueTeam) {
                 return false;
               } else {
@@ -245,11 +245,10 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
         const oprMatrix = multiply(matchTeamsPseudoInverse, matchScoresMatrix);
         const dprMatrix = multiply(matchTeamsPseudoInverse, matchOpponentScoresMatrix);
 
-
         const newRankingsWithMetrics: EventRankWithMetrics[] = [];
 
         for (let j = 0; j < oprMatrix.size()[0]; j++) {
-          const team: TeamIdentifiers | null = playingTeams[j];
+          const team: TeamIdentifiers = playingTeams[j];
 
           if (!team) {
             continue;
@@ -867,7 +866,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   <MatchNotesDialog
                     matchNotesDialogOpen={matchNotesDialogOpen}
                     eventObject={eventObject}
-                    matchList={matchList}
+                    matchList={fiteredMatches}
                     setMatchNotesDialogOpen={setMatchNotesDialogOpen}
                   />
                   : null}

@@ -14,7 +14,11 @@ export async function GET(
 
   const REAwardObjects = await getEventAwards(eventId);
 
-  const awards: EventAward[] = REAwardObjects.map((award) => {
+  const filteredAwardObjects = REAwardObjects.filter((award) => {
+      return award.teamWinners.length !== 0
+  })
+
+  const awards: EventAward[] = filteredAwardObjects.map((award) => {
     return {
       id: award.id,
       eventId: award.event.id,
@@ -27,7 +31,8 @@ export async function GET(
       },
       order: award.order,
     }
-  });
+  })
+
 
   return NextResponse.json({awards: awards}, {
     status: 200,

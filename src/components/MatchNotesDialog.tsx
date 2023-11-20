@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {toast} from "react-toastify";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import {Event, EventMatch, TeamIdentifiers, NotesGroup} from "@/app/types";
@@ -13,7 +13,19 @@ import { useAuth } from "@clerk/nextjs";
 import {useGlobalStore} from "@/state/globalState";
 import NotesGroupComponent from "@/components/NotesGroupComponent";
 
-export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, matchList, setMatchNotesDialogOpen }: { matchNotesDialogOpen: boolean, eventObject: Event | null, matchList: EventMatch[], setMatchNotesDialogOpen: (open: boolean) => void }) {
+interface MatchNotesProps {
+  matchNotesDialogOpen: boolean,
+  eventObject: Event | null,
+  matchList: EventMatch[],
+  setMatchNotesDialogOpen: (open: boolean) => void,
+}
+
+export default function MatchNotesDialog({
+   matchNotesDialogOpen,
+   eventObject,
+   matchList,
+   setMatchNotesDialogOpen,
+}: MatchNotesProps) {
   const { getToken } = useAuth();
 
   const currentNotesGroup = useGlobalStore((state) => state.currentNotesGroup);
@@ -23,6 +35,13 @@ export default function MatchNotesDialog({ matchNotesDialogOpen, eventObject, ma
 
   const [currentMatch, setCurrentMatch] = useState<EventMatch>(matchList[0])
   const [currentTeam, setCurrentTeam] = useState(currentMatch?.blueTeams[0])
+
+  useEffect(() => {
+    if (matchList && !matchNotesDialogOpen) {
+      setCurrentMatch(matchList[0])
+      setCurrentTeam(matchList[0]?.blueTeams[0])
+    }
+  }, [matchList, matchNotesDialogOpen])
 
   const [currentEditor, setCurrentEditor] = useState<any>(null)
 
