@@ -48,9 +48,10 @@ export default function RootLayout({
           <ToastContainer
             className="!scale-90"
             position="bottom-right"
-            autoClose={5000}
+            autoClose={2500}
             hideProgressBar={false}
             newestOnTop={false}
+            limit={2}
             closeOnClick
             rtl={false}
             transition={Slide}

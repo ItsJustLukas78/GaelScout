@@ -532,7 +532,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
         {eventObject ? <>
           <div
             className="relative mb-8 flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
-            <h1 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl sm:text-4xl md:text-5xl lg:text-7xl">
+            <h1 className="mb-5 min-w-fit text-2xl font-bold sm:text-3xl md:text-5xl lg:text-7xl">
               {eventObject.name}
             </h1>
             <div className="absolute max-w-max top-0.5 right-0.5 xl:top-2 xl:right-2">
@@ -604,10 +604,10 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               <TabsTrigger value="awards">Awards</TabsTrigger>
             </TabsList>
             <div
-              className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+              className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-6 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
               <TabsContent value="teams">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
-                  <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl xl:mb-0">
+                  <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-4xl xl:mb-0">
                     Teams
                   </h3>
                   <div className="flex flex-col gap-3 sm:flex-row">
@@ -711,7 +711,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </TabsContent>
               <TabsContent value="rankings">
                 <div className="mb-10 flex flex-col">
-                  <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl">
+                  <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-4xl">
                     Rankings
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
@@ -801,7 +801,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </TabsContent>
               <TabsContent value="matches">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
-                  <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl xl:mb-0">
+                  <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-4xl xl:mb-0">
                     Matches
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
@@ -873,7 +873,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </TabsContent>
               <TabsContent value="skills">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
-                  <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl xl:mb-0">
+                  <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-4xl xl:mb-0">
                     Skills
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
@@ -913,7 +913,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </TabsContent>
               <TabsContent value="awards">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
-                  <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl xl:mb-0">
+                  <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-4xl xl:mb-0">
                     Awards
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">

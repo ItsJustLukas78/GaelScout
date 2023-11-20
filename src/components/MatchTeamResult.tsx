@@ -16,13 +16,10 @@ export default function MatchTeamResult({ teamId, teamNumber, teamName, programC
           <h2 className="font-semibold text-2xs md:text-sm">
             {location}
           </h2>
-          <h2 className="font-semibold text-2xs md:text-sm">
-            {teamOrg}
-          </h2>
         </div>
       </div>
       <button
-        className="ml-auto flex items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 text-xl font-semibold text-black opacity-50 min-w-[50px] min-h-[40px] disabled:opacity-50 sm:mr-3"
+        className="ml-auto flex items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 sm:text-xl text-lg font-semibold text-black opacity-50 sm:min-w-[50px] sm:min-h-[40px] min-w-[40px] min-h-[30px] disabled:opacity-50 sm:mr-3"
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()
