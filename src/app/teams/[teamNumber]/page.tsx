@@ -536,6 +536,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                       name={result.name}
                       start={result.start}
                       location={locationString}
+                      defaultTeam={teamProfile ? teamProfile.teamNumber : ""}
                     />
                   )
                 }

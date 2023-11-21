@@ -31,13 +31,33 @@ import {
   concat,
 } from "mathjs";
 import useSWR from 'swr'
+import { useSearchParams, useRouter } from 'next/navigation'
 
+enum TabType {
+  matches = "matches",
+  rankings = "rankings",
+  teams = "teams",
+  skills = "skills",
+  awards = "awards"
+}
 
 // @ts-ignore
 const fetcher = (...args: any[]) => fetch(...args).then(res => res.json())
 
 export default function EventPage({params}: { params: { eventCode: string } }) {
   const {isLoaded, isSignedIn, user} = useUser();
+  const router = useRouter();
+  const searchParams = useSearchParams()
+
+  const team = searchParams.get("team")
+  const tabParam = searchParams.get("tab")
+
+  const [tab, setTab] = useState<TabType>(team ? "matches" as TabType : (tabParam ? tabParam as  TabType: "teams" as TabType))
+
+  const onTabChange = (value: String) => {
+    setTab(value as TabType)
+    router.replace(`/events/${params.eventCode}?tab=${value}`, {scroll: false})
+  }
 
   const [worldModel, setWorldModel] = useState<any>(null);
   const [eventModel, setEventModel] = useState<any>(null);
@@ -65,7 +85,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
   const [currentTeamsDivision, setCurrentTeamsDivision] = useState<Division | null>({id: -1, name: "All"});
   const [matchList, setMatchList] = useState<EventMatch[]>([]);
   const [fiteredMatches, setFilteredMatches] = useState<EventMatch[]>([]);
-  const [teamNumberFilter, setTeamNumberFilter] = useState<string>("");
+  const [teamNumberFilter, setTeamNumberFilter] = useState<string>(team ? team : "");
 
   const [rankings, setRankings] = useState<EventRank[]>([]);
 
@@ -594,7 +614,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </div>
             </div>
           </div>
-          <Tabs defaultValue="teams">
+          <Tabs value={tab} onValueChange={onTabChange}>
             <TabsList
               className="bg-neutral-800 flex min-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] mb-8 [&>*]:flex-1">
               <TabsTrigger value="teams">Teams</TabsTrigger>

@@ -282,7 +282,7 @@ export default function MatchResult({
               <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${blueWinsWorld ? "bg-green-500" : "bg-gray-600"}`}>
                 {blueWinsWorld ? `Predicted ${Math.abs(blueWinPercentageWorld)}%` : null}
               </div>
-              <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${redWinsWorld ? "bg-green-500" : "bg-green-300"}`}>
+              <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${redWinsWorld ? "bg-green-500" : "bg-gray-600"}`}>
                 {redWinsWorld ? `Predicted ${Math.abs(redWinPercentageWorld)}%` : null}
               </div>
             </div>
