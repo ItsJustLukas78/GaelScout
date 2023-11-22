@@ -53,6 +53,7 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+  overscroll-behavior-x: none;
 }
 
 h1 {
