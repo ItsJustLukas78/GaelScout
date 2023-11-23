@@ -62,6 +62,7 @@ export default function Navbar() {
           <Hamburger toggled={expanded} toggle={setExpanded} />
         </div>
         <div onClick={() => setExpanded(false)} className="inline-flex items-center justify-center pr-7 lg:hidden">
+          <Image src="/GaelScoutLogo2024.png" alt="GaelSuite Logo" width="50" height="50" />
           <NavButton href="/">GaelScout</NavButton>
         </div>
         <div className="ml-auto lg:hidden">
