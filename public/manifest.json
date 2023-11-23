@@ -6,5 +6,12 @@
     "short_name" : "GaelScout",
     "description" : "Scouting for VRC made easy",
     "background_color": "#141414",
-    "theme_color": "#141414"
+    "theme_color": "#141414",
+    "icons": [
+        {
+          "src": "/pwaicon.png",
+          "type": "image/png",
+          "sizes": "512x512"
+        }
+    ]
 }

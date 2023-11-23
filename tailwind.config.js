@@ -7,12 +7,11 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
 	],
   theme: {
-    screens: {
-      '2xs': '380px',
-      'xs': '425px',
-      ...defaultTheme.screens,
-    },
     extend: {
+      screens: {
+        '2xs': '380px',
+        'xs': '425px',
+      },
       fontSize: {
         '2xs': ['.625rem', '.75rem'],
         '3xs': ['.5rem', '.75rem'],
