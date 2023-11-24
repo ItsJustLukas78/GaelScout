@@ -93,40 +93,42 @@ export default function Teams() {
       event.preventDefault();
     }
 
-    setResultsLoading(true);
-    setCurrentResults([]);
-
     const searchParams = new URLSearchParams();
 
     if (teamNumber && teamNumber !== "") {
-      try {
-        const response = await fetch(`/api/teams/number/${teamNumber.toUpperCase()}`)
-
-        const data = await response.json();
-
-        if (data.error) {
-          toast.error(data.error)
-          setResultsLoading(false);
-          setCurrentResults([]);
-          setCurrentResultsCount(0);
-          setTotalPages(Math.ceil(0 / 15));
-          return;
-        }
-
-        setResultsLoading(false);
-        setCurrentResults([data.team]);
-        setCurrentResultsCount(1);
-        setTotalPages(Math.ceil(1 / 15));
-        return;
-      } catch (error) {
-        console.log(error);
-        setResultsLoading(false);
-        setCurrentResults([]);
-        setCurrentResultsCount(0);
-        setTotalPages(Math.ceil(0 / 15));
-        return;
-      }
+      window.location.href = `/teams/${teamNumber.toUpperCase()}`;
+      return;
+      // try {
+      //   const response = await fetch(`/api/teams/number/${teamNumber.toUpperCase()}`)
+      //
+      //   const data = await response.json();
+      //
+      //   if (data.error) {
+      //     toast.error(data.error)
+      //     setResultsLoading(false);
+      //     setCurrentResults([]);
+      //     setCurrentResultsCount(0);
+      //     setTotalPages(Math.ceil(0 / 15));
+      //     return;
+      //   }
+      //
+      //   setResultsLoading(false);
+      //   setCurrentResults([data.team]);
+      //   setCurrentResultsCount(1);
+      //   setTotalPages(Math.ceil(1 / 15));
+      //   return;
+      // } catch (error) {
+      //   console.log(error);
+      //   setResultsLoading(false);
+      //   setCurrentResults([]);
+      //   setCurrentResultsCount(0);
+      //   setTotalPages(Math.ceil(0 / 15));
+      //   return;
+      // }
     }
+
+    setResultsLoading(true);
+    setCurrentResults([]);
 
     if (country !== "All") {
       //country currently stores the value number

@@ -25,6 +25,12 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -40,7 +46,7 @@ export default function RootLayout({
           ) : null}
           <Navbar />
           <div className="flex w-full justify-center">
-            <QuickSearch />
+            {/*<QuickSearch />*/}
             <MobileNav />
             {children}
             <Analytics />

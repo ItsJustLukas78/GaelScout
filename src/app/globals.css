@@ -40,6 +40,8 @@
 --background-end-rgb: 20, 20, 20;
 }
 
+html, body { overscroll-behavior: none; }
+
 html {
     scroll-snap-type: y mandatory;
     height: 100%;
@@ -53,7 +55,6 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-  overscroll-behavior-x: none;
 }
 
 h1 {

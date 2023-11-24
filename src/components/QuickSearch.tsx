@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { MdSearch } from "react-icons/md";
-import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import { FaAngleDoubleLeft, FaAngleDoubleRight } from "react-icons/fa";
 
 
 export default function QuickSearch() {
@@ -23,7 +23,7 @@ export default function QuickSearch() {
 
   return (
     <div
-      className={`fixed z-50 items-center justify-center bg-neutral-700 rounded-full w-52 h-10 2xs:w-72 2xs:h-12 p-1 transition-all duration-500 bottom-20 transform ${hidden ? "-left-72" : ""} ${fullyHidden ? "hidden" : ""}`}
+      className={`fixed z-50 items-center justify-center bg-neutral-700 rounded-full w-52 h-10 2xs:w-72 2xs:h-12 p-1 transition-all duration-500 bottom-20 ${hidden ? "!-left-[280px]" : ""} ${fullyHidden ? "hidden" : ""}`}
     >
       <form
         className="relative h-full w-full"
@@ -57,8 +57,8 @@ export default function QuickSearch() {
           }}
         >
           {hidden ?
-            <IoIosArrowForward className="h-5 w-5"/> :
-            <IoIosArrowBack className="h-5 w-5"/>
+            <FaAngleDoubleRight className="h-5 w-5"/> :
+            <FaAngleDoubleLeft className="h-5 w-5"/>
           }
         </button>
       </div>

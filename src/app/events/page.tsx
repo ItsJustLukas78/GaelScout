@@ -91,34 +91,35 @@ export default function Teams() {
       event.preventDefault();
     }
 
+    if (eventSKU && eventSKU !== "") {
+      window.location.href = `/events/${eventSKU.toUpperCase()}`;
+      return;
+
+      // const skuSearchParams = new URLSearchParams();
+      //
+      // skuSearchParams.append("eventSKU[]", eventSKU);
+      //
+      // try {
+      //   const response = await fetch(`/api/events/?${skuSearchParams.toString()}`)
+      //
+      //   const data = await response.json();
+      //
+      //   if (data.error) {
+      //     toast.error(data.error);
+      //     return;
+      //   }
+      //
+      //   setCurrentResults(data.events);
+      //   setResultsLoading(false);
+      // } catch (error) {
+      //   toast.error(error as any);
+      // }
+    }
+
     setResultsLoading(true);
     setCurrentResults([]);
 
     const searchParams = new URLSearchParams();
-
-    if (eventSKU) {
-      const skuSearchParams = new URLSearchParams();
-
-      skuSearchParams.append("eventSKU[]", eventSKU);
-
-      try {
-        const response = await fetch(`/api/events/?${skuSearchParams.toString()}`)
-
-        const data = await response.json();
-
-        if (data.error) {
-          toast.error(data.error);
-          return;
-        }
-
-        setCurrentResults(data.events);
-        setResultsLoading(false);
-      } catch (error) {
-        toast.error(error as any);
-      }
-
-      return;
-    }
 
     if (eventName) {
       searchParams.append("name", eventName);

@@ -13,8 +13,6 @@ import {IoStatsChart} from "react-icons/io5";
 import {MdEventNote} from "react-icons/md";
 
 export default function TeamProfile({ params }: { params: { teamNumber: string } }) {
-  const router = useRouter();
-
   const inputTeamRef = React.useRef<HTMLInputElement>(null);
 
   const { isSignedIn } = useUser();
@@ -324,21 +322,23 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
             </h3>
           }
         </div>
+        <hr className="sm:hidden block my-8 w-11/12 border-t-2 border-neutral-500"/>
         <Tabs defaultValue="statistics">
-          <TabsList className="fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 bg-neutral-800 sm:h-10 h-14 flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1">
-            <TabsTrigger value="statistics" className="h-8">
+          <TabsList className="fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bg-neutral-800 sm:h-10 h-20 flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
+   to-neutral-800 from-GSGray sm:to-neutral-800 sm:from-neutral-800">
+            <TabsTrigger value="statistics" className="h-10 text-2xs sm:h-8">
               <IoStatsChart className="inline-block mr-2" />
               Season Stats
             </TabsTrigger>
-            <TabsTrigger value="events" className="h-8">
+            <TabsTrigger value="events" className="h-10 text-2xs sm:h-8">
               <MdEventNote className="inline-block mr-2" />
               Events
             </TabsTrigger>
           </TabsList>
-          <div className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 mt-8 sm:mt-0 sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
+          <div className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 sm:p-8 mb-10 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
             <TabsContent value="statistics">
               <div className="mb-10 flex flex-col md:flex-row">
-                <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl md:mb-0 md:text-4xl">
+                <h3 className="mb-5 min-w-fit font-bold text-3xl md:mb-0 md:text-4xl">
                   Season Statistics
                 </h3>
                 <div className="flex flex-row gap-3 md:ml-auto">
@@ -369,42 +369,54 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
               </div>
               {seasonStats ? <>
               <div className="sm:mx-2 flex flex-row flex-wrap justify-center gap-5 md:justify-between">
-                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 md:w-[47%] xl:w-[49%]">
-                  <div className="flex flex-row justify-between">
+                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
+                  <div className="relative flex flex-row justify-between">
                     <h3 className="text-xl font-bold">
                       OPR:
                     </h3>
                     <h3 className="text-xl">
                       {seasonStats.opr != undefined ? seasonStats.opr.toFixed(4) : "N/A"}
                     </h3>
+                    <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
+                      Avg. Contrib. To Score
+                    </p>
                   </div>
                   <hr/>
-                  <div className="flex flex-row justify-between">
+                  <div className="relative flex flex-row justify-between">
                     <h3 className="text-xl font-bold">
                       DPR:
                     </h3>
                     <h3 className="text-xl">
                       {seasonStats.dpr != undefined ? seasonStats.dpr.toFixed(4) : "N/A"}
                     </h3>
+                    <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
+                      Avg. Contrib. To Opponent Score
+                    </p>
                   </div>
                   <hr/>
-                  <div className="flex flex-row justify-between">
+                  <div className="relative flex flex-row justify-between">
                     <h3 className="text-xl font-bold">
                       CCWM:
                     </h3>
                     <h3 className="text-xl">
                       {seasonStats.ccwm != undefined ? seasonStats.ccwm.toFixed(4) : "N/A"}
                     </h3>
+                    <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
+                      OPR - DPR
+                    </p>
                   </div>
                 </div>
-                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 md:w-[47%] xl:w-[49%]">
-                  <div className="flex flex-row justify-between">
+                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
+                  <div className="relative flex flex-row justify-between">
                     <h3 className="text-xl font-bold">
                       OpenSkill:
                     </h3>
                     <h3 className="text-xl">
                       {seasonStats.openSkill != undefined ? seasonStats.openSkill.toFixed(2) : "N/A"}
                     </h3>
+                    <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
+                      TrueSkill Alt. Ranking Using Wins and Losses
+                    </p>
                   </div>
                   <hr/>
                   <div className="flex flex-row justify-between">
@@ -416,7 +428,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                     </h3>
                   </div>
                 </div>
-                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 md:w-[47%] xl:w-[49%]">
+                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
                   <div className="flex flex-row justify-between">
                     <h3 className="text-xl font-bold">
                       Qual Win:
@@ -444,14 +456,17 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                     </h3>
                   </div>
                 </div>
-                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 md:w-[47%] xl:w-[49%]">
-                  <div className="flex flex-row justify-between">
+                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
+                  <div className="relative flex flex-row justify-between">
                     <h3 className="text-xl font-bold">
                       Skills:
                     </h3>
                     <h3 className="text-xl">
                       {seasonStats.topTotalSkills != undefined ? seasonStats.topTotalSkills : "N/A"}
                     </h3>
+                    <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
+                      Combined Top Driver and Programming Skills
+                    </p>
                   </div>
                   <hr/>
                   <div className="flex flex-row justify-between">
@@ -481,23 +496,29 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                     </h3>
                   </div>
                 </div>
-                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 md:w-[47%] xl:w-[49%]">
-                  <div className="flex flex-row justify-between">
+                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
+                  <div className="relative flex flex-row justify-between">
                     <h3 className="text-xl font-bold">
                       Regionals Qual:
                     </h3>
                     <h3 className="text-xl">
                       {seasonStats.qualToRegionals ? "Yes" : "No"}
                     </h3>
+                    <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
+                      Qualifies to Regionals from event awards
+                    </p>
                   </div>
                   <hr/>
-                  <div className="flex flex-row justify-between">
+                  <div className="relative flex flex-row justify-between">
                     <h3 className="text-xl font-bold">
-                      Award Worlds Qual:
+                      Worlds Qual:
                     </h3>
                     <h3 className="text-xl">
                       {seasonStats.awardQualToWorlds ? "Yes" : "No"}
                     </h3>
+                    <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
+                      Qualifies to Worlds from event awards
+                    </p>
                   </div>
                 </div>
               </div>
@@ -517,7 +538,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
             </TabsContent>
             <TabsContent value="events">
               <div className="mb-10 flex flex-col justify-between md:flex-row">
-                <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl md:mb-0 md:text-4xl">
+                <h3 className="mb-5 min-w-fit font-bold text-3xl md:mb-0 md:text-4xl">
                   Events
                 </h3>
                 <div className="flex flex-col gap-3 sm:flex-row">

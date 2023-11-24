@@ -90,21 +90,23 @@ export default function Favorites() {
             View your favorite teams and events. Select a season to view relevant match notes and events.
           </p>
         </div>
+        <hr className="sm:hidden block my-8 w-11/12 border-t-2 border-neutral-500"/>
         <Tabs defaultValue="teams">
-          <TabsList className="fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 bg-neutral-800 sm:h-10 h-14 flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1">
-            <TabsTrigger value="teams" className="h-8">
+          <TabsList className="fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bg-neutral-800 sm:h-10 h-20 flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
+   to-neutral-800 from-GSGray sm:to-neutral-800 sm:from-neutral-800">
+            <TabsTrigger value="teams" className="h-10 text-2xs sm:h-8">
               <FaClipboardList className="inline-block mr-2" />
               Teams
             </TabsTrigger>
-            <TabsTrigger value="events" className="h-8">
+            <TabsTrigger value="events" className="h-10 text-2xs sm:h-8">
               <MdEventNote className="inline-block mr-2" />
               Events
             </TabsTrigger>
           </TabsList>
-          <div className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 mt-8 sm:mt-0 sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
+          <div className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 sm:p-8 mb-10 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
             <TabsContent value="teams">
               <div className="mb-10 flex flex-col justify-between md:flex-row">
-                <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl md:mb-0 md:text-4xl">
+                <h3 className="mb-5 min-w-fit font-bold text-3xl md:mb-0 md:text-4xl">
                   Teams
                 </h3>
                 <div className="flex flex-col gap-3 sm:flex-row">
@@ -177,7 +179,7 @@ export default function Favorites() {
             </TabsContent>
             <TabsContent value="events">
               <div className="mb-10 flex flex-col justify-between md:flex-row">
-                <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl md:mb-0 md:text-4xl">
+                <h3 className="mb-5 min-w-fit font-bold text-3xl md:mb-0 md:text-4xl">
                   Events
                 </h3>
                 <div className="flex flex-col gap-3 sm:flex-row">
