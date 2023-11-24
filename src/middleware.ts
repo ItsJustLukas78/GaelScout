@@ -98,6 +98,7 @@ export default authMiddleware({
     '/predictionModel/:route*',
     '/api/:route*',
     '/favorites/:route*',
+    '/~offline'
   ],
   apiRoutes: ['/api/:route*'],
 

@@ -61,7 +61,7 @@ export default function Home() {
               </SpringAnimatedElement>
             </div>
           </div>
-          <SpringAnimatedElement className="flex h-auto flex-col items-center justify-center pb-16 animHeading lg:space-x-8 lg:flex-row" delay={1.6}>
+          <SpringAnimatedElement className="flex h-auto flex-col items-center pb-16 animHeading lg:space-x-8 lg:flex-row" delay={1.6}>
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
               <div className="text-4xl font-bold xs:text-5xl sm:text-7xl">
                 Developed by members of Gael Force Robotics
