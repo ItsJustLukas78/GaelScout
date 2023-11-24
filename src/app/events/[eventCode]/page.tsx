@@ -371,7 +371,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [teamNumberFilter, matchList]);
 
-  const { data: matchData, error: matchDataError, isLoading: matchDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/matches` : null, fetcher)
+  const { data: matchData, error: matchDataError, isLoading: matchDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/matches` : null, fetcher, {refreshInterval: 1000  * 60})
 
   useEffect(() => {
     if (matchData) {
@@ -380,7 +380,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [matchData])
 
-  const { data: rankingsData, error: rankingsDataError, isLoading: rankingsDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/rankings` : null, fetcher)
+  const { data: rankingsData, error: rankingsDataError, isLoading: rankingsDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/rankings` : null, fetcher, {refreshInterval: 1000  * 60})
 
   useEffect(() => {
     if (rankingsData) {
@@ -392,7 +392,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [rankingsData])
 
-  const { data: skillsData, error: skillsDataError, isLoading: skillsDataIsLoading } = useSWR(eventObject ? `/api/events/${eventObject?.id}/skills` : null, fetcher)
+  const { data: skillsData, error: skillsDataError, isLoading: skillsDataIsLoading } = useSWR(eventObject ? `/api/events/${eventObject?.id}/skills` : null, fetcher, {refreshInterval: 1000  * 60})
 
   useEffect(() => {
     if (skillsData && participatingTeams.length !== 0) {

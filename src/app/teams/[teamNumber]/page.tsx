@@ -11,6 +11,10 @@ import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { useRouter } from 'next/navigation'
 import {IoStatsChart} from "react-icons/io5";
 import {MdEventNote} from "react-icons/md";
+import useSWR from 'swr'
+
+// @ts-ignore
+const fetcher = (...args: any[]) => fetch(...args).then(res => res.json())
 
 export default function TeamProfile({ params }: { params: { teamNumber: string } }) {
   const inputTeamRef = React.useRef<HTMLInputElement>(null);
@@ -74,65 +78,31 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
     }
   }
 
-  const getEvents = async() => {
-    if (!teamProfile) {
-      return;
-    }
+  const {data: eventsData, error: eventsError, isLoading: eventsLoading} = useSWR((teamProfile && seasonId) ? `/api/teams/${teamProfile.teamId}/events/?seasonId=${seasonId}` : null, fetcher);
 
-    const searchParams = new URLSearchParams();
-
-    searchParams.append("seasonId", seasonId.toString());
-
-    try {
-      const response = await fetch(`/api/teams/${teamProfile.teamId}/events/?${searchParams.toString()}`)
-
-      const data = await response.json()
-
-      if (data?.error) {
-        toast.error(data.error)
-        setCurrentEvents([]);
-        return;
-      }
-
-      setCurrentEvents(data.events);
-    } catch (err) {
-      console.log(err);
+  useEffect(() => {
+    if (eventsError) {
+      console.log(eventsError);
       setCurrentEvents([]);
+    } else if (!eventsData) {
+      setCurrentEvents([]);
+    } else {
+      setCurrentEvents(eventsData.events);
     }
-  }
+  }, [eventsData, eventsError]);
 
-  const getFavoriteStatus = async() => {
-    if (!teamProfile) {
-      return;
-    }
+  const {data: favoriteData, error: favoriteError, isLoading: favoriteLoading} = useSWR((teamProfile && isSignedIn) ? `/api/favorites/?teamId=${teamProfile.teamId}&favoriteType=team` : null, fetcher);
 
-    if (!isSignedIn) {
+  useEffect(() => {
+    if (favoriteError) {
+      console.log(favoriteError);
       setFavorited(false);
-      return;
-    }
-
-    const searchParams = new URLSearchParams();
-
-    searchParams.append("teamId", teamProfile.teamId.toString());
-    searchParams.append("favoriteType", "team");
-
-    try {
-      const response = await fetch(`/api/favorites/?${searchParams.toString()}`)
-
-      const data = await response.json()
-
-      if (data.error) {
-        toast.error(data.error)
-        setFavorited(false);
-        return;
-      }
-
-      setFavorited(data.favorites.length > 0);
-    } catch (err) {
-      console.log(err);
+    } else if (!favoriteData) {
       setFavorited(false);
+    } else {
+      setFavorited(favoriteData.favorites.length > 0);
     }
-  }
+  }, [favoriteData, favoriteError]);
 
   const changeFavoriteStatus = async(favorite: boolean) => {
     if (!teamProfile) {
@@ -213,13 +183,6 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
       controller.abort("Cancelling override fetch");
     }
   }, [seasonId, teamNumberInput]);
-
-  useEffect(() => {
-    if (teamProfile) {
-      getEvents();
-      getFavoriteStatus();
-    }
-  } , [teamProfile, seasonId]);
 
   return (
     <main>
