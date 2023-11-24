@@ -7,6 +7,8 @@ import { useUser } from "@clerk/nextjs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import EventResult from "@/components/EventResult";
 import MatchTeamResult from "@/components/MatchTeamResult";
+import { FaClipboardList } from "react-icons/fa";
+import {MdEventNote} from "react-icons/md";
 
 
 export default function Favorites() {
@@ -80,8 +82,8 @@ export default function Favorites() {
   return (
     <main>
       <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
-        <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
-          <h1 className="mb-5 min-w-fit text-5xl font-bold xs:text-5xl sm:text-8xl md:text-5xl lg:text-8xl">
+        <div className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
+          <h1 className="mb-5 min-w-fit text-4xl font-bold sm:text-8xl md:text-5xl lg:text-8xl">
             Favorites
           </h1>
           <p className="mb-5 text-lg font-semibold text-gray-300 md:text-xl">
@@ -89,19 +91,25 @@ export default function Favorites() {
           </p>
         </div>
         <Tabs defaultValue="teams">
-          <TabsList className="bg-neutral-800 flex min-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] my-8 [&>*]:flex-1">
-            <TabsTrigger value="teams">Teams</TabsTrigger>
-            <TabsTrigger value="matches">Matches</TabsTrigger>
+          <TabsList className="fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 bg-neutral-800 sm:h-10 h-14 flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1">
+            <TabsTrigger value="teams" className="h-8">
+              <FaClipboardList className="inline-block mr-2" />
+              Teams
+            </TabsTrigger>
+            <TabsTrigger value="events" className="h-8">
+              <MdEventNote className="inline-block mr-2" />
+              Events
+            </TabsTrigger>
           </TabsList>
-          <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+          <div className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 mt-8 sm:mt-0 sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
             <TabsContent value="teams">
               <div className="mb-10 flex flex-col justify-between md:flex-row">
-                <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl md:mb-0">
+                <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl md:mb-0 md:text-4xl">
                   Teams
                 </h3>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <select
-                    className="h-12 w-52 rounded-lg p-3 text-black sm:w-52 md:ml-auto lg:w-80"
+                    className="h-10 w-48 sm:h-12 text-sm rounded-lg p-3 text-black sm:w-52 md:ml-auto lg:w-80"
                     required
                     value={seasonId}
                     onChange={(event) => setSeasonId(parseInt(event.target.value))}
@@ -167,14 +175,14 @@ export default function Favorites() {
                 />
               : null}
             </TabsContent>
-            <TabsContent value="matches">
+            <TabsContent value="events">
               <div className="mb-10 flex flex-col justify-between md:flex-row">
-                <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl md:mb-0">
+                <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl md:mb-0 md:text-4xl">
                   Events
                 </h3>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <select
-                    className="h-12 w-52 rounded-lg p-3 text-black sm:w-52 md:ml-auto lg:w-80"
+                    className="h-10 w-48 sm:h-12 text-sm rounded-lg p-3 text-black sm:w-52 md:ml-auto lg:w-80"
                     required
                     value={seasonId}
                     onChange={(event) => setSeasonId(parseInt(event.target.value))}

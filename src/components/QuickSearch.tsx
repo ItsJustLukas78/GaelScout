@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { MdSearch } from "react-icons/md";
-import { FaAngleDoubleDown, FaAngleDoubleUp } from "react-icons/fa";
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+
 
 export default function QuickSearch() {
   const path = usePathname();
@@ -22,7 +23,7 @@ export default function QuickSearch() {
 
   return (
     <div
-      className={`fixed z-50 items-center justify-center bg-neutral-700 rounded-full w-52 h-10 2xs:w-72 2xs:h-12 p-1 transition-all duration-500 ${hidden ? "-bottom-9" : "bottom-20"} ${fullyHidden ? "hidden" : ""}`}
+      className={`fixed z-50 items-center justify-center bg-neutral-700 rounded-full w-52 h-10 2xs:w-72 2xs:h-12 p-1 transition-all duration-500 bottom-20 transform ${hidden ? "-left-72" : ""} ${fullyHidden ? "hidden" : ""}`}
     >
       <form
         className="relative h-full w-full"
@@ -50,14 +51,14 @@ export default function QuickSearch() {
         className="relative flex justify-center"
       >
         <button
-          className={`absolute flex items-center text-white justify-center bg-neutral-500 w-10 h-5 ${hidden ? "-top-16 rounded-t-lg" : "-bottom-5 rounded-b-lg"}`}
+          className={`absolute flex items-center text-white justify-center bg-neutral-700 w-6 h-7 ${hidden ? "-right-[23px] bottom-1.5 rounded-r-xl" : "-left-[23px] bottom-1.5 rounded-l-xl"}`}
           onClick={() => {
             setHidden(!hidden);
           }}
         >
           {hidden ?
-            <FaAngleDoubleUp className="h-5 w-5"/> :
-            <FaAngleDoubleDown className="h-5 w-5"/>
+            <IoIosArrowForward className="h-5 w-5"/> :
+            <IoIosArrowBack className="h-5 w-5"/>
           }
         </button>
       </div>

@@ -25,7 +25,7 @@ export default function Navbar() {
           </div>
           <NavButton href="/teams">Teams</NavButton>
           <NavButton href="/events">Events</NavButton>
-          <NavButton href="/profiles">Profiles</NavButton>
+          {/*<NavButton href="/profiles">Profiles</NavButton>*/}
           <NavButton href="/rankings">Rankings</NavButton>
           <NavButton href="/predict">Predict</NavButton>
           <NavButton href="/favorites">Favorites</NavButton>
@@ -81,7 +81,7 @@ export default function Navbar() {
           <div onClick={() => setExpanded(!expanded)} className="mt-5 ml-10 flex flex-col gap-8">
             <NavButton href="/teams">Teams</NavButton>
             <NavButton href="/events">Events</NavButton>
-            <NavButton href="/profiles">Profiles</NavButton>
+            {/*<NavButton href="/profiles">Profiles</NavButton>*/}
             <NavButton href="/rankings">Rankings</NavButton>
             <NavButton href="/favorites">Favorites</NavButton>
             <NavButton href="/predict">Predict</NavButton>

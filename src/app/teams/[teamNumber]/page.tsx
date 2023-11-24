@@ -9,6 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import EventResult from "@/components/EventResult";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { useRouter } from 'next/navigation'
+import {IoStatsChart} from "react-icons/io5";
+import {MdEventNote} from "react-icons/md";
 
 export default function TeamProfile({ params }: { params: { teamNumber: string } }) {
   const router = useRouter();
@@ -224,13 +226,13 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
   return (
     <main>
       <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
-        <div className="relative flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
+        <div className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
           <input
             type="text"
             key="teamInput"
             defaultValue={teamNumberInput}
             ref={inputTeamRef}
-            className="mb-5 border-none bg-transparent text-5xl font-bold outline-none xs:text-5xl sm:text-8xl"
+            className="mb-5 border-none bg-transparent text-4xl font-bold outline-none xs:text-5xl sm:text-8xl"
             onChange={(event) => {
               event.preventDefault();
               window.history.pushState({}, '', `/teams/${event.target.value.toUpperCase()}`);
@@ -323,19 +325,25 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
           }
         </div>
         <Tabs defaultValue="statistics">
-          <TabsList className="bg-neutral-800 flex min-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] my-8 [&>*]:flex-1">
-            <TabsTrigger value="statistics">Season Stats</TabsTrigger>
-            <TabsTrigger value="events">Events</TabsTrigger>
+          <TabsList className="fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 bg-neutral-800 sm:h-10 h-14 flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1">
+            <TabsTrigger value="statistics" className="h-8">
+              <IoStatsChart className="inline-block mr-2" />
+              Season Stats
+            </TabsTrigger>
+            <TabsTrigger value="events" className="h-8">
+              <MdEventNote className="inline-block mr-2" />
+              Events
+            </TabsTrigger>
           </TabsList>
-          <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+          <div className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 mt-8 sm:mt-0 sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
             <TabsContent value="statistics">
               <div className="mb-10 flex flex-col md:flex-row">
-                <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl md:mb-0 md:text-3xl lg:text-5xl">
+                <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl md:mb-0 md:text-4xl">
                   Season Statistics
                 </h3>
                 <div className="flex flex-row gap-3 md:ml-auto">
                   <select
-                    className="h-12 w-52 rounded-lg p-3 text-black sm:w-52 md:ml-auto lg:w-80"
+                    className="h-10 w-48 sm:h-12 text-sm rounded-lg p-3 text-black sm:w-52 md:ml-auto lg:w-80"
                     required
                     value={seasonId}
                     onChange={(event) => setSeasonId(parseInt(event.target.value))}
@@ -360,7 +368,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                 </div>
               </div>
               {seasonStats ? <>
-              <div className="mx-2 flex flex-row flex-wrap justify-center gap-5 md:justify-between">
+              <div className="sm:mx-2 flex flex-row flex-wrap justify-center gap-5 md:justify-between">
                 <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 md:w-[47%] xl:w-[49%]">
                   <div className="flex flex-row justify-between">
                     <h3 className="text-xl font-bold">
@@ -509,12 +517,12 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
             </TabsContent>
             <TabsContent value="events">
               <div className="mb-10 flex flex-col justify-between md:flex-row">
-                <h3 className="mb-5 min-w-fit text-3xl font-bold xs:text-5xl md:mb-0">
+                <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl md:mb-0 md:text-4xl">
                   Events
                 </h3>
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <select
-                    className="h-12 w-52 rounded-lg p-3 text-black sm:w-52 md:ml-auto lg:w-80"
+                    className="h-10 w-48 sm:h-12 text-sm rounded-lg p-3 text-black sm:w-52 md:ml-auto lg:w-80"
                     required
                     value={seasonId}
                     onChange={(event) => setSeasonId(parseInt(event.target.value))}

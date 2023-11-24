@@ -256,7 +256,7 @@ export default function Teams() {
                   })}
                 </select>
               </Form.Control>
-              <Form.Field className="flex flex-col" name="region" asChild>
+              <Form.Field className="" name="region" asChild>
                 <Form.Control asChild>
                   <select
                     className="h-8 rounded-lg p-1 text-black"

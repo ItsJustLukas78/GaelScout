@@ -32,6 +32,11 @@ import {
 } from "mathjs";
 import useSWR from 'swr'
 import { useSearchParams, useRouter } from 'next/navigation'
+import { FaClipboardList, FaTrophy } from "react-icons/fa";
+import { FaRankingStar } from "react-icons/fa6";
+import {GiTrumpet} from "react-icons/gi";
+import {GoNumber} from "react-icons/go";
+
 
 enum TabType {
   matches = "matches",
@@ -551,8 +556,8 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
         {eventObject ? <>
           <div
-            className="relative mb-8 flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
-            <h1 className="mb-5 min-w-fit text-2xl font-bold sm:text-3xl md:text-5xl lg:text-7xl">
+            className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
+            <h1 className="mb-5 min-w-[85%] max-w-[85%] text-2xl font-bold sm:text-3xl md:text-5xl lg:text-7xl">
               {eventObject.name}
             </h1>
             <div className="absolute max-w-max top-0.5 right-0.5 xl:top-2 xl:right-2">
@@ -616,21 +621,36 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
           </div>
           <Tabs value={tab} onValueChange={onTabChange}>
             <TabsList
-              className="bg-neutral-800 flex min-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] mb-8 [&>*]:flex-1">
-              <TabsTrigger value="teams">Teams</TabsTrigger>
-              <TabsTrigger value="rankings">Rankings</TabsTrigger>
-              <TabsTrigger value="matches">Matches</TabsTrigger>
-              <TabsTrigger value="skills">Skills</TabsTrigger>
-              <TabsTrigger value="awards">Awards</TabsTrigger>
+              className="fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 bg-neutral-800 sm:h-10 h-14 flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1">
+              <TabsTrigger value="teams" className="h-8 text-2xs">
+                <FaClipboardList className="inline-block mr-2"/>
+                Teams
+              </TabsTrigger>
+              <TabsTrigger value="rankings" className="h-8 text-2xs">
+                <FaRankingStar className="inline-block mr-2"/>
+                Rankings
+              </TabsTrigger>
+              <TabsTrigger value="matches" className="h-8 text-2xs">
+                <GiTrumpet className="inline-block mr-2"/>
+                 Matches
+              </TabsTrigger>
+              <TabsTrigger value="skills" className="h-8 text-2xs">
+                <GoNumber className="inline-block mr-2"/>
+                Skills
+              </TabsTrigger>
+              <TabsTrigger value="awards" className="h-8 text-2xs">
+                <FaTrophy className="inline-block mr-2"/>
+                Awards
+              </TabsTrigger>
             </TabsList>
             <div
-              className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-6 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+              className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 mt-8 sm:mt-0 sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
               <TabsContent value="teams">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
-                  <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-4xl xl:mb-0">
+                  <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl md:mb-0 md:text-4xl">
                     Teams
                   </h3>
-                  <div className="flex flex-col gap-3 sm:flex-row">
+                  <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
                     <button
                       className="h-8 min-w-max rounded-lg bg-white text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
                       onClick={() => setExportDialogOpen(true)}
@@ -731,7 +751,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </TabsContent>
               <TabsContent value="rankings">
                 <div className="mb-10 flex flex-col">
-                  <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-4xl">
+                  <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl md:mb-0 md:text-4xl">
                     Rankings
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
@@ -821,7 +841,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </TabsContent>
               <TabsContent value="matches">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
-                  <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-4xl xl:mb-0">
+                  <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl md:mb-0 md:text-4xl">
                     Matches
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
@@ -893,7 +913,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </TabsContent>
               <TabsContent value="skills">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
-                  <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-4xl xl:mb-0">
+                  <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl md:mb-0 md:text-4xl">
                     Skills
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
@@ -933,7 +953,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </TabsContent>
               <TabsContent value="awards">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
-                  <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-4xl xl:mb-0">
+                  <h3 className="mb-5 min-w-fit text-2xl font-bold xs:text-3xl md:mb-0 md:text-4xl">
                     Awards
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
