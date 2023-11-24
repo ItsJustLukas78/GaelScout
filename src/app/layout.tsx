@@ -23,6 +23,26 @@ export const metadata: Metadata = {
       '/iphone14portrait.png',
     ],
   },
+  formatDetection: { telephone: false },
+  openGraph: {
+    title: 'GaelScout',
+    description: 'Scouting for VRC made easy',
+    type: 'website',
+    images: [
+      {
+        url: 'https://www.gaelscout.com/pwaicon.png',
+        width: 512,
+        height: 512,
+        alt: 'GaelScout Logo',
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "GaelScout",
+    description: "Scouting for VRC made easy",
+    site: "https://www.gaelscout.com",
+  },
 }
 
 export const viewport = {
