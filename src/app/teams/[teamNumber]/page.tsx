@@ -287,14 +287,14 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
         </div>
         <hr className="sm:hidden block my-8 w-11/12 border-t-2 border-neutral-500"/>
         <Tabs defaultValue="statistics">
-          <TabsList className="fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bg-neutral-800 sm:h-10 h-20 flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
+          <TabsList className="fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bg-neutral-800 sm:h-10 h-[90px] flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
    to-neutral-800 from-GSGray sm:to-neutral-800 sm:from-neutral-800">
-            <TabsTrigger value="statistics" className="h-10 text-2xs sm:h-8">
-              <IoStatsChart className="inline-block mr-2" />
+            <TabsTrigger value="statistics" className="flex sm:flex-row flex-col h-14 text-2xs sm:h-8">
+              <IoStatsChart className="inline-block sm:mr-2 text-lg" />
               Season Stats
             </TabsTrigger>
-            <TabsTrigger value="events" className="h-10 text-2xs sm:h-8">
-              <MdEventNote className="inline-block mr-2" />
+            <TabsTrigger value="events" className="flex sm:flex-row flex-col h-14 text-2xs sm:h-8">
+              <MdEventNote className="inline-block sm:mr-2 text-lg" />
               Events
             </TabsTrigger>
           </TabsList>

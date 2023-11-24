@@ -65,7 +65,7 @@ export default function RootLayout({
             {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS} />
           ) : null}
           <Navbar />
-          <div className="flex w-full justify-center">
+          <div className="flex w-full justify-center pb-16 sm:pb-0">
             {/*<QuickSearch />*/}
             <MobileNav />
             {children}

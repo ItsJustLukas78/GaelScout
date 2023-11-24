@@ -178,9 +178,10 @@ export default function Teams() {
   return (
     <main>
       <Form.Root
+        className="py-32"
         onSubmit={predictMatch}
       >
-        <div className="mt-32 flex h-auto flex-row justify-center gap-7 sm:gap-11 md:gap-20 xl:mt-0">
+        <div className="flex h-auto flex-row justify-center gap-7 sm:gap-11 md:gap-20 xl:mt-0">
           <div className="flex flex-col justify-center items-left xl:hidden">
             <h1 className="mb-10 text-center text-3xl font-bold text-red-600 sm:text-5xl">
               Team One
