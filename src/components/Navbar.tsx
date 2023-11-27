@@ -20,7 +20,7 @@ export default function Navbar() {
    from-neutral-800 to-GSGray">
         <div className="hidden items-center lg:flex lg:gap-9 xl:gap-14 2xl:gap-16">
           <div onClick={() => setExpanded(false)} className="inline-flex items-center justify-center">
-            <Image src="/GaelScoutLogo2024.png" alt="GaelSuite Logo" width="50" height="50" />
+            <Image src="/GaelScoutLogo2024.png" alt="GaelSuite Logo" width="50" height="50" priority={true} />
             <NavButton href="/">GaelScout</NavButton>
           </div>
           <NavButton href="/teams">Teams</NavButton>
@@ -62,7 +62,7 @@ export default function Navbar() {
           <Hamburger toggled={expanded} toggle={setExpanded} />
         </div>
         <div onClick={() => setExpanded(false)} className="inline-flex items-center justify-center pr-7 lg:hidden">
-          <Image src="/GaelScoutLogo2024.png" alt="GaelSuite Logo" width="50" height="50" />
+          <Image src="/GaelScoutLogo2024.png" alt="GaelSuite Logo" width="50" height="50" priority={true} />
           <NavButton href="/">GaelScout</NavButton>
         </div>
         <div className="ml-auto lg:hidden">

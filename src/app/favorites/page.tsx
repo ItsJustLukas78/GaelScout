@@ -106,7 +106,7 @@ export default function Favorites() {
           <div className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 sm:p-8 mb-10 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
             <TabsContent value="teams">
               <div className="mb-10 flex flex-col justify-between md:flex-row">
-                <h3 className="mb-5 min-w-fit font-bold text-3xl md:mb-0 md:text-4xl">
+                <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
                   Teams
                 </h3>
                 <div className="flex flex-col gap-3 sm:flex-row">
@@ -179,7 +179,7 @@ export default function Favorites() {
             </TabsContent>
             <TabsContent value="events">
               <div className="mb-10 flex flex-col justify-between md:flex-row">
-                <h3 className="mb-5 min-w-fit font-bold text-3xl md:mb-0 md:text-4xl">
+                <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
                   Events
                 </h3>
                 <div className="flex flex-col gap-3 sm:flex-row">

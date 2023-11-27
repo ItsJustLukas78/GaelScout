@@ -3,6 +3,8 @@ import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import Link from "next/link";
 import * as tf from "@tensorflow/tfjs";
+import { FaRegBell } from "react-icons/fa";
+
 
 interface MatchResultProps {
   eventMatch: EventMatch
@@ -215,6 +217,45 @@ export default function MatchResult({
     }
   }
 
+  const requestNotification = async (e: any) => {
+    e.preventDefault();
+
+    if (!("Notification" in window)) {
+      toast.error("This browser does not support desktop notification");
+    } else if (Notification.permission === "granted") {
+      console.log("Permission to send notifications has been granted");
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then(function (permission) {
+        if (permission === "granted") {
+          console.log("Permission to send notifications has been granted");
+        }
+      });
+    }
+
+    if (navigator.serviceWorker.controller) {
+      const eventMatch = {
+        id,
+        eventId,
+        started,
+        scheduled,
+        divisionId,
+        round,
+        instance,
+        matchnum,
+        field,
+        name,
+        blueTeams,
+        redTeams,
+        redScore,
+        blueScore
+      }
+
+      navigator.serviceWorker.controller.postMessage({ type: "push", event: eventMatch, numberOfEventsBefore: 4 });
+
+      toast.success("Notification set successfully");
+    }
+  }
+
   return <>
     {eventId ? (
       <div
@@ -276,43 +317,53 @@ export default function MatchResult({
             </Link>
           </div>
         </div>
-        <div className="mt-1 flex flex-col gap-2 justify-center items-center">
-          {worldPrediction ? <>
-            <div className="flex flex-row justify-center gap-2 w-full">
-              <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${blueWinsWorld ? "bg-green-500" : "bg-gray-600"}`}>
-                {blueWinsWorld ? `Predicted ${Math.abs(blueWinPercentageWorld)}%` : null}
+        <div className="flex flex-row justify-center gap-2 w-full">
+          <div className="mt-1 flex flex-col gap-2 justify-center items-center w-[90%]">
+            {worldPrediction ? <>
+              <div className="flex flex-row justify-center gap-2 w-full">
+                <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${blueWinsWorld ? "bg-green-500" : "bg-gray-600"}`}>
+                  {blueWinsWorld ? `Predicted ${Math.abs(blueWinPercentageWorld)}%` : null}
+                </div>
+                <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${redWinsWorld ? "bg-green-500" : "bg-gray-600"}`}>
+                  {redWinsWorld ? `Predicted ${Math.abs(redWinPercentageWorld)}%` : null}
+                </div>
               </div>
-              <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${redWinsWorld ? "bg-green-500" : "bg-gray-600"}`}>
-                {redWinsWorld ? `Predicted ${Math.abs(redWinPercentageWorld)}%` : null}
-              </div>
-            </div>
-          </> : <>
-            <button
-              className="flex flex-row justify-center rounded-2xl font-medium text-black shadow-md transition-colors duration-200 w-[75%] text-2xs bg-green-500 hover:bg-green-600 sm:w-44 sm:p-0.5 lg:text-md lg:w-64"
-              onClick={(event) => predictMatch(event, ModelType.worldModel)}
-            >
-              Predict (World)
-            </button>
-          </>
-          }
-          {eventPrediction ? <>
-            <div className="flex flex-row justify-center gap-2 w-full">
-              <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${blueWinsEvent ? "bg-green-500" : "bg-gray-600"}`}>
-                {blueWinsEvent ? `Predicted ${Math.abs(blueWinPercentageEvent)}%` : null}
-              </div>
-              <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${redWinsEvent ? "bg-green-500" : "bg-gray-600"}`}>
-                {redWinsEvent ? `Predicted ${Math.abs(redWinPercentageEvent)}%` : null}
-              </div>
-            </div>
             </> : <>
-            <button
-              className="flex flex-row justify-center rounded-2xl font-medium text-black shadow-md transition-colors duration-200 w-[75%] text-2xs bg-green-500 hover:green-600 sm:w-44 sm:p-0.5 lg:text-md lg:w-64"
-              onClick={(event) => predictMatch(event, ModelType.eventModel)}
-            >
-              Predict (Event)
-            </button>
-          </>
-          }
+              <button
+                className="flex flex-row justify-center rounded-2xl font-medium text-black shadow-md transition-colors duration-200 w-[75%] text-2xs bg-green-500 hover:bg-green-600 sm:w-44 sm:p-0.5 lg:text-md lg:w-64"
+                onClick={(event) => predictMatch(event, ModelType.worldModel)}
+              >
+                Predict (World)
+              </button>
+            </>
+            }
+            {eventPrediction ? <>
+              <div className="flex flex-row justify-center gap-2 w-full">
+                <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${blueWinsEvent ? "bg-green-500" : "bg-gray-600"}`}>
+                  {blueWinsEvent ? `Predicted ${Math.abs(blueWinPercentageEvent)}%` : null}
+                </div>
+                <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${redWinsEvent ? "bg-green-500" : "bg-gray-600"}`}>
+                  {redWinsEvent ? `Predicted ${Math.abs(redWinPercentageEvent)}%` : null}
+                </div>
+              </div>
+              </> : <>
+              <button
+                className="flex flex-row justify-center rounded-2xl font-medium text-black shadow-md transition-colors duration-200 w-[75%] text-2xs bg-green-500 hover:green-600 sm:w-44 sm:p-0.5 lg:text-md lg:w-64"
+                onClick={(event) => predictMatch(event, ModelType.eventModel)}
+              >
+                Predict (Event)
+              </button>
+            </>
+            }
+          </div>
+          <button
+            className="flex mr-0 justify-center items-center text-white text-2xs hover:text-gray-400 transition-colors duration-300"
+            onClick={(e) => {
+              requestNotification(e);
+            }}
+          >
+            <FaRegBell className="h-6 w-6"/>
+          </button>
         </div>
       </div>
     ) : null}

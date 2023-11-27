@@ -515,7 +515,6 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
   }
 
   const customSort = (a: EventMatch, b: EventMatch) => {
-    // Adjust the order of "round" values
     const roundOrder: Record<number, number> = {
       1: 1, // Practice
       2: 2, // Qualification
@@ -649,7 +648,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 mb-10 sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
               <TabsContent value="teams">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
-                  <h3 className="mb-5 min-w-fit text-3xl font-bold md:mb-0 md:text-4xl">
+                  <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
                     Teams
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
@@ -753,7 +752,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </TabsContent>
               <TabsContent value="rankings">
                 <div className="mb-10 flex flex-col">
-                  <h3 className="mb-5 min-w-fit font-bold text-3xl md:mb-0 md:text-4xl">
+                  <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
                     Rankings
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
@@ -843,7 +842,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </TabsContent>
               <TabsContent value="matches">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
-                  <h3 className="mb-5 min-w-fit font-bold text-3xl md:mb-0 md:text-4xl">
+                  <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
                     Matches
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
@@ -915,7 +914,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </TabsContent>
               <TabsContent value="skills">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
-                  <h3 className="mb-5 min-w-fit font-bold text-3xl md:mb-0 md:text-4xl">
+                  <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
                     Skills
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
@@ -955,7 +954,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </TabsContent>
               <TabsContent value="awards">
                 <div className="mb-10 flex flex-col justify-between xl:flex-row">
-                  <h3 className="mb-5 min-w-fit font-bold text-3xl md:mb-0 md:text-4xl">
+                  <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
                     Awards
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
