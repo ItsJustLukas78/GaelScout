@@ -33,7 +33,7 @@ class PushNotification {
 
   private async notificationError(message: string) {
     // @ts-ignore
-    await self.registration.showNotification("Error", {
+    await self.registration.showNotification("Match Notification", {
       body: message,
       icon: "/GaelScoutLogo2024.png",
     });

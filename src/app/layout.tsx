@@ -72,9 +72,9 @@ export default function RootLayout({
             <Analytics />
           </div>
           <ToastContainer
-            className="!scale-90"
+            className="!scale-90 !bottom-[5em] sm:!bottom-[1em]"
             position="bottom-right"
-            autoClose={2500}
+            autoClose={2000}
             hideProgressBar={false}
             newestOnTop={false}
             limit={2}

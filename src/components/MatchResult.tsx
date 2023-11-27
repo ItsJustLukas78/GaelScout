@@ -252,7 +252,7 @@ export default function MatchResult({
 
       navigator.serviceWorker.controller.postMessage({ type: "push", event: eventMatch, numberOfEventsBefore: 4 });
 
-      toast.success("Notification set successfully");
+      toast.success("Notification set for " + formattedMatchName + "! Previously set notifications will be overwritten.");
     }
   }
 
