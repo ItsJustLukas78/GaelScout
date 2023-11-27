@@ -3,7 +3,7 @@ import CorneredButton from '@/components/CorneredButton'
 import Image from 'next/image'
 import Link from 'next/link'
 import Tilt from 'react-parallax-tilt';
-import React, {useEffect} from "react";
+import React from "react";
 import AnimatedTextCharacter from "@/components/AnimatedTextCharacter";
 import SpringAnimatedElement from "@/components/SpringAnimatedElement";
 import {useUser} from "@clerk/nextjs";
@@ -14,28 +14,6 @@ import {useUser} from "@clerk/nextjs";
 
 export default function Home() {
   const { isSignedIn, user, isLoaded } = useUser();
-
-  // Request notification permission then send a notification
-    const sendNotification = (e:any) => {
-      e.preventDefault();
-
-      if (!("Notification" in window)) {
-        console.log("This browser does not support desktop notification");
-      } else if (Notification.permission === "granted") {
-        console.log("Permission to send notifications has been granted");
-      } else if (Notification.permission !== "denied") {
-        Notification.requestPermission().then(function (permission) {
-          if (permission === "granted") {
-            console.log("Permission to send notifications has been granted");
-          }
-        });
-      }
-
-      if (navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage({ type: "push" });
-      }
-
-    };
 
   return (
     <main>
@@ -57,9 +35,6 @@ export default function Home() {
                   <SpringAnimatedElement className="text-base sm:text-xl mb-8" delay={1.6}>
                     Sign up to access all of GaelScout&apos;s features.
                   </SpringAnimatedElement>
-                  <button onClick={sendNotification} className="block bg-GSBlue text-white rounded-lg py-2 px-4 text-lg font-semibold">
-                    Enable Notifications
-                  </button>
                   <Link href="sign-up">
                     <CorneredButton className="h-8 w-33 text-2xl font-semibold">
                       Sign Up

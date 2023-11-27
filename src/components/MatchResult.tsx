@@ -362,7 +362,7 @@ export default function MatchResult({
               requestNotification(e);
             }}
           >
-            <FaRegBell className="h-6 w-6"/>
+            <FaRegBell className="sm:h-6 sm:w-6 h-4 w-4 mt-2" />
           </button>
         </div>
       </div>
