@@ -233,7 +233,7 @@ export default function NotesGroupComponent() {
             }}
           />
           <button
-            className="pl-1 text-xl font-bold text-green-600 hover:rotate-6 hover:text-green-400 disabled:opacity-50"
+            className="pl-1 text-2xl font-extrabold text-green-600 hover:rotate-6 hover:text-green-400 disabled:opacity-75"
             disabled={enteredJoinCode === ""}
             onClick={joinNotesGroup}
           >
@@ -256,7 +256,7 @@ export default function NotesGroupComponent() {
             <p className="absolute text-right text-neutral-400 right-0.5 bottom-0.5 text-3xs">{enteredNewGroup.length}/40</p>
           </div>
           <button
-            className="pl-1 text-xl font-bold text-green-600 hover:rotate-6 hover:text-green-400 disabled:opacity-50"
+            className="pl-1 text-2xl font-extrabold text-green-600 hover:rotate-6 hover:text-green-400 disabled:opacity-75"
             disabled={enteredNewGroup === ""}
             onClick={createNotesGroup}
           >

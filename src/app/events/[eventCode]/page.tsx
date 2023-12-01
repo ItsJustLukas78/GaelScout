@@ -17,7 +17,7 @@ import RankingsScoutingSheetDialog from "@/components/RankingsScoutingSheetDialo
 import MatchNotesDialog from "@/components/MatchNotesDialog";
 import MatchResult from "@/components/MatchResult";
 import {useUser} from "@clerk/nextjs";
-import MatchTeamResult from "@/components/MatchTeamResult";
+import EventTeamResult from "@/components/EventTeamResult";
 import TeamNotesDialog from "@/components/TeamNotesDialog";
 import {AiFillStar, AiOutlineStar} from "react-icons/ai";
 import EventRankComponent from "@/components/EventRankComponent";
@@ -103,6 +103,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
   const [teamNotesDialogOpen, setTeamNotesDialogOpen] = useState(false);
 
   const [currentNotesTeam, setCurrentNotesTeam] = useState<TeamProfile | null>(null);
+  const [currentNotesMatch, setCurrentNotesMatch] = useState<EventMatch | null>(null);
 
   const [favorited, setFavorited] = useState(false);
 
@@ -550,6 +551,14 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     })
   }
 
+  useEffect(() => {
+    if (currentNotesMatch) {
+      setMatchNotesDialogOpen(true);
+    } else {
+      setMatchNotesDialogOpen(false);
+    }
+    }, [currentNotesMatch])
+
   return (
     <main>
       <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
@@ -706,7 +715,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
 
                     return (
-                      <MatchTeamResult
+                      <EventTeamResult
                         key={result.teamNumber}
                         teamId={result.teamId}
                         teamNumber={result.teamNumber}
@@ -899,6 +908,19 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         eventModel={eventModel}
                         worldModel={worldModel}
                         eventRankings={rankingsWithMetrics}
+                        openMatchNotes={(matchId: number) => {
+                          if (isSignedIn) {
+                            const foundMatch = matchList.find((match) => match.id === matchId);
+                            if (!foundMatch) {
+                              toast.error("Match not found");
+                              setCurrentNotesMatch(null)
+                              return;
+                            }
+                            setCurrentNotesMatch(foundMatch);
+                          } else {
+                            toast.error("You must be signed in to view match notes");
+                          }
+                        }}
                       />
                     )
                   }) : null}
@@ -906,6 +928,8 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                 {isSignedIn ?
                   <MatchNotesDialog
                     matchNotesDialogOpen={matchNotesDialogOpen}
+                    currentNotesMatch={currentNotesMatch ? currentNotesMatch : fiteredMatches[0]}
+                    setCurrentNotesMatch={setCurrentNotesMatch}
                     eventObject={eventObject}
                     matchList={fiteredMatches}
                     setMatchNotesDialogOpen={setMatchNotesDialogOpen}

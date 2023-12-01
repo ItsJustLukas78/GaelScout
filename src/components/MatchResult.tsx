@@ -4,6 +4,7 @@ import {toast} from "react-toastify";
 import Link from "next/link";
 import * as tf from "@tensorflow/tfjs";
 import { FaRegBell } from "react-icons/fa";
+import { GiNotebook } from 'react-icons/gi';
 
 
 interface MatchResultProps {
@@ -11,7 +12,8 @@ interface MatchResultProps {
   seasonId: number
   worldModel: any
   eventModel: any
-  eventRankings: EventRankWithMetrics[]
+  eventRankings: EventRankWithMetrics[],
+  openMatchNotes: (teamId: number) => void
 }
 
 enum ModelType {
@@ -39,7 +41,8 @@ export default function MatchResult({
   seasonId,
   worldModel,
   eventModel,
-  eventRankings
+  eventRankings,
+  openMatchNotes
 } : MatchResultProps
 ) {
 
@@ -217,9 +220,7 @@ export default function MatchResult({
     }
   }
 
-  const requestNotification = async (e: any) => {
-    e.preventDefault();
-
+  const requestNotification = async () => {
     if (!("Notification" in window)) {
       toast.error("This browser does not support desktop notification");
     } else if (Notification.permission === "granted") {
@@ -317,8 +318,17 @@ export default function MatchResult({
             </Link>
           </div>
         </div>
-        <div className="flex flex-row justify-center gap-2 w-full">
-          <div className="mt-1 flex flex-col gap-2 justify-center items-center w-[90%]">
+        <div className="flex flex-row justify-between gap-2 w-full">
+          <button
+            className="flex justify-center items-center ml-2 lg:ml-8 text-white text-2xs hover:text-gray-400 transition-colors duration-300"
+            onClick={(e) => {
+              e.preventDefault();
+              requestNotification();
+            }}
+          >
+            <FaRegBell className="sm:h-6 sm:w-6 h-4 w-4 mt-2" />
+          </button>
+          <div className="mt-1 flex flex-col gap-2 justify-center items-center w-[85%]">
             {worldPrediction ? <>
               <div className="flex flex-row justify-center gap-2 w-full">
                 <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${blueWinsWorld ? "bg-green-500" : "bg-gray-600"}`}>
@@ -357,12 +367,13 @@ export default function MatchResult({
             }
           </div>
           <button
-            className="flex mr-0 justify-center items-center text-white text-2xs hover:text-gray-400 transition-colors duration-300"
+            className="flex justify-center items-center mr-2 lg:mr-8 text-white text-2xs hover:text-gray-400 transition-colors duration-300"
             onClick={(e) => {
-              requestNotification(e);
+              e.preventDefault();
+              openMatchNotes(id);
             }}
           >
-            <FaRegBell className="sm:h-6 sm:w-6 h-4 w-4 mt-2" />
+            <GiNotebook className="sm:h-6 sm:w-6 h-4 w-4 mt-2" />
           </button>
         </div>
       </div>

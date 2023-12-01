@@ -6,7 +6,7 @@ import TeamNotesDialog from "@/components/TeamNotesDialog";
 import { useUser } from "@clerk/nextjs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import EventResult from "@/components/EventResult";
-import MatchTeamResult from "@/components/MatchTeamResult";
+import EventTeamResult from "@/components/EventTeamResult";
 import { FaClipboardList } from "react-icons/fa";
 import {MdEventNote} from "react-icons/md";
 
@@ -140,7 +140,7 @@ export default function Favorites() {
                   const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
 
                   return (
-                    <MatchTeamResult
+                    <EventTeamResult
                       key={result.teamNumber}
                       teamId={result.teamId}
                       teamNumber={result.teamNumber}

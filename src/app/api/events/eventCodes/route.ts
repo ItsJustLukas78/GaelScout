@@ -1,5 +1,3 @@
-export const runtime = 'edge'
-export const preferredRegion = 'auto'
 import { NextResponse, NextRequest } from "next/server";
 import * as cheerio from 'cheerio';
 

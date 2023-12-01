@@ -18,6 +18,8 @@ interface MatchNotesProps {
   eventObject: Event | null,
   matchList: EventMatch[],
   setMatchNotesDialogOpen: (open: boolean) => void,
+  setCurrentNotesMatch: (match: EventMatch) => void,
+  currentNotesMatch: EventMatch
 }
 
 export default function MatchNotesDialog({
@@ -25,6 +27,8 @@ export default function MatchNotesDialog({
    eventObject,
    matchList,
    setMatchNotesDialogOpen,
+   setCurrentNotesMatch,
+   currentNotesMatch,
 }: MatchNotesProps) {
   const { getToken } = useAuth();
 
@@ -33,15 +37,7 @@ export default function MatchNotesDialog({
 
   const [previousNotesGroup, setPreviousNotesGroup] = useState<NotesGroup | null>(null)
 
-  const [currentMatch, setCurrentMatch] = useState<EventMatch>(matchList[0])
-  const [currentTeam, setCurrentTeam] = useState(currentMatch?.blueTeams[0])
-
-  useEffect(() => {
-    if (matchList && !matchNotesDialogOpen) {
-      setCurrentMatch(matchList[0])
-      setCurrentTeam(matchList[0]?.blueTeams[0])
-    }
-  }, [matchList, matchNotesDialogOpen])
+  const [currentTeam, setCurrentTeam] = useState(currentNotesMatch?.blueTeams[0])
 
   const [currentEditor, setCurrentEditor] = useState<any>(null)
 
@@ -138,7 +134,7 @@ export default function MatchNotesDialog({
       setCompletedInitialFetch(false)
 
       if (match) {
-        setCurrentMatch(match)
+        setCurrentNotesMatch(match)
       } else if (changeGroup) {
         // do nothing
       } else {
@@ -187,7 +183,7 @@ export default function MatchNotesDialog({
 
       if (data.notes.length === 0) {
         setCompletedInitialFetch(true)
-        setCurrentTeam(currentMatch?.blueTeams[0])
+        setCurrentTeam(currentNotesMatch?.blueTeams[0])
         setPreviousNotesGroup(currentNotesGroup)
         setTeamToMatchNotes(teamNotes)
         setLoading(false)
@@ -198,7 +194,7 @@ export default function MatchNotesDialog({
         teamNotes[teamNote.teamNumber as string] = teamNote.note
       }
 
-      setCurrentTeam(currentMatch?.blueTeams[0])
+      setCurrentTeam(currentNotesMatch?.blueTeams[0])
       setPreviousNotesGroup(currentNotesGroup)
       setTeamToMatchNotes(teamNotes)
       setCompletedInitialFetch(true)
@@ -211,10 +207,10 @@ export default function MatchNotesDialog({
   }
 
   useEffect(() => {
-    if (currentMatch && matchNotesDialogOpen) {
-      getMatchTeamNotes([...currentMatch.blueTeams, ...currentMatch.redTeams])
+    if (currentNotesMatch && matchNotesDialogOpen) {
+      getMatchTeamNotes([...currentNotesMatch.blueTeams, ...currentNotesMatch.redTeams])
     }
-  }, [currentMatch, matchNotesDialogOpen])
+  }, [currentNotesMatch, matchNotesDialogOpen])
 
   useEffect(() => {
     if (!currentEditor) {
@@ -232,7 +228,7 @@ export default function MatchNotesDialog({
   useEffect(() => {
     if (completedInitialFetch && matchNotesDialogOpen) {
       saveNotesAndChangeMatch(true).then(() => {
-        getMatchTeamNotes([...currentMatch.blueTeams, ...currentMatch.redTeams])
+        getMatchTeamNotes([...currentNotesMatch.blueTeams, ...currentNotesMatch.redTeams])
       })
     }
   }, [currentNotesGroup])
@@ -266,20 +262,20 @@ export default function MatchNotesDialog({
             <div className={`flex flex-col ${loading ? "animate-pulse" : ""}`}>
               <div className="flex flex-col matchNotesDialogTipTap max-h-[300px]">
                 <h1 className="mb-3 text-xl font-semibold text-neutral-200">
-                  {currentMatch?.name} - {currentTeam?.teamNumber}
+                  {currentNotesMatch?.name} - {currentTeam?.teamNumber}
                 </h1>
                 <Tiptap setEditor={setCurrentEditor} />
                 <MatchResultNavigator
                   className="mt-5"
-                  key={currentMatch?.id}
-                  {...currentMatch}
+                  key={currentNotesMatch?.id}
+                  {...currentNotesMatch}
                   teamSetter={changeTeamNotes}
                 />
                 <div className="mt-2 flex flex-row justify-center">
                   <button
                     className="flex h-5 w-10 items-center justify-center text-xl font-semibold text-white"
                     onClick={() => {
-                      const currentMatchIndex = matchList.indexOf(currentMatch)
+                      const currentMatchIndex = matchList.indexOf(currentNotesMatch)
                       if (currentMatchIndex !== 0) {
                         saveNotesAndChangeMatch(false, matchList[currentMatchIndex - 1])
                       }
@@ -296,7 +292,7 @@ export default function MatchNotesDialog({
                   <button
                     className="flex h-5 w-10 items-center justify-center text-xl font-semibold text-white"
                     onClick={() => {
-                      const currentMatchIndex = matchList.indexOf(currentMatch)
+                      const currentMatchIndex = matchList.indexOf(currentNotesMatch)
                       if (currentMatchIndex !== matchList.length - 1) {
                         saveNotesAndChangeMatch(false, matchList[currentMatchIndex + 1])
                       }

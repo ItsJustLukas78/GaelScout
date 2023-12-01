@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { GiNotebook } from 'react-icons/gi';
 
-export default function MatchTeamResult({ teamId, teamNumber, teamName, programCode, teamGrade, location, teamOrg, openMatchNotes } :
+export default function EventTeamResult({ teamId, teamNumber, teamName, programCode, teamGrade, location, teamOrg, openMatchNotes } :
 { teamId: number, teamNumber: string, teamName: string, programCode: string, teamGrade: string, location: string, teamOrg: string, openMatchNotes: (teamId: number) => void}) {
   return (
     <Link
