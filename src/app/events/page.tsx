@@ -7,6 +7,8 @@ import React, {useEffect, useState} from "react";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { Event, Country, Region } from "@/app/types";
+import { AiOutlineArrowRight } from "react-icons/ai";
+import Link from "next/link";
 
 const countries: any = {
 "Commonly Selected": [{"value":244,"data-code":"US","name":"United States"},{"value":49,"data-code":"CN","name":"China"},{"value":39,"data-code":"CA","name":"Canada"},{"value":14,"data-code":"AU","name":"Australia"},{"value":82,"data-code":"GB","name":"United Kingdom"},{"value":107,"data-code":"IE","name":"Ireland"},{"value":180,"data-code":"NZ","name":"New Zealand"},{"value":239,"data-code":"TW","name":"Taiwan"},{"value":100,"data-code":"HK","name":"Hong Kong"},{"value":164,"data-code":"MX","name":"Mexico"}],
@@ -202,9 +204,16 @@ export default function Events() {
     <main>
       <div className="flex w-full flex-col items-center justify-center gap-16 py-32 sm:py-32 md:flex-row md:gap-7 lg:gap-20">
         <div className="flex h-auto flex-col justify-center items-left max-w-[300px] xs:max-w-min md:max-w-[250px] lg:max-w-min">
-          <h1 className="mb-10 text-6xl font-bold xs:text-8xl md:text-6xl lg:text-8xl">
+          <h1 className="mb-5 text-6xl font-bold xs:text-8xl md:text-6xl lg:text-8xl">
             Events
           </h1>
+          {/* promt to go to live events map with arrow */}
+          <Link className="flex flex-row mb-5 items-center gap-2 hover:text-blue-500" href="/events/map">
+            <h3 className="text-2xl font-semibold">
+              Live Events Map
+            </h3>
+            <AiOutlineArrowRight className="text-2xl" />
+          </Link>
           <Form.Root
             onSubmit={getEvents}
             className="flex flex-col gap-5"
