@@ -194,6 +194,10 @@ export interface Event {
     city: string;
     region: string;
     country: string;
+    coordinates: {
+      lat: number;
+      lon: number;
+    }
   },
   divisions: Division[]
 }

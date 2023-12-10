@@ -338,13 +338,20 @@ export async function getTeamEvents(team_id: number, season_id?: number): Promis
 //   }
 // }
 
-export async function getEvents({seasonId, eventSKUs, eventIds} : {seasonId?: number, eventSKUs?: string[], eventIds?: number[]}): Promise<any[]> {
+export async function getEvents({seasonId, eventSKUs, eventIds, onlyActive} : {seasonId?: number, eventSKUs?: string[], eventIds?: number[], onlyActive?: boolean}): Promise<any[]> {
   const url = `https://www.robotevents.com/api/v2/events`;
   const new_headers = {
     "accept": "application/json",
     "Authorization": "Bearer " + API_KEY,
   };
-  const new_params = { season: seasonId, sku: eventSKUs, id: eventIds };
+
+
+  const start = new Date();
+  const end = new Date();
+  start.setDate(start.getDate() - 5);
+  end.setDate(end.getDate() + 5);
+
+  const new_params = { season: seasonId, sku: eventSKUs, id: eventIds, eventTypes: ['tournament'], start: onlyActive ? start.toISOString() : null, end: onlyActive ? end.toISOString() : null };
 
   const events: any[] = [];
 

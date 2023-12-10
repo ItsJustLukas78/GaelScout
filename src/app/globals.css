@@ -33,6 +33,10 @@
   src: url("../../public/fonts/ClashDisplay-Regular.otf");
 }
 
+svg {
+  display: inline-block;
+  vertical-align: middle;
+}
 
 :root {
 --foreground-rgb: 255, 255, 255;
@@ -55,6 +59,23 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+.mapContainerWrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+path.rsm-geography {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  outline: none;
 }
 
 h1 {

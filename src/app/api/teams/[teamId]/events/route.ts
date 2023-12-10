@@ -43,6 +43,7 @@ export async function GET(
           city: event.location.city,
           region: event.location.region,
           country: event.location.country,
+          coordinates: event.location.coordinates,
         },
         // @ts-ignore
         divisions: event.divisions.map((division) => {

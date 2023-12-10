@@ -56,7 +56,7 @@ enum GradeLevel {
   MiddleSchool = "Middle School",
 }
 
-export default function Teams() {
+export default function Events() {
 
   const [eventName, setEventName] = useState("");
   const [country, setCountry] = useState<string>("All");
