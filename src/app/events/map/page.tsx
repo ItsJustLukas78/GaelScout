@@ -66,7 +66,7 @@ export default function EventsMap() {
         </ComposableMap>
       </div>
       <div className="fixed sm:bottom-32 bottom-6 flex justify-center w-full">
-        <div className="bg-black bg-opacity-50 p-3 rounded-lg">
+        <div className="bg-black bg-opacity-50 p-3 rounded-lg m-4">
           {currentEvent ?
             <>
               <Link href={`/events/${currentEvent.sku}`}>

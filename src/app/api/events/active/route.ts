@@ -14,11 +14,11 @@ export async function GET(request: NextRequest) {
 
     const yesterday = new Date(currentDateTimezone);
     yesterday.setDate(yesterday.getDate() - 1);
-    yesterday.setHours(-3, 0, 0, 0);
+    yesterday.setUTCHours(0, 0, 0, 0);
 
     const tomorrow = new Date(currentDateTimezone);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(-3, 0, 0, 0);
+    tomorrow.setUTCHours(0, 0, 0, 0);
 
     const filteredEvents = foundEvents.filter((event) => {
       const eventStart = new Date(event.start);
@@ -26,6 +26,9 @@ export async function GET(request: NextRequest) {
 
       eventStart.setTime(eventStart.getTime());
       eventEnd.setTime(eventEnd.getTime());
+
+      eventStart.setUTCHours(0, 0, 0, 0);
+      eventEnd.setUTCHours(0, 0, 0, 0);
 
       return (eventStart > yesterday && eventStart < tomorrow) || (eventEnd > yesterday && eventEnd < tomorrow);
     });
