@@ -2,6 +2,8 @@ import { NextResponse, NextRequest } from "next/server";
 import { getEvents } from "@/utils/RobotEventsAPI";
 import { Event } from "@/app/types";
 
+export const revalidate = 60 * 60; // 1 hour
+
 export async function GET(request: NextRequest) {
   try {
     const foundEvents = await getEvents({onlyActive: true});
