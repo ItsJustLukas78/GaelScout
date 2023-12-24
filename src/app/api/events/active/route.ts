@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { getEvents } from "@/utils/RobotEventsAPI";
 import { Event } from "@/app/types";
 
-export const revalidate = 60 * 60; // 1 hour
+export const revalidate = 3600;
 
 export async function GET(request: NextRequest) {
   try {

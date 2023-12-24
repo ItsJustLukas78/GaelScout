@@ -9,6 +9,8 @@ import Link from "next/link";
 // @ts-ignore
 const fetcher = (...args: any[]) => fetch(...args).then(res => res.json())
 
+export const revalidate = 3600
+
 export default function EventsMap() {
 
   const {data: eventsData, error: eventsError, isLoading: eventsLoading} = useSWR('/api/events/active', fetcher)
