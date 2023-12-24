@@ -74,6 +74,7 @@ export async function GET(request: NextRequest) {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        'Cache-Control': `s-maxage=${revalidate}, stale-while-revalidate`,
       }
     });
   } catch (e) {
