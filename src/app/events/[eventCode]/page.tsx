@@ -14,6 +14,7 @@ import {
 } from "@/app/types";
 import ScoutingSheetDialog from "@/components/ScoutingSheetDialog";
 import RankingsScoutingSheetDialog from "@/components/RankingsScoutingSheetDialog";
+import MatchNotificationDialog from "@/components/MatchNotificationDialog";
 import MatchNotesDialog from "@/components/MatchNotesDialog";
 import MatchResult from "@/components/MatchResult";
 import {useUser} from "@clerk/nextjs";
@@ -104,6 +105,9 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
 
   const [currentNotesTeam, setCurrentNotesTeam] = useState<TeamProfile | null>(null);
   const [currentNotesMatch, setCurrentNotesMatch] = useState<EventMatch | null>(null);
+
+  const [currentNotificationMatch, setCurrentNotificationMatch] = useState<EventMatch | null>(null);
+  const [matchNotificationDialogOpen, setMatchNotificationDialogOpen] = useState(false);
 
   const [favorited, setFavorited] = useState(false);
 
@@ -921,19 +925,40 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                             toast.error("You must be signed in to view match notes");
                           }
                         }}
+                        openMatchNotificationDialog={(matchId: number) => {
+                          if (isSignedIn) {
+                            const foundMatch = matchList.find((match) => match.id === matchId);
+                            if (!foundMatch) {
+                              toast.error("Match not found");
+                              return;
+                            }
+                            setCurrentNotificationMatch(foundMatch);
+                            setMatchNotificationDialogOpen(true);
+                          } else {
+                            toast.error("You must be signed in to view match notifications");
+                          }
+                        }}
                       />
                     )
                   }) : null}
                 </div>
-                {isSignedIn ?
-                  <MatchNotesDialog
-                    matchNotesDialogOpen={matchNotesDialogOpen}
-                    currentNotesMatch={currentNotesMatch ? currentNotesMatch : fiteredMatches[0]}
-                    setCurrentNotesMatch={setCurrentNotesMatch}
-                    eventObject={eventObject}
-                    matchList={fiteredMatches}
-                    setMatchNotesDialogOpen={setMatchNotesDialogOpen}
-                  />
+                {isSignedIn ? <>
+                    <MatchNotesDialog
+                      matchNotesDialogOpen={matchNotesDialogOpen}
+                      currentNotesMatch={currentNotesMatch ? currentNotesMatch : fiteredMatches[0]}
+                      setCurrentNotesMatch={setCurrentNotesMatch}
+                      eventObject={eventObject}
+                      matchList={fiteredMatches}
+                      setMatchNotesDialogOpen={setMatchNotesDialogOpen}
+                    />
+                    <MatchNotificationDialog
+                      matchNotificationDialogOpen={matchNotificationDialogOpen}
+                      currentNotificationMatch={currentNotificationMatch ? currentNotificationMatch : fiteredMatches[0]}
+                      eventObject={eventObject}
+                      currentDivision={currentDivision}
+                      setMatchNotificationDialogOpen={setMatchNotificationDialogOpen}
+                    />
+                  </>
                   : null}
               </TabsContent>
               <TabsContent value="skills">

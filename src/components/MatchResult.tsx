@@ -14,6 +14,7 @@ interface MatchResultProps {
   eventModel: any
   eventRankings: EventRankWithMetrics[],
   openMatchNotes: (teamId: number) => void
+  openMatchNotificationDialog: (teamId: number) => void
 }
 
 enum ModelType {
@@ -42,7 +43,8 @@ export default function MatchResult({
   worldModel,
   eventModel,
   eventRankings,
-  openMatchNotes
+  openMatchNotes,
+  openMatchNotificationDialog
 } : MatchResultProps
 ) {
 
@@ -220,43 +222,6 @@ export default function MatchResult({
     }
   }
 
-  const requestNotification = async () => {
-    if (!("Notification" in window)) {
-      toast.error("This browser does not support desktop notification");
-    } else if (Notification.permission === "granted") {
-      console.log("Permission to send notifications has been granted");
-    } else if (Notification.permission !== "denied") {
-      Notification.requestPermission().then(function (permission) {
-        if (permission === "granted") {
-          console.log("Permission to send notifications has been granted");
-        }
-      });
-    }
-
-    if (navigator.serviceWorker.controller) {
-      const eventMatch = {
-        id,
-        eventId,
-        started,
-        scheduled,
-        divisionId,
-        round,
-        instance,
-        matchnum,
-        field,
-        name,
-        blueTeams,
-        redTeams,
-        redScore,
-        blueScore
-      }
-
-      navigator.serviceWorker.controller.postMessage({ type: "push", event: eventMatch, numberOfEventsBefore: 4 });
-
-      toast.success("Notification set for " + formattedMatchName + "! Previously set notifications will be overwritten.");
-    }
-  }
-
   return <>
     {eventId ? (
       <div
@@ -323,7 +288,7 @@ export default function MatchResult({
             className="flex justify-center items-center ml-2 lg:ml-8 text-white text-2xs hover:text-gray-400 transition-colors duration-300"
             onClick={(e) => {
               e.preventDefault();
-              requestNotification();
+              openMatchNotificationDialog(id);
             }}
           >
             <FaRegBell className="sm:h-6 sm:w-6 h-4 w-4 mt-2" />

@@ -53,6 +53,20 @@ export interface EventMatch {
   redScore: number,
 }
 
+export interface MatchNotification {
+  id: number,
+  userId: string,
+  eventId: number,
+  divisionId: number,
+  checkRound: number,
+  checkInstance: number,
+  checkMatchnum: number,
+  checkMatchName: string,
+  matchName: string,
+  phoneNumber: string,
+  estimatedDate: Date,
+}
+
 export interface EventRank {
   id: number,
   eventId: number,

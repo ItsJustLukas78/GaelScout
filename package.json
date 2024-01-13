@@ -67,6 +67,7 @@
     "next-sitemap": "^4.2.3",
     "next-swagger-doc": "^0.4.0",
     "openskill": "^3.1.0",
+    "phone": "^3.1.42",
     "radix-ui": "^1.0.1",
     "rate-limiter-flexible": "^2.4.2",
     "react": "18.2.0",
@@ -84,6 +85,7 @@
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "topojson-client": "^3.1.0",
+    "twilio": "^5.0.0-rc.1",
     "typescript": "5.1.6",
     "utf-8-validate": "^5.0.10",
     "zustand": "^4.4.5"

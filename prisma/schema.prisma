@@ -99,16 +99,17 @@ model NotesGroup {
 }
 
 model User {
-  id             String          @id
-  username       String?         @unique
-  email          String?         @unique
-  firstName      String?
-  lastName       String?
+  id                String              @id
+  username          String?             @unique
+  email             String?             @unique
+  firstName         String?
+  lastName          String?
   // teamNotes TeamNote[]
-  favoriteTeams  FavoriteTeam[]
-  favoriteEvents FavoriteEvent[]
-  notesGroups    NotesGroup[]    @relation("UserNotesGroups")
-  notesGroupId   Int?
+  favoriteTeams     FavoriteTeam[]
+  favoriteEvents    FavoriteEvent[]
+  notesGroups       NotesGroup[]        @relation("UserNotesGroups")
+  notesGroupId      Int?
+  MatchNotification MatchNotification[]
 }
 
 model FavoriteTeam {
@@ -129,4 +130,21 @@ model FavoriteEvent {
   eventId Int
 
   @@unique([userId, eventId])
+}
+
+model MatchNotification {
+  id             Int      @id @default(autoincrement())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  eventId        Int
+  divisionId     Int
+  checkRound     Int
+  checkInstance  Int
+  checkMatchnum  Int
+  checkMatchName String
+  matchName      String
+  phoneNumber    String
+  estimatedDate  DateTime
+
+  @@unique([userId, eventId, divisionId, checkRound, checkInstance, checkMatchnum, phoneNumber, checkMatchName, matchName, estimatedDate])
 }
