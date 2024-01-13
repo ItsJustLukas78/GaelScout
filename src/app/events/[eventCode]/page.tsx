@@ -182,6 +182,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
   }, [currentTeamsDivision, matchList, participatingTeams]);
 
   useEffect(() => {
+    if (currentDivision) {
+      setCurrentTeamsDivision(currentDivision);
+    }
+  }, [currentDivision])
+
+  useEffect(() => {
     if (matchList.length !== 0 && participatingTeams.length !== 0 && rankings.length !== 0) {
       const completedMatches = matchList.filter((match) => {
         return match.blueScore !== 0 && match.redScore !== 0;
@@ -792,7 +798,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       value={currentDivision?.id}
                       onChange={(event) => {
                         // @ts-ignore
-                        setCurrentDivision(divisionList.find((division) => division.id === event.target.value) || null);
+                        setCurrentDivision(divisionList.find((division) => division.id === parseInt(event.target.value)) || null);
                       }}
                     >
                       <option value={999} disabled hidden>Select Division</option>
@@ -874,7 +880,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       value={currentDivision?.id}
                       onChange={(event) => {
                         // @ts-ignore
-                        setCurrentDivision(divisionList.find((division) => division.id === event.target.value) || null);
+                        setCurrentDivision(divisionList.find((division) => division.id === parseInt(event.target.value)) || null);
                       }}
                     >
                       <option value={999} disabled hidden>Select Division</option>
