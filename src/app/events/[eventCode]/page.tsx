@@ -753,6 +753,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   exportDialogOpen={exportDialogOpen}
                   eventObject={eventObject}
                   participatingTeams={participatingTeams}
+                  matchList={matchList}
                   loadingTeams={teamsIsLoading}
                   setExportDialogOpen={setExportDialogOpen}
                 />

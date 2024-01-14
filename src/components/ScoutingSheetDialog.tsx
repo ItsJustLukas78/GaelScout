@@ -4,7 +4,7 @@ import {toast} from "react-toastify";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import CheckboxDiv from "@/components/CheckboxDiv";
 import * as RadioGroup from '@radix-ui/react-radio-group';
-import { Event, TeamProfile, TeamSeasonProfile } from "@/app/types";
+import {Event, EventMatch, TeamProfile, TeamSeasonProfile} from "@/app/types";
 
 enum sortMethod {
   "openSkillRank" = "openSkillRank",
@@ -12,7 +12,7 @@ enum sortMethod {
   "ccwm" = "ccwm",
 }
 
-export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, participatingTeams, loadingTeams, setExportDialogOpen }: { exportDialogOpen: boolean, eventObject: Event | null, participatingTeams: TeamProfile[], loadingTeams: boolean, setExportDialogOpen: (open: boolean) => void }) {
+export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, participatingTeams, matchList, loadingTeams, setExportDialogOpen }: { exportDialogOpen: boolean, eventObject: Event | null, participatingTeams: TeamProfile[], matchList: undefined | EventMatch[], loadingTeams: boolean, setExportDialogOpen: (open: boolean) => void }) {
 
   const [numberChecked, setNumberChecked] = useState(true);
   const [nameChecked, setNameChecked] = useState(true);
@@ -35,7 +35,9 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
   const [awqtwChecked, setAwqtwChecked] = useState(false);
 
   const [sortMethod, setSortMethod] = useState<sortMethod>("openSkillRank" as sortMethod);
+  const [onlyIncludeRelevant, setOnlyIncludeRelevant] = useState(false);
 
+  const [teamNumber, setTeamNumber] = useState("");
 
   const submitExportForm = (e: any) => {
     e.preventDefault();
@@ -67,11 +69,13 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
       "teamRegion" = "Region",
       "teamCountry" = "Country",
       "teamGrade" = "Grade",
+      "relevance" = "Relevance",
     }
 
     const teamValues = {
       teamNumber: numberChecked,
       teamName: nameChecked,
+      relevance: onlyIncludeRelevant,
       teamOrg: orgChecked,
       teamCity: cityChecked,
       teamRegion: regionChecked,
@@ -91,6 +95,7 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
       awardQualToWorlds: awqtwChecked,
     }
 
+    // TODO: pagination
     const getTeamSeasonProfiles = async (): Promise<null | TeamSeasonProfile[]> => {
       try {
         const response = await fetch(`/api/events/${eventObject.id}/seasonProfiles/?seasonId=${eventObject.season.id}`)
@@ -129,10 +134,41 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
 
       csvHeader = csvHeader + "\n"
 
+      enum RelavancyType {
+        alliance = "Alliance",
+        opponent = "Opponent",
+        both = "Both",
+      }
+
+      let teamsToRelavancyType: {[key: number]: RelavancyType} = {}
+
+      if (onlyIncludeRelevant && teamNumber !== "") {
+        const currentMatchList = matchList ? matchList : [];
+
+        const currentTeamMatchList = currentMatchList.filter((match: EventMatch) => {
+          return match.redTeams.find((team) => team.teamNumber == teamNumber.toUpperCase()) || match.blueTeams.find((team) => team.teamNumber == teamNumber)
+        })
+
+        currentTeamMatchList.map((match) => {
+          const allianceTeam: "red" | "blue" = match.redTeams.find((team) => team.teamNumber == teamNumber.toUpperCase()) ? "red" : "blue";
+
+          match.redTeams.map((team) => {
+            teamsToRelavancyType[team.teamId] ? teamsToRelavancyType[team.teamId] = RelavancyType.both :
+            teamsToRelavancyType[team.teamId] = allianceTeam === "red" ? RelavancyType.alliance : RelavancyType.opponent;
+          })
+
+          match.blueTeams.map((team) => {
+            teamsToRelavancyType[team.teamId] ? teamsToRelavancyType[team.teamId] = RelavancyType.both :
+            teamsToRelavancyType[team.teamId] = allianceTeam === "blue" ? RelavancyType.alliance : RelavancyType.opponent;
+          })
+        })
+      }
+
+
       interface TeamProfileWithTeamSeasonProfile extends TeamProfile, TeamSeasonProfile {}
 
       // make a list of objects representing both the team and their season profile
-      const teamSeasonProfilesWithTeam: TeamProfile[] | TeamProfileWithTeamSeasonProfile[] = participatingTeams.map((team) => {
+      let teamSeasonProfilesWithTeam: TeamProfile[] | TeamProfileWithTeamSeasonProfile[] = participatingTeams.map((team) => {
         const currentTeamNumber = team.teamNumber;
 
         const currentTeamSeasonProfile = teamSeasonProfiles.find((teamSeasonProfile) => {
@@ -148,6 +184,13 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
           ...currentTeamSeasonProfile,
         }
       })
+
+      // filter out teams that are not relevant
+      if (onlyIncludeRelevant && teamNumber !== "") {
+        teamSeasonProfilesWithTeam = teamSeasonProfilesWithTeam.filter((team) => {
+          return (teamsToRelavancyType[team.teamId] !== undefined) && (team.teamNumber !== teamNumber.toUpperCase());
+        })
+      }
 
       // sort the list of objects using the sort method
       teamSeasonProfilesWithTeam.sort((a: TeamProfile | TeamProfileWithTeamSeasonProfile, b: TeamProfile | TeamProfileWithTeamSeasonProfile) => {
@@ -182,6 +225,14 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
           if (value) {
             const enumKey = key as keyof typeof team;
             let teamValue: string | number | undefined = team[enumKey] as string | number | undefined;
+
+            if (key === "relevance") {
+              if (onlyIncludeRelevant && teamNumber !== "") {
+                teamValue = teamsToRelavancyType[team.teamId] ? teamsToRelavancyType[team.teamId] : "N/A"
+              } else {
+                teamValue = "N/A"
+              }
+            }
 
             if ((!teamValue || teamValue === "") && typeof teamValue !== 'number') {
               csvRow += "N/A" + ","
@@ -244,9 +295,9 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
               className="flex flex-col"
             >
               <p className="text-sm font-semibold xs:text-md">
-                Select all the information you want to be included in the sheet for each team:
+                Include for each team:
               </p>
-              <div className="mt-3 flex flex-row justify-between overflow-scroll overflow-x-hidden h-[275px]">
+              <div className="mt-1 flex flex-row justify-between overflow-scroll overflow-x-hidden h-[180px]">
                 <div className="flex flex-col">
                   <CheckboxDiv checked={numberChecked} onCheckedChange={(e) => setNumberChecked((numberChecked) => (!numberChecked))}>
                     Number
@@ -309,11 +360,11 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
                   </CheckboxDiv>
                 </div>
               </div>
-              <p className="mt-5 text-sm font-semibold xs:text-md">
+              <p className="mt-3 text-sm font-semibold xs:text-md">
                 Sort by:
               </p>
               <RadioGroup.Root
-                className="mt-3 flex flex-row gap-3"
+                className="mt-1 flex flex-row gap-3"
                 value={sortMethod}
                 onValueChange={(value: sortMethod) => setSortMethod(value)}
               >
@@ -354,8 +405,52 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
                   </label>
                 </div>
               </RadioGroup.Root>
+              <p className="mt-5 text-sm font-semibold xs:text-md">
+                Include:
+              </p>
+              <RadioGroup.Root
+                className="mt-2 flex flex-row gap-3.5"
+                value={onlyIncludeRelevant.toString()}
+                onValueChange={(value) => setOnlyIncludeRelevant((value === "true"))}
+              >
+                <div className="flex items-center">
+                  <RadioGroup.Item
+                    className="rounded-full bg-white w-[25px] h-[25px]"
+                    value="false"
+                    id="includeAll"
+                  >
+                    <RadioGroup.Indicator className="flex h-full w-full items-center justify-center rounded-full bg-violet-400" />
+                  </RadioGroup.Item>
+                  <label className="text-white text-[15px] pl-[15px]" htmlFor="includeAll">
+                    All
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <RadioGroup.Item
+                    className="rounded-full bg-white w-[25px] h-[25px]"
+                    value="true"
+                    id="onlyIncludeRelevant"
+                  >
+                    <RadioGroup.Indicator className="flex h-full w-full items-center justify-center rounded-full bg-violet-400" />
+                  </RadioGroup.Item>
+                  <label className="text-white text-[15px] pl-[15px]" htmlFor="onlyIncludeRelevant">
+                    Opponents/Alliances
+                  </label>
+                </div>
+              </RadioGroup.Root>
+              {onlyIncludeRelevant && <>
+                <p className="mt-5 text-sm font-semibold xs:text-md">
+                  Team number:
+                </p>
+                <input
+                  className="mt-2 rounded-md bg-white text-black text-[15px] p-[5px] w-[100px]"
+                  type="text"
+                  value={teamNumber}
+                  onChange={(e) => setTeamNumber(e.target.value)}
+                />
+              </>}
               <p className="mt-5 text-xs xs:text-sm">
-                Some values may not be available if a team has not competed in the current season and has not been analyzed yet.
+                Some values may not be available based on team history.
               </p>
             </form>
           </AlertDialog.Description>
