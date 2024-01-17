@@ -181,11 +181,6 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [currentTeamsDivision, matchList, participatingTeams]);
 
-  useEffect(() => {
-    if (currentDivision) {
-      setCurrentTeamsDivision(currentDivision);
-    }
-  }, [currentDivision])
 
   useEffect(() => {
     if (matchList.length !== 0 && participatingTeams.length !== 0 && rankings.length !== 0) {
@@ -679,10 +674,11 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       value={currentTeamsDivision?.id}
                       onChange={(event) => {
                         // @ts-ignore
-                        const newValue = (parseInt(event.target.id) === -1 ? {
+                        const newValue = (parseInt(event.target.value) === -1 ? {
                           id: -1,
                           name: "All"
                         } : divisionList.find((division) => division.id === parseInt(event.target.value)) || null);
+
                         setCurrentTeamsDivision(newValue);
                       }}
                     >
