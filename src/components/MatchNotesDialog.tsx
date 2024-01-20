@@ -19,7 +19,8 @@ interface MatchNotesProps {
   matchList: EventMatch[],
   setMatchNotesDialogOpen: (open: boolean) => void,
   setCurrentNotesMatch: (match: EventMatch) => void,
-  currentNotesMatch: EventMatch
+  currentNotesMatch: EventMatch,
+  currentMatchIndex: number
 }
 
 export default function MatchNotesDialog({
@@ -29,6 +30,7 @@ export default function MatchNotesDialog({
    setMatchNotesDialogOpen,
    setCurrentNotesMatch,
    currentNotesMatch,
+   currentMatchIndex
 }: MatchNotesProps) {
   const { getToken } = useAuth();
 
@@ -275,7 +277,6 @@ export default function MatchNotesDialog({
                   <button
                     className="flex h-5 w-10 items-center justify-center text-xl font-semibold text-white"
                     onClick={() => {
-                      const currentMatchIndex = matchList.indexOf(currentNotesMatch)
                       if (currentMatchIndex !== 0) {
                         saveNotesAndChangeMatch(false, matchList[currentMatchIndex - 1])
                       }
@@ -292,7 +293,6 @@ export default function MatchNotesDialog({
                   <button
                     className="flex h-5 w-10 items-center justify-center text-xl font-semibold text-white"
                     onClick={() => {
-                      const currentMatchIndex = matchList.indexOf(currentNotesMatch)
                       if (currentMatchIndex !== matchList.length - 1) {
                         saveNotesAndChangeMatch(false, matchList[currentMatchIndex + 1])
                       }

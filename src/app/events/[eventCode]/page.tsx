@@ -36,6 +36,10 @@ import { FaClipboardList, FaTrophy } from "react-icons/fa";
 import { FaRankingStar } from "react-icons/fa6";
 import {GiTrumpet} from "react-icons/gi";
 import {GoNumber} from "react-icons/go";
+import { IoMdSearch } from "react-icons/io";
+import { useGlobalStore } from "@/state/globalState";
+import { RelavancyType } from "@/app/types";
+
 
 
 enum TabType {
@@ -104,6 +108,11 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
 
   const [currentNotesTeam, setCurrentNotesTeam] = useState<TeamProfile | null>(null);
   const [currentNotesMatch, setCurrentNotesMatch] = useState<EventMatch | null>(null);
+
+  const currentUsersTeamNumber = useGlobalStore(state => state.currentUsersTeamNumber)
+  const setUsersCurrentTeamNumber = useGlobalStore(state => state.setUsersCurrentTeamNumber)
+
+  const [teamsToRelavancyType, setTeamsToRelavancyType] = useState<Record<number, RelavancyType>>({})
 
   const [favorited, setFavorited] = useState(false);
 
@@ -454,6 +463,47 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       setSkills(teamSkills);
     }
   }, [skillsData, participatingTeams])
+
+
+  useEffect(() => {
+    if (currentUsersTeamNumber === "" || !currentUsersTeamNumber) {
+      return;
+    }
+
+    const teamInMatchList = participatingTeams.find((team) => team.teamNumber.toUpperCase() == currentUsersTeamNumber.toUpperCase())
+
+    if (!teamInMatchList) {
+      return;
+    }
+
+    let teamsToRelavancyType: {[key: number]: RelavancyType} = {}
+
+    const currentTeamMatchList = matchList.filter((match: EventMatch) => {
+      return match.redTeams.find((team) => team.teamNumber.toUpperCase() == currentUsersTeamNumber.toUpperCase()) || match.blueTeams.find((team) => team.teamNumber.toUpperCase() == currentUsersTeamNumber.toUpperCase())
+    })
+
+    console.log({currentTeamMatchList})
+
+    currentTeamMatchList.map((match) => {
+      const allianceTeam: "red" | "blue" = match.redTeams.find((team) => team.teamNumber == currentUsersTeamNumber.toUpperCase()) ? "red" : "blue";
+
+      match.redTeams.map((team) => {
+        teamsToRelavancyType[team.teamId] ? teamsToRelavancyType[team.teamId] = RelavancyType.both :
+        teamsToRelavancyType[team.teamId] = allianceTeam === "red" ? RelavancyType.alliance : RelavancyType.opponent;
+      })
+
+      match.blueTeams.map((team) => {
+        teamsToRelavancyType[team.teamId] ? teamsToRelavancyType[team.teamId] = RelavancyType.both :
+        teamsToRelavancyType[team.teamId] = allianceTeam === "blue" ? RelavancyType.alliance : RelavancyType.opponent;
+      })
+    })
+
+    console.log({teamsToRelavancyType}, {team: teamInMatchList})
+    teamsToRelavancyType[teamInMatchList.teamId] = RelavancyType.self
+
+    setTeamsToRelavancyType(teamsToRelavancyType)
+
+  }, [currentUsersTeamNumber, matchList, participatingTeams])
 
   const changeFavoriteStatus = async (favorite: boolean) => {
     if (!eventObject) {
@@ -894,6 +944,13 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       placeholder="Filter by team..."
                       onChange={(e) => setTeamNumberFilter(e.target.value)}
                     />
+                    <input
+                      className="h-8 min-w-max rounded-lg bg-white p-3 text-xs text-black sm:w-44 md:h-12 md:w-52 md:text-sm"
+                      type="text"
+                      value={currentUsersTeamNumber ? currentUsersTeamNumber : ""}
+                      placeholder="Label alliances/opponents..."
+                      onChange={(e) => setUsersCurrentTeamNumber(e.target.value)}
+                    />
                   </div>
                 </div>
                 {matchList.length === 0 && !matchDataIsLoading ?
@@ -911,6 +968,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         eventModel={eventModel}
                         worldModel={worldModel}
                         eventRankings={rankingsWithMetrics}
+                        teamsToRelavancyType={teamsToRelavancyType}
                         openMatchNotes={(matchId: number) => {
                           if (isSignedIn) {
                             const foundMatch = matchList.find((match) => match.id === matchId);
@@ -936,6 +994,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     eventObject={eventObject}
                     matchList={fiteredMatches}
                     setMatchNotesDialogOpen={setMatchNotesDialogOpen}
+                    currentMatchIndex={fiteredMatches.findIndex((match) => match.id === currentNotesMatch?.id)}
                   />
                   : null}
               </TabsContent>

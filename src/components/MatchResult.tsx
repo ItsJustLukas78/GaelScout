@@ -5,6 +5,8 @@ import Link from "next/link";
 import * as tf from "@tensorflow/tfjs";
 import { FaRegBell } from "react-icons/fa";
 import { GiNotebook } from 'react-icons/gi';
+import {RelavancyType} from "@/app/types";
+import MatchResultTeamLink from "@/components/MatchResultTeamLink";
 
 
 interface MatchResultProps {
@@ -13,6 +15,7 @@ interface MatchResultProps {
   worldModel: any
   eventModel: any
   eventRankings: EventRankWithMetrics[],
+  teamsToRelavancyType: Record<number, RelavancyType>,
   openMatchNotes: (teamId: number) => void
 }
 
@@ -42,6 +45,7 @@ export default function MatchResult({
   worldModel,
   eventModel,
   eventRankings,
+  teamsToRelavancyType,
   openMatchNotes
 } : MatchResultProps
 ) {
@@ -264,18 +268,8 @@ export default function MatchResult({
       >
         <div className="flex flex-row justify-between">
           <div className="flex flex-col gap-3 text-center min-w-[55px] md:min-w-[150px]">
-            <Link
-              href={`/teams/${blueTeams[0].teamNumber}`}
-              className="text-xs font-semibold text-blue-500 hover:text-blue-700 sm:text-lg md:text-3xl"
-            >
-              {blueTeams[0].teamNumber}
-            </Link>
-            <Link
-              href={`/teams/${blueTeams[1].teamNumber}`}
-              className="text-xs font-semibold text-blue-500 hover:text-blue-700 sm:text-lg md:text-3xl"
-            >
-              {blueTeams[1].teamNumber}
-            </Link>
+            <MatchResultTeamLink team={blueTeams[0]} teamsToRelavancyType={teamsToRelavancyType} />
+            <MatchResultTeamLink team={blueTeams[1]} teamsToRelavancyType={teamsToRelavancyType} />
           </div>
           <div className="flex flex-col justify-center text-center min-w-[30px] md:min-w-[55px]">
             <h2 className="text-sm font-medium text-blue-500 sm:text3xl sm:text-xl md:text-4xl">
@@ -304,18 +298,8 @@ export default function MatchResult({
             </h2>
           </div>
           <div className="flex flex-col gap-3 text-center min-w-[55px] md:min-w-[150px]">
-            <Link
-              href={`/teams/${redTeams[0].teamNumber}`}
-              className="text-xs font-semibold text-red-500 hover:text-red-700 sm:text-lg md:text-3xl"
-            >
-              {redTeams[0].teamNumber}
-            </Link>
-            <Link
-              href={`/teams/${redTeams[1].teamNumber}`}
-              className="text-xs font-semibold text-red-500 hover:text-red-700 sm:text-lg md:text-3xl"
-            >
-              {redTeams[1].teamNumber}
-            </Link>
+            <MatchResultTeamLink team={redTeams[0]} teamsToRelavancyType={teamsToRelavancyType} />
+            <MatchResultTeamLink team={redTeams[1]} teamsToRelavancyType={teamsToRelavancyType} />
           </div>
         </div>
         <div className="flex flex-row justify-between gap-2 w-full">

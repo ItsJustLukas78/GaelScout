@@ -17,6 +17,13 @@ export interface NotesGroup {
   joinCode: string;
 }
 
+export enum RelavancyType {
+  alliance = "Alliance",
+  opponent = "Opponent",
+  both = "Both",
+  self = "Self",
+}
+
 export interface TeamProfile {
   teamId: number,
   teamName: string,
