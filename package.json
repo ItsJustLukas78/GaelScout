@@ -12,7 +12,7 @@
     "@apollo/sandbox": "^2.5.0",
     "@apollo/server": "^4.8.1",
     "@as-integrations/next": "^2.0.1",
-    "@clerk/nextjs": "^4.23.1",
+    "@clerk/nextjs": "^4.29.3",
     "@clerk/themes": "^1.7.5",
     "@ducanh2912/next-pwa": "^9.7.2",
     "@prisma/client": "latest",
