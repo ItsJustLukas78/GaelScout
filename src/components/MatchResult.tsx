@@ -264,15 +264,15 @@ export default function MatchResult({
   return <>
     {eventId ? (
       <div
-        className="flex h-auto w-full flex-col rounded-2xl bg-neutral-700 p-3 shadow-md shadow-neutral-900 min-h-28"
+        className="flex h-auto w-full flex-col rounded-xl bg-neutral-700 p-3 shadow-md shadow-neutral-900 min-h-28"
       >
         <div className="flex flex-row justify-between">
           <div className="flex flex-col gap-3 text-center min-w-[55px] md:min-w-[150px]">
-            <MatchResultTeamLink team={blueTeams[0]} teamsToRelavancyType={teamsToRelavancyType} />
-            <MatchResultTeamLink team={blueTeams[1]} teamsToRelavancyType={teamsToRelavancyType} />
+            <MatchResultTeamLink team={blueTeams[0]} mainColor={"blue"} teamsToRelavancyType={teamsToRelavancyType} />
+            <MatchResultTeamLink team={blueTeams[1]} mainColor={"blue"} teamsToRelavancyType={teamsToRelavancyType} />
           </div>
           <div className="flex flex-col justify-center text-center min-w-[30px] md:min-w-[55px]">
-            <h2 className="text-sm font-medium text-blue-500 sm:text3xl sm:text-xl md:text-4xl">
+            <h2 className="text-sm text-blue-500 sm:text3xl sm:text-xl md:text-4xl">
               {blueScore > redScore ?
                 <u className="font-bold">{blueScore}</u>
                 :
@@ -281,15 +281,15 @@ export default function MatchResult({
             </h2>
           </div>
           <div className="flex flex-col justify-center gap-1 text-center min-w-[55px] md:min-w-[150px]">
-            <h2 className="text-sm font-semibold text-GSGreen sm:text-lg md:text-3xl">
+            <h2 className="text-xs text-GSGreen sm:text-lg md:text-3xl">
               {formattedMatchName}
             </h2>
-            <h2 className="text-xs font-semibold text-neutral-200 sm:text-md md:text-2xl">
+            <h2 className="text-xs text-neutral-200 sm:text-md md:text-2xl">
               {field}
             </h2>
           </div>
           <div className="flex flex-col justify-center text-center min-w-[30px] md:min-w-[55px]">
-            <h2 className="text-sm font-medium text-red-500 sm:text-xl md:text-4xl">
+            <h2 className="text-sm text-red-500 sm:text-xl md:text-4xl">
               {redScore > blueScore ?
                 <u className="font-bold">{redScore}</u>
                 :
@@ -298,8 +298,8 @@ export default function MatchResult({
             </h2>
           </div>
           <div className="flex flex-col gap-3 text-center min-w-[55px] md:min-w-[150px]">
-            <MatchResultTeamLink team={redTeams[0]} teamsToRelavancyType={teamsToRelavancyType} />
-            <MatchResultTeamLink team={redTeams[1]} teamsToRelavancyType={teamsToRelavancyType} />
+            <MatchResultTeamLink team={redTeams[0]} mainColor={"red"} teamsToRelavancyType={teamsToRelavancyType} />
+            <MatchResultTeamLink team={redTeams[1]} mainColor={"red"} teamsToRelavancyType={teamsToRelavancyType} />
           </div>
         </div>
         <div className="flex flex-row justify-between gap-2 w-full">
@@ -312,7 +312,7 @@ export default function MatchResult({
           >
             <FaRegBell className="sm:h-6 sm:w-6 h-4 w-4 mt-2" />
           </button>
-          <div className="mt-1 flex flex-col gap-2 justify-center items-center w-[85%]">
+          <div className="mt-1 flex flex-col gap-1.5 justify-center items-center w-[85%]">
             {worldPrediction ? <>
               <div className="flex flex-row justify-center gap-2 w-full">
                 <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${blueWinsWorld ? "bg-green-500" : "bg-gray-600"}`}>
@@ -324,7 +324,7 @@ export default function MatchResult({
               </div>
             </> : <>
               <button
-                className="flex flex-row justify-center rounded-2xl font-medium text-black shadow-md transition-colors duration-200 w-[75%] text-2xs bg-green-500 hover:bg-green-600 sm:w-44 sm:p-0.5 lg:text-md lg:w-64"
+                className="flex flex-row justify-center rounded-2xl text-black shadow-md transition-colors duration-200 w-[75%] text-2xs bg-green-500 hover:bg-green-600 sm:w-44 sm:p-0.5 lg:text-md lg:w-64"
                 onClick={(event) => predictMatch(event, ModelType.worldModel)}
               >
                 Predict (World)
@@ -333,16 +333,16 @@ export default function MatchResult({
             }
             {eventPrediction ? <>
               <div className="flex flex-row justify-center gap-2 w-full">
-                <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${blueWinsEvent ? "bg-green-500" : "bg-gray-600"}`}>
+                <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black sm:p-0.5 ${blueWinsEvent ? "bg-green-500" : "bg-gray-600"}`}>
                   {blueWinsEvent ? `Predicted ${Math.abs(blueWinPercentageEvent)}%` : null}
                 </div>
-                <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${redWinsEvent ? "bg-green-500" : "bg-gray-600"}`}>
+                <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black sm:p-0.5 ${redWinsEvent ? "bg-green-500" : "bg-gray-600"}`}>
                   {redWinsEvent ? `Predicted ${Math.abs(redWinPercentageEvent)}%` : null}
                 </div>
               </div>
               </> : <>
               <button
-                className="flex flex-row justify-center rounded-2xl font-medium text-black shadow-md transition-colors duration-200 w-[75%] text-2xs bg-green-500 hover:green-600 sm:w-44 sm:p-0.5 lg:text-md lg:w-64"
+                className="flex flex-row justify-center rounded-2xl text-black shadow-md transition-colors duration-200 w-[75%] text-2xs bg-green-500 hover:green-600 sm:w-44 sm:p-0.5 lg:text-md lg:w-64"
                 onClick={(event) => predictMatch(event, ModelType.eventModel)}
               >
                 Predict (Event)

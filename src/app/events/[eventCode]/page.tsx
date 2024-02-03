@@ -58,10 +58,10 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
   const router = useRouter();
   const searchParams = useSearchParams()
 
-  const team = searchParams.get("team")
+  const teamParam = searchParams.get("team")
   const tabParam = searchParams.get("tab")
 
-  const [tab, setTab] = useState<TabType>(team ? "matches" as TabType : (tabParam ? tabParam as  TabType: "teams" as TabType))
+  const [tab, setTab] = useState<TabType>(teamParam ? "matches" as TabType : (tabParam ? tabParam as  TabType: "teams" as TabType))
 
   const onTabChange = (value: String) => {
     setTab(value as TabType)
@@ -94,7 +94,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
   const [currentTeamsDivision, setCurrentTeamsDivision] = useState<Division | null>({id: -1, name: "All"});
   const [matchList, setMatchList] = useState<EventMatch[]>([]);
   const [fiteredMatches, setFilteredMatches] = useState<EventMatch[]>([]);
-  const [teamNumberFilter, setTeamNumberFilter] = useState<string>(team ? team : "");
+  const [teamNumberFilter, setTeamNumberFilter] = useState<string>(teamParam ? teamParam : "");
 
   const [rankings, setRankings] = useState<EventRank[]>([]);
 
@@ -145,6 +145,16 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
   useEffect(() => {
     if (teamsData) {
       setParticipatingTeams(teamsData.teams)
+
+      // if (teamParam && teamsData.teams.length > 0 && eventData?.events[0].divisions.length > 1) {
+      //   const team = teamsData.teams.find((team: TeamProfile) => team.teamNumber === teamParam.toUpperCase())
+      //   if (team) {
+      //     const teamDivision = findTeamDivision(team)
+      //     if (teamDivision) {
+      //       setCurrentTeamsDivision(teamDivision)
+      //     }
+      //   }
+      // }
     }
   }, [teamsData])
 
@@ -190,6 +200,17 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [currentTeamsDivision, matchList, participatingTeams]);
 
+  // const findTeamDivision = (team: TeamProfile): Division | null => {
+  //   let teamDivision: Division | null = null;
+  //
+  //   matchList.forEach((match: EventMatch) => {
+  //     if (match.blueTeams.find((blueTeam) => blueTeam.teamId === team.teamId) || match.redTeams.find((redTeam) => redTeam.teamId === team.teamId)) {
+  //       teamDivision = divisionList.find((division) => division.id === match.divisionId) || null;
+  //     }
+  //   })
+  //
+  //   return teamDivision
+  // }
 
   useEffect(() => {
     if (matchList.length !== 0 && participatingTeams.length !== 0 && rankings.length !== 0) {
@@ -473,6 +494,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     const teamInMatchList = participatingTeams.find((team) => team.teamNumber.toUpperCase() == currentUsersTeamNumber.toUpperCase())
 
     if (!teamInMatchList) {
+      setTeamsToRelavancyType({})
       return;
     }
 
@@ -903,7 +925,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                 />
               </TabsContent>
               <TabsContent value="matches">
-                <div className="mb-10 flex flex-col justify-between xl:flex-row">
+                <div className="mb-10 flex flex-col justify-between">
                   <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
                     Matches
                   </h3>
@@ -945,10 +967,10 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       onChange={(e) => setTeamNumberFilter(e.target.value)}
                     />
                     <input
-                      className="h-8 min-w-max rounded-lg bg-white p-3 text-xs text-black sm:w-44 md:h-12 md:w-52 md:text-sm"
+                      className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-72 md:text-lg"
                       type="text"
                       value={currentUsersTeamNumber ? currentUsersTeamNumber : ""}
-                      placeholder="Label alliances/opponents..."
+                      placeholder="Label alliances/opponents for..."
                       onChange={(e) => setUsersCurrentTeamNumber(e.target.value)}
                     />
                   </div>
@@ -958,7 +980,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     No matches found
                   </h1>
                 : null}
-                <div className="flex flex-col gap-4 overflow-auto w-[100%]">
+                <div className="flex flex-col gap-1.5 overflow-auto w-[100%]">
                   {fiteredMatches.length !== 0 ? fiteredMatches.map((result: EventMatch) => {
                     return (
                       <MatchResult
