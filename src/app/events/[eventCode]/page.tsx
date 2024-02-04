@@ -504,8 +504,6 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       return match.redTeams.find((team) => team.teamNumber.toUpperCase() == currentUsersTeamNumber.toUpperCase()) || match.blueTeams.find((team) => team.teamNumber.toUpperCase() == currentUsersTeamNumber.toUpperCase())
     })
 
-    console.log({currentTeamMatchList})
-
     currentTeamMatchList.map((match) => {
       const allianceTeam: "red" | "blue" = match.redTeams.find((team) => team.teamNumber == currentUsersTeamNumber.toUpperCase()) ? "red" : "blue";
 
@@ -520,7 +518,6 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       })
     })
 
-    console.log({teamsToRelavancyType}, {team: teamInMatchList})
     teamsToRelavancyType[teamInMatchList.teamId] = RelavancyType.self
 
     setTeamsToRelavancyType(teamsToRelavancyType)
@@ -1016,7 +1013,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     eventObject={eventObject}
                     matchList={fiteredMatches}
                     setMatchNotesDialogOpen={setMatchNotesDialogOpen}
-                    currentMatchIndex={fiteredMatches.findIndex((match) => match.id === currentNotesMatch?.id)}
+                    teamsToRelavancyType={teamsToRelavancyType}
                   />
                   : null}
               </TabsContent>

@@ -1,8 +1,7 @@
-"use client"
 import React, {useEffect, useRef, useState} from "react";
 import {toast} from "react-toastify";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
-import {Event, EventMatch, TeamIdentifiers, NotesGroup} from "@/app/types";
+import {Event, EventMatch, TeamIdentifiers, NotesGroup, RelavancyType} from "@/app/types";
 import Tiptap from "@/components/Tiptap";
 import MatchResultNavigator from "@/components/MatchResultNavigator";
 import {
@@ -20,7 +19,7 @@ interface MatchNotesProps {
   setMatchNotesDialogOpen: (open: boolean) => void,
   setCurrentNotesMatch: (match: EventMatch) => void,
   currentNotesMatch: EventMatch,
-  currentMatchIndex: number
+  teamsToRelavancyType: Record<number, RelavancyType>
 }
 
 export default function MatchNotesDialog({
@@ -30,7 +29,7 @@ export default function MatchNotesDialog({
    setMatchNotesDialogOpen,
    setCurrentNotesMatch,
    currentNotesMatch,
-   currentMatchIndex
+   teamsToRelavancyType
 }: MatchNotesProps) {
   const { getToken } = useAuth();
 
@@ -48,6 +47,22 @@ export default function MatchNotesDialog({
   const [completedInitialFetch, setCompletedInitialFetch] = useState(false)
 
   const [loading, setLoading] = useState(false)
+
+  const [currentMatchIndex, setCurrentMatchIndex] = useState(
+    matchList?.findIndex((match) => {
+      return match.id === currentNotesMatch?.id
+    }) || 0
+  )
+
+  useEffect(() => {
+    if (matchList.length === 0 || !currentNotesMatch) {
+      return;
+    }
+
+    setCurrentMatchIndex(matchList.findIndex((match) => {
+      return match.id === currentNotesMatch.id
+    }))
+  }, [matchList, currentNotesMatch])
 
   const changeTeamNotes = (team: TeamIdentifiers) => {
     if (!currentEditor) {
@@ -124,6 +139,7 @@ export default function MatchNotesDialog({
       })
 
       const data = await response.json()
+
 
       if (data.error) {
         toast.error(data.error);
@@ -272,6 +288,7 @@ export default function MatchNotesDialog({
                   key={currentNotesMatch?.id}
                   {...currentNotesMatch}
                   teamSetter={changeTeamNotes}
+                  teamsToRelavancyType={teamsToRelavancyType}
                 />
                 <div className="mt-2 flex flex-row justify-center">
                   <button

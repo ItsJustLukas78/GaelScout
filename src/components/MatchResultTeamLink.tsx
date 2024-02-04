@@ -10,14 +10,18 @@ interface MatchResultTeamLinkProps {
   team: TeamIdentifiers;
   mainColor: "red" | "blue";
   teamsToRelavancyType: Record<number, RelavancyType>;
+  link?: boolean;
+  className?: string;
+  onClick?: () => void;
 }
 
-export default function MatchResultTeamLink({ team, mainColor, teamsToRelavancyType }: MatchResultTeamLinkProps) {
-  console.log({teamsToRelavancyType})
+export default function MatchResultTeamLink({ team, mainColor, teamsToRelavancyType, link = true, className, onClick }: MatchResultTeamLinkProps) {
   return (
+    link ?
     <Link
       href={`/teams/${team.teamNumber}`}
-      className={`text-xs ${mainColor === "red" ? "text-red-500 hover:text-red-700" : "text-blue-500 hover:text-blue-700"} sm:text-lg md:text-3xl
+      className={`${mainColor === "red" ? "text-red-500 hover:text-red-700" : "text-blue-500 hover:text-blue-700"} 
+      ${className ? className : "text-xs sm:text-lg md:text-3xl"}
       ${teamsToRelavancyType[team.teamId] === RelavancyType.self ? "underline" : ""}`
       }
     >
@@ -28,5 +32,20 @@ export default function MatchResultTeamLink({ team, mainColor, teamsToRelavancyT
         {teamsToRelavancyType[team.teamId] === RelavancyType.both ? <><LuSwords /> <FaHandshakeSimple /></> : null}
       </span>
     </Link>
+    :
+    <button
+      className={`${mainColor === "red" ? "text-red-500" : "text-blue-500"} 
+      ${className ? className : "text-xs sm:text-lg md:text-3xl"}
+      ${teamsToRelavancyType[team.teamId] === RelavancyType.self ? "underline" : ""}`
+      }
+      onClick={onClick}
+    >
+      {team.teamNumber}
+      <span className="ml-1 text-2xs sm:text-sm md:text-xl text-GSGreen">
+        {teamsToRelavancyType[team.teamId] === RelavancyType.opponent ? <LuSwords /> : null}
+        {teamsToRelavancyType[team.teamId] === RelavancyType.alliance ? <FaHandshakeSimple /> : null}
+        {teamsToRelavancyType[team.teamId] === RelavancyType.both ? <><LuSwords /> <FaHandshakeSimple /></> : null}
+      </span>
+    </button>
   )
 }
