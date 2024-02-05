@@ -18,21 +18,23 @@ export async function GET(
       return award.teamWinners.length !== 0
   })
 
-  const awards: EventAward[] = filteredAwardObjects.map((award) => {
-    return {
-      id: award.id,
-      eventId: award.event.id,
-      divisionId: award.teamWinners[0].division.id,
-      name: award.title,
-      qualification: award.qualifications[0],
-      team: {
-        teamId: award.teamWinners[0].team.id,
-        teamNumber: award.teamWinners[0].team.name,
-      },
-      order: award.order,
-    }
-  })
-
+  const awards: EventAward[] = filteredAwardObjects.reduce((acc: EventAward[], award) => {
+    let duplicates = award.teamWinners.map((team: any) => {
+      return {
+        id: award.id,
+        eventId: award.event.id,
+        divisionId: team.division.id,
+        name: award.title,
+        qualification: award.qualifications[0],
+        team: {
+          teamId: team.team.id,
+          teamNumber: team.team.name,
+        },
+        order: award.order,
+      }
+    })
+    return acc.concat(duplicates)
+  }, [])
 
   return NextResponse.json({awards: awards}, {
     status: 200,

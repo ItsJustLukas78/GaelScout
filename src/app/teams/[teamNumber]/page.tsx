@@ -318,7 +318,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
                     <option value="181">Over Under 2023-24</option>
                   </select>
                   <button
-                    className="flex items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 text-xl font-semibold text-black opacity-50 min-w-[50px] min-h-[40px] disabled:opacity-50"
+                    className="flex items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 text-xl font-semibold text-black opacity-50 min-w-[50px] h-10 sm:h-12 disabled:opacity-50"
                     onClick={(e) => {
                       e.preventDefault()
                       if (isSignedIn) {

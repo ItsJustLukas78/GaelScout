@@ -1086,6 +1086,8 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   {awards.length !== 0 ? awards.map((result: EventAward) => {
                     const foundTeamProfile = participatingTeams.find((team) => team.teamId === result.team.teamId);
 
+                    console.log(result)
+
                     if (!foundTeamProfile) {
                       return null;
                     }
