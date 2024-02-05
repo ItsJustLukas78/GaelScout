@@ -4,8 +4,19 @@ import {toast} from "react-toastify";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import CheckboxDiv from "@/components/CheckboxDiv";
 import {Event, TeamProfile, EventRankWithMetrics} from "@/app/types";
+import StarterKit from '@tiptap/starter-kit'
+import Placeholder from '@tiptap/extension-placeholder'
+import CharacterCount from "@tiptap/extension-character-count";
+import Highlight from '@tiptap/extension-highlight';
+import Underline from '@tiptap/extension-underline';
+import {useAuth} from "@clerk/nextjs";
+import {useGlobalStore} from "@/state/globalState";
+import {generateText} from "@tiptap/core";
 
 export default function RankingsScoutingSheetDialog({ exportDialogOpen, eventObject, rankingsWithMetrics, teamProfiles, setExportDialogOpen }: { exportDialogOpen: boolean, eventObject: Event | null, rankingsWithMetrics: EventRankWithMetrics[], teamProfiles: TeamProfile[], setExportDialogOpen: (open: boolean) => void }) {
+  const { getToken } = useAuth();
+
+  const currentNotesGroup = useGlobalStore((state) => state.currentNotesGroup);
 
   const [numberChecked, setNumberChecked] = useState(true);
   const [nameChecked, setNameChecked] = useState(true);
@@ -14,6 +25,7 @@ export default function RankingsScoutingSheetDialog({ exportDialogOpen, eventObj
   const [regionChecked, setRegionChecked] = useState(true);
   const [countryChecked, setCountryChecked] = useState(false);
   const [gradeChecked, setGradeChecked] = useState(false);
+  const [notesChecked, setNotesChecked] = useState(false);
   const [winsChecked, setWinsChecked] = useState(true);
   const [lossesChecked, setLossesChecked] = useState(true);
   const [tiesChecked, setTiesChecked] = useState(true);
@@ -25,7 +37,7 @@ export default function RankingsScoutingSheetDialog({ exportDialogOpen, eventObj
   const [spChecked, setSpChecked] = useState(false);
   const [highScoreChecked, setHighScoreChecked] = useState(false);
 
-  const submitExportForm = (e: any) => {
+  const submitExportForm = async (e: any) => {
     e.preventDefault();
 
     if (eventObject === null || !eventObject.id) {
@@ -34,6 +46,44 @@ export default function RankingsScoutingSheetDialog({ exportDialogOpen, eventObj
     }
 
     toast.info("Generating sheet...");
+
+    const teamNotes: { [key: string]: object } = {}
+
+    if (notesChecked) {
+      // fetch all notes
+      const token = await getToken()
+
+      if (!token) {
+        toast.error("You must be logged in to export notes")
+        return;
+      }
+
+      const searchParams = new URLSearchParams();
+
+      for (const team of teamProfiles) {
+        searchParams.append("teamNumber", team.teamNumber);
+      }
+
+      searchParams.append("notesGroupId", currentNotesGroup?.id.toString() || '')
+
+      const response = await fetch(`/api/seasons/${eventObject?.season.id}/notes?${searchParams.toString()}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+
+      const data = await response.json()
+
+      if (data.error) {
+        toast.error(data.error)
+        return;
+      }
+
+      for (const note of data.notes) {
+        teamNotes[note.teamNumber] = note.note
+      }
+    }
 
     enum ShortHandToFull {
       teamNumber = "Number",
@@ -53,6 +103,7 @@ export default function RankingsScoutingSheetDialog({ exportDialogOpen, eventObj
       ap = "AP",
       sp = "SP",
       high_score = "High Score",
+      notes = "Notes"
     }
 
     const teamValues = {
@@ -63,7 +114,7 @@ export default function RankingsScoutingSheetDialog({ exportDialogOpen, eventObj
       teamRegion: regionChecked,
       teamCountry: countryChecked,
       teamGrade: gradeChecked,
-
+      notes: notesChecked,
       wins: winsChecked,
       losses: lossesChecked,
       ties: tiesChecked,
@@ -95,11 +146,34 @@ export default function RankingsScoutingSheetDialog({ exportDialogOpen, eventObj
         return teamProfile.teamId === teamRanking.team.teamId;
       });
 
+      if (!teamProfile) {
+        return;
+      }
+
       let csvRow = ""
 
       for (const [key, value] of Object.entries(teamValues)) {
         if (value) {
           let teamValue = (teamProfile as any)[key] ?? (teamRanking as any)[key];
+
+          if (key === "notes") {
+            const notes = teamNotes[teamProfile.teamNumber]
+
+            if (!notes) {
+              teamValue = null
+            } else {
+              teamValue = generateText(notes, [
+                StarterKit as any,
+                Placeholder,
+                CharacterCount,
+                Highlight,
+                Underline
+              ])
+
+              // surround with quotes so newlines are preserved
+              teamValue = `"${teamValue}"`
+            }
+          }
 
           if ((!teamValue || teamValue === "") && typeof teamValue !== 'number') {
             csvRow += "N/A" + ","
@@ -197,6 +271,9 @@ export default function RankingsScoutingSheetDialog({ exportDialogOpen, eventObj
                   </CheckboxDiv>
                 </div>
                 <div className="flex flex-col max-w-[60%]">
+                  <CheckboxDiv checked={notesChecked} onCheckedChange={(e) => setNotesChecked((notesChecked) => (!notesChecked))}>
+                    Notes
+                  </CheckboxDiv>
                   <CheckboxDiv checked={winsChecked} onCheckedChange={(e) => setWinsChecked((winsChecked) => (!winsChecked))}>
                     Wins
                   </CheckboxDiv>

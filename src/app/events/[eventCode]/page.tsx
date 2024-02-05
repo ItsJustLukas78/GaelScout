@@ -488,6 +488,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
 
   useEffect(() => {
     if (currentUsersTeamNumber === "" || !currentUsersTeamNumber) {
+      setTeamsToRelavancyType({})
       return;
     }
 
@@ -1085,8 +1086,6 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                 <div className="flex flex-col gap-4 overflow-auto w-[100%]">
                   {awards.length !== 0 ? awards.map((result: EventAward) => {
                     const foundTeamProfile = participatingTeams.find((team) => team.teamId === result.team.teamId);
-
-                    console.log(result)
 
                     if (!foundTeamProfile) {
                       return null;
