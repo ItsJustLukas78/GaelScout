@@ -40,7 +40,13 @@ import { IoMdSearch } from "react-icons/io";
 import { useGlobalStore } from "@/state/globalState";
 import { RelavancyType } from "@/app/types";
 
-
+const SWROptions = {
+  revalidateOnFocus: true,
+  revalidateOnReconnect: true,
+  refreshWhenHidden: false,
+  refreshWhenOffline: false,
+  focusThrottleInterval: 30 * 1000,
+}
 
 enum TabType {
   matches = "matches",
@@ -51,7 +57,15 @@ enum TabType {
 }
 
 // @ts-ignore
-const fetcher = (...args: any[]) => fetch(...args).then(res => res.json())
+const fetcher = (...args: any[]) => fetch(...args).then(res => {
+  if (res.status === 200) {
+    return res.json()
+  } else if (res.status === 429) {
+    throw new Error("Too many requests")
+  } else {
+    throw new Error("Couldn't fetch data")
+  }
+})
 
 export default function EventPage({params}: { params: { eventCode: string } }) {
   const {isLoaded, isSignedIn, user} = useUser();
@@ -122,28 +136,22 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
 
   const [skills, setSkills] = useState<CombinedTeamSkills[]>([])
 
-  const { data: awardsData, error: awardsError, isLoading: awardsIsLoading } = useSWR(eventObject ? `/api/events/${eventObject.id}/awards` : null, fetcher)
+  const { data: eventData, error: eventDataError, isLoading: eventDataIsLoading } = useSWR(`/api/events/?eventSKU=${eventCode}`, fetcher, SWROptions)
 
   useEffect(() => {
-    if (awardsData) {
-      setAwards(awardsData.awards)
-    }
-  }, [awardsData])
-
-  const { data: eventData, error: eventDataError, isLoading: eventDataIsLoading } = useSWR(`/api/events/?eventSKU=${eventCode}`, fetcher)
-
-  useEffect(() => {
-    if (eventData) {
+    if (eventData && !eventDataError) {
       setEventObject(eventData.events[0])
       setDivisionList(eventData.events[0].divisions)
       setCurrentDivision(eventData.events[0].divisions[0])
+    } else if (eventDataError) {
+      router.replace("/404", undefined)
     }
-  }, [eventData])
+  }, [eventData, eventDataError])
 
-  const { data: teamsData, error: teamsError, isLoading: teamsIsLoading } = useSWR(eventObject ? `/api/events/${eventObject.id}/teams` : null, fetcher)
+  const { data: teamsData, error: teamsError, isLoading: teamsIsLoading } = useSWR(eventObject ? `/api/events/${eventObject.id}/teams` : null, fetcher, SWROptions)
 
   useEffect(() => {
-    if (teamsData) {
+    if (teamsData && !teamsError) {
       setParticipatingTeams(teamsData.teams)
 
       // if (teamParam && teamsData.teams.length > 0 && eventData?.events[0].divisions.length > 1) {
@@ -155,16 +163,30 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       //     }
       //   }
       // }
+    } else if (teamsError) {
+      toast.error(teamsError + ": teams data")
     }
-  }, [teamsData])
+  }, [teamsData, teamsError])
 
-  const { data: favoritesData, error: favoritesError, isLoading: favoritesIsLoading } = useSWR(isSignedIn && eventObject ? `/api/favorites/?eventId=${eventObject?.id}&favoriteType=event` : null, fetcher)
+  const { data: favoritesData, error: favoritesError, isLoading: favoritesIsLoading } = useSWR(isSignedIn && eventObject ? `/api/favorites/?eventId=${eventObject?.id}&favoriteType=event` : null, fetcher, SWROptions)
 
   useEffect(() => {
-    if (favoritesData) {
+    if (favoritesData && !favoritesError) {
       setFavorited(favoritesData.favorites.length > 0)
+    } else if (favoritesError) {
+      toast.error(favoritesError + ": favorites data")
     }
-  }, [favoritesData])
+  }, [favoritesData, favoritesError])
+
+  const { data: awardsData, error: awardsError, isLoading: awardsIsLoading } = useSWR(eventObject ? `/api/events/${eventObject.id}/awards` : null, fetcher, SWROptions)
+
+  useEffect(() => {
+    if (awardsData && !awardsError) {
+      setAwards(awardsData.awards)
+    } else if (awardsError) {
+      toast.error(awardsError + ": awards data")
+    }
+  }, [awardsData, awardsError])
 
   useEffect(() => {
     if (currentTeamsDivision) {
@@ -403,31 +425,35 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [teamNumberFilter, matchList]);
 
-  const { data: matchData, error: matchDataError, isLoading: matchDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/matches` : null, fetcher, {refreshInterval: 1000  * 60})
+  const { data: matchData, error: matchDataError, isLoading: matchDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/matches` : null, fetcher, {...SWROptions, refreshInterval: 1000  * 60})
 
   useEffect(() => {
-    if (matchData) {
+    if (matchData && !matchDataError) {
       const dateSortedMatches = matchData.matches.sort(customSort);
       setMatchList(dateSortedMatches);
+    } else if (matchDataError) {
+      toast.error(matchDataError + ": match data")
     }
   }, [matchData])
 
-  const { data: rankingsData, error: rankingsDataError, isLoading: rankingsDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/rankings` : null, fetcher, {refreshInterval: 1000  * 60})
+  const { data: rankingsData, error: rankingsDataError, isLoading: rankingsDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/rankings` : null, fetcher, {...SWROptions, refreshInterval: 1000  * 60})
 
   useEffect(() => {
-    if (rankingsData) {
+    if (rankingsData && !rankingsDataError) {
       const rankSortedRankings = rankingsData.rankings.sort((a: EventRank, b: EventRank) => {
         return a.rank - b.rank;
       });
 
       setRankings(rankSortedRankings);
+    } else if (rankingsDataError) {
+      toast.error(rankingsDataError + ": rankings data")
     }
   }, [rankingsData])
 
-  const { data: skillsData, error: skillsDataError, isLoading: skillsDataIsLoading } = useSWR(eventObject ? `/api/events/${eventObject?.id}/skills` : null, fetcher, {refreshInterval: 1000  * 60})
+  const { data: skillsData, error: skillsDataError, isLoading: skillsDataIsLoading } = useSWR(eventObject ? `/api/events/${eventObject?.id}/skills` : null, fetcher, {...SWROptions, refreshInterval: 1000  * 60})
 
   useEffect(() => {
-    if (skillsData && participatingTeams.length !== 0) {
+    if (skillsData && participatingTeams.length !== 0 && !skillsDataError) {
       const teamSkills: CombinedTeamSkills[] = [];
       const teamToSkills: Record<number, SkillsRun[]> = {};
 
@@ -482,6 +508,8 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       });
 
       setSkills(teamSkills);
+    } else if (skillsDataError) {
+      toast.error(skillsDataError + ": skills data")
     }
   }, [skillsData, participatingTeams])
 

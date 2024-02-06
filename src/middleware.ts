@@ -20,6 +20,16 @@ const verifyRatelimit = createLimit(1, "30s");
 const verifyGenRatelimit = createLimit(3, "30s");
 const notesGroupCreateRatelimit = createLimit(3, "60s");
 
+const generalPaths = [
+  '/api/predict',
+  '/api/seasons',
+  '/api/teams',
+  '/api/events',
+  '/api/favorites',
+  '/api/notesGroups/join',
+  '/api/notesGroups/leave'
+];
+
 async function middleware(auth: any, request: NextRequest, event: NextFetchEvent): Promise<Response | undefined> {
   if (!(auth.userId || auth.isPublicRoute)) {
     // redirect to /login
@@ -31,7 +41,7 @@ async function middleware(auth: any, request: NextRequest, event: NextFetchEvent
 
   if (request.nextUrl.pathname === "/api/blocked") {
     return NextResponse.next();
-  } else if (request.nextUrl.pathname.startsWith('/api/predict') || request.nextUrl.pathname.startsWith('/api/seasons') || request.nextUrl.pathname.startsWith('/api/teams') || request.nextUrl.pathname.startsWith('/api/events') || request.nextUrl.pathname.startsWith('/api/notesGroups/join') || request.nextUrl.pathname.startsWith('/api/notesGroups/leave')) {
+  } else if (generalPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
     const { success, pending, limit, reset, remaining } = await generalRatelimit.limit(`ratelimit_middleware_${ip}`);
     event.waitUntil(pending);
 
@@ -98,7 +108,8 @@ export default authMiddleware({
     '/predictionModel/:route*',
     '/api/:route*',
     '/favorites/:route*',
-    '/~offline'
+    '/~offline',
+    '/404',
   ],
   apiRoutes: ['/api/:route*'],
 

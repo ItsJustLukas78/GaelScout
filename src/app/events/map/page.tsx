@@ -7,13 +7,29 @@ import {Event} from "@/app/types";
 import Link from "next/link";
 
 // @ts-ignore
-const fetcher = (...args: any[]) => fetch(...args).then(res => res.json())
+const fetcher = (...args: any[]) => fetch(...args).then(res => {
+  if (res.status === 200) {
+    return res.json()
+  } else if (res.status === 429) {
+    throw new Error("Too many requests")
+  } else {
+    throw new Error("Couldn't fetch data")
+  }
+})
 
 export const revalidate = 3600
 
+const SWROptions = {
+  revalidateOnFocus: true,
+  revalidateOnReconnect: true,
+  refreshWhenHidden: false,
+  refreshWhenOffline: false,
+  focusThrottleInterval: 30 * 1000,
+}
+
 export default function EventsMap() {
 
-  const {data: eventsData, error: eventsError, isLoading: eventsLoading} = useSWR('/api/events/active', fetcher)
+  const {data: eventsData, error: eventsError, isLoading: eventsLoading} = useSWR('/api/events/active', fetcher, SWROptions)
 
   const events = eventsData?.events
 

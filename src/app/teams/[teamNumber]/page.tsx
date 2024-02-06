@@ -14,8 +14,24 @@ import {MdEventNote} from "react-icons/md";
 import {IsPWA} from "@/components/IsPWA";
 import useSWR from 'swr'
 
+const SWROptions = {
+  revalidateOnFocus: true,
+  revalidateOnReconnect: true,
+  refreshWhenHidden: false,
+  refreshWhenOffline: false,
+  focusThrottleInterval: 30 * 1000,
+}
+
 // @ts-ignore
-const fetcher = (...args: any[]) => fetch(...args).then(res => res.json())
+const fetcher = (...args: any[]) => fetch(...args).then(res => {
+  if (res.status === 200) {
+    return res.json()
+  } else if (res.status === 429) {
+    throw new Error("Too many requests")
+  } else {
+    throw new Error("Couldn't fetch data")
+  }
+})
 
 export default function TeamProfile({ params }: { params: { teamNumber: string } }) {
   const inputTeamRef = React.useRef<HTMLInputElement>(null);
@@ -81,11 +97,11 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
     }
   }
 
-  const {data: eventsData, error: eventsError, isLoading: eventsLoading} = useSWR((teamProfile && seasonId) ? `/api/teams/${teamProfile.teamId}/events/?seasonId=${seasonId}` : null, fetcher);
+  const {data: eventsData, error: eventsError, isLoading: eventsLoading} = useSWR((teamProfile && seasonId) ? `/api/teams/${teamProfile.teamId}/events/?seasonId=${seasonId}` : null, fetcher, SWROptions);
 
   useEffect(() => {
     if (eventsError) {
-      console.log(eventsError);
+      toast.error(eventsError + ": events data");
       setCurrentEvents([]);
     } else if (!eventsData) {
       setCurrentEvents([]);
@@ -94,11 +110,11 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
     }
   }, [eventsData, eventsError]);
 
-  const {data: favoriteData, error: favoriteError, isLoading: favoriteLoading} = useSWR((teamProfile && isSignedIn) ? `/api/favorites/?teamId=${teamProfile.teamId}&favoriteType=team` : null, fetcher);
+  const {data: favoriteData, error: favoriteError, isLoading: favoriteLoading} = useSWR((teamProfile && isSignedIn) ? `/api/favorites/?teamId=${teamProfile.teamId}&favoriteType=team` : null, fetcher, SWROptions);
 
   useEffect(() => {
     if (favoriteError) {
-      console.log(favoriteError);
+      toast.error(favoriteError + ": favorite data");
       setFavorited(false);
     } else if (!favoriteData) {
       setFavorited(false);
