@@ -18,7 +18,6 @@ import { RankableStatistic } from "@/app/types";
 async function formatTeamSeasonProfile(teamSeasonProfile: any) {
   return {
     teamId: teamSeasonProfile.teamId,
-    teamName: teamSeasonProfile.teamName,
     teamNumber: teamSeasonProfile.teamNumber,
     opr: teamSeasonProfile.opr,
     dpr: teamSeasonProfile.dpr,

@@ -8,20 +8,20 @@ datasource db {
 }
 
 model TeamProfile {
-  teamId             Int                 @id
-  teamName           String
-  teamNumber         String              @unique
-  robotName          String?             @default("No name")
-  teamGrade          String?             @default("No grade")
-  teamOrg            String?             @default("No org")
-  teamCity           String?             @default("No city")
-  teamRegion         String?             @default("No region")
-  teamCountry        String?             @default("No country")
-  programCode        String              @default("No program")
-  programId          Int                 @default(0)
-  TeamNotes          TeamNote[]
-  TeamSeasonProfiles TeamSeasonProfile[]
-  FavoriteTeam       FavoriteTeam[]
+  teamId            Int                 @id
+  teamName          String
+  teamNumber        String              @unique
+  robotName         String?             @default("No name")
+  teamGrade         String?             @default("No grade")
+  teamOrg           String?             @default("No org")
+  teamCity          String?             @default("No city")
+  teamRegion        String?             @default("No region")
+  teamCountry       String?             @default("No country")
+  programCode       String              @default("No program")
+  programId         Int                 @default(0)
+  FavoriteTeam      FavoriteTeam[]
+  TeamNotes         TeamNote[]
+  TeamSeasonProfile TeamSeasonProfile[]
 
   @@unique([teamId, teamNumber])
 }
@@ -29,7 +29,6 @@ model TeamProfile {
 model TeamSeasonProfile {
   id                      Int         @id @default(autoincrement())
   teamId                  Int
-  teamName                String
   teamNumber              String
   seasonId                Int
   seasonName              String
@@ -58,7 +57,7 @@ model TeamSeasonProfile {
   totalMatchWinPercentage Float
   qualToRegionals         Boolean
   awardQualToWorlds       Boolean
-  team                    TeamProfile @relation(fields: [teamId], references: [teamId])
+  TeamProfile             TeamProfile @relation(fields: [teamId, teamNumber], references: [teamId, teamNumber], onDelete: Cascade)
 
   @@unique([teamId, seasonId])
   @@unique([teamNumber, seasonId])
@@ -81,9 +80,9 @@ model TeamNote {
   userId       String?
   seasonId     Int
   teamNumber   String
-  team         TeamProfile @relation(fields: [teamId, teamNumber], references: [teamId, teamNumber])
-  NotesGroup   NotesGroup? @relation(fields: [notesGroupId], references: [id])
   notesGroupId Int?
+  NotesGroup   NotesGroup? @relation(fields: [notesGroupId], references: [id])
+  team         TeamProfile @relation(fields: [teamId, teamNumber], references: [teamId, teamNumber], onDelete: Cascade)
 
   @@unique([userId, seasonId, teamNumber, teamId])
   @@unique([notesGroupId, seasonId, teamNumber, teamId])
@@ -93,31 +92,30 @@ model NotesGroup {
   id       Int        @id @default(autoincrement())
   joinCode String     @unique
   name     String
-  // adminId  String
-  users    User[]     @relation("UserNotesGroups")
   notes    TeamNote[]
+  users    User[]     @relation("UserNotesGroups")
 }
 
 model User {
-  id             String          @id
-  username       String?         @unique
-  email          String?         @unique
-  firstName      String?
-  lastName       String?
-  // teamNotes TeamNote[]
-  favoriteTeams  FavoriteTeam[]
-  favoriteEvents FavoriteEvent[]
-  notesGroups    NotesGroup[]    @relation("UserNotesGroups")
-  notesGroupId   Int?
+  id                String              @id
+  email             String?             @unique
+  firstName         String?
+  lastName          String?
+  username          String?             @unique
+  notesGroupId      Int?
+  favoriteEvents    FavoriteEvent[]
+  favoriteTeams     FavoriteTeam[]
+  MatchNotification MatchNotification[]
+  notesGroups       NotesGroup[]        @relation("UserNotesGroups")
 }
 
 model FavoriteTeam {
   id         Int         @id @default(autoincrement())
   userId     String
-  user       User        @relation(fields: [userId], references: [id])
   teamId     Int
   teamNumber String
-  team       TeamProfile @relation(fields: [teamId, teamNumber], references: [teamId, teamNumber], onUpdate: Cascade)
+  team       TeamProfile @relation(fields: [teamId, teamNumber], references: [teamId, teamNumber], onDelete: Cascade)
+  user       User        @relation(fields: [userId], references: [id])
 
   @@unique([userId, teamNumber, teamId])
 }
@@ -125,8 +123,25 @@ model FavoriteTeam {
 model FavoriteEvent {
   id      Int    @id @default(autoincrement())
   userId  String
-  user    User   @relation(fields: [userId], references: [id])
   eventId Int
+  user    User   @relation(fields: [userId], references: [id])
 
   @@unique([userId, eventId])
+}
+
+model MatchNotification {
+  id             Int      @id @default(autoincrement())
+  userId         String
+  eventId        Int
+  divisionId     Int
+  checkRound     Int
+  checkInstance  Int
+  checkMatchnum  Int
+  matchName      String
+  phoneNumber    String
+  checkMatchName String
+  estimatedDate  DateTime
+  User           User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, eventId, divisionId, checkRound, checkInstance, checkMatchnum, phoneNumber, checkMatchName, matchName, estimatedDate])
 }
