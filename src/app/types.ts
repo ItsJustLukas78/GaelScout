@@ -115,7 +115,6 @@ export interface CombinedTeamSkills {
 
 export interface TeamSeasonProfile {
   teamId: number,
-  teamName: string,
   teamNumber: string,
   opr: number,
   dpr: number,
