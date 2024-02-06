@@ -316,7 +316,7 @@ export default function Verify() {
           <h1>Contact Us</h1>
           <p>If you have any questions about this Privacy Policy, You can contact us:</p>
           <ul>
-            <li>By email: lukasdoingbusiness@gmail.com</li>
+            <li>By email: support@gaelscout.com</li>
           </ul>
         </div>
       </div>
