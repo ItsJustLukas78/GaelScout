@@ -2,7 +2,7 @@ import prisma from "@/lib/db";
 import { NextResponse, NextRequest } from "next/server";
 import { rating, predictWin } from 'openskill'
 // import * as tf from '@tensorflow/tfjs-node'
-import { ExtendedTeamSeasonProfile } from "@/app/types";
+import { TeamSeasonProfile } from "@/app/types";
 // import { predictMatchWithModel } from "@/models/predictionModel";
 
 // const model = await tf.loadLayersModel('file://../../../models/predictionModel/model.json');
@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
   try {
     let unFoundTeams = [];
 
-    const r1TeamData: ExtendedTeamSeasonProfile | null = await prisma.teamSeasonProfile.findFirst({
+    const r1TeamData: TeamSeasonProfile | null = await prisma.teamSeasonProfile.findFirst({
       where: {
         teamNumber: r1Team,
         seasonId: seasonId,
@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
       unFoundTeams.push(r1Team);
     }
 
-    const r2TeamData: ExtendedTeamSeasonProfile | null = await prisma.teamSeasonProfile.findFirst({
+    const r2TeamData: TeamSeasonProfile | null = await prisma.teamSeasonProfile.findFirst({
       where: {
         teamNumber: r2Team,
         seasonId: seasonId,
@@ -95,7 +95,7 @@ export async function GET(request: NextRequest) {
       unFoundTeams.push(r2Team);
     }
 
-    const b1TeamData: ExtendedTeamSeasonProfile | null = await prisma.teamSeasonProfile.findFirst({
+    const b1TeamData: TeamSeasonProfile | null = await prisma.teamSeasonProfile.findFirst({
       where: {
         teamNumber: b1Team,
         seasonId: seasonId,
@@ -106,7 +106,7 @@ export async function GET(request: NextRequest) {
       unFoundTeams.push(b1Team);
     }
 
-    const b2TeamData: ExtendedTeamSeasonProfile | null = await prisma.teamSeasonProfile.findFirst({
+    const b2TeamData: TeamSeasonProfile | null = await prisma.teamSeasonProfile.findFirst({
       where: {
         teamNumber: b2Team,
         seasonId: seasonId,

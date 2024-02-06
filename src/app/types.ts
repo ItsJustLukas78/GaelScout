@@ -116,6 +116,10 @@ export interface CombinedTeamSkills {
 export interface TeamSeasonProfile {
   teamId: number,
   teamNumber: string,
+  seasonId: number,
+  seasonName: string,
+  mu: number;
+  sigma: number;
   opr: number,
   dpr: number,
   ccwm: number,
@@ -138,41 +142,6 @@ export interface TeamSeasonProfile {
   qualToRegionals: boolean,
   awardQualToWorlds: boolean,
 }
-
-export interface ExtendedTeamSeasonProfile {
-  id: number;
-  teamId: number;
-  teamName: string;
-  teamNumber: string;
-  seasonId: number;
-  seasonName: string;
-  mu: number;
-  sigma: number;
-  openSkill: number;
-  openSkillRank: number;
-  opr: number;
-  dpr: number;
-  ccwm: number;
-  oprCum: number;
-  dprCum: number;
-  eventCount: number;
-  topProgSkills: number;
-  topDriverSkills: number;
-  topTotalSkills: number;
-  skillsRank: number;
-  qualMatchCount: number;
-  elimMatchCount: number;
-  qualMatchWins: number;
-  elimMatchWins: number;
-  qualMatchLosses: number;
-  elimMatchLosses: number;
-  qualMatchWinPercentage: number;
-  elimMatchWinPercentage: number;
-  totalMatchWinPercentage: number;
-  qualToRegionals: boolean;
-  awardQualToWorlds: boolean;
-}
-
 
 export interface Division {
   id: number;
