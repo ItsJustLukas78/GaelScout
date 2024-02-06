@@ -135,6 +135,26 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
   const [awards, setAwards] = useState<EventAward[]>([])
 
   const [skills, setSkills] = useState<CombinedTeamSkills[]>([])
+  const [skillsRanked, setSkillsRanked] = useState<CombinedTeamSkills[]>([])
+  const [skillsSort, setSkillsSort] = useState<"total" | "driver" | "prog">("total")
+
+  useEffect(() => {
+    if (skills.length === 0) {
+      return
+    }
+
+    const newSkillsRanked = [...skills]
+
+    if (skillsSort === "total") {
+      newSkillsRanked.sort((a, b) => b.totalSkills - a.totalSkills)
+    } else if (skillsSort === "driver") {
+      newSkillsRanked.sort((a, b) => b.driverSkills - a.driverSkills)
+    } else if (skillsSort === "prog") {
+      newSkillsRanked.sort((a, b) => b.progSkills - a.progSkills)
+    }
+
+    setSkillsRanked(newSkillsRanked)
+  }, [skills, skillsSort])
 
   const { data: eventData, error: eventDataError, isLoading: eventDataIsLoading } = useSWR(`/api/events/?eventSKU=${eventCode}`, fetcher, SWROptions)
 
@@ -1052,6 +1072,18 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     Skills
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
+                    <select
+                      className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      required
+                      value={skillsSort}
+                      onChange={(event) => {
+                        setSkillsSort(event.target.value as "total" | "prog" | "driver");
+                      }}
+                    >
+                      <option value="total">Total</option>
+                      <option value="prog">Prog</option>
+                      <option value="driver">Driver</option>
+                    </select>
                     <input
                       className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
                       type="text"
@@ -1072,7 +1104,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   </h1>
                   : null}
                 <div className="flex flex-col gap-4 overflow-auto w-[100%]">
-                  {skills.length !== 0 ? skills.map((result: CombinedTeamSkills) => {
+                  {skillsRanked.length !== 0 ? skillsRanked.map((result: CombinedTeamSkills) => {
                     if (teamNumberFilter !== "" && !result.teamNumber.startsWith(teamNumberFilter.toUpperCase())) {
                       return null;
                     }
@@ -1087,7 +1119,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                 </div>
               </TabsContent>
               <TabsContent value="awards">
-                <div className="mb-10 flex flex-col justify-between xl:flex-row">
+                <div className="mb-5 flex flex-col justify-between xl:flex-row">
                   <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
                     Awards
                   </h3>
@@ -1101,6 +1133,9 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     />
                   </div>
                 </div>
+                <p className="mb-10 text-sm font-semibold">
+                  We recommend using <a className="text-blue-500" href={"https://bren.app/excellence/"} target="_blank">bren.app/excellence</a> by Brendan McGuire to see excellence eligible teams at the moment.
+                </p>
                 {awardsIsLoading ?
                   <h1 className="text-2xl font-semibold text-neutral-200">
                     Loading...
