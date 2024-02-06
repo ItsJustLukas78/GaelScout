@@ -164,7 +164,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       setDivisionList(eventData.events[0].divisions)
       setCurrentDivision(eventData.events[0].divisions[0])
     } else if (eventDataError) {
-      router.replace("/404", undefined)
+      router.replace("/not-found", undefined)
     }
   }, [eventData, eventDataError])
 

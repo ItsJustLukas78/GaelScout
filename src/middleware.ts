@@ -109,7 +109,7 @@ export default authMiddleware({
     '/api/:route*',
     '/favorites/:route*',
     '/~offline',
-    '/404',
+    '/not-found',
   ],
   apiRoutes: ['/api/:route*'],
 
