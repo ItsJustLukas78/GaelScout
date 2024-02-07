@@ -187,18 +187,27 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
     }
   }
 
+  // make sure the input has stopped for 500ms before fetching
   useEffect(() => {
     const controller = new AbortController();
-    getTeam(controller);
+    const timeout = setTimeout(() => {
+      getTeam(controller);
+    }, 500);
+
     return () => {
+      clearTimeout(timeout);
       controller.abort("Cancelling override fetch");
     }
-  } , [teamNumberInput]);
+  }, [teamNumberInput]);
 
   useEffect(() => {
     const controller = new AbortController();
-    getSeasonStats(controller);
+    const timeout = setTimeout(() => {
+      getSeasonStats(controller);
+    }, 500);
+
     return () => {
+      clearTimeout(timeout);
       controller.abort("Cancelling override fetch");
     }
   }, [seasonId, teamNumberInput]);
@@ -212,7 +221,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
             key="teamInput"
             defaultValue={teamNumberInput}
             ref={inputTeamRef}
-            className="mb-5 border-none bg-transparent text-4xl font-bold outline-none xs:text-5xl sm:text-8xl"
+            className="mb-5 border-none bg-transparent text-4xl font-bold outline-none xs:text-5xl sm:text-8xl text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-stone-400"
             onChange={(event) => {
               event.preventDefault();
               window.history.pushState({}, '', `/teams/${event.target.value.toUpperCase()}`);
@@ -537,7 +546,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
               </div>
               <div className="flex flex-col gap-4 overflow-auto w-[100%]">
                 {currentEvents.length !== 0 && currentEvents.map((result: Event) => {
-                  const locationString = `${result.location.city ? result.location.city + ", " : ""}${result.location.region ? result.location.region + ", " : ""}${result.location.country}`;
+                  const locationString = `${result.location.venue ? result.location.venue + ' @ ' : ''}${result.location.city ? result.location.city + ", " : ""}${result.location.region ? result.location.region + ", " : ""}${result.location.country}`;
 
                   return (
                     <EventResult

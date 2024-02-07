@@ -83,7 +83,7 @@ export default function Favorites() {
     <main>
       <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
         <div className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
-          <h1 className="mb-5 min-w-fit text-4xl font-bold sm:text-8xl md:text-5xl lg:text-8xl">
+          <h1 className="mb-5 min-w-fit text-4xl font-bold sm:text-8xl md:text-5xl lg:text-8xl text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-stone-400">
             Favorites
           </h1>
           <p className="mb-5 text-lg font-semibold text-gray-300 md:text-xl">
@@ -212,7 +212,7 @@ export default function Favorites() {
                 {favoriteEvents.length !== 0 ? favoriteEvents.map((result: Event) => {
                   if (result.season.id !== seasonId) return null;
 
-                  const locationString = `${result.location.city ? result.location.city + ", " : ""}${result.location.region ? result.location.region + ", " : ""}${result.location.country}`;
+                  const locationString = `${result.location.venue ? result.location.venue + ' @ ' : ''}${result.location.city ? result.location.city + ", " : ""}${result.location.region ? result.location.region + ", " : ""}${result.location.country}`;
 
                   return (
                     <EventResult

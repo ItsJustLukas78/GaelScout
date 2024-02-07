@@ -7,6 +7,9 @@ import React from "react";
 import AnimatedTextCharacter from "@/components/AnimatedTextCharacter";
 import SpringAnimatedElement from "@/components/SpringAnimatedElement";
 import {useUser} from "@clerk/nextjs";
+import {MdSearch} from "react-icons/md";
+import { FaArrowDownLong } from "react-icons/fa6";
+
 
 // Z indexes
 // 50 - Modals
@@ -21,7 +24,7 @@ export default function Home() {
         <div className="flex flex-col gap-72">
           <div className="flex h-auto flex-col lg:items-start items-center animHeading lg:space-x-8 lg:flex-row">
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
-              <AnimatedTextCharacter className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl" delay={0.4} interval={0.6} text="Scouting Done Easy."/>
+              <AnimatedTextCharacter className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl text-shadow shadow-stone-500" delay={0.4} interval={0.6} text="Scouting Done Easy."/>
               <SpringAnimatedElement className="text-base sm:text-xl" delay={1.6}>
                 Enhance your VEX Robotics scouting with GaelScout – your all-in-one solution for team data, match results, rankings, efficient note-taking, and a competitive edge.
               </SpringAnimatedElement>
@@ -33,7 +36,7 @@ export default function Home() {
                   )
                 : <>
                   <SpringAnimatedElement className="text-base sm:text-xl mb-8" delay={1.6}>
-                    Sign up to access all of GaelScout&apos;s features.
+                    Enjoy your smooth scouting experience with GaelScout! Sign up to access all features.
                   </SpringAnimatedElement>
                   <Link href="sign-up">
                     <CorneredButton className="h-8 w-33 text-2xl font-semibold">
@@ -75,8 +78,13 @@ export default function Home() {
                 difficulty distinguishing teams from one another in competition.
               </p>
               <p className="text-base sm:text-xl">
-                Our members have created GaelScout in order to tackle that
-                challenge, and wanted to bring it to the VRC community.
+                GaelScout&apos;s history originates back in 2019, starting as an app offering
+                team information and scouting notes, with a neural network match predictor
+                as its standout feature.
+              </p>
+              <p className="text-base sm:text-xl">
+                Our members have brought back GaelScout, now serving the features of VEX Via,
+                VEX DB, and its predecessor in a single application to tackle these challenges.
               </p>
             </div>
             <div className="hidden max-w-[426px] xl:block">
@@ -111,6 +119,30 @@ export default function Home() {
             </div>
           </SpringAnimatedElement>
         </div>
+        <SpringAnimatedElement delay={1.6} className="fixed z-50 self-center xs:bottom-20 bottom-10 flex items-center flex-col justify-center">
+          <FaArrowDownLong className="mb-3 h-5 w-5 text-white drop-shadow-[0_3px_3px_#9ca3af]"/>
+          <form
+            className="relative h-7 w-52"
+            onSubmit={(e) => {
+              e.preventDefault();
+              window.location.href = `/teams/${(document.querySelector("input") as HTMLInputElement).value}`
+            }}
+          >
+            <input
+              className="h-full w-full pr-2 rounded-full bg-white text-center text-md font-semibold text-black placeholder-neutral-400 placeholder-opacity-100 shadow-md shadow-gray-400"
+              type="text"
+              placeholder="Team Quicksearch"
+            />
+            <button
+              className="absolute items-center justify-center bg-transparent text-black right-0.5 bottom-0.5"
+              onClick={() => {
+                window.location.href = `/teams/${(document.querySelector("input") as HTMLInputElement).value}`
+              }}
+            >
+              <MdSearch className="absolute right-1 bottom-0.5 h-5 w-5"/>
+            </button>
+          </form>
+        </SpringAnimatedElement>
       </div>
     </main>
   )

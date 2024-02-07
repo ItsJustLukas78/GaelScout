@@ -36,7 +36,7 @@ import { FaClipboardList, FaTrophy } from "react-icons/fa";
 import { FaRankingStar } from "react-icons/fa6";
 import {GiTrumpet} from "react-icons/gi";
 import {GoNumber} from "react-icons/go";
-import { IoMdSearch } from "react-icons/io";
+import { FaMapMarkedAlt } from "react-icons/fa";
 import { useGlobalStore } from "@/state/globalState";
 import { RelavancyType } from "@/app/types";
 
@@ -684,7 +684,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
         {eventObject ? <>
           <div
             className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
-            <h1 className="mb-5 min-w-[85%] max-w-[85%] text-2xl font-bold sm:text-3xl md:text-5xl lg:text-7xl">
+            <h1 className="mb-5 min-w-[85%] max-w-[85%] text-2xl font-bold sm:text-3xl md:text-5xl lg:text-7xl text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-stone-400">
               {eventObject.name}
             </h1>
             <div className="absolute max-w-max top-0.5 right-0.5 xl:top-2 xl:right-2">
@@ -712,9 +712,22 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                 <div className="flex flex-col">
                   <h3 className="font-bold text-md sm:text-xl">
                     Location:
+                    <button className="ml-2 hover:text-blue-500"
+                      onClick={() => {
+                        const searchParams = new URLSearchParams();
+                        searchParams.append('api', '1');
+                        searchParams.append('query', `${eventObject?.location.address}, ${eventObject?.location.city}, ${eventObject?.location.region}, ${eventObject?.location.country}`);
+                        window.open(
+                        `https://www.google.com/maps/search/?${searchParams.toString()}`,
+                        "_blank"
+                        );
+                      }
+                    }>
+                    <FaMapMarkedAlt className="inline-block"/>
+                    </button>
                   </h3>
                   <h3 className="text-sm sm:text-lg">
-                    {eventObject.location.city ? eventObject.location.city + ", " : ""}{eventObject.location.region + ", "}{eventObject.location.country}
+                    {eventObject.location.venue ? eventObject.location.venue + ' @ ' : ''}{eventObject.location.city ? eventObject.location.city + ", " : ""}{eventObject.location.region + ", "}{eventObject.location.country}
                   </h3>
                 </div>
                 <div className="flex flex-col">
@@ -1134,7 +1147,19 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   </div>
                 </div>
                 <p className="mb-10 text-sm font-semibold">
-                  We recommend using <a className="text-blue-500" href={"https://bren.app/excellence/"} target="_blank">bren.app/excellence</a> by Brendan McGuire to see excellence eligible teams at the moment.
+                  We recommend using <button
+                    className="text-blue-500"
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(eventCode);
+                      window.open(
+                        `https://bren.app/excellence`,
+                        "_blank"
+                      );
+                    }}
+                  >
+                    bren.app/excellence
+                  </button> by Brendan McGuire to see excellence eligible teams at the moment. Clicking the
+                  link will copy the event code to your clipboard.
                 </p>
                 {awardsIsLoading ?
                   <h1 className="text-2xl font-semibold text-neutral-200">

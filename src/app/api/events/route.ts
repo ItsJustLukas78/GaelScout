@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
         },
         location: {
           venue: event.location.venue,
-          address: event.location.address,
+          address: event.location.address_1,
           city: event.location.city,
           region: event.location.region,
           country: event.location.country,

@@ -11,9 +11,10 @@ module.exports = {
   theme: {
     extend: {
       textShadow: {
-        sm: '0 1px 0px var(--tw-shadow-color)',
-        DEFAULT: '1.7px 1.7px 0px var(--tw-shadow-color)',
-        lg: '0 8px 0px var(--tw-shadow-color)',
+        xs: '1px 1px 0px var(--tw-shadow-color)',
+        sm: '2px 2px 0px var(--tw-shadow-color)',
+        DEFAULT: '2.5px 2.5px 0px var(--tw-shadow-color)',
+        lg: '3.5px 3.5px 0px var(--tw-shadow-color)',
       },
       screens: {
         '2xs': '380px',

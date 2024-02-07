@@ -201,7 +201,7 @@ export default function Teams() {
     <main>
       <div className="flex w-full flex-col items-center justify-center gap-16 py-32 sm:py-32 md:flex-row md:gap-7 lg:gap-20">
         <div className="flex h-auto flex-col justify-center items-left max-w-[300px] xs:max-w-min md:max-w-[250px] lg:max-w-min">
-          <h1 className="mb-10 text-6xl font-bold xs:text-8xl md:text-6xl lg:text-8xl">
+          <h1 className="mb-10 text-6xl font-bold xs:text-8xl md:text-6xl lg:text-8xl text-shadow-lg shadow-stone-400">
             Teams
           </h1>
           <Form.Root

@@ -21,14 +21,14 @@ export default function Navbar() {
         <div className="hidden items-center lg:flex lg:gap-9 xl:gap-14 2xl:gap-16">
           <div onClick={() => setExpanded(false)} className="inline-flex items-center justify-center">
             <Image src="/GaelScoutLogo2024.png" alt="GaelSuite Logo" width="50" height="50" priority={true} />
-            <NavButton href="/">GaelScout</NavButton>
+            <NavButton href="/" className="text-shadow shadow-stone-700">GaelScout</NavButton>
           </div>
-          <NavButton href="/teams">Teams</NavButton>
-          <NavButton href="/events">Events</NavButton>
+          <NavButton href="/teams" className="text-shadow shadow-stone-700">Teams</NavButton>
+          <NavButton href="/events" className="text-shadow shadow-stone-700">Events</NavButton>
           {/*<NavButton href="/profiles">Profiles</NavButton>*/}
-          <NavButton href="/rankings">Rankings</NavButton>
-          <NavButton href="/predict">Predict</NavButton>
-          <NavButton href="/favorites">Favorites</NavButton>
+          <NavButton href="/rankings" className="text-shadow shadow-stone-700">Rankings</NavButton>
+          <NavButton href="/predict" className="text-shadow shadow-stone-700">Predict</NavButton>
+          <NavButton href="/favorites" className="text-shadow shadow-stone-700">Favorites</NavButton>
           {/*<NavButton href="/verify">Verify</NavButton>*/}
           {/*<NavDropDown>*/}
           {/*  <NavDropButton href="/predict">Predict</NavDropButton>*/}
@@ -63,7 +63,7 @@ export default function Navbar() {
         </div>
         <div onClick={() => setExpanded(false)} className="inline-flex items-center justify-center pr-7 lg:hidden">
           <Image src="/GaelScoutLogo2024.png" alt="GaelSuite Logo" width="50" height="50" priority={true} />
-          <NavButton href="/">GaelScout</NavButton>
+          <NavButton href="/" className="text-shadow-sm sm:text-shadow shadow-stone-700">GaelScout</NavButton>
         </div>
         <div className="ml-auto lg:hidden">
           {isLoaded && isSignedIn ? <UserButton
@@ -79,12 +79,12 @@ export default function Navbar() {
         <div className="z-50 h-full w-full fixed top-20 bg-GSGray bg-opacity-100 lg:justify-center
          bg-gradient-to-b" >
           <div onClick={() => setExpanded(!expanded)} className="mt-5 ml-10 flex flex-col gap-8">
-            <NavButton href="/teams">Teams</NavButton>
-            <NavButton href="/events">Events</NavButton>
+            <NavButton href="/teams" className="text-shadow shadow-stone-700">Teams</NavButton>
+            <NavButton href="/events" className="text-shadow shadow-stone-700">Events</NavButton>
             {/*<NavButton href="/profiles">Profiles</NavButton>*/}
-            <NavButton href="/rankings">Rankings</NavButton>
-            <NavButton href="/favorites">Favorites</NavButton>
-            <NavButton href="/predict">Predict</NavButton>
+            <NavButton href="/rankings" className="text-shadow shadow-stone-700">Rankings</NavButton>
+            <NavButton href="/favorites" className="text-shadow shadow-stone-700">Favorites</NavButton>
+            <NavButton href="/predict" className="text-shadow shadow-stone-700">Predict</NavButton>
             {/*<NavButton href="/verify">Verify</NavButton>*/}
             {/*<NavButton href="/api-docs">API</NavButton>*/}
             {/*<NavButton external={true} href="https://www.gaelsuite.com">GaelSuite</NavButton>*/}
