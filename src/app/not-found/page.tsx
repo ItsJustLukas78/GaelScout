@@ -8,7 +8,7 @@ export default function NotFound() {
           <div className="flex flex-col items-center justify-center">
             <h1 className="text-9xl font-bold text-gray-300 text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-stone-400">404</h1>
             <h2 className="text-3xl font-bold text-gray-300 text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-stone-400">Page not found</h2>
-            <p className="text-xl text-gray-300 text-center text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-stone-400">That doesnt exist silly, get back to scouting!</p>
+            <p className="text-xl text-gray-300 text-center text-shadow-xs shadow-stone-400">That doesnt exist silly, get back to scouting!</p>
           </div>
         </div>
       </div>

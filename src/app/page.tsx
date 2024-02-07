@@ -119,10 +119,10 @@ export default function Home() {
             </div>
           </SpringAnimatedElement>
         </div>
-        <SpringAnimatedElement delay={1.6} className="fixed z-50 self-center xs:bottom-20 bottom-10 flex items-center flex-col justify-center">
+        <SpringAnimatedElement delay={1.6} className="fixed z-50 self-center bottom-20 flex items-center flex-col justify-center">
           <FaArrowDownLong className="mb-3 h-5 w-5 text-white drop-shadow-[0_3px_3px_#9ca3af]"/>
           <form
-            className="relative h-7 w-52"
+            className="relative h-8 w-52"
             onSubmit={(e) => {
               e.preventDefault();
               window.location.href = `/teams/${(document.querySelector("input") as HTMLInputElement).value}`
