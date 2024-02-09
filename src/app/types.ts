@@ -141,6 +141,7 @@ export interface TeamSeasonProfile {
   totalMatchWinPercentage: number,
   qualToRegionals: boolean,
   awardQualToWorlds: boolean,
+  TeamProfile?: TeamProfile,
 }
 
 export interface Division {

@@ -14,35 +14,6 @@ import { RankableStatistic } from "@/app/types";
 //   max: 10
 // })
 
-
-async function formatTeamSeasonProfile(teamSeasonProfile: any) {
-  return {
-    teamId: teamSeasonProfile.teamId,
-    teamNumber: teamSeasonProfile.teamNumber,
-    opr: teamSeasonProfile.opr,
-    dpr: teamSeasonProfile.dpr,
-    ccwm: teamSeasonProfile.ccwm,
-    openSkill: teamSeasonProfile.openSkill,
-    openSkillRank: teamSeasonProfile.openSkillRank,
-    eventCount: teamSeasonProfile.eventCount,
-    topProgSkills: teamSeasonProfile.topProgSkills,
-    topDriverSkills: teamSeasonProfile.topDriverSkills,
-    topTotalSkills: teamSeasonProfile.topTotalSkills,
-    skillsRank: teamSeasonProfile.skillsRank,
-    qualMatchCount: teamSeasonProfile.qualMatchCount,
-    elimMatchCount: teamSeasonProfile.elimMatchCount,
-    qualMatchWins: teamSeasonProfile.qualMatchWins,
-    elimMatchWins: teamSeasonProfile.elimMatchWins,
-    qualMatchLosses: teamSeasonProfile.qualMatchLosses,
-    elimMatchLosses: teamSeasonProfile.elimMatchLosses,
-    qualMatchWinPercentage: teamSeasonProfile.qualMatchWinPercentage,
-    elimMatchWinPercentage: teamSeasonProfile.elimMatchWinPercentage,
-    totalMatchWinPercentage: teamSeasonProfile.totalMatchWinPercentage,
-    qualToRegionals: teamSeasonProfile.qualToRegionals,
-    awardQualToWorlds: teamSeasonProfile.awardQualToWorlds,
-  }
-}
-
 /**
  * @swagger
  * /api/seasons/{seasonId}/seasonProfiles:
@@ -84,6 +55,9 @@ export async function GET(
   const isQualToRegionals = searchParams.get('qualToRegionals') as "true" | "false" | "all" | undefined;
   const isAwardQualToWorlds = searchParams.get('awardQualToWorlds') as "true" | "false" | "all" | undefined;
 
+  const region = searchParams.get('region');
+  const country = searchParams.get('country');
+
   let sortMethod = (searchParams.get('sort') ? searchParams.get('sort') : RankableStatistic.OPENSKILL) as string
 
   if (sortMethod) {
@@ -124,9 +98,24 @@ export async function GET(
     whereClause.awardQualToWorlds = isAwardQualToWorlds === "true";
   }
 
+  if (region) {
+    whereClause.TeamProfile = {
+      teamRegion: region
+    };
+  }
+
+  if (country) {
+    whereClause.TeamProfile ? whereClause.TeamProfile.teamCountry = country : whereClause.TeamProfile = {
+      teamCountry: country
+    }
+  }
+
   if (teamNumber.length === 0) {
     teams = await prisma.teamSeasonProfile.findMany({
       where: whereClause,
+      include: {
+        TeamProfile: true
+      },
       orderBy: {
         [sortMethod]: (sortMethod === RankableStatistic.DPR ? 'asc' : 'desc')
       },
@@ -144,6 +133,9 @@ export async function GET(
         teamNumber: {
           in: teamNumber
         }
+      },
+      include: {
+        TeamProfile: true
       },
       orderBy: {
         [sortMethod]: (sortMethod === RankableStatistic.DPR ? 'asc' : 'desc')
@@ -174,13 +166,9 @@ export async function GET(
     perPage: 15,
   }
 
-  const formattedTeams = await Promise.all(teams.map(async (team: any) => {
-    return await formatTeamSeasonProfile(team);
-  }));
-
   const formattedResponse = {
     meta: meta,
-    data: formattedTeams
+    data: teams,
   }
 
   const prettyJson: string = JSON.stringify(formattedResponse, null, 2);
