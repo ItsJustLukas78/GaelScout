@@ -87,37 +87,40 @@ export default function Home() {
                 VEX DB, and its predecessor in a single application to tackle these challenges.
               </p>
             </div>
-            <div className="hidden max-w-[426px] xl:block">
-              <div className="hidden max-w-lg flex-row flex-wrap xl:max-w-128 xl:flex">
-                <Tilt
-                  tiltMaxAngleX={20}
-                  tiltMaxAngleY={20}
-                >
-                </Tilt>
-                <Tilt
-                  tiltMaxAngleX={20}
-                  tiltMaxAngleY={20}
-                >
-                  <Image src="/gfnew.png" alt="GFR logo" width="200" height="200" className="transition-all hover:rotate-12"/>
-                </Tilt>
-              </div>
-            </div>
-            <div className="hidden max-w-[426px] lg:block xl:hidden">
-              <div className="hidden max-w-lg flex-row flex-wrap lg:flex xl:max-w-128 xl:hidden">
-                <Tilt
-                  tiltMaxAngleX={20}
-                  tiltMaxAngleY={20}
-                >
-                </Tilt>
+            <div className="hidden max-w-[426px] lg:block">
+              <div className="hidden max-w-lg flex-row flex-wrap lg:flex xl:max-w-128">
                 <Tilt
                   tiltMaxAngleX={20}
                   tiltMaxAngleY={20}
                 >
                   <Image src="/gfnew.png" alt="GFR Logo" width="200" height="200" className="transition-all hover:rotate-12"/>
                 </Tilt>
+                <iframe
+                  className="rounded-xl"
+                  src="https://discord.com/widget?id=1175614341941313647&theme=dark"
+                  width="350" height="500"
+                  sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+                >
+                </iframe>
               </div>
             </div>
           </SpringAnimatedElement>
+          <div className="-mt-64 flex-col items-center lg:hidden flex">
+            <iframe
+              className="rounded-xl sm:hidden block"
+              src="https://discord.com/widget?id=1175614341941313647&theme=dark"
+              width="350" height="500"
+              sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+            >
+            </iframe>
+            <iframe
+              className="rounded-xl hidden sm:block"
+              src="https://discord.com/widget?id=1175614341941313647&theme=dark"
+              width="500" height="500"
+              sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+            >
+            </iframe>
+          </div>
         </div>
         <SpringAnimatedElement delay={1.6} className="fixed z-50 self-center bottom-20 flex items-center flex-col justify-center">
           <FaArrowDownLong className="mb-3 h-5 w-5 text-white drop-shadow-[0_3px_3px_#9ca3af]"/>

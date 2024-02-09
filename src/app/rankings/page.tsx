@@ -316,8 +316,8 @@ export default function RankingsPage() {
                 }) : loadingTeams ?
                   [0,1,2,3,4].map(() => {
                     return (
-                      <tr className="h-16 animate-pulse [>td]:bg-gray-400 [>td]:px-4 [>td]:py-2 [>td]:text-xs sm:[>td]:text-lg xl:[>td]:text-xl" key={Math.random()}>
-                        <td className="bg-gray-400 px-4 py-2 text-sm font-semibold md:text-lg xl:text-2xl"></td>
+                      <tr className="h-16 [&>td]:bg-gray-400 [&>td]:animate-pulse [&>td]:px-4 [&>td]:py-2 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
