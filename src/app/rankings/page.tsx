@@ -8,8 +8,8 @@ export default function RankingsPage() {
 
   const [loadingTeams, setLoadingTeams] = useState(true);
   const [rankedStatistic, setRankedStatistic] = useState<RankableStatistic>(RankableStatistic.OPENSKILL);
-  const [qualledToRegionals, setQualledToRegionals] = useState<boolean>(false);
-  const [qualledToWorlds, setQualledToWorlds] = useState<boolean>(false);
+  const [qualledToRegionals, setQualledToRegionals] = useState<"true" | "false" | "all">("all");
+  const [qualledToWorlds, setQualledToWorlds] = useState<"true" | "false" | "all">("all");
   const [seasonId, setSeasonId] = useState<number>(181);
   const [topRatedTeams, setTopRatedTeams] = useState<TeamSeasonProfile[]>([]);
   const [currentResultsCount, setCurrentResultsCount] = useState(0);
@@ -36,13 +36,8 @@ export default function RankingsPage() {
     searchParams.append("perPage", "50");
     searchParams.append("page", page ? page.toString() : "1");
 
-    if (qualledToRegionals) {
-      searchParams.append("qualToRegionals", "true");
-    }
-
-    if (qualledToWorlds) {
-      searchParams.append("awardQualToWorlds", "true");
-    }
+    searchParams.append("qualToRegionals", qualledToRegionals);
+    searchParams.append("awardQualToWorlds", qualledToWorlds);
 
     try {
       const response = await fetch(`/api/seasons/${seasonId}/seasonProfiles?${searchParams.toString()}`)
@@ -93,11 +88,11 @@ export default function RankingsPage() {
     <main>
       <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
         <div className="flex h-auto flex-col justify-center rounded-2xl bg-neutral-800 p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
-          <div className="mb-10 flex flex-col justify-between lg:flex-row">
-            <h3 className="my-5 min-w-fit text-3xl font-bold xs:text-5xl lg:my-0 text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-stone-400">
+          <div className="mb-10 flex flex-col justify-between xl:flex-row">
+            <h3 className="my-5 min-w-fit text-3xl font-bold xs:text-5xl xl:my-0 text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-stone-400">
               Rankings
             </h3>
-            <div className="flex flex-col gap-4 sm:flex-row">
+            <div className="flex flex-col gap-4 sm:flex-row flex-wrap">
               <select
                 className="h-10 rounded-lg p-3 text-xs text-black sm:h-12 sm:w-52 sm:text-sm xl:w-48"
                 required
@@ -119,28 +114,27 @@ export default function RankingsPage() {
                 <option value="173">Spin Up 2022-23</option>
                 <option value="181">Over Under 2023-24</option>
               </select>
-              <div className="flex flex-col gap-4">
-                {/*select input for qual or not to regionals, a toggle box*/}
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    className="h-5 w-5"
-                    checked={qualledToRegionals}
-                    onChange={() => setQualledToRegionals(!qualledToRegionals)}
-                  />
-                  <span className="text-sm sm:text-md xl:text-lg">Qualled to Regionals</span>
-                </label>
-                {/*select input for qual or not to worlds, a toggle box*/}
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    className="h-5 w-5"
-                    checked={qualledToWorlds}
-                    onChange={() => setQualledToWorlds(!qualledToWorlds)}
-                  />
-                  <span className="text-sm sm:text-md xl:text-lg">Qualled to Worlds</span>
-                </label>
-              </div>
+              <select
+                className="h-10 rounded-lg p-3 text-xs text-black sm:h-12 sm:w-52 sm:text-sm xl:w-48"
+                required
+                value={qualledToRegionals}
+                onChange={(event) => setQualledToRegionals(event.target.value as "true" | "false" | "all")}
+              >
+                <option value="all">Disregard Reg qual</option>
+                <option value="true">Qualled to Regionals</option>
+                <option value="false">Did not Qual to Regionals</option>
+              </select>
+              {/*select input for qual or not to worlds, three toggle boxes: neutral, true, false*/}
+              <select
+                className="h-10 rounded-lg p-3 text-xs text-black sm:h-12 sm:w-52 sm:text-sm xl:w-48"
+                required
+                value={qualledToWorlds}
+                onChange={(event) => setQualledToWorlds(event.target.value as "true" | "false" | "all")}
+              >
+                <option value="all">Disregard Worlds qual</option>
+                <option value="true">Qualled to Worlds</option>
+                <option value="false">Did not Qual to Worlds</option>
+              </select>
             </div>
           </div>
           {/*<div className="mb-10 flex flex-col gap-5 lg:flex-row">*/}

@@ -81,8 +81,8 @@ export async function GET(
   const perPage = parseInt(searchParams.get('perPage') || '15') > 50 ? 50 : parseInt(searchParams.get('perPage') || '15');
   const seasonId = parseInt(params.seasonId);
 
-  const isQualToRegionals = searchParams.get('qualToRegionals') === 'true';
-  const isAwardQualToWorlds = searchParams.get('awardQualToWorlds') === 'true';
+  const isQualToRegionals = searchParams.get('qualToRegionals') as "true" | "false" | "all" | undefined;
+  const isAwardQualToWorlds = searchParams.get('awardQualToWorlds') as "true" | "false" | "all" | undefined;
 
   let sortMethod = (searchParams.get('sort') ? searchParams.get('sort') : RankableStatistic.OPENSKILL) as string
 
@@ -116,12 +116,12 @@ export async function GET(
     seasonId: seasonId
   }
 
-  if (isQualToRegionals) {
-    whereClause.qualToRegionals = true;
+  if (isQualToRegionals !== undefined && isQualToRegionals !== "all") {
+    whereClause.qualToRegionals = isQualToRegionals === "true";
   }
 
-  if (isAwardQualToWorlds) {
-    whereClause.awardQualToWorlds = true;
+  if (isAwardQualToWorlds !== undefined && isAwardQualToWorlds !== "all") {
+    whereClause.awardQualToWorlds = isAwardQualToWorlds === "true";
   }
 
   if (teamNumber.length === 0) {
