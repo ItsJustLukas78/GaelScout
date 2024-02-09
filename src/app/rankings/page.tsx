@@ -8,6 +8,8 @@ export default function RankingsPage() {
 
   const [loadingTeams, setLoadingTeams] = useState(true);
   const [rankedStatistic, setRankedStatistic] = useState<RankableStatistic>(RankableStatistic.OPENSKILL);
+  const [qualledToRegionals, setQualledToRegionals] = useState<boolean>(false);
+  const [qualledToWorlds, setQualledToWorlds] = useState<boolean>(false);
   const [seasonId, setSeasonId] = useState<number>(181);
   const [topRatedTeams, setTopRatedTeams] = useState<TeamSeasonProfile[]>([]);
   const [currentResultsCount, setCurrentResultsCount] = useState(0);
@@ -33,6 +35,14 @@ export default function RankingsPage() {
     searchParams.append("sort", rankedStatistic);
     searchParams.append("perPage", "50");
     searchParams.append("page", page ? page.toString() : "1");
+
+    if (qualledToRegionals) {
+      searchParams.append("qualToRegionals", "true");
+    }
+
+    if (qualledToWorlds) {
+      searchParams.append("awardQualToWorlds", "true");
+    }
 
     try {
       const response = await fetch(`/api/seasons/${seasonId}/seasonProfiles?${searchParams.toString()}`)
@@ -77,7 +87,7 @@ export default function RankingsPage() {
 
   useEffect(() => {
     getRankedTeams(null, 1);
-  }, [rankedStatistic, seasonId]);
+  }, [rankedStatistic, seasonId, qualledToRegionals, qualledToWorlds]);
 
   return (
     <main>
@@ -109,6 +119,28 @@ export default function RankingsPage() {
                 <option value="173">Spin Up 2022-23</option>
                 <option value="181">Over Under 2023-24</option>
               </select>
+              <div className="flex flex-col gap-4">
+                {/*select input for qual or not to regionals, a toggle box*/}
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="h-5 w-5"
+                    checked={qualledToRegionals}
+                    onChange={() => setQualledToRegionals(!qualledToRegionals)}
+                  />
+                  <span className="text-sm sm:text-md xl:text-lg">Qualled to Regionals</span>
+                </label>
+                {/*select input for qual or not to worlds, a toggle box*/}
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="h-5 w-5"
+                    checked={qualledToWorlds}
+                    onChange={() => setQualledToWorlds(!qualledToWorlds)}
+                  />
+                  <span className="text-sm sm:text-md xl:text-lg">Qualled to Worlds</span>
+                </label>
+              </div>
             </div>
           </div>
           {/*<div className="mb-10 flex flex-col gap-5 lg:flex-row">*/}
@@ -134,10 +166,13 @@ export default function RankingsPage() {
                   <th>WorldSkills</th>
                   <th>Driver</th>
                   <th>Prog</th>
+                  <th>Reg Qualled</th>
+                  <th>Worlds Qualled</th>
                 </tr>
               </thead>
               <tbody className="rounded-2xl bg-neutral-700">
                 {topRatedTeams.length !== 0 ? topRatedTeams.map((result: TeamSeasonProfile) => {
+                  console.log({result});
                   return (
                     <tr key={result.teamNumber}>
                       <td className="px-4 py-2 text-sm font-semibold md:text-lg xl:text-2xl">
@@ -150,6 +185,8 @@ export default function RankingsPage() {
                       <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.topTotalSkills}</td>
                       <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.topDriverSkills.toFixed(2)}</td>
                       <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.topProgSkills.toFixed(2)}</td>
+                      <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.qualToRegionals ? "Yes" : "No"}</td>
+                      <td className="px-4 py-2 text-xs md:text-lg xl:text-xl">{result.awardQualToWorlds ? "Yes" : "No"}</td>
                     </tr>
                   )
                 }) : loadingTeams ?
@@ -157,6 +194,8 @@ export default function RankingsPage() {
                     return (
                       <tr className="h-16 animate-pulse" key={Math.random()}>
                         <td className="bg-gray-400 px-4 py-2 text-sm font-semibold md:text-lg xl:text-2xl"></td>
+                        <td className="bg-gray-400 px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl"></td>
+                        <td className="bg-gray-400 px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl"></td>
                         <td className="bg-gray-400 px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl"></td>
                         <td className="bg-gray-400 px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl"></td>
                         <td className="bg-gray-400 px-4 py-2 text-xs xs:text-sm md:text-lg xl:text-xl"></td>

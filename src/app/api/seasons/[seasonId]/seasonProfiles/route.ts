@@ -80,6 +80,10 @@ export async function GET(
   const page = parseInt(searchParams.get('page') || '1');
   const perPage = parseInt(searchParams.get('perPage') || '15') > 50 ? 50 : parseInt(searchParams.get('perPage') || '15');
   const seasonId = parseInt(params.seasonId);
+
+  const isQualToRegionals = searchParams.get('qualToRegionals') === 'true';
+  const isAwardQualToWorlds = searchParams.get('awardQualToWorlds') === 'true';
+
   let sortMethod = (searchParams.get('sort') ? searchParams.get('sort') : RankableStatistic.OPENSKILL) as string
 
   if (sortMethod) {
@@ -108,11 +112,21 @@ export async function GET(
   let teams;
   let count;
 
+  const whereClause: any = {
+    seasonId: seasonId
+  }
+
+  if (isQualToRegionals) {
+    whereClause.qualToRegionals = true;
+  }
+
+  if (isAwardQualToWorlds) {
+    whereClause.awardQualToWorlds = true;
+  }
+
   if (teamNumber.length === 0) {
     teams = await prisma.teamSeasonProfile.findMany({
-      where: {
-        seasonId: seasonId,
-      },
+      where: whereClause,
       orderBy: {
         [sortMethod]: (sortMethod === RankableStatistic.DPR ? 'asc' : 'desc')
       },
@@ -121,9 +135,7 @@ export async function GET(
     });
 
     count = await prisma.teamSeasonProfile.count({
-      where: {
-        seasonId: seasonId
-      }
+      where: whereClause
     });
   } else {
     teams = await prisma.teamSeasonProfile.findMany({

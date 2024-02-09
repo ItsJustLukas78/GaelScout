@@ -37,12 +37,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.4,
-    },
-    {
-      url: 'https://www.gaelscout.com/verify',
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.1,
     }
   ]
 }
