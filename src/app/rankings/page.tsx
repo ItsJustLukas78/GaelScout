@@ -63,6 +63,12 @@ export default function RankingsPage() {
 
   const [availableRegions, setAvailableRegions] = useState<string[]>([]);
 
+  const [showPerfStats, setShowMatchStats] = useState(true);
+  const [showSkills, setShowSkills] = useState(true);
+  const [showQuals, setShowQuals] = useState(true);
+  const [showBackgroundInfo, setShowBackgroundInfo] = useState(true);
+
+
   useEffect(() => {
     setRegion("No Regions");
     if (country === "All Countries") {
@@ -263,6 +269,45 @@ export default function RankingsPage() {
                 <option value="true">Qualled to Worlds</option>
                 <option value="false">Did not Qual to Worlds</option>
               </select>
+              {/*toggle box for visibility of columns lik Country, Region setValueVisibility*/}
+              <div className="flex flex-wrap sm:flex-row gap-4">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="h-5 w-5"
+                    checked={showPerfStats}
+                    onChange={(event) => setShowMatchStats(event.target.checked)}
+                  />
+                  <span className="text-sm sm:text-md xl:text-lg">Performance Stats</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="h-5 w-5"
+                    checked={showSkills}
+                    onChange={(event) => setShowSkills(event.target.checked)}
+                  />
+                  <span className="text-sm sm:text-md xl:text-lg">Skills</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="h-5 w-5"
+                    checked={showQuals}
+                    onChange={(event) => setShowQuals(event.target.checked)}
+                  />
+                  <span className="text-sm sm:text-md xl:text-lg">Quals</span>
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="h-5 w-5"
+                    checked={showBackgroundInfo}
+                    onChange={(event) => setShowBackgroundInfo(event.target.checked)}
+                  />
+                  <span className="text-sm sm:text-md xl:text-lg">Background Info</span>
+                </label>
+              </div>
             </div>
           </div>
           {/*<div className="mb-10 flex flex-col gap-5 lg:flex-row">*/}
@@ -277,9 +322,9 @@ export default function RankingsPage() {
           {/*  </h3>*/}
           {/*</div>*/}
           <div className="flex flex-row overflow-auto w-[100%] mb-2">
-            <table className="bg-black sticky left-0 table-auto border-separate min-w-[10%]">
+            <table className="bg-black sticky left-0 table-auto border-separate w-[10%]">
               <thead>
-                <tr className="[&>th]:px-2 [&>th]:text-center [&>th]:h-14 md:[&>th]:text-md [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-xl bg-gray-700">
+                <tr className="[&>th]:px-1 [&>th]:text-center [&>th]:h-14 md:[&>th]:text-md [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-xl bg-gray-700">
                   <th>
                     Rank
                   </th>
@@ -292,7 +337,7 @@ export default function RankingsPage() {
               {topRatedTeams.length !== 0 ? topRatedTeams.map((result: TeamSeasonProfile) => {
                 console.log({result});
                 return (
-                  <tr key={result.teamNumber} className="[&>td]:text-center [&>td]:px-4 [&>td]:h-16 bg-gray-700">
+                  <tr key={result.teamNumber} className="[&>td]:text-center [&>td]:px-1 [&>td]:h-16 bg-gray-700">
                     <td className="text-xs font-semibold md:text-md xl:text-lg">
                       {topRatedTeams.indexOf(result) + 1}
                     </td>
@@ -303,7 +348,7 @@ export default function RankingsPage() {
                 )}) : loadingTeams ?
                 [0,1,2,3,4].map(() => {
                   return (
-                    <tr className="h-16 [&>td]:bg-gray-400 [&>td]:animate-pulse [&>td]:px-4 [&>td]:h-14 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
+                    <tr className="h-16 [&>td]:bg-gray-400 [&>td]:animate-pulse [&>td]:px-1 [&>td]:h-14 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
                       <td></td>
                       <td></td>
                     </tr>
@@ -312,44 +357,76 @@ export default function RankingsPage() {
               }
               </tbody>
             </table>
-            <table className="table-auto border-separate min-w-[90%]">
+            <table className="table-auto border-separate w-[90%]">
               <thead>
-                <tr className="[&>th]:px-2 [&>th]:h-14 md:[&>th]:text-md [&>th]:text-center [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-xl bg-gray-600">
-                  <th>OPR</th>
-                  <th>DPR</th>
-                  <th>CCWM</th>
-                  <th>OpenSkill</th>
-                  <th>WorldSkills</th>
-                  <th>Driver</th>
-                  <th>Prog</th>
-                  <th>Reg Qualled</th>
-                  <th>Worlds Qualled</th>
-                  <th>Country</th>
-                  <th>Region</th>
+                <tr className="[&>th]:px-1 [&>th]:h-14 md:[&>th]:text-md [&>th]:text-center [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-xl bg-gray-600">
+                  {showPerfStats ? (
+                    <>
+                      <th>OPR</th>
+                      <th>DPR</th>
+                      <th>CCWM</th>
+                      <th>Open Skill</th>
+                    </>
+                  ) : null}
+                  {showSkills ? (
+                    <>
+                      <th>World Skills</th>
+                      <th>Driver</th>
+                      <th>Prog</th>
+                    </>
+                  ) : null}
+                  {showQuals ? (
+                    <>
+                      <th>Reg Qualled</th>
+                      <th>Worlds Qualled</th>
+                    </>
+                  ) : null}
+                  {showBackgroundInfo ? (
+                    <>
+                      <th>Country</th>
+                      <th>Region</th>
+                    </>
+                  ) : null}
                 </tr>
               </thead>
               <tbody>
                 {topRatedTeams.length !== 0 ? topRatedTeams.map((result: TeamSeasonProfile) => {
                   console.log({result});
                   return (
-                    <tr key={result.teamNumber} className="[&>td]:px-4 [&>td]:h-16 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl bg-gray-500">
-                      <td>{result.opr.toFixed(2)}</td>
-                      <td>{result.dpr.toFixed(2)}</td>
-                      <td>{result.ccwm.toFixed(2)}</td>
-                      <td>{result.openSkill.toFixed(2)}</td>
-                      <td>{result.topTotalSkills}</td>
-                      <td>{result.topDriverSkills.toFixed(2)}</td>
-                      <td>{result.topProgSkills.toFixed(2)}</td>
-                      <td>{result.qualToRegionals ? "Yes" : "No"}</td>
-                      <td>{result.awardQualToWorlds ? "Yes" : "No"}</td>
-                      <td>{result.TeamProfile?.teamCountry}</td>
-                      <td>{result.TeamProfile?.teamRegion}</td>
+                    <tr key={result.teamNumber} className="[&>td]:px-1 [&>td]:h-16 [&>td]:text-center [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl bg-gray-500">
+                      {showPerfStats ? (
+                        <>
+                          <td>{result.opr.toFixed(1)}</td>
+                          <td>{result.dpr.toFixed(1)}</td>
+                          <td>{result.ccwm.toFixed(1)}</td>
+                          <td>{result.openSkill.toFixed(1)}</td>
+                        </>
+                      ) : null}
+                      {showSkills ? (
+                        <>
+                          <td>{result.topTotalSkills}</td>
+                          <td>{result.topDriverSkills.toFixed(1)}</td>
+                          <td>{result.topProgSkills.toFixed(1)}</td>
+                        </>
+                      ) : null}
+                      {showQuals ? (
+                        <>
+                          <td>{result.qualToRegionals ? "Yes" : "No"}</td>
+                          <td>{result.awardQualToWorlds ? "Yes" : "No"}</td>
+                        </>
+                      ) : null}
+                      {showBackgroundInfo ? (
+                        <>
+                          <td>{result.TeamProfile?.teamCountry}</td>
+                          <td>{result.TeamProfile?.teamRegion}</td>
+                        </>
+                      ) : null}
                     </tr>
                   )
                 }) : loadingTeams ?
                   [0,1,2,3,4].map(() => {
                     return (
-                      <tr className="[&>td]:bg-gray-400 [&>td]:animate-pulse [&>td]:px-4 [&>td]:h-16 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
+                      <tr className="[&>td]:bg-gray-400 [&>td]:animate-pulse [&>td]:px-1 [&>td]:h-16 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
                         <td></td>
                         <td></td>
                         <td></td>
