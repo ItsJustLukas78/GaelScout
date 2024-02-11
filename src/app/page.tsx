@@ -24,7 +24,7 @@ export default function Home() {
         <div className="flex flex-col gap-72">
           <div className="flex h-auto flex-col lg:items-start items-center animHeading lg:space-x-8 lg:flex-row">
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
-              <AnimatedTextCharacter className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl text-shadow shadow-stone-500" delay={0.4} interval={0.6} text="Scouting Done Easy."/>
+              <AnimatedTextCharacter className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl text-shadow-lg shadow-stone-500" delay={0.4} interval={0.6} text="Scouting Done Easy."/>
               <SpringAnimatedElement className="text-base sm:text-xl" delay={1.6}>
                 Enhance your VEX Robotics scouting with GaelScout – your all-in-one solution for team data, match results, rankings, efficient note-taking, and a competitive edge.
               </SpringAnimatedElement>
@@ -66,7 +66,7 @@ export default function Home() {
           </div>
           <SpringAnimatedElement className="flex h-auto flex-col items-center pb-16 animHeading lg:space-x-8 lg:flex-row" delay={1.6}>
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
-              <div className="text-4xl font-bold xs:text-5xl sm:text-7xl">
+              <div className="text-4xl font-bold xs:text-5xl sm:text-7xl text-shadow-lg shadow-stone-500">
                 Developed by members of Gael Force Robotics
               </div>
               <p className="text-base sm:text-xl">

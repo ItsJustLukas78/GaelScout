@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {TeamSeasonProfile, RankableStatistic, Region, Country} from "@/app/types";
 import {AiOutlineDoubleLeft, AiOutlineDoubleRight, AiOutlineLeft, AiOutlineRight} from "react-icons/ai";
+import LoadMore from "@/components/LoadMore";
 
 const countries: any = {
 "Commonly Selected": [{"value":244,"data-code":"US","name":"United States"},{"value":49,"data-code":"CN","name":"China"},{"value":39,"data-code":"CA","name":"Canada"},{"value":14,"data-code":"AU","name":"Australia"},{"value":82,"data-code":"GB","name":"United Kingdom"},{"value":107,"data-code":"IE","name":"Ireland"},{"value":180,"data-code":"NZ","name":"New Zealand"},{"value":239,"data-code":"TW","name":"Taiwan"},{"value":100,"data-code":"HK","name":"Hong Kong"},{"value":164,"data-code":"MX","name":"Mexico"}],
@@ -56,7 +57,6 @@ export default function RankingsPage() {
   const [topRatedTeams, setTopRatedTeams] = useState<TeamSeasonProfile[]>([]);
   const [currentResultsCount, setCurrentResultsCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
 
   const [country, setCountry] = useState<string>("All Countries");
   const [region, setRegion] = useState("No Regions");
@@ -77,13 +77,15 @@ export default function RankingsPage() {
     }
   }, [country]);
 
-  const getRankedTeams = async(event: any, page?: number) => {
+  const getRankedTeams = async(event: any, page?: number, append?: boolean) => {
     if (event) {
       event.preventDefault();
     }
 
     setLoadingTeams(true);
-    setTopRatedTeams([]);
+    if (!append) {
+      setTopRatedTeams([]);
+    }
 
     if (!page) {
       page = 1;
@@ -122,42 +124,44 @@ export default function RankingsPage() {
 
       if (data.error) {
         toast.error(data.error);
-        setTopRatedTeams([]);
-        setLoadingTeams(false);
-        setCurrentResultsCount(0);
-        setTotalPages(0);
+        if (!append) {
+          setTopRatedTeams([]);
+          setLoadingTeams(false);
+          setCurrentResultsCount(0);
+        } else {
+          setLoadingTeams(false);
+          setCurrentPage(currentPage - 1);
+        }
         return;
       }
 
-      const meta = data.meta;
-      const totalResults = meta.total;
       const results = data.data;
       const resultCount = results.length;
 
       if (resultCount === 0) {
         toast.info("No teams found");
-        setTopRatedTeams([]);
-        setCurrentResultsCount(0);
-        setTotalPages(0);
+        if (!append) {
+          setTopRatedTeams([]);
+          setCurrentResultsCount(0);
+        }
       } else {
-        setTopRatedTeams(results);
-        setCurrentResultsCount(resultCount);
-        setTotalPages(Math.ceil(totalResults / 100));
-        setLoadingTeams(false);
+        setTopRatedTeams(append ? [...topRatedTeams, ...results] : results);
+        setCurrentResultsCount(append ? currentResultsCount + resultCount : resultCount);
       }
 
       setLoadingTeams(false);
     } catch (error) {
       toast.error(error as any);
-      setTopRatedTeams([]);
-      setLoadingTeams(false);
-      setCurrentResultsCount(0);
-      setTotalPages(0);
+      if (!append) {
+        setTopRatedTeams([]);
+        setLoadingTeams(false);
+        setCurrentResultsCount(0);
+      }
     }
   }
 
   useEffect(() => {
-    getRankedTeams(null, 1);
+    getRankedTeams(null, 1, false);
   }, [rankedStatistic, seasonId, qualledToRegionals, qualledToWorlds, country, region]);
 
   return (
@@ -272,13 +276,45 @@ export default function RankingsPage() {
           {/*    Qualled to Regionals: 234*/}
           {/*  </h3>*/}
           {/*</div>*/}
-          <div className="flex flex-col gap-4 overflow-auto w-[100%]">
-            <table className="table-auto border-separate rounded-2xl min-w-[100%]">
+          <div className="flex flex-row overflow-auto w-[100%] mb-2">
+            <table className="bg-black sticky left-0 table-auto border-separate min-w-[10%]">
               <thead>
-                <tr className="[&>th]:px-4 [&>th]:py-2 md:[&>th]:text-md [&>th]:pb-5 [&>th]:pl-4 [&>th]:text-left [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-xl bg-gray-600">
-                  <th
-                    className="sticky left-0 bg-gray-700"
-                  >Number</th>
+                <tr className="[&>th]:px-2 [&>th]:text-center [&>th]:h-14 md:[&>th]:text-md [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-xl bg-gray-700">
+                  <th>
+                    Rank
+                  </th>
+                  <th>
+                    Number
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+              {topRatedTeams.length !== 0 ? topRatedTeams.map((result: TeamSeasonProfile) => {
+                console.log({result});
+                return (
+                  <tr key={result.teamNumber} className="[&>td]:text-center [&>td]:px-4 [&>td]:h-16 bg-gray-700">
+                    <td className="text-xs font-semibold md:text-md xl:text-lg">
+                      {topRatedTeams.indexOf(result) + 1}
+                    </td>
+                    <td className="text-sm font-semibold md:text-lg xl:text-2xl">
+                      <a href={`/teams/${result.teamNumber}`} className="hover:text-blue-500">{result.teamNumber}</a>
+                    </td>
+                  </tr>
+                )}) : loadingTeams ?
+                [0,1,2,3,4].map(() => {
+                  return (
+                    <tr className="h-16 [&>td]:bg-gray-400 [&>td]:animate-pulse [&>td]:px-4 [&>td]:h-14 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                  )
+                }) : null
+              }
+              </tbody>
+            </table>
+            <table className="table-auto border-separate min-w-[90%]">
+              <thead>
+                <tr className="[&>th]:px-2 [&>th]:h-14 md:[&>th]:text-md [&>th]:text-center [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-xl bg-gray-600">
                   <th>OPR</th>
                   <th>DPR</th>
                   <th>CCWM</th>
@@ -292,14 +328,11 @@ export default function RankingsPage() {
                   <th>Region</th>
                 </tr>
               </thead>
-              <tbody className="rounded-2xl">
+              <tbody>
                 {topRatedTeams.length !== 0 ? topRatedTeams.map((result: TeamSeasonProfile) => {
                   console.log({result});
                   return (
-                    <tr key={result.teamNumber} className="[&>td]:px-4 [&>td]:py-2 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl bg-gray-500">
-                      <td className="px-4 py-2 text-sm font-semibold md:text-lg xl:text-2xl sticky left-0 bg-gray-700">
-                        <a href={`/teams/${result.teamNumber}`} className="hover:text-blue-500">{result.teamNumber}</a>
-                      </td>
+                    <tr key={result.teamNumber} className="[&>td]:px-4 [&>td]:h-16 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl bg-gray-500">
                       <td>{result.opr.toFixed(2)}</td>
                       <td>{result.dpr.toFixed(2)}</td>
                       <td>{result.ccwm.toFixed(2)}</td>
@@ -316,8 +349,7 @@ export default function RankingsPage() {
                 }) : loadingTeams ?
                   [0,1,2,3,4].map(() => {
                     return (
-                      <tr className="h-16 [&>td]:bg-gray-400 [&>td]:animate-pulse [&>td]:px-4 [&>td]:py-2 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
-                        <td></td>
+                      <tr className="[&>td]:bg-gray-400 [&>td]:animate-pulse [&>td]:px-4 [&>td]:h-16 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -335,105 +367,9 @@ export default function RankingsPage() {
               </tbody>
             </table>
           </div>
-        </div>
-        <div className="mt-4 flex flex-row">
-          <h3 className="mr-4 flex items-center text-sm text-white">
-            {currentResultsCount} Results
-          </h3>
-          <button
-            className="h-8 rounded-l-md bg-white p-1 text-black min-w-[20px]"
-            onClick={() => getRankedTeams(null, 1)}
-            disabled={currentPage === 1}
-          >
-            <AiOutlineDoubleLeft />
-          </button>
-          <button
-            className="h-8 bg-white p-1 text-black min-w-[20px]"
-            onClick={() => getRankedTeams(null, currentPage - 1)}
-            disabled={currentPage === 1}
-          >
-            <AiOutlineLeft />
-          </button>
-          <div className="flex flex-row">
-            {totalPages === 1 &&
-              <>
-                <button
-                  className="h-8 bg-white p-1 text-black min-w-[20px]"
-                  onClick={() => {}}
-                  disabled={true}
-                >
-                  1
-                </button>
-              </>
-            }
-            {totalPages > 1 && <>
-                {currentPage - 2 > 0 &&
-                  <>
-                    <button
-                      className="h-8 bg-white p-1 text-black min-w-[20px]"
-                      onClick={(e) => getRankedTeams(e, currentPage - 2)}
-                    >
-                      {currentPage - 2}
-                    </button>
-                  </>
-                }
-                {currentPage - 1 > 0 &&
-                  <>
-                    <button
-                      className="h-8 bg-white p-1 text-black min-w-[20px]"
-                      onClick={(e) => getRankedTeams(e, currentPage - 1)}
-                    >
-                      {currentPage - 1}
-                    </button>
-                  </>
-                }
-                <button
-                  className="h-8 bg-neutral-400 p-1 text-black min-w-[20px]"
-                  onClick={() => {}}
-                  disabled={true}
-                >
-                  {currentPage}
-                </button>
-                {currentPage + 1 <= totalPages &&
-                  <>
-                    <button
-                      className="h-8 bg-white p-1 text-black min-w-[20px]"
-                      onClick={(e) =>  getRankedTeams(e, currentPage + 1)}
-                    >
-                      {currentPage + 1}
-                    </button>
-                  </>
-                }
-                {currentPage + 2 <= totalPages &&
-                  <>
-                    <button
-                      className="h-8 bg-white p-1 text-black min-w-[20px]"
-                      onClick={(e) => getRankedTeams(e, currentPage + 2)}
-                    >
-                      {currentPage + 2}
-                    </button>
-                  </>
-                }
-              </>
-            }
-          </div>
-          <button
-            className="h-8 bg-white p-1 text-black min-w-[20px]"
-            onClick={() => getRankedTeams(null, currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            <AiOutlineRight />
-          </button>
-          <button
-            className="h-8 rounded-r-md bg-white p-1 text-black min-w-[20px]"
-            onClick={() => getRankedTeams(null, totalPages)}
-            disabled={currentPage === totalPages}
-          >
-            <AiOutlineDoubleRight />
-          </button>
-          <h3 className="ml-4 flex items-center text-sm text-white">
-            Page {currentPage} of {totalPages}
-          </h3>
+          <LoadMore
+            loadMore={() => getRankedTeams(null, currentPage + 1, true)}
+          />
         </div>
       </div>
     </main>
