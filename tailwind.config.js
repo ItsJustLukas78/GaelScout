@@ -50,10 +50,50 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        'gradient': {
+          to: { 'background-position': '200% center' },
+        },
+        "blob": {
+          '0%': {
+            transform: 'translate(0px, 0px) scale(1)',
+          },
+          '33%': {
+            transform: 'translate(10px, -50px) scale(1.1)',
+          },
+          '66%': {
+            transform: 'translate(-20px, 20px) scale(0.9)',
+          },
+          '100%': {
+            transform: 'translate(0px, 0px) scale(1)',
+          },
+        },
+        "spotlight": {
+          '0%': {
+            transform: 'translate(-100px, 0px) scale(1)',
+          },
+          '20%': {
+            transform: 'translate(100px, -80px) scale(1.15)',
+          },
+          '40%': {
+            transform: 'translate(-100px, -100px) scale(0.6)',
+          },
+          '60%': {
+            transform: 'translate(100px, 10px) scale(1)',
+          },
+          '80%': {
+            transform: 'translate(-20px, -80px) scale(0.7)',
+          },
+          '100%': {
+            transform: 'translate(-100px, 0px) scale(1)',
+          },
+        }
       },
       animation: {
+        'gradient': 'gradient 8s linear infinite',
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "blob": "blob 4s infinite",
+        "spotlight": "spotlight 10s infinite",
       },
       fontFamily: {
         sans: ['var(--font-geist-sans)'],

@@ -33,14 +33,14 @@ const fetcher = (...args: any[]) => fetch(...args).then(res => {
   }
 })
 
-export default function TeamProfile({ params }: { params: { teamNumber: string } }) {
+export default function TeamProfile({ params }: { params: { slug: []} }) {
   const inputTeamRef = React.useRef<HTMLInputElement>(null);
 
   const isPWA = IsPWA();
 
   const { isSignedIn } = useUser();
 
-  const teamNumber = params.teamNumber
+  const teamNumber = params.slug?.at(0) as undefined | string
 
   const [teamNumberInput, setTeamNumberInput] = useState<string>(teamNumber ? teamNumber.toUpperCase() : "");
 
@@ -54,8 +54,42 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
 
   const [favorited, setFavorited] = useState<boolean>(false);
 
+  const [placeholder, setPlaceholder] = useState<string>("Type Here...");
+
+  const placeHolderPhrases = ["5327A", "606X", "229V", "11101B", "Type Here"];
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const animatedPlaceholder = async () => {
+      while (isMounted) {
+        console.log("BRUH")
+        console.log("----")
+        for (let i = 0; i < placeHolderPhrases.length; i++) {
+          const phrase = placeHolderPhrases[i] + "...";
+          await new Promise(resolve => setTimeout(resolve, 6000));
+          setPlaceholder("");
+          for (let j = 0; j < phrase.length; j++) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            setPlaceholder(prevPlaceholder => phrase.substring(0, j + 1));
+          }
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+      }
+    };
+
+    animatedPlaceholder();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const getTeam = async(controler: AbortController) => {
     try {
+      if (!teamNumberInput || teamNumberInput == "") {
+        return;
+      }
       const response = await fetch(`/api/teams/number/${teamNumberInput.toUpperCase()}`, {
         signal: controler.signal,
       });
@@ -78,6 +112,9 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
 
   const getSeasonStats = async(controller : AbortController) => {
     try {
+      if (!teamNumberInput || teamNumberInput == "") {
+        return;
+      }
       const response = await fetch(`/api/seasons/${seasonId}/seasonProfile/${teamNumberInput.toUpperCase()}`, {
         signal: controller.signal,
       });
@@ -189,6 +226,11 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
 
   // make sure the input has stopped for 500ms before fetching
   useEffect(() => {
+    if (!teamNumberInput || teamNumberInput == "") {
+      setTeamProfile(null);
+      setSeasonStats(null);
+      return;
+    }
     const controller = new AbortController();
     const timeout = setTimeout(() => {
       getTeam(controller);
@@ -201,6 +243,11 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
   }, [teamNumberInput]);
 
   useEffect(() => {
+    if (!teamNumberInput || teamNumberInput == "") {
+      setTeamProfile(null);
+      setSeasonStats(null);
+      return;
+    }
     const controller = new AbortController();
     const timeout = setTimeout(() => {
       getSeasonStats(controller);
@@ -213,109 +260,117 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
   }, [seasonId, teamNumberInput]);
 
   return (
-    <main>
-      <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
-        <div className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
-          <input
-            type="text"
-            key="teamInput"
-            defaultValue={teamNumberInput}
-            ref={inputTeamRef}
-            className="mb-5 border-none bg-transparent text-4xl font-bold outline-none xs:text-5xl sm:text-8xl text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-stone-400"
-            onChange={(event) => {
-              event.preventDefault();
-              window.history.pushState({}, '', `/teams/${event.target.value.toUpperCase()}`);
-              setTeamNumberInput(event.target.value.toUpperCase());
-            }}
-          >
-          </input>
-          <a href={`https://www.robotevents.com/teams/VRC/${teamNumberInput.toUpperCase()}`} className="mb-5 max-w-fit text-lg font-bold hover:text-blue-500 xs:text-xl">
-            <u>RobotEvents Page</u>
-          </a>
-          {teamProfile ? <>
-            <div className="absolute max-w-max top-0.5 right-0.5 xl:top-2 xl:right-2">
-              <button
-                className="flex items-center justify-center text-2xl font-extrabold min-w-[50px] min-h-[50px]"
-                onClick={(e) => {
-                  e.preventDefault()
-                  if (isSignedIn) {
-                    changeFavoriteStatus(!favorited);
-                    return;
-                  } else {
-                    toast.error("You must be signed in to favorite a team");
-                  }
-                }}
-              >
-                {favorited ? <AiFillStar className="inline-block" /> : <AiOutlineStar className="inline-block" />}
-              </button>
-            </div>
-            <div className="flex flex-col gap-5 min-w-auto lg:flex-row lg:gap-14">
-              <div className="flex min-w-fit flex-row gap-5 lg:flex-col">
-                <div className="flex flex-col w-[49%] lg:w-auto">
-                  <h3 className="text-xl font-bold">
-                    Name:
-                  </h3>
-                  <h3 className="font-normal text-md">
-                    {teamProfile.teamName ? teamProfile.teamName : "N/A"}
-                  </h3>
+    <div>
+      <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32 overflow-hidden">
+        <div className={`relative flex h-auto flex-col justify-center rounded-2xl ${teamNumberInput ? "sm:bg-neutral-800" : "items-center sm:bg-none"} sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]`}>
+          <div className={`relative ${teamNumberInput ? "[&>div]:opacity-0" : "w-168 flex justify-center [&>div]:opacity-100"} [&>div]:[transition:transform_10s,opacity_1s] [&>div]:transition-opacity [&>div]:ease-in-out`}>
+            <div className="absolute top-0 left-12 w-32 h-32 sm:w-72 sm:h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
+            <div className="absolute top-0 right-12 w-32 h-32 sm:w-72 sm:h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
+            <div className="absolute -bottom-20 w-32 h-32 sm:w-72 sm:h-72 bg-green-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
+            <div className="absolute -bottom-20 w-32 h-32 sm:w-52 sm:h-52 bg-white rounded-full mix-blend-difference filter blur-sm opacity-100 animate-spotlight pointer-events-none" />
+            <input
+              // type="text"
+              key="teamInput"
+              defaultValue={teamNumberInput}
+              placeholder={placeholder}
+              ref={inputTeamRef}
+              className={`${teamNumberInput ? "text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-stone-400" : "text-center mt-10"} mb-5 border-none bg-transparent text-4xl font-bold outline-none xs:text-5xl sm:text-8xl placeholder-white placeholder-opacity-100`}
+              onChange={(event) => {
+                event.preventDefault();
+                window.history.pushState({}, '', `/teams/${event.target.value.toUpperCase()}`);
+                setTeamNumberInput(event.target.value.toUpperCase());
+              }}
+            >
+            </input>
+          </div>
+          {teamProfile ? (
+            <div className={`flex flex-col mb-5 text-xl transition-all ease-in-out duration-1000 ${teamNumberInput ? "opacity-100" : "opacity-0 translate-x-full"}`}>
+              <a href={`https://www.robotevents.com/teams/VRC/${teamNumberInput.toUpperCase()}`} className="mb-5 max-w-fit text-lg font-bold hover:text-blue-500 xs:text-xl">
+                <u>RobotEvents Page</u>
+              </a>
+              <div className="absolute max-w-max top-0.5 right-0.5 xl:top-2 xl:right-2">
+                <button
+                  className="flex items-center justify-center text-2xl font-extrabold min-w-[50px] min-h-[50px]"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    if (isSignedIn) {
+                      changeFavoriteStatus(!favorited);
+                      return;
+                    } else {
+                      toast.error("You must be signed in to favorite a team");
+                    }
+                  }}
+                >
+                  {favorited ? <AiFillStar className="inline-block" /> : <AiOutlineStar className="inline-block" />}
+                </button>
+              </div>
+              <div className="flex flex-col gap-5 min-w-auto lg:flex-row lg:gap-14">
+                <div className="flex min-w-fit flex-row gap-5 lg:flex-col">
+                  <div className="flex flex-col w-[49%] lg:w-auto">
+                    <h3 className="text-xl font-bold">
+                      Name:
+                    </h3>
+                    <h3 className="font-normal text-md">
+                      {teamProfile.teamName ? teamProfile.teamName : "N/A"}
+                    </h3>
+                  </div>
+                  <div className="flex flex-col w-[49%] lg:w-auto">
+                    <h3 className="text-xl font-bold">
+                      Robot Name:
+                    </h3>
+                    <h3 className="font-normal text-md">
+                      {teamProfile.robotName ? teamProfile.robotName : "N/A"}
+                    </h3>
+                  </div>
                 </div>
-                <div className="flex flex-col w-[49%] lg:w-auto">
-                  <h3 className="text-xl font-bold">
-                    Robot Name:
-                  </h3>
-                  <h3 className="font-normal text-md">
-                    {teamProfile.robotName ? teamProfile.robotName : "N/A"}
-                  </h3>
+                <div className="flex min-w-fit flex-row gap-5 lg:flex-col">
+                  <div className="flex flex-col w-[49%] lg:w-auto">
+                    <h3 className="text-xl font-bold">
+                      Org:
+                    </h3>
+                    <h3 className="font-normal text-md">
+                      {teamProfile.teamOrg ? (
+                        teamProfile.teamOrg.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')
+                      ) : "N/A"}
+                    </h3>
+                  </div>
+                  <div className="flex flex-col w-[49%] lg:w-auto">
+                    <h3 className="text-xl font-bold">
+                      Location:
+                    </h3>
+                    <h3 className="font-normal text-md">
+                      {teamProfile.teamCity ? teamProfile.teamCity + ", " : ""}{teamProfile.teamRegion ? teamProfile.teamRegion + ", " : ""}{teamProfile.teamCountry ? teamProfile.teamCountry : ""}
+                    </h3>
+                  </div>
+                </div>
+                <div className="flex min-w-fit flex-row gap-5 lg:flex-col">
+                  <div className="flex flex-col w-[49%] lg:w-auto">
+                    <h3 className="text-xl font-bold">
+                      Program:
+                    </h3>
+                    <h3 className="font-normal text-md">
+                      {teamProfile.programCode ? teamProfile.programCode : "N/A"}
+                    </h3>
+                  </div>
+                  <div className="flex flex-col w-[49%] lg:w-auto">
+                    <h3 className="text-xl font-bold">
+                      Grade:
+                    </h3>
+                    <h3 className="font-normal text-md">
+                      {teamProfile.teamGrade ? teamProfile.teamGrade : "N/A"}
+                    </h3>
+                  </div>
                 </div>
               </div>
-              <div className="flex min-w-fit flex-row gap-5 lg:flex-col">
-                <div className="flex flex-col w-[49%] lg:w-auto">
-                  <h3 className="text-xl font-bold">
-                    Org:
-                  </h3>
-                  <h3 className="font-normal text-md">
-                    {teamProfile.teamOrg ? (
-                      teamProfile.teamOrg.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ')
-                    ) : "N/A"}
-                  </h3>
-                </div>
-                <div className="flex flex-col w-[49%] lg:w-auto">
-                  <h3 className="text-xl font-bold">
-                    Location:
-                  </h3>
-                  <h3 className="font-normal text-md">
-                    {teamProfile.teamCity ? teamProfile.teamCity + ", " : ""}{teamProfile.teamRegion ? teamProfile.teamRegion + ", " : ""}{teamProfile.teamCountry ? teamProfile.teamCountry : ""}
-                  </h3>
-                </div>
-              </div>
-              <div className="flex min-w-fit flex-row gap-5 lg:flex-col">
-                <div className="flex flex-col w-[49%] lg:w-auto">
-                  <h3 className="text-xl font-bold">
-                    Program:
-                  </h3>
-                  <h3 className="font-normal text-md">
-                    {teamProfile.programCode ? teamProfile.programCode : "N/A"}
-                  </h3>
-                </div>
-                <div className="flex flex-col w-[49%] lg:w-auto">
-                  <h3 className="text-xl font-bold">
-                    Grade:
-                  </h3>
-                  <h3 className="font-normal text-md">
-                    {teamProfile.teamGrade ? teamProfile.teamGrade : "N/A"}
-                  </h3>
-                </div>
-              </div>
-            </div>
-          </> :
-            <h3 className="mb-5 text-xl">
+            </div> ) :
+            <h3 className={`mb-5 text-xl transition-all ease-in-out duration-1000 ${teamNumberInput ? "opacity-100" : "opacity-0 translate-x-full"}`}>
               Team Profile Not Found
             </h3>
           }
         </div>
-        <hr className="sm:hidden block my-8 w-11/12 border-t-2 border-neutral-500"/>
+        <hr className={`sm:hidden block my-8 w-11/12 border-t-2 border-neutral-500 ${teamNumberInput ? "opacity-100" : "opacity-0"}`} />
         <Tabs defaultValue="statistics">
-          <TabsList className={`fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bg-neutral-800 sm:h-10 ${isPWA ? 'h-[90px]' : 'h-[60px]'} flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
+          <TabsList className={`fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bg-neutral-800 sm:h-10 transition-all ease-in-out duration-1000 ${teamNumberInput ? "opacity-100" : `opacity-0 ${isPWA ? "translate-y-100" : null}`} ${isPWA ? 'h-[90px]' : 'h-[60px]'} flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
    to-neutral-800 from-GSGray sm:to-neutral-800 sm:from-neutral-800`}>
             <TabsTrigger value="statistics" className="flex sm:flex-row flex-col h-14 text-2xs sm:h-8">
               <IoStatsChart className="inline-block sm:mr-2 text-lg" />
@@ -326,7 +381,7 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
               Events
             </TabsTrigger>
           </TabsList>
-          <div className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 sm:p-8 mb-10 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
+          <div className={`relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 sm:p-8 mb-10 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px] transition-all ease-in-out duration-1000 ${teamNumberInput ? "opacity-100" : "opacity-0 -translate-x-full"}`}>
             <TabsContent value="statistics">
               <div className="mb-10 flex flex-col md:flex-row">
                 <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
@@ -566,6 +621,6 @@ export default function TeamProfile({ params }: { params: { teamNumber: string }
           </div>
         </Tabs>
       </div>
-    </main>
+    </div>
   )
 }

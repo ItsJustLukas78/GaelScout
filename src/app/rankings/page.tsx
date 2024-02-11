@@ -119,7 +119,6 @@ export default function RankingsPage() {
     }
 
     if (region !== "Select Region" && region !== "All Regions" && region !== "No Regions") {
-      console.log("region", region);
       searchParams.append("region", region);
     }
 
@@ -335,7 +334,6 @@ export default function RankingsPage() {
               </thead>
               <tbody>
               {topRatedTeams.length !== 0 ? topRatedTeams.map((result: TeamSeasonProfile) => {
-                console.log({result});
                 return (
                   <tr key={result.teamNumber} className="[&>td]:text-center [&>td]:px-1 [&>td]:h-16 bg-gray-700">
                     <td className="text-xs font-semibold md:text-md xl:text-lg">
@@ -391,7 +389,6 @@ export default function RankingsPage() {
               </thead>
               <tbody>
                 {topRatedTeams.length !== 0 ? topRatedTeams.map((result: TeamSeasonProfile) => {
-                  console.log({result});
                   return (
                     <tr key={result.teamNumber} className="[&>td]:px-1 [&>td]:h-16 [&>td]:text-center [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl bg-gray-500">
                       {showPerfStats ? (
