@@ -7,7 +7,7 @@ interface AwardResultProps {
 }
 
 export default function AwardResult(
-  { award: {id, eventId, divisionId, name, qualification, team: teamIdentifiers, order}, team } : AwardResultProps
+  { award: {id, eventId, eventName, divisionId, name, qualification, team: teamIdentifiers, order}, team } : AwardResultProps
 )
 {
   return (

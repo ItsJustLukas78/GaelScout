@@ -23,6 +23,7 @@ export async function GET(
       return {
         id: award.id,
         eventId: award.event.id,
+        eventName: award.event.name,
         divisionId: team.division.id,
         name: award.title,
         qualification: award.qualifications[0],

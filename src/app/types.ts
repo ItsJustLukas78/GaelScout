@@ -86,7 +86,17 @@ export interface EventRankWithMetrics extends EventRank {
 export interface EventAward {
   id: number,
   eventId: number,
+  eventName: string,
   divisionId: number,
+  name: string,
+  qualification: string,
+  team: TeamIdentifiers,
+  order: number,
+}
+
+export interface Award {
+  id: number,
+  eventId: number,
   name: string,
   qualification: string,
   team: TeamIdentifiers,

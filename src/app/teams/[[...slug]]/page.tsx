@@ -1,14 +1,16 @@
 "use client"
 import React, {useEffect, useState} from "react";
 import { toast } from "react-toastify";
-import { TeamProfile, TeamSeasonProfile, Event } from "@/app/types";
+import {TeamProfile, TeamSeasonProfile, Event, EventAward} from "@/app/types";
 import { GiNotebook } from "react-icons/gi";
 import TeamNotesDialog from "@/components/TeamNotesDialog";
 import { useUser } from "@clerk/nextjs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import EventResult from "@/components/EventResult";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
-import { useRouter } from 'next/navigation'
+import { GiDiamondTrophy } from "react-icons/gi";
+import { FaTrophy } from "react-icons/fa";
+import { FaAward } from "react-icons/fa";
 import {IoStatsChart} from "react-icons/io5";
 import {MdEventNote} from "react-icons/md";
 import {IsPWA} from "@/components/IsPWA";
@@ -51,11 +53,11 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
   const [teamNotesDialogOpen, setTeamNotesDialogOpen] = useState<boolean>(false);
 
   const [currentEvents, setCurrentEvents] = useState<Event[]>([]);
+  const [currentAwards, setCurrentAwards] = useState<EventAward[]>([]);
 
   const [favorited, setFavorited] = useState<boolean>(false);
 
   const [placeholder, setPlaceholder] = useState<string>("Type Here...");
-
   const placeHolderPhrases = ["5327A", "606X", "229V", "11101B", "Type Here"];
 
   useEffect(() => {
@@ -63,8 +65,6 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
 
     const animatedPlaceholder = async () => {
       while (isMounted) {
-        console.log("BRUH")
-        console.log("----")
         for (let i = 0; i < placeHolderPhrases.length; i++) {
           const phrase = placeHolderPhrases[i] + "...";
           await new Promise(resolve => setTimeout(resolve, 6000));
@@ -159,6 +159,20 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
       setFavorited(favoriteData.favorites.length > 0);
     }
   }, [favoriteData, favoriteError]);
+
+  const {data: awardsData, error: awardsError, isLoading: awardsLoading} = useSWR((teamProfile && seasonId) ? `/api/teams/${teamProfile.teamId}/awards/?seasonId=${seasonId}` : null, fetcher, SWROptions);
+
+  useEffect(() => {
+    if (awardsError) {
+      toast.error(awardsError + ": awards data");
+      setCurrentAwards([]);
+    } else if (!awardsData) {
+      setCurrentAwards([]);
+    } else {
+      setCurrentAwards(awardsData.awards);
+    }
+  }, [awardsData, awardsError]);
+
 
   const changeFavoriteStatus = async(favorite: boolean) => {
     if (!teamProfile) {
@@ -565,6 +579,40 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
                       Qualifies to Worlds from event awards
                     </p>
+                  </div>
+                </div>
+                {/* display list of awards */}
+                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
+                  <h3 className="text-xl font-bold">
+                    Awards:
+                  </h3>
+                  <div className="flex flex-col gap-5 overflow-auto h-60 pr-4">
+                    {currentAwards.length !== 0 && currentAwards.map((award: EventAward) => {
+                      return <>
+                        <div key={award.id} className="flex flex-row gap-2">
+                          <div className="flex flex-col gap-2">
+                            {award.name.includes("Excellence Award") ? <GiDiamondTrophy className="w-10 h-10 mt-1" /> :
+                              (award.name.includes("Tournament Champions") ? <FaTrophy className="w-10 h-10 mt-1" /> :
+                                <FaAward className="w-10 h-10 mt-1" />
+                              )
+                            }
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <h1 className="mb-2 text-sm font-extrabold md:text-lg">
+                              {award.name}
+                            </h1>
+                            <h2 className="text-xs font-medium md:text-sm">
+                              <span className="font-bold">Event:</span> {award.eventName}
+                            </h2>
+                            <h2 className="text-xs font-medium md:text-sm">
+                              <span className="font-bold">Qualifications:</span> {award.qualification ?? 'N/A'}
+                            </h2>
+                          </div>
+                        </div>
+                        <hr className="w-full border-neutral-500" />
+                      </>
+                    }
+                    )}
                   </div>
                 </div>
               </div>
