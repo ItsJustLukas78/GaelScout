@@ -6,7 +6,7 @@ interface SkillsResultProps {
 }
 
 export default function SkillsResult(
-  { skills: { teamId, teamNumber, teamName, progSkills, totalSkills, driverSkills, rank } }: SkillsResultProps
+  { skills: { teamId, teamNumber, teamName, progSkills, totalSkills, driverSkills, progAttempts, driverAttempts, rank } }: SkillsResultProps
 )
 {
   return (
@@ -29,12 +29,22 @@ export default function SkillsResult(
               Total: {totalSkills}
             </h2>
           </div>
-          <h2 className="font-semibold text-2xs md:text-sm">
-            Prog: {progSkills}
-          </h2>
-          <h2 className="font-semibold text-2xs md:text-sm">
-            Driver: {driverSkills}
-          </h2>
+          <div className="flex flex-col w-full">
+            <h2 className="font-bold text-2xs md:text-sm">
+              Prog: {progSkills}
+            </h2>
+            <h2 className="font-bold text-2xs md:text-sm">
+              Attempts: {progAttempts}
+            </h2>
+          </div>
+          <div className="flex flex-col w-full">
+            <h2 className="font-bold text-2xs md:text-sm">
+              Driver: {driverSkills}
+            </h2>
+            <h2 className="font-bold text-2xs md:text-sm">
+              Attempts: {driverAttempts}
+            </h2>
+          </div>
         </div>
       </div>
     </Link>

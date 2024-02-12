@@ -14,6 +14,7 @@ import { FaAward } from "react-icons/fa";
 import {IoStatsChart} from "react-icons/io5";
 import {MdEventNote} from "react-icons/md";
 import {IsPWA} from "@/components/IsPWA";
+import Spinner from "@/components/Spinner";
 import useSWR from 'swr'
 
 const SWROptions = {
@@ -55,6 +56,9 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
   const [currentEvents, setCurrentEvents] = useState<Event[]>([]);
   const [currentAwards, setCurrentAwards] = useState<EventAward[]>([]);
 
+  const [loadingProfile, setLoadingProfile] = useState<boolean>(false);
+  const [loadingSeasonStats, setLoadingSeasonStats] = useState<boolean>(false);
+
   const [favorited, setFavorited] = useState<boolean>(false);
 
   const [placeholder, setPlaceholder] = useState<string>("Type Here...");
@@ -90,6 +94,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
       if (!teamNumberInput || teamNumberInput == "") {
         return;
       }
+      setLoadingProfile(true);
       const response = await fetch(`/api/teams/number/${teamNumberInput.toUpperCase()}`, {
         signal: controler.signal,
       });
@@ -100,13 +105,16 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
         // toast.error(data.error)
         console.log(data.error);
         setTeamProfile(null);
+        setLoadingProfile(false);
         return;
       }
 
       setTeamProfile(data.team)
-
+      setLoadingProfile(false);
     } catch (err) {
       toast.error(err as any)
+      setTeamProfile(null);
+      setLoadingProfile(false);
     }
   }
 
@@ -115,6 +123,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
       if (!teamNumberInput || teamNumberInput == "") {
         return;
       }
+      setLoadingSeasonStats(true);
       const response = await fetch(`/api/seasons/${seasonId}/seasonProfile/${teamNumberInput.toUpperCase()}`, {
         signal: controller.signal,
       });
@@ -124,10 +133,12 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
       if (data.error) {
         console.log(data.error);
         setSeasonStats(null);
+        setLoadingSeasonStats(false);
         return;
       }
 
       setSeasonStats(data);
+      setLoadingSeasonStats(false);
     } catch (err) {
       console.log(err);
       setSeasonStats(null);
@@ -276,8 +287,8 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
   return (
     <div>
       <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32 overflow-hidden">
-        <div className={`relative flex h-auto flex-col justify-center rounded-2xl ${teamNumberInput ? "sm:bg-neutral-800" : "items-center sm:bg-none"} sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]`}>
-          <div className={`relative ${teamNumberInput ? "[&>div]:opacity-0" : "w-168 flex justify-center [&>div]:opacity-100"} [&>div]:[transition:transform_10s,opacity_1s] [&>div]:transition-opacity [&>div]:ease-in-out`}>
+        <div className={`relative flex h-auto flex-col justify-center rounded-2xl ${teamNumberInput ? "sm:bg-neutral-800" : "!w-full items-center sm:bg-none"} sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]`}>
+          <div className={`relative ${teamNumberInput ? "[&>div]:opacity-0" : "sm:w-168 w-96 flex justify-center [&>div]:opacity-100"} [&>div]:[transition:transform_10s,opacity_1s] [&>div]:transition-opacity [&>div]:ease-in-out`}>
             <div className="absolute top-0 left-12 w-32 h-32 sm:w-72 sm:h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
             <div className="absolute top-0 right-12 w-32 h-32 sm:w-72 sm:h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
             <div className="absolute -bottom-20 w-32 h-32 sm:w-72 sm:h-72 bg-green-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
@@ -376,7 +387,9 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                   </div>
                 </div>
               </div>
-            </div> ) :
+            </div> ) : loadingProfile ? <h3 className="mb-5 text-xl transition-all ease-in-out duration-1000 opacity-100">
+              Loading Team Profile... <Spinner className="inline-block !h-5 !w-5" />
+            </h3> :
             <h3 className={`mb-5 text-xl transition-all ease-in-out duration-1000 ${teamNumberInput ? "opacity-100" : "opacity-0 translate-x-full"}`}>
               Team Profile Not Found
             </h3>
@@ -556,31 +569,34 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </h3>
                   </div>
                 </div>
-                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
-                  <div className="relative flex flex-row justify-between">
-                    <h3 className="text-xl font-bold">
-                      Regionals Qual:
-                    </h3>
-                    <h3 className="text-xl">
-                      {seasonStats.qualToRegionals ? "Yes" : "No"}
-                    </h3>
-                    <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
-                      Qualifies to Regionals from event awards
-                    </p>
+                { currentAwards && currentAwards.length !== 0 ?
+                  <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
+                    <div className="relative flex flex-row justify-between">
+                      <h3 className="text-xl font-bold">
+                        Regionals Qual:
+                      </h3>
+                      <h3 className="text-xl">
+                        {currentAwards.some((award: EventAward) => award.qualification == "Event Region Championship") ? "Yes" : "No"}
+                      </h3>
+                      <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
+                        Qualifies to Regionals from event awards
+                      </p>
+                    </div>
+                    <hr/>
+                    <div className="relative flex flex-row justify-between">
+                      <h3 className="text-xl font-bold">
+                        Worlds Qual:
+                      </h3>
+                      <h3 className="text-xl">
+                        {currentAwards.some((award: EventAward) => award.qualification == "World Championship") ? "Yes" : "No"}
+                      </h3>
+                      <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
+                        Qualifies to Worlds from event awards
+                      </p>
+                    </div>
                   </div>
-                  <hr/>
-                  <div className="relative flex flex-row justify-between">
-                    <h3 className="text-xl font-bold">
-                      Worlds Qual:
-                    </h3>
-                    <h3 className="text-xl">
-                      {seasonStats.awardQualToWorlds ? "Yes" : "No"}
-                    </h3>
-                    <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
-                      Qualifies to Worlds from event awards
-                    </p>
-                  </div>
-                </div>
+                  : null
+                }
                 {/* display list of awards */}
                 <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
                   <h3 className="text-xl font-bold">
@@ -624,7 +640,9 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                   setTeamNotesDialogOpen={setTeamNotesDialogOpen}
                 />
               : null}
-              </> :
+              </> : loadingSeasonStats ? <h3 className="mx-2 text-xl">
+                Loading Season Profile... <Spinner className="inline-block !h-5 !w-5" />
+              </h3> :
               <h3 className="mx-2 text-xl">
                 Season Profile Not Found
               </h3>

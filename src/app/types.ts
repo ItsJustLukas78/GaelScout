@@ -94,15 +94,6 @@ export interface EventAward {
   order: number,
 }
 
-export interface Award {
-  id: number,
-  eventId: number,
-  name: string,
-  qualification: string,
-  team: TeamIdentifiers,
-  order: number,
-}
-
 export interface SkillsRun {
   id: number,
   eventId: number,
@@ -120,6 +111,8 @@ export interface CombinedTeamSkills {
   progSkills: number,
   driverSkills: number,
   totalSkills: number,
+  progAttempts: number,
+  driverAttempts: number,
   rank: number,
 }
 

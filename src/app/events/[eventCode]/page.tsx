@@ -515,6 +515,8 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
           progSkills: greatestProgrammingScore,
           driverSkills: greatestDriverScore,
           totalSkills: greatestDriverScore + greatestProgrammingScore,
+          progAttempts: teamToSkills[team.teamId].find((skill: SkillsRun) => skill.type === "programming")?.attempts || 0,
+          driverAttempts: teamToSkills[team.teamId].find((skill: SkillsRun) => skill.type === "driver")?.attempts || 0,
           rank: 0,
         });
       });
