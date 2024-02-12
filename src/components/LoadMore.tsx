@@ -4,12 +4,17 @@ import {useEffect} from "react";
 
 interface LoadMoreProps {
   loadMore: () => any
+  active: boolean
 }
 
-export default function LoadMore({ loadMore }: LoadMoreProps) {
+export default function LoadMore({ loadMore, active }: LoadMoreProps) {
   const [ref, inView] = useInView();
 
   useEffect(() => {
+    if (!active) {
+      return;
+    }
+
     let timeout: NodeJS.Timeout;
 
     if (inView) {

@@ -84,11 +84,14 @@ export default function RankingsPage() {
   }, [country]);
 
   const getRankedTeams = async(event: any, page?: number, append?: boolean) => {
+    console.log("getRankedTeams");
+    console.log({event, page, append});
     if (event) {
       event.preventDefault();
     }
 
     setLoadingTeams(true);
+    
     if (!append) {
       setTopRatedTeams([]);
     }
@@ -130,7 +133,8 @@ export default function RankingsPage() {
       if (data.error) {
         toast.error(data.error);
         if (!append) {
-          setTopRatedTeams([]);
+          console.log("bruh"); 
+setTopRatedTeams([]);
           setLoadingTeams(false);
           setCurrentResultsCount(0);
         } else {
@@ -443,6 +447,7 @@ export default function RankingsPage() {
           </div>
           <LoadMore
             loadMore={() => getRankedTeams(null, currentPage + 1, true)}
+            active={currentResultsCount !== 0 && currentResultsCount % 50 === 0}
           />
         </div>
       </div>

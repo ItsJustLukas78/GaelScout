@@ -9,13 +9,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import EventResult from "@/components/EventResult";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { GiDiamondTrophy } from "react-icons/gi";
-import { FaTrophy } from "react-icons/fa";
+import {FaLaptopCode, FaTrophy} from "react-icons/fa";
 import { FaAward } from "react-icons/fa";
+import { BiCool } from "react-icons/bi";
+import { MdBuild } from "react-icons/md";
+import { MdEngineering } from "react-icons/md";
+import { MdCelebration } from "react-icons/md";
+import { FaLightbulb } from "react-icons/fa";
 import {IoStatsChart} from "react-icons/io5";
-import {MdEventNote} from "react-icons/md";
+import {MdEventNote, MdSupervisorAccount} from "react-icons/md";
 import {IsPWA} from "@/components/IsPWA";
 import Spinner from "@/components/Spinner";
 import useSWR from 'swr'
+import {TbNotebook, TbNumbers} from "react-icons/tb";
 
 const SWROptions = {
   revalidateOnFocus: true,
@@ -24,6 +30,20 @@ const SWROptions = {
   refreshWhenOffline: false,
   focusThrottleInterval: 30 * 1000,
 }
+
+const awardIcons = {
+  "Excellence Award": <GiDiamondTrophy className="w-10 h-10 mt-1" />,
+  "Tournament Champions": <FaTrophy className="w-10 h-10 mt-1" />,
+  "Design Award": <TbNotebook className="w-10 h-10 mt-1" />,
+  "Judges Award": <MdSupervisorAccount className="w-10 h-10 mt-1" />,
+  "Skills Champion": <TbNumbers className="w-10 h-10 mt-1" />,
+  "Think Award": <FaLaptopCode className="w-10 h-10 mt-1" />,
+  "Amaze Award": <BiCool className="w-10 h-10 mt-1" />,
+  "Build Award": <MdBuild className="w-10 h-10 mt-1" />,
+  "Create Award": <MdEngineering className="w-10 h-10 mt-1" />,
+  "Innovate Award": <FaLightbulb className="w-10 h-10 mt-1" />,
+  "Sportsmanship Award": <MdCelebration className="w-10 h-10 mt-1" />,
+};
 
 // @ts-ignore
 const fetcher = (...args: any[]) => fetch(...args).then(res => {
@@ -63,6 +83,19 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
 
   const [placeholder, setPlaceholder] = useState<string>("Type Here...");
   const placeHolderPhrases = ["5327A", "606X", "229V", "11101B", "Type Here"];
+
+  const returnAwardIcon = (awardName: string) => {
+    let icon = <FaAward className="w-10 h-10 mt-1" />;
+
+    Object.keys(awardIcons).forEach((key: any) => {
+      if (awardName.startsWith(key)) {
+        // @ts-ignore
+        icon = awardIcons[key];
+      }
+    });
+
+    return icon;
+  }
 
   useEffect(() => {
     let isMounted = true;
@@ -444,10 +477,10 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
               <div className="sm:mx-2 flex flex-row flex-wrap justify-center gap-5 md:justify-between">
                 <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
                   <div className="relative flex flex-row justify-between">
-                    <h3 className="text-xl font-bold">
+                    <h3 className={`text-xl font-bold ${seasonStats.opr ? seasonStats.opr > 40 ? "goodGradient" : seasonStats.opr < 25 ? "badGradient" : "midGradient" : ""}`}>
                       OPR:
                     </h3>
-                    <h3 className="text-xl">
+                    <h3 className={`text-xl ${seasonStats.opr ? seasonStats.opr > 40 ? "goodGradient" : seasonStats.opr < 25 ? "badGradient" : "midGradient" : ""}`}>
                       {seasonStats.opr != undefined ? seasonStats.opr.toFixed(4) : "N/A"}
                     </h3>
                     <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
@@ -456,10 +489,10 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                   </div>
                   <hr/>
                   <div className="relative flex flex-row justify-between">
-                    <h3 className="text-xl font-bold">
+                    <h3 className={`text-xl font-bold ${seasonStats.dpr ? seasonStats.dpr < 25 ? "goodGradient" : seasonStats.dpr > 40 ? "badGradient" : "midGradient" : ""}`}>
                       DPR:
                     </h3>
-                    <h3 className="text-xl">
+                    <h3 className={`text-xl ${seasonStats.dpr ? seasonStats.dpr < 25 ? "goodGradient" : seasonStats.dpr > 40 ? "badGradient" : "midGradient" : ""}`}>
                       {seasonStats.dpr != undefined ? seasonStats.dpr.toFixed(4) : "N/A"}
                     </h3>
                     <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
@@ -468,10 +501,10 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                   </div>
                   <hr/>
                   <div className="relative flex flex-row justify-between">
-                    <h3 className="text-xl font-bold">
+                    <h3 className={`text-xl font-bold ${seasonStats.ccwm ? seasonStats.ccwm > 30 ? "goodGradient" : seasonStats.ccwm < 15 ? "badGradient" : "midGradient" : ""}`}>
                       CCWM:
                     </h3>
-                    <h3 className="text-xl">
+                    <h3 className={`text-xl midGradient ${seasonStats.ccwm ? seasonStats.ccwm > 30 ? "goodGradient" : seasonStats.ccwm < 15 ? "badGradient" : "midGradient" : ""}`}>
                       {seasonStats.ccwm != undefined ? seasonStats.ccwm.toFixed(4) : "N/A"}
                     </h3>
                     <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
@@ -605,13 +638,9 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                   <div className="flex flex-col gap-5 overflow-auto h-60 pr-4">
                     {currentAwards.length !== 0 && currentAwards.map((award: EventAward) => {
                       return <>
-                        <div key={award.id} className="flex flex-row gap-2">
+                        <div key={award.id + award.order} className="flex flex-row gap-2">
                           <div className="flex flex-col gap-2">
-                            {award.name.includes("Excellence Award") ? <GiDiamondTrophy className="w-10 h-10 mt-1" /> :
-                              (award.name.includes("Tournament Champions") ? <FaTrophy className="w-10 h-10 mt-1" /> :
-                                <FaAward className="w-10 h-10 mt-1" />
-                              )
-                            }
+                            {returnAwardIcon(award.name)}
                           </div>
                           <div className="flex flex-col gap-2">
                             <h1 className="mb-2 text-sm font-extrabold md:text-lg">
