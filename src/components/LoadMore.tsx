@@ -34,7 +34,9 @@ export default function LoadMore({ loadMore, active }: LoadMoreProps) {
 
   return (
     <div ref={ref} className="flex justify-center items-center w-full h-20">
-      <Spinner />
+      {active &&
+        <Spinner />
+      }
     </div>
   );
 }

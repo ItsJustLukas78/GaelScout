@@ -5,15 +5,12 @@ export default function EventResult({ id, sku, name, start, location, dark=false
   return (
     <Link
       href={`/events/${sku}${defaultTeam ? `?team=${defaultTeam}` : ''}`}
-      className={`flex h-auto w-full flex-col rounded-2xl p-3 shadow-lg transition-colors duration-200 min-h-28 ${dark ? 'bg-neutral-700 shadow-neutral-900 hover:bg-neutral-600' : 'bg-neutral-300 shadow-neutral-500 hover:bg-gray-400 [&>*]:text-gray-900'}`}
+      className={`flex h-auto w-full flex-col rounded-xl p-2 shadow-lg transition-colors duration-200 bg-neutral-700 shadow-neutral-900 hover:bg-neutral-600`}
     >
-      <h1 className="mb-2 text-sm font-bold md:text-lg">
+      <h1 className="text-sm mb-1 font-bold md:text-lg line-clamp-1 w-full">
         {name}
       </h1>
-      <div className="flex flex-col gap-2">
-        <h2 className="text-xs font-semibold md:text-sm">
-          {sku}
-        </h2>
+      <div className="flex flex-col gap-1">
         <h2 className="text-xs font-semibold md:text-sm">
           {location}
         </h2>

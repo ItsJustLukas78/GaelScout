@@ -5,6 +5,7 @@ import { Event } from "@/app/types";
 export async function GET(request: NextRequest) {
   try {
     const searchParams = new URL(request.url).searchParams;
+    const seasonId = searchParams.get('seasonId') || '181';
 
     const eventSKU: string[] = [];
 
@@ -24,11 +25,11 @@ export async function GET(request: NextRequest) {
       return eventSKURegex.test(sku);
     });
 
-    if (validSKUs.length === 0) {
+    if (validSKUs.length === 0 && eventSKU.length !== 0) {
       return NextResponse.json({error: 'Event not found'}, {status: 400});
     }
 
-    const foundEvents = await getEvents({eventSKUs: validSKUs});
+    const foundEvents = await getEvents({eventSKUs: validSKUs, seasonId: parseInt(seasonId)});
 
     const formattedEvents: Event[] = foundEvents.map((event) => {
       return {

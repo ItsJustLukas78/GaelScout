@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import { Event, Country, Region } from "@/app/types";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import Link from "next/link";
+import {useGlobalStore} from "@/state/globalState";
+import LoadMore from "@/components/LoadMore";
 
 const countries: any = {
 "Commonly Selected": [{"value":244,"data-code":"US","name":"United States"},{"value":49,"data-code":"CN","name":"China"},{"value":39,"data-code":"CA","name":"Canada"},{"value":14,"data-code":"AU","name":"Australia"},{"value":82,"data-code":"GB","name":"United Kingdom"},{"value":107,"data-code":"IE","name":"Ireland"},{"value":180,"data-code":"NZ","name":"New Zealand"},{"value":239,"data-code":"TW","name":"Taiwan"},{"value":100,"data-code":"HK","name":"Hong Kong"},{"value":164,"data-code":"MX","name":"Mexico"}],
@@ -52,6 +54,8 @@ const regions: any = {
 "107":[{"value":744,"name":"Limerick"},{"value":732,"name":"Carlow"},{"value":733,"name":"Cavan"},{"value":734,"name":"Clare"},{"value":735,"name":"Cork"},{"value":736,"name":"Donegal"},{"value":737,"name":"Dublin"},{"value":738,"name":"Galway"},{"value":739,"name":"Kerry"},{"value":740,"name":"Kildare"},{"value":741,"name":"Kilkenny"},{"value":742,"name":"Laois"},{"value":743,"name":"Leitrim"},{"value":745,"name":"Longford"},{"value":746,"name":"Louth"},{"value":747,"name":"Mayo"},{"value":748,"name":"Meath"},{"value":749,"name":"Monaghan"},{"value":750,"name":"Offaly"},{"value":751,"name":"Roscommon"},{"value":752,"name":"Sligo"},{"value":753,"name":"Tipperary"},{"value":754,"name":"Waterford"},{"value":755,"name":"Westmeath"},{"value":756,"name":"Wexford"},{"value":757,"name":"Wicklow"}],
 };
 
+const allCountries: Country[] = Object.values(countries).flat() as Country[];
+
 enum GradeLevel {
   All = "All",
   HighSchool = "High School",
@@ -59,20 +63,103 @@ enum GradeLevel {
 }
 
 export default function Events() {
+  
+  const [eventSearchValue, setEventSearchValue] = useState("");
+  const [placeholder, setPlaceholder] = useState("Type an event name...");
+  const [placeHolderPhrases] = useState([
+    "Type an event name", "Type an event SKU", "Mecha Mayhem", "Mall of America", "RE-VRC-23-1524"
+  ]);
 
-  const [eventName, setEventName] = useState("");
+  const seasonToEvents = useGlobalStore(state => state.seasonToEvents);
+  const setSeasonToEvents = useGlobalStore(state => state.setSeasonToEvents);
+
+  const seasonToEventsAge = useGlobalStore(state => state.seasonToEventsAge);
+  const setSeasonToEventsAge = useGlobalStore(state => state.setSeasonToEventsAge);
+
+  const [seasonId, setSeasonId] = useState(181);
+  const [seasonEvents, setSeasonEvents] = useState<Event[]>([]);
+  const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
+
+  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
+  const [displayedEvents, setDisplayedEvents] = useState<Event[]>([]);
+
   const [country, setCountry] = useState<string>("All");
-  const [region, setRegion] = useState("N/A");
-  const [gradeLevel, setGradeLevel] = useState("All" as GradeLevel);
-  const [eventSKU, setEventSKU] = useState("");
-  const [seasonId, setSeasonId] = useState("");
+  const [region, setRegion] = useState("All");
 
   const [availableRegions, setAvailableRegions] = useState<string[]>([]);
 
-  const [currentResults, setCurrentResults] = useState<Event[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [resultsLoading, setResultsLoading] = useState(false);
+  // const eventSKURegex = new RegExp('^RE-VRC-\\d{2}-\\d{4}$');
+
+  useEffect(() => {
+    let filtering;
+
+    if (eventSearchValue === "") {
+      filtering = upcomingEvents;
+    } else {
+      filtering = seasonEvents;
+    }
+
+    if (country !== "All") {
+      const countryName = allCountries.find((c: Country) => {
+        return c.value === parseInt(country);
+      })?.name;
+
+      filtering = filtering.filter((event: Event) => {
+        return event.location.country === countryName;
+      });
+    }
+
+    if (region !== "N/A" && region !== "All" && region !== "Select Region") {
+      filtering = filtering.filter((event: Event) => {
+        return event.location.region === region;
+      });
+    }
+
+    if (eventSearchValue) {
+      filtering = filtering.filter((event: Event) => {
+        return event.name.toUpperCase().includes(eventSearchValue) || event.sku.toUpperCase().includes(eventSearchValue);
+      });
+    }
+
+    setFilteredEvents(filtering);
+  }, [eventSearchValue, seasonEvents, country, region, upcomingEvents]);
+
+  const increaseEventsShown = () => {
+    setDisplayedEvents(filteredEvents.slice(0, (currentPage + 1) * 30));
+    setCurrentPage(currentPage + 1);
+  }
+
+  useEffect(() => {
+    setDisplayedEvents(filteredEvents.slice(0, 30));
+    setCurrentPage(1);
+  }, [filteredEvents]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const animatedPlaceholder = async () => {
+      while (isMounted) {
+        for (let i = 0; i < placeHolderPhrases.length; i++) {
+          const phrase = placeHolderPhrases[i] + "...";
+          await new Promise(resolve => setTimeout(resolve, 6000));
+          setPlaceholder("");
+          for (let j = 0; j < phrase.length; j++) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            setPlaceholder(prevPlaceholder => phrase.substring(0, j + 1));
+          }
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+      }
+    };
+
+    animatedPlaceholder();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     setRegion("N/A")
@@ -88,308 +175,176 @@ export default function Events() {
     }
   }, [country]);
 
-  const getEvents = async(event: any, page?: number) => {
-    if (event) {
-      event.preventDefault();
-    }
-
-    if (eventSKU && eventSKU !== "") {
-      window.location.href = `/events/${eventSKU.toUpperCase()}`;
-      return;
-
-      // const skuSearchParams = new URLSearchParams();
-      //
-      // skuSearchParams.append("eventSKU[]", eventSKU);
-      //
-      // try {
-      //   const response = await fetch(`/api/events/?${skuSearchParams.toString()}`)
-      //
-      //   const data = await response.json();
-      //
-      //   if (data.error) {
-      //     toast.error(data.error);
-      //     return;
-      //   }
-      //
-      //   setCurrentResults(data.events);
-      //   setResultsLoading(false);
-      // } catch (error) {
-      //   toast.error(error as any);
-      // }
-    }
-
-    setResultsLoading(true);
-    setCurrentResults([]);
-
-    const searchParams = new URLSearchParams();
-
-    if (eventName) {
-      searchParams.append("name", eventName);
-    }
-
-    if (country !== "All") {
-      searchParams.append("country_id", country);
-    }
-
-    if (region !== "Select Region" && region !== "All" && region !== "N/A") {
-      searchParams.append("country_region_id",
-        regions[country].find((foundRegion: Region) => {
-          return foundRegion.name === region;
-        }).value.toString());
-    }
-
-    if (gradeLevel !== "All") {
-      if (gradeLevel === "High School") {
-        searchParams.append("grade_level_id", "3");
-      } else {
-        searchParams.append("grade_level_id", "2");
-      }
-    }
-
-    if (seasonId) {
-      searchParams.append("seasonId", seasonId);
-    }
-
-    if (!page) {
-      page = 1;
-      setCurrentPage(1);
-    } else {
-      setCurrentPage(page);
-    }
-
-    searchParams.append("page", page.toString());
-
+  const getEvents = async () => {
     try {
-      const response = await fetch(`/api/events/eventCodes/?${searchParams.toString()}`);
+      const searchParams = new URLSearchParams();
+      searchParams.append("seasonId", seasonId.toString());
 
+      const response = await fetch(`/api/events?${searchParams.toString()}`);
       const data = await response.json();
 
       if (data.error) {
-       toast.error(data.error);
-       return;
+        console.error(data.error);
+        toast.error(data.error);
+        return;
       }
 
-      const eventCodes = data.eventSKUs;
-      const eventCodesCount = eventCodes.length;
-
-      if (eventCodesCount === 0) {
-       setCurrentResults([]);
-       setResultsLoading(false);
-       toast.info("No events found");
-      } else {
-        const searchParams = new URLSearchParams();
-
-        eventCodes.forEach((value: any) => {
-          searchParams.append('eventSKU[]', value);
-        });
-
-        const response = await fetch(`/api/events/?${searchParams.toString()}`);
-
-        const data = await response.json();
-
-        if (data.error) {
-          toast.error(data.error);
-          return;
-        }
-
-        setCurrentResults(data.events);
-        setResultsLoading(false);
-      }
+      setSeasonToEvents(seasonId, data.events);
+      setSeasonEvents(data.events);
+      setSeasonToEventsAge(seasonId, new Date());
     } catch (error) {
-      toast.error(error as any);
+      console.error(error);
     }
   }
 
+  const hasHydrated = useGlobalStore(state => state._hasHydrated);
+
+  useEffect(() => {
+    if (!hasHydrated) {
+      return;
+    }
+
+    console.log({seasonToEvents: seasonToEvents[seasonId]});
+    if (seasonToEvents[seasonId] === undefined || seasonToEvents[seasonId].length === 0) {
+      getEvents();
+    } else if (seasonToEvents[seasonId] !== undefined) {
+      const lastDateUpdated = seasonToEventsAge[seasonId];
+      const currentDate = new Date();
+      const timeDifference = currentDate.getTime() - new Date(lastDateUpdated).getTime();
+
+      console.log({timeDifference: new Date(timeDifference).getSeconds()});
+
+      if (timeDifference > (1000 * 60 * 60)) {
+        getEvents();
+      } else {
+        setSeasonEvents(seasonToEvents[seasonId]);
+      }
+    }
+  }, [seasonId, hasHydrated]);
+
+  useEffect(() => {
+    if (seasonEvents.length > 0) {
+      const upcomingEvents = seasonEvents.filter((event: Event) => {
+        return (new Date(event.start)).getTime() > (Date.now() - (1000 * 60 * 60 * 24 * 4));
+      });
+      setUpcomingEvents(upcomingEvents);
+    }
+  }, [seasonEvents]);
+
+
   return (
     <main>
-      <div className="flex w-full flex-col items-center justify-center gap-16 py-32 sm:py-32 md:flex-row md:gap-7 lg:gap-20">
-        <div className="flex h-auto flex-col justify-center items-left max-w-[300px] xs:max-w-min md:max-w-[250px] lg:max-w-min">
-          <h1 className="mb-5 text-6xl font-bold xs:text-8xl md:text-6xl lg:text-8xl text-shadow-lg shadow-stone-400">
-            Events
-          </h1>
-          {/* promt to go to live events map with arrow */}
-          <Link className="flex flex-row mb-5 items-center gap-2 hover:text-blue-500" href="/events/map">
-            <h3 className="text-2xl font-semibold">
-              Live Events Map
+      <div className="flex w-screen flex-col items-center justify-center py-32 sm:py-32">
+        <div className={`flex flex-col justify-center rounded-2xl items-center sm:bg-none sm:p-8 items-left w-full md:w-[800px] lg:w-[900px] xl:w-[1200px]`}>
+          <div className={`relative ${eventSearchValue ? "[&>div]:opacity-0" : "sm:w-168 w-96 flex justify-center [&>div]:opacity-100"} [&>div]:[transition:transform_10s,opacity_1s] [&>div]:transition-opacity [&>div]:ease-in-out`}>
+            <div className="absolute top-10 left-12 w-28 h-28 sm:w-44 sm:h-44 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
+            <div className="absolute top-10 right-12 w-28 h-28 sm:w-44 sm:h-44 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
+            <div className="absolute -bottom-10 w-28 h-28 sm:w-44 sm:h-44 bg-green-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
+            <div className="absolute -bottom-10 w-24 h-24 sm:w-48 sm:h-48 bg-white rounded-full mix-blend-difference filter blur-sm opacity-100 animate-spotlight pointer-events-none" />
+            <input
+              type="textArea"
+              key="eventInput"
+              defaultValue={eventSearchValue}
+              placeholder={placeholder}
+              className={`${eventSearchValue ? "text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-stone-400" : ""} inline-block text-center mt-10 mb-5 border-none bg-transparent text-wrap text-2xl font-bold outline-none xs:text-4xl sm:text-5xl placeholder-white placeholder-opacity-100`}
+              onChange={(event) => {
+                event.preventDefault();
+                setEventSearchValue(event.target.value.toUpperCase());
+              }}
+            >
+            </input>
+          </div>
+        </div>
+        <div className="flex flex-wrap [&>div]:w-60 xs:[&>div]:w-80 flex-col items-center justify-center mt-16 gap-3 md:flex-row sm:gap-5 xl:gap-20">
+          {/*season selection box*/}
+          <div className="flex flex-col">
+            <select
+              className="h-8 rounded-lg p-0.5 text-black"
+              value={seasonId}
+              onChange={(e) => setSeasonId(parseInt(e.target.value))}
+            >
+              <option value="173">Spin Up 2022-23</option>
+              <option value="181">Over Under 2023-24</option>
+            </select>
+            <h3 className="text-sm font-semibold">
+              Season
             </h3>
-            <AiOutlineArrowRight className="text-2xl" />
-          </Link>
-          <Form.Root
-            onSubmit={getEvents}
-            className="flex flex-col gap-5"
-          >
-            <Form.Field className="flex flex-col" name="teamNumber">
-              <Form.Label>
-                Event SKU
-              </Form.Label>
-              <Form.Control asChild>
-                <input
-                  className="h-8 rounded-lg p-1 text-black"
-                  onChange={(e) => setEventSKU(e.target.value)}
-                />
-              </Form.Control>
-            </Form.Field>
-            <Form.Field className="flex flex-col" name="teamNumber">
-              <Form.Label>
-                Event Name
-              </Form.Label>
-              <Form.Control asChild>
-                <input
-                  className="h-8 rounded-lg p-1 text-black"
-                  onChange={(e) => setEventName(e.target.value)}
-                  disabled={eventSKU !== ""}
-                />
-              </Form.Control>
-            </Form.Field>
-            <Form.Field className="flex flex-col gap-2" name="country">
-              <Form.Label>
-                Country/Region
-              </Form.Label>
-              <Form.Control asChild>
-                <select
-                  className="h-8 rounded-lg p-1 text-black"
-                  onChange={(e) => setCountry(e.target.value)}
-                  disabled={eventSKU !== ""}
-                >
-                  {["All", ...Object.keys(countries)].map((section: string) => {
-                    if (section === "All") {
-                      return (
-                        <option
-                          key={section}
-                          value={section}
-                        >
-                          {section}
-                        </option>
-                      )
-                    }
+          </div>
+          {/*country selection box*/}
+          <div className="flex flex-col">
+            <select
+              className="h-8 rounded-lg p-0.5 text-black"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+            >
+              {["All", ...Object.keys(countries)].map((section: string) => {
+                if (section === "All") {
+                  return (
+                    <option
+                      key={section}
+                      value={section}
+                    >
+                      {section}
+                    </option>
+                  )
+                }
 
-                    return (
-                      <optgroup key={section} label={section}>
-                        {countries[section].map((country: Country) => {
-                          return (
-                            <option
-                              key={country.name}
-                              value={country.value}
-                            >
-                              {country.name}
-                            </option>
-                          )
-                        })}
-                      </optgroup>
-                    )
-                  })}
-                </select>
-              </Form.Control>
-              <Form.Field className="" name="region" asChild>
-                <Form.Control asChild>
-                  <select
-                    className="h-8 rounded-lg p-1 text-black"
-                    onChange={(e) => setRegion(e.target.value)}
-                    disabled={availableRegions.length === 1 || eventSKU !== ""}
-                  >
-                    {availableRegions.map((regionName: string) => {
+                return (
+                  <optgroup key={section} label={section}>
+                    {countries[section].map((country: Country) => {
                       return (
                         <option
-                          key={regionName}
-                          value={regionName}
+                          key={country.name}
+                          value={country.value}
                         >
-                          {regionName}
+                          {country.name}
                         </option>
                       )
                     })}
-                  </select>
-                </Form.Control>
-              </Form.Field>
-            </Form.Field>
-            <Form.Field className="flex flex-col" name="seasonId">
-              <Form.Label>
-                Season
-              </Form.Label>
-              <Form.Control asChild>
-                <select
-                  className="h-8 rounded-lg p-1 text-black"
-                  onChange={(e) => setSeasonId(e.target.value)}
-                  disabled={eventSKU !== ""}
-                >
-                  <option>All</option>
-                  <option value="173">Spin Up 2022-2023</option>
-                  <option value="181">Over Under 2023-2024</option>
-                </select>
-              </Form.Control>
-            </Form.Field>
-            <Form.Field className="flex flex-col" name="gradeLevel">
-              <Form.Label>
-                Grade Level
-              </Form.Label>
-              <Form.Control asChild>
-                <select
-                  className="h-8 rounded-lg p-1 text-black"
-                  onChange={(e) => setGradeLevel(e.target.value as GradeLevel)}
-                  disabled={eventSKU !== ""}
-                >
-                  {Object.values(GradeLevel).map((gradeLevel: string) => {
-                    return (
-                      <option
-                        key={gradeLevel}
-                        value={gradeLevel}
-                      >
-                        {gradeLevel}
-                      </option>
-                    )
-                  })}
-                </select>
-              </Form.Control>
-            </Form.Field>
-            <Form.Submit asChild>
-              <CorneredButton>Search</CorneredButton>
-            </Form.Submit>
-          </Form.Root>
-        </div>
-        <div className="flex h-auto flex-col items-center justify-center">
-          <div className="flex w-80 flex-col items-center gap-4 overflow-auto rounded-2xl bg-neutral-800 p-8 h-120 sm:w-96 lg:w-120">
-            {resultsLoading &&
-              <>
-                <EventResultSkeleton />
-                <EventResultSkeleton />
-                <EventResultSkeleton />
-                <EventResultSkeleton />
-              </>
-            }
-
-            {currentResults.length !== 0 && currentResults.map((result: Event) => {
-              const locationString = `${result.location.city ? result.location.city + ", " : ""}${result.location.region ? result.location.region + ", " : ""}${result.location.country}`;
-
-              return (
-                <EventResult
-                  key={result.id}
-                  id={result.id}
-                  sku={result.sku}
-                  name={result.name}
-                  start={result.start}
-                  location={locationString}
-                />
-              )
-            })}
-          </div>
-          <div className="mt-4 flex flex-row">
-            <button
-              className="h-8 rounded-l-lg bg-white p-1 text-black min-w-[20px]"
-              onClick={() => getEvents(null, currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              <AiOutlineLeft />
-            </button>
-            <button
-              className="h-8 rounded-r-lg bg-white p-1 text-black min-w-[20px]"
-              onClick={() => getEvents(null, currentPage + 1)}
-              disabled={currentResults.length < 20}
-            >
-              <AiOutlineRight />
-            </button>
-            <h3 className="ml-4 flex items-center text-sm text-white">
-              Page {currentPage}
+                  </optgroup>
+                )
+              })}
+            </select>
+            <h3 className="text-sm font-semibold">
+              Country
             </h3>
           </div>
+          <div className="flex flex-col">
+            <select
+              className="h-8 rounded-lg p-0.5 text-black"
+              value={region}
+              onChange={(e) => setRegion(e.target.value)}
+              disabled={availableRegions.length === 1}
+            >
+              {availableRegions.map((regionName: string) => {
+                return (
+                  <option
+                    key={regionName}
+                    value={regionName}
+                  >
+                    {regionName}
+                  </option>
+                )
+              })}
+            </select>
+            <h3 className="text-sm font-semibold">
+              Region
+            </h3>
+          </div>
+        </div>
+        {/*list events*/}
+        <div className="flex flex-col items-center justify-center max-w-[80%] min-w-[80%]">
+          <hr className="border-2 border-gray-500 my-10 w-full" />
+          <div className="flex flex-col items-center justify-center mb-3 gap-3 w-full">
+            {displayedEvents.map((event: Event) => {
+              const locationString = `${event.location.city ? event.location.city + ", " : ""}${event.location.region ? event.location.region + ", " : ""}${event.location.country}`;
+
+              return <>
+                <EventResult id={event.id} sku={event.sku} name={event.name} start={event.start} location={locationString} />
+              </>
+            })}
+          </div>
+          <LoadMore loadMore={increaseEventsShown} active={currentPage * 30 <= displayedEvents.length} />
         </div>
       </div>
     </main>
