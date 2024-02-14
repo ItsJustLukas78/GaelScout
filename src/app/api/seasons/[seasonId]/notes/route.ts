@@ -7,7 +7,6 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { seasonId: string } }
 ) {
-  console.log('POST /api/seasons/[seasonId]/notes');
   const seasonId = parseInt(params.seasonId);
 
   const { userId } = await auth();

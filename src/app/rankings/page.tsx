@@ -2,9 +2,7 @@
 import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {TeamSeasonProfile, RankableStatistic, Region, Country} from "@/app/types";
-import {AiOutlineDoubleLeft, AiOutlineDoubleRight, AiOutlineLeft, AiOutlineRight} from "react-icons/ai";
 import LoadMore from "@/components/LoadMore";
-
 
 
 const countries: any = {
@@ -266,10 +264,8 @@ export default function RankingsPage() {
     searchParams.append("awardQualToWorlds", qualledToWorlds);
 
     if (eventRegion !== "All Event Regions") {
-      console.log("eventRegion", eventRegion);
       searchParams.append("eventRegion", eventRegion);
     } else {
-      console.log("eventRegion", "All Event Regions");
       if (country !== "All Countries") {
         //country currently stores the value number
         const allCountries: Country[] = Object.values(countries).flat() as Country[];
@@ -286,7 +282,6 @@ export default function RankingsPage() {
     }
 
     try {
-      console.log(`/api/seasons/${seasonId}/seasonProfiles?${searchParams.toString()}`);
       const response = await fetch(`/api/seasons/${seasonId}/seasonProfiles?${searchParams.toString()}`)
 
       const data = await response.json();

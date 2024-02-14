@@ -204,7 +204,6 @@ export default function Events() {
       return;
     }
 
-    console.log({seasonToEvents: seasonToEvents[seasonId]});
     if (seasonToEvents[seasonId] === undefined || seasonToEvents[seasonId].length === 0) {
       getEvents();
     } else if (seasonToEvents[seasonId] !== undefined) {
