@@ -221,6 +221,7 @@ export default function Favorites() {
                       sku={result.sku}
                       name={result.name}
                       start={result.start}
+                      dark={false}
                       location={locationString}
                     />
                   )
