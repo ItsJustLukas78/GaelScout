@@ -622,7 +622,7 @@ export default function RankingsPage() {
           </div>
           <LoadMore
             loadMore={() => getRankedTeams(null, currentPage + 1, true)}
-            active={currentResultsCount !== 0 && currentResultsCount % 50 === 0}
+            active={currentResultsCount !== 0 && currentResultsCount % 50 === 0 && !loadingTeams}
           />
         </div>
       </div>
