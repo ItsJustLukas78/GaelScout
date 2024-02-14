@@ -24,11 +24,10 @@ import useSWR from 'swr'
 import {TbNotebook, TbNumbers} from "react-icons/tb";
 
 const SWROptions = {
-  revalidateOnFocus: true,
+  revalidateOnFocus: false,
   revalidateOnReconnect: true,
   refreshWhenHidden: false,
   refreshWhenOffline: false,
-  focusThrottleInterval: 30 * 1000,
 }
 
 const awardIcons = {
@@ -209,7 +208,6 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
   useEffect(() => {
     if (awardsError) {
       toast.error(awardsError + ": awards data");
-      setCurrentAwards([]);
     } else if (!awardsData) {
       setCurrentAwards([]);
     } else {
