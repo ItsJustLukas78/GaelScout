@@ -5,6 +5,8 @@ import {TeamSeasonProfile, RankableStatistic, Region, Country} from "@/app/types
 import {AiOutlineDoubleLeft, AiOutlineDoubleRight, AiOutlineLeft, AiOutlineRight} from "react-icons/ai";
 import LoadMore from "@/components/LoadMore";
 
+
+
 const countries: any = {
 "Commonly Selected": [{"value":244,"data-code":"US","name":"United States"},{"value":49,"data-code":"CN","name":"China"},{"value":39,"data-code":"CA","name":"Canada"},{"value":14,"data-code":"AU","name":"Australia"},{"value":82,"data-code":"GB","name":"United Kingdom"},{"value":107,"data-code":"IE","name":"Ireland"},{"value":180,"data-code":"NZ","name":"New Zealand"},{"value":239,"data-code":"TW","name":"Taiwan"},{"value":100,"data-code":"HK","name":"Hong Kong"},{"value":164,"data-code":"MX","name":"Mexico"}],
 "A": [{"value": 3, "data-code": "AF", "name": "Afghanistan"}, {"value": 16, "data-code": "AX", "name": "Aland Islands" }, {"value": 6, "data-code": "AL", "name": "Albania"}, {"value": 65, "data-code": "DZ", "name": "Algeria" }, {"value": 12, "data-code": "AS", "name": "American Samoa"}, {"value": 1, "data-code": "AD", "name": "Andorra" }, {"value": 9, "data-code": "AO", "name": "Angola"}, {"value": 5, "data-code": "AI", "name": "Anguilla" }, {"value": 10, "data-code": "AQ", "name": "Antarctica"}, {"value": 4, "data-code": "AG", "name": "Antigua and Barbuda" }, {"value": 11, "data-code": "AR", "name": "Argentina"}, {"value": 7, "data-code": "AM", "name": "Armenia" }, {"value": 15, "data-code": "AW", "name": "Aruba"}, {"value": 14, "data-code": "AU", "name": "Australia" }, {"value": 13, "data-code": "AT", "name": "Austria"}, {"value": 17, "data-code": "AZ", "name": "Azerbaijan"}],
@@ -47,6 +49,158 @@ const regions: any = {
 "107":[{"value":744,"name":"Limerick"},{"value":732,"name":"Carlow"},{"value":733,"name":"Cavan"},{"value":734,"name":"Clare"},{"value":735,"name":"Cork"},{"value":736,"name":"Donegal"},{"value":737,"name":"Dublin"},{"value":738,"name":"Galway"},{"value":739,"name":"Kerry"},{"value":740,"name":"Kildare"},{"value":741,"name":"Kilkenny"},{"value":742,"name":"Laois"},{"value":743,"name":"Leitrim"},{"value":745,"name":"Longford"},{"value":746,"name":"Louth"},{"value":747,"name":"Mayo"},{"value":748,"name":"Meath"},{"value":749,"name":"Monaghan"},{"value":750,"name":"Offaly"},{"value":751,"name":"Roscommon"},{"value":752,"name":"Sligo"},{"value":753,"name":"Tipperary"},{"value":754,"name":"Waterford"},{"value":755,"name":"Westmeath"},{"value":756,"name":"Wexford"},{"value":757,"name":"Wicklow"}],
 };
 
+const eventRegions = [
+  "All Event Regions",
+  "Alabama",
+  "Alaska",
+  "Alberta/Saskatchewan",
+  "American Samoa",
+  "Andorra",
+  "Arizona",
+  "Arkansas",
+  "Australia",
+  "Azerbaijan",
+  "Bahrain",
+  "Bangladesh",
+  "Belgium",
+  "Bermuda",
+  "Brazil",
+  "British Columbia (BC)",
+  "Burundi",
+  "California - Region 1",
+  "California - Region 2",
+  "California - Region 3",
+  "California - Region 4",
+  "Chile",
+  "China",
+  "Chinese Taipei",
+  "Colombia",
+  "Colorado",
+  "Cook Islands",
+  "Czech Republic",
+  "Côte d’Ivoire",
+  "Delaware",
+  "Delmarva",
+  "District of Columbia",
+  "Egypt",
+  "Estonia",
+  "Ethiopia",
+  "Finland",
+  "Florida - North/Central",
+  "Florida - South",
+  "France",
+  "Gambia",
+  "Georgia",
+  "Germany",
+  "Ghana",
+  "Guam",
+  "Guatemala",
+  "Haiti",
+  "Hawaii",
+  "Hong Kong",
+  "Idaho",
+  "Illinois",
+  "India",
+  "Indiana",
+  "Indonesia",
+  "Iowa",
+  "Ireland",
+  "Japan",
+  "Jordan",
+  "Kansas",
+  "Kazakhstan",
+  "Kentucky",
+  "Kuwait",
+  "Lebanon",
+  "Lesotho",
+  "Liberia",
+  "Libya",
+  "Lithuania",
+  "Louisiana",
+  "Luxembourg",
+  "Macau",
+  "Maine",
+  "Malaysia",
+  "Manitoba",
+  "Maryland",
+  "Mexico",
+  "Michigan",
+  "Minnesota",
+  "Mississippi",
+  "Missouri",
+  "Montana",
+  "Morocco",
+  "Myanmar",
+  "Nebraska",
+  "Netherlands",
+  "Nevada",
+  "New Brunswick/Nova Scotia/Prince Edward Island",
+  "New Hampshire/Vermont",
+  "New Jersey",
+  "New Mexico",
+  "New York-North",
+  "New York-South",
+  "New Zealand",
+  "Newfoundland and Labrador",
+  "Nigeria",
+  "North Carolina",
+  "North Dakota",
+  "Northern Mariana Islands",
+  "Ohio",
+  "Oklahoma",
+  "Oman",
+  "Ontario",
+  "Oregon",
+  "Panama",
+  "Paraguay",
+  "Pennsylvania - East",
+  "Pennsylvania - West",
+  "Philippines",
+  "Poland",
+  "Puerto Rico",
+  "Qatar",
+  "Quebec",
+  "Romania",
+  "Russia",
+  "Saudi Arabia",
+  "Singapore",
+  "Slovakia",
+  "Slovenia",
+  "South Africa",
+  "South Carolina",
+  "South Dakota",
+  "South Korea",
+  "Southern New England",
+  "Spain",
+  "Suriname",
+  "Switzerland",
+  "Tennessee",
+  "Texas - Region 1",
+  "Texas - Region 2",
+  "Texas - Region 3",
+  "Texas - Region 4",
+  "Texas - Region 5",
+  "Texas - Region 6",
+  "Thailand",
+  "Tunisia",
+  "Turkmenistan",
+  "Türkiye",
+  "Uganda",
+  "Unassigned",
+  "United Arab Emirates",
+  "United Kingdom",
+  "Utah",
+  "Vancouver Island (BC)",
+  "Vietnam",
+  "Virginia",
+  "Washington",
+  "West Virginia",
+  "Wisconsin",
+  "Wyoming",
+  "Zimbabwe"
+];
+
+
 export default function RankingsPage() {
 
   const [loadingTeams, setLoadingTeams] = useState(true);
@@ -59,7 +213,9 @@ export default function RankingsPage() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [country, setCountry] = useState<string>("All Countries");
-  const [region, setRegion] = useState("No Regions");
+  const [region, setRegion] = useState("No States/Territories");
+
+  const [eventRegion, setEventRegion] = useState<string>("All Event Regions");
 
   const [availableRegions, setAvailableRegions] = useState<string[]>([]);
 
@@ -70,22 +226,20 @@ export default function RankingsPage() {
 
 
   useEffect(() => {
-    setRegion("No Regions");
+    setRegion("No States/Territories");
     if (country === "All Countries") {
-      setAvailableRegions(["All Regions"]);
+      setAvailableRegions(["All States/Territories"]);
     } else if (Object.hasOwn(regions, country)) {
       const regionNames = regions[country].map((region: Region) => {
         return region.name;
       })
-      setAvailableRegions(["Select Region", ...regionNames]);
+      setAvailableRegions(["Select State/Territory", ...regionNames]);
     } else {
-      setAvailableRegions(["No Regions"]);
+      setAvailableRegions(["No States/Territories"]);
     }
   }, [country]);
 
   const getRankedTeams = async(event: any, page?: number, append?: boolean) => {
-    console.log("getRankedTeams");
-    console.log({event, page, append});
     if (event) {
       event.preventDefault();
     }
@@ -111,21 +265,28 @@ export default function RankingsPage() {
     searchParams.append("qualToRegionals", qualledToRegionals);
     searchParams.append("awardQualToWorlds", qualledToWorlds);
 
-     if (country !== "All Countries") {
-      //country currently stores the value number
-      const allCountries: Country[] = Object.values(countries).flat() as Country[];
-      const countryName = allCountries.find((c: Country) => {
-        return c.value === parseInt(country);
-      })?.name;
+    if (eventRegion !== "All Event Regions") {
+      console.log("eventRegion", eventRegion);
+      searchParams.append("eventRegion", eventRegion);
+    } else {
+      console.log("eventRegion", "All Event Regions");
+      if (country !== "All Countries") {
+        //country currently stores the value number
+        const allCountries: Country[] = Object.values(countries).flat() as Country[];
+        const countryName = allCountries.find((c: Country) => {
+          return c.value === parseInt(country);
+        })?.name;
 
-      searchParams.append("country", countryName || "");
-    }
+        searchParams.append("country", countryName || "");
+      }
 
-    if (region !== "Select Region" && region !== "All Regions" && region !== "No Regions") {
-      searchParams.append("region", region);
+      if (region !== "Select State/Territory" && region !== "All States/Territories" && region !== "No States/Territories") {
+        searchParams.append("region", region);
+      }
     }
 
     try {
+      console.log(`/api/seasons/${seasonId}/seasonProfiles?${searchParams.toString()}`);
       const response = await fetch(`/api/seasons/${seasonId}/seasonProfiles?${searchParams.toString()}`)
 
       const data = await response.json();
@@ -133,8 +294,7 @@ export default function RankingsPage() {
       if (data.error) {
         toast.error(data.error);
         if (!append) {
-          console.log("bruh"); 
-setTopRatedTeams([]);
+          setTopRatedTeams([]);
           setLoadingTeams(false);
           setCurrentResultsCount(0);
         } else {
@@ -171,7 +331,7 @@ setTopRatedTeams([]);
 
   useEffect(() => {
     getRankedTeams(null, 1, false);
-  }, [rankedStatistic, seasonId, qualledToRegionals, qualledToWorlds, country, region]);
+  }, [rankedStatistic, seasonId, qualledToRegionals, qualledToWorlds, country, region, eventRegion]);
 
   return (
     <main>
@@ -195,8 +355,22 @@ setTopRatedTeams([]);
               <select
                 className="h-8 rounded-lg p-1 text-xs text-black sm:h-12 sm:w-52 sm:text-sm xl:w-48"
                 required
+                value={eventRegion}
+                onChange={(event) => setEventRegion(event.target.value)}
+                disabled={country !== "All Countries"}
+                >
+                {eventRegions.map((region: string) => {
+                  return (
+                    <option key={region} value={region}>{region}</option>
+                  )
+                })}
+              </select>
+              <select
+                className="h-8 rounded-lg p-1 text-xs text-black sm:h-12 sm:w-52 sm:text-sm xl:w-48"
+                required
                 value={country}
                 onChange={(event) => setCountry(event.target.value)}
+                disabled={eventRegion !== "All Event Regions"}
               >
                 {["All Countries", ...Object.keys(countries)].map((section: string) => {
                     if (section === "All Countries") {
@@ -231,7 +405,7 @@ setTopRatedTeams([]);
                 required
                 value={region}
                 onChange={(event) => setRegion(event.target.value)}
-                disabled={availableRegions.length === 1}
+                disabled={availableRegions.length === 1 || eventRegion !== "All Event Regions"}
               >
                 {availableRegions.map((region: string) => {
                   return (
@@ -245,11 +419,11 @@ setTopRatedTeams([]);
                 value={rankedStatistic}
                 onChange={(event) => setRankedStatistic(event.target.value as RankableStatistic)}
               >
-                <option value="opr">OPR</option>
-                <option value="dpr">DPR</option>
-                <option value="ccwm">CCWM</option>
-                <option value="openSkill">OpenSkill</option>
-                <option value="topTotalSkills">World Skills</option>
+                <option value="opr">Rank by OPR</option>
+                <option value="dpr">Rank by DPR</option>
+                <option value="ccwm">Rank by CCWM</option>
+                <option value="openSkill">Rank by OpenSkill</option>
+                <option value="topTotalSkills">Rank by World Skills</option>
               </select>
               <select
                 className="h-8 rounded-lg p-1 text-xs text-black sm:h-12 sm:w-52 sm:text-sm xl:w-48"
@@ -361,7 +535,7 @@ setTopRatedTeams([]);
             </table>
             <table className="table-auto border-separate w-[90%]">
               <thead>
-                <tr className="[&>th]:px-1 [&>th]:h-14 md:[&>th]:text-md [&>th]:text-center [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-xl bg-gray-600">
+                <tr className="[&>th]:px-1 [&>th]:h-14 md:[&>th]:text-md [&>th]:text-center [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-lg bg-gray-600">
                   {showPerfStats ? (
                     <>
                       <th>OPR</th>
@@ -394,7 +568,7 @@ setTopRatedTeams([]);
               <tbody>
                 {topRatedTeams.length !== 0 ? topRatedTeams.map((result: TeamSeasonProfile) => {
                   return (
-                    <tr key={result.teamNumber} className="[&>td]:px-1 [&>td]:h-16 [&>td]:text-center [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl bg-gray-500">
+                    <tr key={result.teamNumber} className="[&>td]:px-1 [&>td]:h-16 [&>td]:text-center [&>td]:text-xs sm:[&>td]:text-sm xl:[&>td]:text-lg bg-gray-500">
                       {showPerfStats ? (
                         <>
                           <td>{result.opr.toFixed(1)}</td>
@@ -419,7 +593,7 @@ setTopRatedTeams([]);
                       {showBackgroundInfo ? (
                         <>
                           <td>{result.TeamProfile?.teamCountry}</td>
-                          <td>{result.TeamProfile?.teamRegion}</td>
+                          <td>{result.TeamProfile?.teamEventRegion || result.TeamProfile?.teamRegion}</td>
                         </>
                       ) : null}
                     </tr>

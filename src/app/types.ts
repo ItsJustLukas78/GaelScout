@@ -33,6 +33,7 @@ export interface TeamProfile {
   teamOrg: string,
   teamCity: string,
   teamRegion: string,
+  teamEventRegion?: string,
   teamCountry: string,
   programCode: string,
   programId: number,
@@ -146,6 +147,51 @@ export interface TeamSeasonProfile {
   awardQualToWorlds: boolean,
   TeamProfile?: TeamProfile,
 }
+
+interface SkillsStandingsTeamData {
+    id: number;
+    program: string;
+    teamRegId: number;
+    team: string;
+    teamName: string;
+    organization: string;
+    city: string;
+    region: string;
+    country: string;
+    gradeLevel: string;
+    link: string;
+    eventRegion: string;
+    affiliations: any[]; // Adjust type accordingly if possible
+    eventRegionId: number;
+}
+
+interface SkillsStandingsEventData {
+    sku: string;
+    startDate: string;
+    seasonName: string;
+}
+
+interface SkillsStandingsScoresData {
+    score: number;
+    programming: number;
+    driver: number;
+    combinedStopTime: number;
+    maxProgramming: number;
+    maxDriver: number;
+    progStopTime: number;
+    driverStopTime: number;
+    progScoredAt: string;
+    driverScoredAt: string;
+}
+
+export interface SkillsStandingsData {
+    rank: number;
+    team: SkillsStandingsTeamData;
+    event: SkillsStandingsEventData;
+    scores: SkillsStandingsScoresData;
+    eligible: boolean;
+}
+
 
 export interface Division {
   id: number;

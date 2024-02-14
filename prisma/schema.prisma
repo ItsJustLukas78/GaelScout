@@ -11,14 +11,15 @@ model TeamProfile {
   teamId            Int                 @id
   teamName          String
   teamNumber        String              @unique
-  robotName         String?             @default("No name")
-  teamGrade         String?             @default("No grade")
-  teamOrg           String?             @default("No org")
-  teamCity          String?             @default("No city")
-  teamRegion        String?             @default("No region")
-  teamCountry       String?             @default("No country")
-  programCode       String              @default("No program")
+  robotName         String?
+  teamGrade         String?
+  teamOrg           String?
+  teamCity          String?
+  teamRegion        String?
+  teamCountry       String?
+  programCode       String              @default("")
   programId         Int                 @default(0)
+  teamEventRegion   String?
   FavoriteTeam      FavoriteTeam[]
   TeamNotes         TeamNote[]
   TeamSeasonProfile TeamSeasonProfile[]

@@ -57,6 +57,7 @@ export async function GET(
 
   const region = searchParams.get('region');
   const country = searchParams.get('country');
+  const eventRegion = searchParams.get('eventRegion');
 
   let sortMethod = (searchParams.get('sort') ? searchParams.get('sort') : RankableStatistic.OPENSKILL) as string
 
@@ -98,15 +99,21 @@ export async function GET(
     whereClause.awardQualToWorlds = isAwardQualToWorlds === "true";
   }
 
-  if (region) {
+  if (eventRegion) {
     whereClause.TeamProfile = {
-      teamRegion: region
+      teamEventRegion: eventRegion
     };
-  }
+  } else {
+    if (region) {
+      whereClause.TeamProfile = {
+        teamRegion: region
+      };
+    }
 
-  if (country) {
-    whereClause.TeamProfile ? whereClause.TeamProfile.teamCountry = country : whereClause.TeamProfile = {
-      teamCountry: country
+    if (country) {
+      whereClause.TeamProfile ? whereClause.TeamProfile.teamCountry = country : whereClause.TeamProfile = {
+        teamCountry: country
+      }
     }
   }
 

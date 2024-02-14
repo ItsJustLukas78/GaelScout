@@ -397,7 +397,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                       Location:
                     </h3>
                     <h3 className="font-normal text-md">
-                      {teamProfile.teamCity ? teamProfile.teamCity + ", " : ""}{teamProfile.teamRegion ? teamProfile.teamRegion + ", " : ""}{teamProfile.teamCountry ? teamProfile.teamCountry : ""}
+                      {teamProfile.teamCity ? teamProfile.teamCity + ", " : ""}{teamProfile.teamEventRegion || teamProfile.teamRegion ? teamProfile.teamEventRegion || teamProfile.teamRegion + ", " : ""}{teamProfile.teamCountry ? teamProfile.teamCountry : ""}
                     </h3>
                   </div>
                 </div>
@@ -504,7 +504,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     <h3 className={`text-xl font-bold ${seasonStats.ccwm ? seasonStats.ccwm > 30 ? "goodGradient" : seasonStats.ccwm < 15 ? "badGradient" : "midGradient" : ""}`}>
                       CCWM:
                     </h3>
-                    <h3 className={`text-xl midGradient ${seasonStats.ccwm ? seasonStats.ccwm > 30 ? "goodGradient" : seasonStats.ccwm < 15 ? "badGradient" : "midGradient" : ""}`}>
+                    <h3 className={`text-xl ${seasonStats.ccwm ? seasonStats.ccwm > 30 ? "goodGradient" : seasonStats.ccwm < 15 ? "badGradient" : "midGradient" : ""}`}>
                       {seasonStats.ccwm != undefined ? seasonStats.ccwm.toFixed(4) : "N/A"}
                     </h3>
                     <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">

@@ -137,7 +137,7 @@ export default function Favorites() {
                   </h1>
                 ) : null}
                 {favoriteTeams.length !== 0 ? favoriteTeams.map((result: TeamProfile) => {
-                  const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
+                  const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamEventRegion || result.teamRegion ? result.teamEventRegion || result.teamRegion + ", " : ""}${result.teamCountry}`;
 
                   return (
                     <EventTeamResult
