@@ -22,6 +22,8 @@ import {IsPWA} from "@/components/IsPWA";
 import Spinner from "@/components/Spinner";
 import useSWR from 'swr'
 import {TbNotebook, TbNumbers} from "react-icons/tb";
+import { FaSadCry } from "react-icons/fa";
+
 
 const SWROptions = {
   revalidateOnFocus: false,
@@ -318,7 +320,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
   return (
     <div>
       <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32 overflow-hidden">
-        <div className={`relative flex h-auto flex-col justify-center rounded-2xl ${teamNumberInput ? "sm:bg-neutral-800" : "!w-full items-center sm:bg-none"} sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]`}>
+        <div className={`relative flex h-auto flex-col justify-center rounded-2xl ${teamNumberInput ? "sm:bg-neutral-800" : "!w-full items-center sm:bg-none"} sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px] transition-all ease-in-out duration-1000`}>
           <div className={`relative ${teamNumberInput ? "[&>div]:opacity-0" : "sm:w-168 w-96 flex justify-center [&>div]:opacity-100"} [&>div]:[transition:transform_10s,opacity_1s] [&>div]:transition-opacity [&>div]:ease-in-out`}>
             <div className="absolute top-0 left-12 w-32 h-32 sm:w-72 sm:h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
             <div className="absolute top-0 right-12 w-32 h-32 sm:w-72 sm:h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
@@ -360,9 +362,9 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                   {favorited ? <AiFillStar className="inline-block" /> : <AiOutlineStar className="inline-block" />}
                 </button>
               </div>
-              <div className="flex flex-col gap-5 min-w-auto lg:flex-row lg:gap-14">
-                <div className="flex min-w-fit flex-row gap-5 lg:flex-col">
-                  <div className="flex flex-col w-[49%] lg:w-auto">
+              <div className="flex flex-col gap-5 min-w-auto xl:flex-row xl:gap-14">
+                <div className="flex min-w-fit flex-row gap-5 xl:flex-col">
+                  <div className="flex flex-col w-[49%] xl:w-auto">
                     <h3 className="text-xl font-bold">
                       Name:
                     </h3>
@@ -370,7 +372,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                       {teamProfile.teamName ? teamProfile.teamName : "N/A"}
                     </h3>
                   </div>
-                  <div className="flex flex-col w-[49%] lg:w-auto">
+                  <div className="flex flex-col w-[49%] xl:w-auto">
                     <h3 className="text-xl font-bold">
                       Robot Name:
                     </h3>
@@ -379,8 +381,8 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </h3>
                   </div>
                 </div>
-                <div className="flex min-w-fit flex-row gap-5 lg:flex-col">
-                  <div className="flex flex-col w-[49%] lg:w-auto">
+                <div className="flex min-w-fit flex-row gap-5 xl:flex-col">
+                  <div className="flex flex-col w-[49%] xl:w-auto">
                     <h3 className="text-xl font-bold">
                       Org:
                     </h3>
@@ -390,7 +392,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                       ) : "N/A"}
                     </h3>
                   </div>
-                  <div className="flex flex-col w-[49%] lg:w-auto">
+                  <div className="flex flex-col w-[49%] xl:w-auto">
                     <h3 className="text-xl font-bold">
                       Location:
                     </h3>
@@ -399,8 +401,8 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </h3>
                   </div>
                 </div>
-                <div className="flex min-w-fit flex-row gap-5 lg:flex-col">
-                  <div className="flex flex-col w-[49%] lg:w-auto">
+                <div className="flex min-w-fit flex-row gap-5 xl:flex-col">
+                  <div className="flex flex-col w-[49%] xl:w-auto">
                     <h3 className="text-xl font-bold">
                       Program:
                     </h3>
@@ -408,7 +410,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                       {teamProfile.programCode ? teamProfile.programCode : "N/A"}
                     </h3>
                   </div>
-                  <div className="flex flex-col w-[49%] lg:w-auto">
+                  <div className="flex flex-col w-[49%] xl:w-auto">
                     <h3 className="text-xl font-bold">
                       Grade:
                     </h3>
@@ -600,7 +602,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </h3>
                   </div>
                 </div>
-                { currentAwards && currentAwards.length !== 0 ?
+                { currentAwards ?
                   <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
                     <div className="relative flex flex-row justify-between">
                       <h3 className="text-xl font-bold">
@@ -654,8 +656,12 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                         </div>
                         <hr className="w-full border-neutral-500" />
                       </>
+                    })}
+                    {currentAwards.length === 0 ?
+                      <h3 className="text-sm font-medium text-center italic">
+                        No Awards <FaSadCry className="inline-block" />
+                      </h3> : null
                     }
-                    )}
                   </div>
                 </div>
               </div>
@@ -704,6 +710,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                       name={result.name}
                       start={result.start}
                       location={locationString}
+                      dark={false}
                       defaultTeam={teamProfile ? teamProfile.teamNumber : ""}
                     />
                   )

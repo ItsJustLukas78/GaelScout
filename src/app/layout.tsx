@@ -59,7 +59,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={GeistSans.variable}>
       <Providers>
-        <body className="relative min-h-screen">
+        <body className="relative min-h-screen w-full">
           {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS ? (
             <GoogleAnalytics ga_id=
             {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS} />

@@ -11,6 +11,7 @@ import { AiOutlineArrowRight } from "react-icons/ai";
 import Link from "next/link";
 import {useGlobalStore} from "@/state/globalState";
 import LoadMore from "@/components/LoadMore";
+import Spinner from "@/components/Spinner";
 
 const countries: any = {
 "Commonly Selected": [{"value":244,"data-code":"US","name":"United States"},{"value":49,"data-code":"CN","name":"China"},{"value":39,"data-code":"CA","name":"Canada"},{"value":14,"data-code":"AU","name":"Australia"},{"value":82,"data-code":"GB","name":"United Kingdom"},{"value":107,"data-code":"IE","name":"Ireland"},{"value":180,"data-code":"NZ","name":"New Zealand"},{"value":239,"data-code":"TW","name":"Taiwan"},{"value":100,"data-code":"HK","name":"Hong Kong"},{"value":164,"data-code":"MX","name":"Mexico"}],
@@ -90,6 +91,8 @@ export default function Events() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [loading, setLoading] = useState(true);
+
   // const eventSKURegex = new RegExp('^RE-VRC-\\d{2}-\\d{4}$');
 
   useEffect(() => {
@@ -129,11 +132,13 @@ export default function Events() {
   const increaseEventsShown = () => {
     setDisplayedEvents(filteredEvents.slice(0, (currentPage + 1) * 30));
     setCurrentPage(currentPage + 1);
+    setLoading(false);
   }
 
   useEffect(() => {
     setDisplayedEvents(filteredEvents.slice(0, 30));
     setCurrentPage(1);
+    setLoading(false);
   }, [filteredEvents]);
 
   useEffect(() => {
@@ -176,6 +181,7 @@ export default function Events() {
   }, [country]);
 
   const getEvents = async () => {
+    setLoading(true);
     try {
       const searchParams = new URLSearchParams();
       searchParams.append("seasonId", seasonId.toString());
@@ -200,6 +206,8 @@ export default function Events() {
   const hasHydrated = useGlobalStore(state => state._hasHydrated);
 
   useEffect(() => {
+    setLoading(true);
+
     if (!hasHydrated) {
       return;
     }
@@ -233,7 +241,7 @@ export default function Events() {
 
   return (
     <main>
-      <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
+      <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32 overflow-hidden">
         <div className={`flex flex-col justify-center rounded-2xl items-center sm:bg-none sm:p-8 items-left w-full md:w-[800px] lg:w-[900px] xl:w-[1200px]`}>
           <div className={`relative ${eventSearchValue ? "[&>div]:opacity-0" : "sm:w-168 w-96 flex justify-center [&>div]:opacity-100"} [&>div]:[transition:transform_10s,opacity_1s] [&>div]:transition-opacity [&>div]:ease-in-out`}>
             <div className="absolute top-10 left-12 w-28 h-28 sm:w-44 sm:h-44 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
@@ -332,8 +340,8 @@ export default function Events() {
           </div>
         </div>
         {/*list events*/}
-        <div className="flex flex-col items-center justify-center [&>div]:w-60 xs:[&>div]:w-80 sm:[&>div]:w-112 md:[&>div]:w-168">
-          <hr className="border-2 border-gray-500 my-10 w-full" />
+        <div className="flex flex-col items-center justify-center [&>div]:w-[80%] xs:[&>div]:w-80 sm:[&>div]:w-112 md:[&>div]:w-168">
+          <hr className="border-2 border-gray-500 my-10 w-[70%] xs:w-80 sm:w-112 md:w-168" />
           <div className="flex flex-col items-center justify-center mb-3 gap-2 w-full">
             {displayedEvents.map((event: Event) => {
               const locationString = `${event.location.city ? event.location.city + ", " : ""}${event.location.region ? event.location.region + ", " : ""}${event.location.country}`;
@@ -342,6 +350,7 @@ export default function Events() {
                 <EventResult id={event.id} sku={event.sku} name={event.name} start={event.start} location={locationString} />
               </>
             })}
+            {displayedEvents.length === 0 && loading && <Spinner/>}
           </div>
           <LoadMore loadMore={increaseEventsShown} active={currentPage * 30 <= displayedEvents.length} />
         </div>

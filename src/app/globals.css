@@ -59,6 +59,9 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .mapContainerWrapper {
