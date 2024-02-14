@@ -45,7 +45,6 @@ model TeamSeasonProfile {
   eventCount              Int
   topProgSkills           Int
   topDriverSkills         Int
-  topTotalSkills          Int
   skillsRank              Int
   qualMatchCount          Int
   elimMatchCount          Int
@@ -58,6 +57,9 @@ model TeamSeasonProfile {
   totalMatchWinPercentage Float
   qualToRegionals         Boolean
   awardQualToWorlds       Boolean
+  driverSkills            Int         @default(0)
+  progSkills              Int         @default(0)
+  totalSkills             Int         @default(0)
   TeamProfile             TeamProfile @relation(fields: [teamId, teamNumber], references: [teamId, teamNumber], onDelete: Cascade)
 
   @@unique([teamId, seasonId])

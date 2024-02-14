@@ -568,10 +568,10 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                       Skills:
                     </h3>
                     <h3 className="text-xl">
-                      {seasonStats.topTotalSkills != undefined ? seasonStats.topTotalSkills : "N/A"}
+                      {seasonStats.totalSkills != undefined ? seasonStats.totalSkills : "N/A"}
                     </h3>
                     <p className="absolute -bottom-1/2 left-0 text-2xs text-gray-300">
-                      Combined Top Driver and Programming Skills
+                      Official Skills Score
                     </p>
                   </div>
                   <hr/>
@@ -589,7 +589,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                       Driver:
                     </h3>
                     <h3 className="text-xl">
-                      {seasonStats.topDriverSkills != undefined ? seasonStats.topDriverSkills : "N/A"}
+                      {seasonStats.driverSkills != undefined ? seasonStats.driverSkills : "N/A"}
                     </h3>
                   </div>
                   <hr/>
@@ -598,7 +598,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                       Program:
                     </h3>
                     <h3 className="text-xl">
-                      {seasonStats.topProgSkills != undefined ? seasonStats.topProgSkills : "N/A"}
+                      {seasonStats.progSkills != undefined ? seasonStats.progSkills : "N/A"}
                     </h3>
                   </div>
                 </div>

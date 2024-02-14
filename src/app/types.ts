@@ -130,9 +130,11 @@ export interface TeamSeasonProfile {
   openSkill: number,
   openSkillRank: number,
   eventCount: number,
+  totalSkills: number,
+  driverSkills: number,
+  progSkills: number,
   topProgSkills: number,
   topDriverSkills: number,
-  topTotalSkills: number,
   skillsRank: number,
   qualMatchCount: number,
   elimMatchCount: number,
@@ -243,7 +245,7 @@ export enum RankableStatistic {
   DPR = "dpr",
   CCWM = "ccwm",
   OPENSKILL = "openSkill",
-  TOTALSKILLS = "topTotalSkills",
+  TOTALSKILLS = "totalSkills",
 }
 
 

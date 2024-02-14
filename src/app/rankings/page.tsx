@@ -418,7 +418,7 @@ export default function RankingsPage() {
                 <option value="dpr">Rank by DPR</option>
                 <option value="ccwm">Rank by CCWM</option>
                 <option value="openSkill">Rank by OpenSkill</option>
-                <option value="topTotalSkills">Rank by World Skills</option>
+                <option value="totalSkills">Rank by World Skills</option>
               </select>
               <select
                 className="h-8 rounded-lg p-1 text-xs text-black sm:h-12 sm:w-52 sm:text-sm xl:w-48"
@@ -544,6 +544,8 @@ export default function RankingsPage() {
                       <th>World Skills</th>
                       <th>Driver</th>
                       <th>Prog</th>
+                      <th>Top Driver</th>
+                      <th>Top Prog</th>
                     </>
                   ) : null}
                   {showQuals ? (
@@ -574,7 +576,9 @@ export default function RankingsPage() {
                       ) : null}
                       {showSkills ? (
                         <>
-                          <td>{result.topTotalSkills}</td>
+                          <td>{result.totalSkills}</td>
+                          <td>{result.driverSkills}</td>
+                          <td>{result.progSkills}</td>
                           <td>{result.topDriverSkills}</td>
                           <td>{result.topProgSkills}</td>
                         </>
@@ -597,6 +601,8 @@ export default function RankingsPage() {
                   [0,1,2,3,4].map(() => {
                     return (
                       <tr className="[&>td]:bg-gray-400 [&>td]:animate-pulse [&>td]:px-1 [&>td]:h-16 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
