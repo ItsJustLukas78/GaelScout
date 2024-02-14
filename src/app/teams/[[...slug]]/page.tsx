@@ -397,7 +397,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                       Location:
                     </h3>
                     <h3 className="font-normal text-md">
-                      {teamProfile.teamCity ? teamProfile.teamCity + ", " : ""}{teamProfile.teamEventRegion || teamProfile.teamRegion ? teamProfile.teamEventRegion || teamProfile.teamRegion + ", " : ""}{teamProfile.teamCountry ? teamProfile.teamCountry : ""}
+                      {teamProfile.teamCity ? teamProfile.teamCity + ", " : ""}{teamProfile.teamRegion ? teamProfile.teamRegion + ", " : ""}{teamProfile.teamCountry ? teamProfile.teamCountry : ""}
                     </h3>
                   </div>
                 </div>

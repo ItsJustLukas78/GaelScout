@@ -575,8 +575,8 @@ export default function RankingsPage() {
                       {showSkills ? (
                         <>
                           <td>{result.topTotalSkills}</td>
-                          <td>{result.topDriverSkills.toFixed(1)}</td>
-                          <td>{result.topProgSkills.toFixed(1)}</td>
+                          <td>{result.topDriverSkills}</td>
+                          <td>{result.topProgSkills}</td>
                         </>
                       ) : null}
                       {showQuals ? (

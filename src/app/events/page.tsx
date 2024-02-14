@@ -233,7 +233,7 @@ export default function Events() {
 
   return (
     <main>
-      <div className="flex w-screen flex-col items-center justify-center py-32 sm:py-32">
+      <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
         <div className={`flex flex-col justify-center rounded-2xl items-center sm:bg-none sm:p-8 items-left w-full md:w-[800px] lg:w-[900px] xl:w-[1200px]`}>
           <div className={`relative ${eventSearchValue ? "[&>div]:opacity-0" : "sm:w-168 w-96 flex justify-center [&>div]:opacity-100"} [&>div]:[transition:transform_10s,opacity_1s] [&>div]:transition-opacity [&>div]:ease-in-out`}>
             <div className="absolute top-10 left-12 w-28 h-28 sm:w-44 sm:h-44 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
@@ -245,7 +245,7 @@ export default function Events() {
               key="eventInput"
               defaultValue={eventSearchValue}
               placeholder={placeholder}
-              className={`${eventSearchValue ? "text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-stone-400" : ""} inline-block text-center mt-10 mb-5 border-none bg-transparent text-wrap text-2xl font-bold outline-none xs:text-4xl sm:text-5xl placeholder-white placeholder-opacity-100`}
+              className={`${eventSearchValue ? "text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-stone-400" : ""} text-center mt-10 mb-5 border-none bg-transparent text-wrap text-2xl font-bold outline-none xs:text-4xl sm:text-5xl placeholder-white placeholder-opacity-100`}
               onChange={(event) => {
                 event.preventDefault();
                 setEventSearchValue(event.target.value.toUpperCase());
@@ -254,7 +254,7 @@ export default function Events() {
             </input>
           </div>
         </div>
-        <div className="flex flex-wrap [&>div]:w-60 xs:[&>div]:w-80 flex-col items-center justify-center mt-16 gap-3 md:flex-row sm:gap-5 xl:gap-20">
+        <div className="flex flex-wrap w-full sm:w-[700px] [&>div]:w-60 xs:[&>div]:w-80 flex-col items-center justify-center mt-16 gap-3 md:flex-row sm:gap-5 xl:gap-10">
           {/*season selection box*/}
           <div className="flex flex-col">
             <select
@@ -332,9 +332,9 @@ export default function Events() {
           </div>
         </div>
         {/*list events*/}
-        <div className="flex flex-col items-center justify-center max-w-[80%] min-w-[80%]">
+        <div className="flex flex-col items-center justify-center [&>div]:w-60 xs:[&>div]:w-80 sm:[&>div]:w-112 md:[&>div]:w-168">
           <hr className="border-2 border-gray-500 my-10 w-full" />
-          <div className="flex flex-col items-center justify-center mb-3 gap-3 w-full">
+          <div className="flex flex-col items-center justify-center mb-3 gap-2 w-full">
             {displayedEvents.map((event: Event) => {
               const locationString = `${event.location.city ? event.location.city + ", " : ""}${event.location.region ? event.location.region + ", " : ""}${event.location.country}`;
 
