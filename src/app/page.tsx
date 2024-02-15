@@ -123,7 +123,7 @@ export default function Home() {
             <iframe
               className="rounded-xl sm:hidden block"
               src="https://discord.com/widget?id=1175614341941313647&theme=dark"
-              width="350" height="500"
+              width="250" height="400"
               sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
             >
             </iframe>
@@ -136,7 +136,7 @@ export default function Home() {
             </iframe>
           </div>
         </div>
-        <SpringAnimatedElement delay={1.6} className="fixed z-50 self-center bottom-20 flex items-center flex-col justify-center">
+        <SpringAnimatedElement delay={1.6} className="fixed z-50 self-center bottom-[175px] flex items-center flex-col justify-center">
           <div className="flex items-center justify-center bg-neutral-800 rounded-full h-10 w-40 ">
             <div className="ml-7 flex gap-5">
               <FaPeopleGroup
