@@ -42,6 +42,10 @@ export default function Favorites() {
           return;
         }
 
+        data.favorites.sort((a: TeamProfile, b: TeamProfile) => {
+          return a.teamNumber.localeCompare(b.teamNumber);
+        });
+
         setFavoriteTeams(data.favorites);
       } catch (err) {
         console.log(err);
@@ -57,6 +61,10 @@ export default function Favorites() {
           toast.error(data.error)
           return;
         }
+
+        data.favorites.sort((a: Event, b: Event) => {
+          return new Date(a.start).getTime() - new Date(b.start).getTime();
+        });
 
         setFavoriteEvents(data.favorites);
       } catch (err) {
@@ -137,7 +145,7 @@ export default function Favorites() {
                   </h1>
                 ) : null}
                 {favoriteTeams.length !== 0 ? favoriteTeams.map((result: TeamProfile) => {
-                  const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamEventRegion || result.teamRegion ? result.teamEventRegion || result.teamRegion + ", " : ""}${result.teamCountry}`;
+                  const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
 
                   return (
                     <EventTeamResult

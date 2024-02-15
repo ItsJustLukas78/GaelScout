@@ -847,7 +847,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       return null;
                     }
 
-                    const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamEventRegion || result.teamRegion ? result.teamEventRegion || result.teamRegion + ", " : ""}${result.teamCountry}`;
+                    const locationString = `${result.teamCity ? result.teamCity + ", " : ""}${result.teamRegion ? result.teamRegion + ", " : ""}${result.teamCountry}`;
 
                     return (
                       <EventTeamResult

@@ -38,6 +38,7 @@ const awardIcons = {
   "Design Award": <TbNotebook className="w-10 h-10 mt-1" />,
   "Judges Award": <MdSupervisorAccount className="w-10 h-10 mt-1" />,
   "Skills Champion": <TbNumbers className="w-10 h-10 mt-1" />,
+  "Robot Skills Champion": <TbNumbers className="w-10 h-10 mt-1" />,
   "Think Award": <FaLaptopCode className="w-10 h-10 mt-1" />,
   "Amaze Award": <BiCool className="w-10 h-10 mt-1" />,
   "Build Award": <MdBuild className="w-10 h-10 mt-1" />,

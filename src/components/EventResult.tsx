@@ -5,7 +5,7 @@ export default function EventResult({ id, sku, name, start, location, dark=true,
   return (
     <Link
       href={`/events/${sku}${defaultTeam ? `?team=${defaultTeam}` : ''}`}
-      className={`flex h-auto w-full flex-col rounded-xl p-2 shadow-lg transition-colors duration-200 ${dark ? 'bg-neutral-800 shadow-neutral-900 hover:bg-neutral-700' : 'bg-neutral-700 shadow-neutral-700 hover:bg-neutral-500'}`}
+      className={`flex h-auto w-full flex-col rounded-xl p-2 shadow-lg transition-colors duration-200 ${dark ? 'bg-neutral-800 shadow-neutral-900 hover:bg-neutral-700' : 'bg-neutral-700 shadow-neutral-800 hover:bg-neutral-600'}`}
     >
       <h1 className="text-sm mb-1 font-semibold md:text-lg line-clamp-1 w-full">
         {name}
