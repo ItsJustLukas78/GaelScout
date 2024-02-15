@@ -1,7 +1,7 @@
 import React from "react";
 import { LazyMotion, domAnimation, m as motion } from "framer-motion";
 
-const SpringAnimatedElement = ({ children, className, delay }: { children: React.ReactNode, className?: string, delay: number }) => {
+const SpringAnimatedElement = ({ children, className, delay, id, style}: { children: React.ReactNode, className?: string, delay: number, id?: string, style?: React.CSSProperties }) => {
   //use delay to stagger the animation
   const container = {
     hidden: { opacity: 0 },
@@ -38,9 +38,11 @@ const SpringAnimatedElement = ({ children, className, delay }: { children: React
     <LazyMotion features={domAnimation} strict>
       <motion.div
         className={`${className}`}
+        id={id}
         variants={container}
         initial="hidden"
         animate="visible"
+        style={style}
       >
         {//for element in children, create sep div, children can be string or element
         React.Children.map(children, (element, index) => (

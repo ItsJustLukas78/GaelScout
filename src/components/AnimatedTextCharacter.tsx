@@ -1,7 +1,7 @@
 import React from "react";
 import {LazyMotion, domAnimation, m as motion} from "framer-motion"
 
-const AnimatedTextWord = ({ text, className, delay, interval = 0.04 }: { text: string, className?: string, delay: number, interval?: number }) => {
+const AnimatedTextWord = ({ text, className, delay, interval = 0.04, style }: { text: string, className?: string, delay: number, interval?: number, style?: React.CSSProperties }) => {
   let words = text.split(" ");
 
   words = words.map((word) => word + "\u00A0");
@@ -45,6 +45,7 @@ const AnimatedTextWord = ({ text, className, delay, interval = 0.04 }: { text: s
         variants={container}
         initial="hidden"
         animate="visible"
+        style={style}
       >
         {words.map((word, index) => (
           <motion.span

@@ -3,12 +3,13 @@ import CorneredButton from '@/components/CorneredButton'
 import Image from 'next/image'
 import Link from 'next/link'
 import Tilt from 'react-parallax-tilt';
-import React from "react";
+import React, {useState} from "react";
 import AnimatedTextCharacter from "@/components/AnimatedTextCharacter";
 import SpringAnimatedElement from "@/components/SpringAnimatedElement";
 import {useUser} from "@clerk/nextjs";
 import {MdSearch} from "react-icons/md";
-import { FaArrowDownLong } from "react-icons/fa6";
+import { FaPeopleGroup } from "react-icons/fa6";
+import { MdEventNote } from "react-icons/md";
 
 
 // Z indexes
@@ -18,11 +19,24 @@ import { FaArrowDownLong } from "react-icons/fa6";
 export default function Home() {
   const { isSignedIn, user, isLoaded } = useUser();
 
+  // const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  //
+  // const handleMouseMove = (e: any) => {
+  //   const x = e.clientX / window.innerWidth;
+  //   const y = e.clientY / window.innerHeight;
+  //   setCursorPosition({ x, y });
+  // };
+  //
+  // const coordinateStyles = {
+  //   transform: `translate(-${cursorPosition.x * 30}px, -${cursorPosition.y * 30}px)`,
+  //   transition: "transform 0.5s"
+  // }
+
   return (
     <main>
       <div className="flex w-full items-center justify-center py-28 xs:py-32">
         <div className="flex flex-col gap-72">
-          <div className="flex h-auto flex-col lg:items-start items-center animHeading lg:space-x-8 lg:flex-row">
+          <div className="relative flex h-auto flex-col lg:items-start items-center animHeading lg:space-x-8 lg:flex-row">
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
               <AnimatedTextCharacter className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl text-shadow-lg shadow-stone-500" delay={0.4} interval={0.6} text="Scouting Done Easy."/>
               <SpringAnimatedElement className="text-base sm:text-xl" delay={1.6}>
@@ -123,28 +137,19 @@ export default function Home() {
           </div>
         </div>
         <SpringAnimatedElement delay={1.6} className="fixed z-50 self-center bottom-20 flex items-center flex-col justify-center">
-          <FaArrowDownLong className="mb-3 h-5 w-5 text-white drop-shadow-[0_3px_3px_#9ca3af]"/>
-          <form
-            className="relative h-8 w-52"
-            onSubmit={(e) => {
-              e.preventDefault();
-              window.location.href = `/teams/${(document.querySelector("input") as HTMLInputElement).value}`
-            }}
-          >
-            <input
-              className="h-full w-full pr-2 rounded-full bg-white text-center text-md font-semibold text-black placeholder-neutral-400 placeholder-opacity-100 shadow-md shadow-gray-400"
-              type="text"
-              placeholder="Team Quicksearch"
-            />
-            <button
-              className="absolute items-center justify-center bg-transparent text-black right-0.5 bottom-0.5"
-              onClick={() => {
-                window.location.href = `/teams/${(document.querySelector("input") as HTMLInputElement).value}`
-              }}
-            >
-              <MdSearch className="absolute right-1 bottom-0.5 h-5 w-5"/>
-            </button>
-          </form>
+          <div className="flex items-center justify-center bg-neutral-800 rounded-full h-10 w-40 ">
+            <div className="ml-7 flex gap-5">
+              <FaPeopleGroup
+                onClick={() => window.location.href = "/teams"}
+                className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"/>
+              <hr className="h-5 w-0.5 bg-neutral-600 border-none"/>
+              <MdEventNote
+                onClick={() => window.location.href = "/events"}
+                className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"
+              />
+            </div>
+            <MdSearch className="h-5 w-5 ml-auto mr-2.5 text-neutral-500"/>
+          </div>
         </SpringAnimatedElement>
       </div>
     </main>
