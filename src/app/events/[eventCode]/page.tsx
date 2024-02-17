@@ -138,6 +138,8 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
   const [skillsRanked, setSkillsRanked] = useState<CombinedTeamSkills[]>([])
   const [skillsSort, setSkillsSort] = useState<"total" | "driver" | "prog">("total")
 
+  const [compactMatches, setCompactMatches] = useState<boolean>(false)
+
   useEffect(() => {
     if (skills.length === 0) {
       return
@@ -1034,6 +1036,15 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       placeholder="Label alliances/opponents for..."
                       onChange={(e) => setUsersCurrentTeamNumber(e.target.value)}
                     />
+                    <label className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      className="h-5 w-5"
+                      checked={compactMatches}
+                      onChange={(event) => setCompactMatches(event.target.checked)}
+                    />
+                    <span className="text-sm sm:text-md xl:text-lg">Compact Mode</span>
+                  </label>
                   </div>
                 </div>
                 {matchList.length === 0 && !matchDataIsLoading ?
@@ -1065,6 +1076,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                             toast.error("You must be signed in to view match notes");
                           }
                         }}
+                        compact={compactMatches}
                       />
                     )
                   }) : null}
