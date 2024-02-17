@@ -129,7 +129,7 @@ export default function Favorites() {
                   </select>
                 </div>
               </div>
-              <div className="flex flex-col gap-4 overflow-auto w-[100%]">
+              <div className="flex flex-col gap-2 overflow-auto w-[100%]">
                 {favoriteTeams.length === 0 && !loadingFavorites ? (
                   <h1 className="text-3xl font-semibold text-center text-gray-300">
                     No favorite teams found
@@ -202,7 +202,7 @@ export default function Favorites() {
                   </select>
                 </div>
               </div>
-              <div className="flex flex-col gap-4 overflow-auto w-[100%]">
+              <div className="flex flex-col gap-2 overflow-auto w-[100%]">
                 {favoriteEvents.length === 0 && !loadingFavorites ? (
                   <h1 className="text-3xl font-semibold text-center text-gray-300">
                     No favorite events found

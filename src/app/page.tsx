@@ -10,6 +10,7 @@ import {useUser} from "@clerk/nextjs";
 import {MdSearch} from "react-icons/md";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { MdEventNote } from "react-icons/md";
+import {FaStar} from "react-icons/fa";
 
 
 // Z indexes
@@ -137,8 +138,12 @@ export default function Home() {
           </div>
         </div>
         <SpringAnimatedElement delay={1.6} className="fixed z-50 self-center bottom-[175px] flex items-center flex-col justify-center">
-          <div className="flex items-center justify-center bg-neutral-800 rounded-full h-10 w-40 ">
-            <div className="ml-7 flex gap-5">
+          <div className="flex items-center justify-center bg-neutral-800 rounded-full h-10 w-48">
+            <div className="ml-7 flex gap-3">
+              <FaStar
+                onClick={() => window.location.href = "/favorites"}
+                className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"/>
+              <hr className="h-5 w-0.5 bg-neutral-600 border-none"/>
               <FaPeopleGroup
                 onClick={() => window.location.href = "/teams"}
                 className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"/>
