@@ -39,6 +39,8 @@ import {GoNumber} from "react-icons/go";
 import { FaMapMarkedAlt } from "react-icons/fa";
 import { useGlobalStore } from "@/state/globalState";
 import { RelavancyType } from "@/app/types";
+import { TiDeleteOutline } from "react-icons/ti";
+
 
 const SWROptions = {
   revalidateOnFocus: true,
@@ -824,16 +826,22 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         )
                       })}
                     </select>
-                    <input
-                      className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
-                      type="text"
-                      value={teamNumberFilter}
-                      placeholder="Filter by team..."
-                      onChange={(e) => setTeamNumberFilter(e.target.value)}
-                    />
+                    <div className="relative min-w-max">
+                      <input
+                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                        type="text"
+                        value={teamNumberFilter}
+                        placeholder="Filter by team..."
+                        onChange={(e) => setTeamNumberFilter(e.target.value)}
+                      />
+                      <TiDeleteOutline
+                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
+                        onClick={() => setTeamNumberFilter("")}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="flex flex-col gap-4 w-[100%]">
+                <div className="flex flex-col gap-1 w-[100%]">
                   {teamsIsLoading ?
                     <h1 className="text-2xl font-semibold text-neutral-200">
                       Loading...
@@ -875,6 +883,10 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                           } else {
                             toast.error("You must be signed in to view match notes");
                           }
+                        }}
+                        goToTeamMatches={() => {
+                          setTeamNumberFilter(result.teamNumber);
+                          setTab(TabType.matches);
                         }}
                       />
                     )
@@ -940,13 +952,19 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         )
                       })}
                     </select>
-                    <input
-                      className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
-                      type="text"
-                      value={teamNumberFilter}
-                      placeholder="Filter by team..."
-                      onChange={(e) => setTeamNumberFilter(e.target.value)}
-                    />
+                    <div className="relative min-w-max">
+                      <input
+                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                        type="text"
+                        value={teamNumberFilter}
+                        placeholder="Filter by team..."
+                        onChange={(e) => setTeamNumberFilter(e.target.value)}
+                      />
+                      <TiDeleteOutline
+                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
+                        onClick={() => setTeamNumberFilter("")}
+                      />
+                    </div>
                   </div>
                 </div>
                 {rankingsDataIsLoading ?
@@ -959,7 +977,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     No rankings found, insufficient match data to calculate rankings
                   </h1>
                   : null}
-                <div className="flex flex-col gap-4 overflow-auto w-[100%]">
+                <div className="flex flex-col gap-1 overflow-auto w-[100%]">
                   {rankingsWithMetricsSorted.length !== 0 ? rankingsWithMetricsSorted.map((result: EventRankWithMetrics) => {
                     const foundTeamProfile = participatingTeams.find((team) => team.teamId === result.team.teamId);
                     if (!foundTeamProfile) {
@@ -1022,20 +1040,32 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         )
                       })}
                     </select>
-                    <input
-                      className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
-                      type="text"
-                      value={teamNumberFilter}
-                      placeholder="Filter by team..."
-                      onChange={(e) => setTeamNumberFilter(e.target.value)}
-                    />
-                    <input
-                      className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-72 md:text-lg"
-                      type="text"
-                      value={currentUsersTeamNumber ? currentUsersTeamNumber : ""}
-                      placeholder="Label alliances/opponents for..."
-                      onChange={(e) => setUsersCurrentTeamNumber(e.target.value)}
-                    />
+                    <div className="relative min-w-max">
+                      <input
+                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                        type="text"
+                        value={teamNumberFilter}
+                        placeholder="Filter by team..."
+                        onChange={(e) => setTeamNumberFilter(e.target.value)}
+                      />
+                      <TiDeleteOutline
+                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
+                        onClick={() => setTeamNumberFilter("")}
+                      />
+                    </div>
+                    <div className="relative min-w-max">
+                      <input
+                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-72 md:text-lg"
+                        type="text"
+                        value={currentUsersTeamNumber ? currentUsersTeamNumber : ""}
+                        placeholder="Label alliances/opponents for..."
+                        onChange={(e) => setUsersCurrentTeamNumber(e.target.value)}
+                      />
+                      <TiDeleteOutline
+                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
+                        onClick={() => setUsersCurrentTeamNumber("")}
+                      />
+                    </div>
                     <label className="flex items-center gap-2">
                     <input
                       type="checkbox"
@@ -1111,13 +1141,19 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       <option value="prog">Prog</option>
                       <option value="driver">Driver</option>
                     </select>
-                    <input
-                      className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
-                      type="text"
-                      value={teamNumberFilter}
-                      placeholder="Filter by team..."
-                      onChange={(e) => setTeamNumberFilter(e.target.value)}
-                    />
+                    <div className="relative min-w-max">
+                      <input
+                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                        type="text"
+                        value={teamNumberFilter}
+                        placeholder="Filter by team..."
+                        onChange={(e) => setTeamNumberFilter(e.target.value)}
+                      />
+                      <TiDeleteOutline
+                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
+                        onClick={() => setTeamNumberFilter("")}
+                      />
+                    </div>
                   </div>
                 </div>
                 {skillsDataIsLoading ?
@@ -1130,7 +1166,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     No skills runs found
                   </h1>
                   : null}
-                <div className="flex flex-col gap-4 overflow-auto w-[100%]">
+                <div className="flex flex-col gap-1 overflow-auto w-[100%]">
                   {skillsRanked.length !== 0 ? skillsRanked.map((result: CombinedTeamSkills) => {
                     if (teamNumberFilter !== "" && !result.teamNumber.startsWith(teamNumberFilter.toUpperCase())) {
                       return null;
@@ -1151,13 +1187,19 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     Awards
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
-                    <input
-                      className="h-8 min-w-max rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
-                      type="text"
-                      value={teamNumberFilter}
-                      placeholder="Filter by team..."
-                      onChange={(e) => setTeamNumberFilter(e.target.value)}
-                    />
+                    <div className="relative min-w-max">
+                      <input
+                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                        type="text"
+                        value={teamNumberFilter}
+                        placeholder="Filter by team..."
+                        onChange={(e) => setTeamNumberFilter(e.target.value)}
+                      />
+                      <TiDeleteOutline
+                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
+                        onClick={() => setTeamNumberFilter("")}
+                      />
+                    </div>
                   </div>
                 </div>
                 <p className="mb-10 text-sm font-semibold">

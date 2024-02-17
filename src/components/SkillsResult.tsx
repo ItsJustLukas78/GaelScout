@@ -16,7 +16,7 @@ export default function SkillsResult(
     >
       <div className="flex w-full flex-row">
         <h1 className="mb-2 text-sm font-medium md:text-2xl">
-          <span className="font-bold">{teamNumber}</span> - {teamName}
+          <span className="font-extrabold">{teamNumber}</span> - {teamName}
         </h1>
       </div>
       <div className="flex w-full flex-col gap-2">

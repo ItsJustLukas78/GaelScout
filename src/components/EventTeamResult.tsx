@@ -1,12 +1,14 @@
 import Link from 'next/link'
 import { GiNotebook } from 'react-icons/gi';
+import { GrSchedule } from "react-icons/gr";
 
-export default function EventTeamResult({ teamId, teamNumber, teamName, programCode, teamGrade, location, teamOrg, openMatchNotes } :
-{ teamId: number, teamNumber: string, teamName: string, programCode: string, teamGrade: string, location: string, teamOrg: string, openMatchNotes: (teamId: number) => void}) {
+
+export default function EventTeamResult({ teamId, teamNumber, teamName, programCode, teamGrade, location, teamOrg, openMatchNotes, goToTeamMatches } :
+{ teamId: number, teamNumber: string, teamName: string, programCode: string, teamGrade: string, location: string, teamOrg: string, openMatchNotes: (teamId: number) => void, goToTeamMatches: () => void}) {
   return (
     <Link
       href={`/teams/${teamNumber}`}
-      className="flex h-auto w-full flex-row items-center rounded-2xl bg-neutral-700 p-3 shadow-md shadow-neutral-900 transition-colors duration-200 min-h-20 hover:bg-neutral-600"
+      className="flex w-full flex-row items-center rounded-2xl bg-neutral-700 px-3 shadow-md shadow-neutral-900 transition-colors duration-200 min-h-20 hover:bg-neutral-600"
     >
       <div className="flex flex-col">
         <h1 className="mb-2 text-lg font-bold md:text-2xl">
@@ -20,6 +22,16 @@ export default function EventTeamResult({ teamId, teamNumber, teamName, programC
       </div>
       <button
         className="ml-auto flex items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 sm:text-xl text-lg font-semibold text-black opacity-50 sm:min-w-[50px] sm:min-h-[40px] min-w-[40px] min-h-[30px] disabled:opacity-50 sm:mr-3"
+        onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          goToTeamMatches()
+        }}
+      >
+        <GrSchedule className="inline-block" />
+      </button>
+      <button
+        className="ml-1 flex items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 sm:text-xl text-lg font-semibold text-black opacity-50 sm:min-w-[50px] sm:min-h-[40px] min-w-[40px] min-h-[30px] disabled:opacity-50 sm:mr-3"
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()

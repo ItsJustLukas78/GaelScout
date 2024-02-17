@@ -14,7 +14,7 @@ export default function EventRankComponent({ rank, team }: EventRankComponentPro
     >
       <div className="flex w-full flex-row">
         <h1 className="mb-2 text-sm font-medium md:text-2xl">
-          <span className="font-bold">{team.teamNumber}</span> - {team.teamName}
+          <span className="font-extrabold">{team.teamNumber}</span> - {team.teamName}
         </h1>
       </div>
       <div className="flex w-full flex-col gap-2">
