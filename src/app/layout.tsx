@@ -67,7 +67,7 @@ export default function RootLayout({
           <Navbar />
           <div className="flex w-full justify-center pb-16 sm:pb-0 m-0">
             {/*<QuickSearch />*/}
-            {/*<MobileNav />*/}
+            <MobileNav />
             {children}
             <Analytics />
           </div>
