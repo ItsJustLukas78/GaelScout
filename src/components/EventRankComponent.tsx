@@ -4,9 +4,10 @@ import Link from 'next/link'
 
 interface EventRankComponentProps {
   rank: EventRankWithMetrics,
-  team: TeamProfile
+  team: TeamProfile,
+  statBrackets: {[key: string]: number},
 }
-export default function EventRankComponent({ rank, team }: EventRankComponentProps) {
+export default function EventRankComponent({ rank, team, statBrackets }: EventRankComponentProps) {
   return (
     <Link
       href={`/teams/${team.teamNumber}`}
@@ -36,13 +37,13 @@ export default function EventRankComponent({ rank, team }: EventRankComponentPro
           <h2 className="font-semibold text-2xs md:text-sm">
             {`${rank.wins}-${rank.losses}-${rank.ties}`}
           </h2>
-          <h2 className={`ml-auto font-semibold text-2xs md:text-sm ${rank.opr ? rank.opr > 40 ? "goodGradient" : rank.opr < 25 ? "badGradient" : "midGradient" : ""}`}>
+          <h2 className={`ml-auto font-semibold text-2xs md:text-sm ${rank.opr ? rank.opr > statBrackets.upperOPR ? "goodGradient" : rank.opr < statBrackets.middleOPR ? "badGradient" : "midGradient" : ""}`}>
             OPR:{rank.opr.toFixed(1)}
           </h2>
-          <h2 className={`ml-3 font-semibold text-2xs md:text-sm ${rank.dpr ? rank.dpr < 25 ? "goodGradient" : rank.dpr > 40 ? "badGradient" : "midGradient" : ""}`}>
+          <h2 className={`ml-3 font-semibold text-2xs md:text-sm ${rank.dpr ? rank.dpr < statBrackets.upperDPR ? "goodGradient" : rank.dpr > statBrackets.middleDPR ? "badGradient" : "midGradient" : ""}`}>
             DPR: {rank.dpr.toFixed(1)}
           </h2>
-          <h2 className={`ml-auto font-semibold text-2xs md:text-sm ${rank.ccwm ? rank.ccwm > 30 ? "goodGradient" : rank.ccwm < 15 ? "badGradient" : "midGradient" : ""}`}>
+          <h2 className={`ml-auto font-semibold text-2xs md:text-sm ${rank.ccwm ? rank.ccwm > statBrackets.upperCCWM ? "goodGradient" : rank.ccwm < statBrackets.middleCCWM ? "badGradient" : "midGradient" : ""}`}>
             CCWM: {rank.ccwm.toFixed(1)}
           </h2>
         </div>

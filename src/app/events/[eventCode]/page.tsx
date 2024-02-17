@@ -142,6 +142,11 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
 
   const [compactMatches, setCompactMatches] = useState<boolean>(false)
 
+  const [statBrackets, setStatBrackets] = useState<{[key: string]: number}>({});
+
+  const [reflectVIAStats, setReflectVIAStats] = useState<boolean>(false)
+
+
   useEffect(() => {
     if (skills.length === 0) {
       return
@@ -260,9 +265,13 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
 
   useEffect(() => {
     if (matchList.length !== 0 && participatingTeams.length !== 0 && rankings.length !== 0) {
-      const completedMatches = matchList.filter((match) => {
-        return match.blueScore !== 0 && match.redScore !== 0;
-      });
+      let completedMatches = matchList;
+
+      if (!reflectVIAStats) {
+        completedMatches = matchList.filter((match) => {
+          return match.blueScore !== 0 && match.redScore !== 0;
+        });
+      }
 
       if (completedMatches.length === 0) {
         return;
@@ -383,6 +392,72 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
 
         setRankingsWithMetrics(newRankingsWithMetrics);
 
+        // get the opr, dpr, and ccwm lowest value for the top 20% of teams
+        let upperOPR: number = Infinity;
+        let upperDPR: number = -Infinity;
+        let upperCCWM: number = Infinity;
+
+        // get the opr, dpr, and ccwm lowest value for the middle top 50% of teams
+        let middleOPR: number = Infinity;
+        let middleDPR: number = -Infinity;
+        let middleCCWM: number = Infinity;
+
+        const topOPR = [...newRankingsWithMetrics].sort((a: EventRankWithMetrics, b: EventRankWithMetrics) => {
+          return b.opr - a.opr;
+        })
+
+        const topDPR = [...newRankingsWithMetrics].sort((a: EventRankWithMetrics, b: EventRankWithMetrics) => {
+          return a.dpr - b.dpr;
+        })
+
+        const topCCWM = [...newRankingsWithMetrics].sort((a: EventRankWithMetrics, b: EventRankWithMetrics) => {
+          return b.ccwm - a.ccwm;
+        })
+
+        topOPR.forEach((ranking: EventRankWithMetrics, index: number) => {
+          if (index < topOPR.length * 0.35) {
+            if (ranking.opr < upperOPR) {
+              upperOPR = ranking.opr;
+            }
+          } else if (index < topOPR.length * 0.7) {
+            if (ranking.opr < middleOPR) {
+              middleOPR = ranking.opr;
+            }
+          }
+        })
+
+        topDPR.forEach((ranking: EventRankWithMetrics, index: number) => {
+          if (index < topDPR.length * 0.35) {
+            if (ranking.dpr > upperDPR) {
+              upperDPR = ranking.dpr;
+            }
+          } else if (index < topDPR.length * 0.7) {
+            if (ranking.dpr > middleDPR) {
+              middleDPR = ranking.dpr;
+            }
+          }
+        })
+
+        topCCWM.forEach((ranking: EventRankWithMetrics, index: number) => {
+          if (index < topCCWM.length * 0.1) {
+            if (ranking.ccwm < upperCCWM) {
+              upperCCWM = ranking.ccwm;
+            }
+          } else if (index < topCCWM.length * 0.7) {
+            if (ranking.ccwm < middleCCWM) {
+              middleCCWM = ranking.ccwm;
+            }
+          }
+        })
+
+        setStatBrackets({
+          upperOPR,
+          upperDPR,
+          upperCCWM,
+          middleOPR,
+          middleDPR,
+          middleCCWM
+        })
       } catch (err) {
         console.log(err);
         setRankingsWithMetrics([
@@ -397,7 +472,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
         ]);
       }
     }
-  }, [matchList, participatingTeams, rankings]);
+  }, [matchList, participatingTeams, rankings, reflectVIAStats]);
 
   useEffect(() => {
     if (rankingsWithMetrics.length !== 0) {
@@ -965,6 +1040,15 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         onClick={() => setTeamNumberFilter("")}
                       />
                     </div>
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        className="h-5 w-5"
+                        checked={reflectVIAStats}
+                        onChange={(event) => setReflectVIAStats(event.target.checked)}
+                      />
+                      <span className="text-xs sm:text-md xl:text-lg">Reflect Vex VIA/Account for unscored matches</span>
+                    </label>
                   </div>
                 </div>
                 {rankingsDataIsLoading ?
@@ -993,6 +1077,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         key={foundTeamProfile.teamId}
                         rank={result}
                         team={foundTeamProfile}
+                        statBrackets={statBrackets}
                       />
                     )
                   }) : null}
@@ -1067,14 +1152,14 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       />
                     </div>
                     <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      className="h-5 w-5"
-                      checked={compactMatches}
-                      onChange={(event) => setCompactMatches(event.target.checked)}
-                    />
-                    <span className="text-sm sm:text-md xl:text-lg">Compact Mode</span>
-                  </label>
+                      <input
+                        type="checkbox"
+                        className="h-5 w-5"
+                        checked={compactMatches}
+                        onChange={(event) => setCompactMatches(event.target.checked)}
+                      />
+                      <span className="text-sm sm:text-md xl:text-lg">Compact Mode</span>
+                    </label>
                   </div>
                 </div>
                 {matchList.length === 0 && !matchDataIsLoading ?

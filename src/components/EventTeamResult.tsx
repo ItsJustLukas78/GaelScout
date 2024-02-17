@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { GiNotebook } from 'react-icons/gi';
 import { GrSchedule } from "react-icons/gr";
+import {Event} from "@/app/types";
 
 interface EventTeamResultProps {
   key: string,
@@ -12,11 +13,11 @@ interface EventTeamResultProps {
   location: string,
   teamOrg: string,
   openMatchNotes: (teamId: number) => void,
-  goToTeamMatches?: () => void
+  goToTeamMatches?: () => void,
 }
 
 
-export default function EventTeamResult({ teamId, teamNumber, teamName, programCode, teamGrade, location, teamOrg, openMatchNotes, goToTeamMatches } : EventTeamResultProps) {
+export default function EventTeamResult({ teamId, teamNumber, teamName, programCode, teamGrade, location, teamOrg, openMatchNotes, goToTeamMatches} : EventTeamResultProps) {
   return (
     <Link
       href={`/teams/${teamNumber}`}
