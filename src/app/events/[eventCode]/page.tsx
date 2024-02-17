@@ -869,6 +869,10 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         teamGrade={result.teamGrade}
                         location={locationString}
                         teamOrg={result.teamOrg}
+                        goToTeamMatches={() => {
+                          setTeamNumberFilter(result.teamNumber);
+                          setTab(TabType.matches);
+                        }}
                         openMatchNotes={(teamId: number) => {
                           if (isSignedIn) {
                             const foundTeamProfile = participatingTeams.find((team) => team.teamId === teamId);
@@ -883,10 +887,6 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                           } else {
                             toast.error("You must be signed in to view match notes");
                           }
-                        }}
-                        goToTeamMatches={() => {
-                          setTeamNumberFilter(result.teamNumber);
-                          setTab(TabType.matches);
                         }}
                       />
                     )

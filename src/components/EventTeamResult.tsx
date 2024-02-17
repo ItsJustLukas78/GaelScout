@@ -2,9 +2,21 @@ import Link from 'next/link'
 import { GiNotebook } from 'react-icons/gi';
 import { GrSchedule } from "react-icons/gr";
 
+interface EventTeamResultProps {
+  key: string,
+  teamId: number,
+  teamNumber: string,
+  teamName: string,
+  programCode: string,
+  teamGrade: string,
+  location: string,
+  teamOrg: string,
+  openMatchNotes: (teamId: number) => void,
+  goToTeamMatches?: () => void
+}
 
-export default function EventTeamResult({ teamId, teamNumber, teamName, programCode, teamGrade, location, teamOrg, openMatchNotes, goToTeamMatches } :
-{ teamId: number, teamNumber: string, teamName: string, programCode: string, teamGrade: string, location: string, teamOrg: string, openMatchNotes: (teamId: number) => void, goToTeamMatches: () => void}) {
+
+export default function EventTeamResult({ teamId, teamNumber, teamName, programCode, teamGrade, location, teamOrg, openMatchNotes, goToTeamMatches } : EventTeamResultProps) {
   return (
     <Link
       href={`/teams/${teamNumber}`}
@@ -20,18 +32,20 @@ export default function EventTeamResult({ teamId, teamNumber, teamName, programC
           </h2>
         </div>
       </div>
+      {goToTeamMatches && (
+        <button
+          className="ml-auto flex items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 sm:text-xl text-lg font-semibold text-black opacity-50 sm:min-w-[50px] sm:min-h-[40px] min-w-[40px] min-h-[30px] disabled:opacity-50 sm:mr-3"
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            goToTeamMatches()
+          }}
+        >
+          <GrSchedule className="inline-block" />
+        </button>
+      )}
       <button
-        className="ml-auto flex items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 sm:text-xl text-lg font-semibold text-black opacity-50 sm:min-w-[50px] sm:min-h-[40px] min-w-[40px] min-h-[30px] disabled:opacity-50 sm:mr-3"
-        onClick={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          goToTeamMatches()
-        }}
-      >
-        <GrSchedule className="inline-block" />
-      </button>
-      <button
-        className="ml-1 flex items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 sm:text-xl text-lg font-semibold text-black opacity-50 sm:min-w-[50px] sm:min-h-[40px] min-w-[40px] min-h-[30px] disabled:opacity-50 sm:mr-3"
+        className={`${goToTeamMatches ? "ml-1" : "ml-auto"} ml-1 flex items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 sm:text-xl text-lg font-semibold text-black opacity-50 sm:min-w-[50px] sm:min-h-[40px] min-w-[40px] min-h-[30px] disabled:opacity-50 sm:mr-3`}
         onClick={(e) => {
           e.preventDefault()
           e.stopPropagation()
