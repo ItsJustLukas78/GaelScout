@@ -279,9 +279,12 @@ export default function MatchNotesDialog({
           <AlertDialog.Description asChild>
             <div className={`flex flex-col ${loading ? "animate-pulse" : ""}`}>
               <div className="flex flex-col matchNotesDialogTipTap max-h-[300px]">
-                <h1 className="mb-3 text-xl font-semibold text-neutral-200">
+                <h1 className="text-xl font-semibold text-neutral-200">
                   {currentNotesMatch?.name} - {currentTeam?.teamNumber}
                 </h1>
+                <p className="mt-0.5 mb-2 text-xs font-semibold text-neutral-200">
+                  Click on a team to switch notes quickly
+                </p>
                 <Tiptap setEditor={setCurrentEditor} />
                 <MatchResultNavigator
                   className="mt-5"

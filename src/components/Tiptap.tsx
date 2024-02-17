@@ -54,7 +54,7 @@ const Tiptap = ({setEditor}: TiptapProps) => {
     <>
       {/* Toolbar */}
       {editor &&
-        <div className="mb-5 flex 2xs:flex-row flex-col gap-3 rounded-xl bg-neutral-900 p-2 shadow-md shadow-neutral-900">
+        <div className="mb-4 flex 2xs:flex-row flex-col gap-3 rounded-xl bg-neutral-900 p-1 shadow-md shadow-neutral-900">
           <div className="flex flex-row gap-3">
             <button
               onClick={() => editor.chain().focus().toggleBold().run()}

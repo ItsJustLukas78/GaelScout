@@ -10,7 +10,7 @@ export default function EventRankComponent({ rank, team }: EventRankComponentPro
   return (
     <Link
       href={`/teams/${team.teamNumber}`}
-      className="flex h-auto w-full flex-col items-center rounded-xl bg-neutral-700 p-2 shadow-md shadow-neutral-900 transition-colors duration-200 min-h-28 hover:bg-neutral-600"
+      className="flex h-auto w-full flex-col items-center rounded-xl bg-neutral-700 p-2 shadow-md shadow-neutral-900 transition-colors duration-200 hover:bg-neutral-600"
     >
       <div className="flex w-full flex-row">
         <h1 className="mb-2 text-sm font-medium md:text-2xl">

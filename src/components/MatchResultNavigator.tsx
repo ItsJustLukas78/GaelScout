@@ -23,7 +23,7 @@ export default function MatchResultNavigator(
   return <>
     {eventId ? (
       <div
-        className={`flex h-auto w-full flex-col rounded-xl bg-neutral-700 p-2 shadow-md shadow-neutral-900 min-h-28 ${className}`}
+        className={`flex h-auto w-full flex-col rounded-xl bg-neutral-700 p-2 shadow-md shadow-neutral-900 ${className}`}
       >
         <div className="flex flex-row justify-between">
           <div className="flex flex-col gap-3 text-center w-[55px]">
@@ -40,10 +40,10 @@ export default function MatchResultNavigator(
             </h2>
           </div>
           <div className="flex flex-col justify-center gap-1 text-center w-[55px]">
-            <h2 className="text-xs text-GSGreen">
+            <h2 className="text-2xs text-GSGreen">
               {formattedMatchName}
             </h2>
-            <h2 className="text-xs text-neutral-200">
+            <h2 className="text-2xs text-neutral-200 line-clamp-3">
               {field}
             </h2>
           </div>

@@ -220,7 +220,7 @@ export default function NotesGroupComponent() {
         {checkLeaveConfirmation ? "Sure?" : "Leave"}
       </button>
     </div>
-    <div className="mt-5 flex flex-row gap-3 rounded-xl bg-neutral-900 p-2 px-2 shadow-md shadow-neutral-900">
+    <div className="mt-5 flex flex-row gap-3 rounded-xl bg-neutral-900 p-1 px-2 shadow-md shadow-neutral-900">
       <div className="flex flex-row items-center justify-between w-full">
         <div className="flex flex-row items-center justify-between">
           <input

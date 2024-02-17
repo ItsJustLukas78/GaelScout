@@ -21,12 +21,12 @@ export default function MatchResultTeamLink({ team, mainColor, teamsToRelavancyT
     <Link
       href={`/teams/${team.teamNumber}`}
       className={`${mainColor === "red" ? "text-red-500 hover:text-red-700" : "text-blue-500 hover:text-blue-700"} 
-      ${className ? className : "text-xs sm:text-lg md:text-3xl"}
+      ${className ? className : "text-xs sm:text-lg"}
       ${teamsToRelavancyType[team.teamId] === RelavancyType.self ? "underline" : ""}`
       }
     >
       {team.teamNumber}
-      <span className="ml-1 text-2xs sm:text-sm md:text-xl text-GSGreen">
+      <span className="ml-1 text-2xs sm:text-sm text-GSGreen">
         {teamsToRelavancyType[team.teamId] === RelavancyType.opponent ? <LuSwords /> : null}
         {teamsToRelavancyType[team.teamId] === RelavancyType.alliance ? <FaHandshakeSimple /> : null}
         {teamsToRelavancyType[team.teamId] === RelavancyType.both ? <><LuSwords /> <FaHandshakeSimple /></> : null}
@@ -35,13 +35,15 @@ export default function MatchResultTeamLink({ team, mainColor, teamsToRelavancyT
     :
     <button
       className={`${mainColor === "red" ? "text-red-500" : "text-blue-500"} 
-      ${className ? className : "text-xs sm:text-lg md:text-3xl"}
-      ${teamsToRelavancyType[team.teamId] === RelavancyType.self ? "underline" : ""}`
+      ${className ? className : "text-xs sm:text-lg"}
+      ${teamsToRelavancyType[team.teamId] === RelavancyType.self ? "underline" : ""}
+      flex text-center justify-center items-center h-[49%]
+      `
       }
       onClick={onClick}
     >
       {team.teamNumber}
-      <span className="ml-1 text-2xs sm:text-sm md:text-xl text-GSGreen">
+      <span className="ml-1 text-2xs sm:text-sm text-GSGreen">
         {teamsToRelavancyType[team.teamId] === RelavancyType.opponent ? <LuSwords /> : null}
         {teamsToRelavancyType[team.teamId] === RelavancyType.alliance ? <FaHandshakeSimple /> : null}
         {teamsToRelavancyType[team.teamId] === RelavancyType.both ? <><LuSwords /> <FaHandshakeSimple /></> : null}
