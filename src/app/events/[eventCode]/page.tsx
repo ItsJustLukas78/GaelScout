@@ -32,7 +32,7 @@ import {
 } from "mathjs";
 import useSWR from 'swr'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { FaClipboardList, FaTrophy } from "react-icons/fa";
+import {FaClipboardList, FaRegSadTear, FaTrophy} from "react-icons/fa";
 import { FaRankingStar } from "react-icons/fa6";
 import {GiTrumpet} from "react-icons/gi";
 import {GoNumber} from "react-icons/go";
@@ -40,7 +40,7 @@ import { FaMapMarkedAlt } from "react-icons/fa";
 import { useGlobalStore } from "@/state/globalState";
 import { RelavancyType } from "@/app/types";
 import { TiDeleteOutline } from "react-icons/ti";
-
+import Spinner from "@/components/Spinner";
 
 const SWROptions = {
   revalidateOnFocus: true,
@@ -144,7 +144,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
 
   const [statBrackets, setStatBrackets] = useState<{[key: string]: number}>({});
 
-  const [reflectVIAStats, setReflectVIAStats] = useState<boolean>(false)
+  const [reflectVIAStats, setReflectVIAStats] = useState<boolean>(true)
 
 
   useEffect(() => {
@@ -173,7 +173,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       setDivisionList(eventData.events[0].divisions)
       setCurrentDivision(eventData.events[0].divisions[0])
     } else if (eventDataError) {
-      router.replace("/not-found", undefined)
+      // router.replace("/not-found", undefined)
     }
   }, [eventData, eventDataError])
 
@@ -192,7 +192,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       //     }
       //   }
       // }
-    } else if (teamsError) {
+    } else if (teamsError && !teamsIsLoading) {
       toast.error(teamsError + ": teams data")
     }
   }, [teamsData, teamsError])
@@ -202,7 +202,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
   useEffect(() => {
     if (favoritesData && !favoritesError) {
       setFavorited(favoritesData.favorites.length > 0)
-    } else if (favoritesError) {
+    } else if (favoritesError && !favoritesIsLoading) {
       toast.error(favoritesError + ": favorites data")
     }
   }, [favoritesData, favoritesError])
@@ -530,7 +530,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     if (matchData && !matchDataError) {
       const dateSortedMatches = matchData.matches.sort(customSort);
       setMatchList(dateSortedMatches);
-    } else if (matchDataError) {
+    } else if (matchDataError && !matchDataIsLoading) {
       toast.error(matchDataError + ": match data")
     }
   }, [matchData])
@@ -544,7 +544,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       });
 
       setRankings(rankSortedRankings);
-    } else if (rankingsDataError) {
+    } else if (rankingsDataError && !rankingsDataIsLoading) {
       toast.error(rankingsDataError + ": rankings data")
     }
   }, [rankingsData])
@@ -808,7 +808,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     </button>
                   </h3>
                   <h3 className="text-sm sm:text-lg">
-                    {eventObject.location.venue ? eventObject.location.venue + ' @ ' : ''}{eventObject.location.city ? eventObject.location.city + ", " : ""}{eventObject.location.region + ", "}{eventObject.location.country}
+                    {eventObject?.location.venue ? eventObject.location.venue + ' @ ' : ''}{eventObject.location.city ? eventObject.location.city + ", " : ""}{eventObject.location.region + ", "}{eventObject.location.country}
                   </h3>
                 </div>
                 <div className="flex flex-col">
@@ -816,7 +816,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     SKU:
                   </h3>
                   <h3 className="text-sm sm:text-lg">
-                    {eventObject.sku}
+                    {eventObject?.sku}
                   </h3>
                 </div>
               </div>
@@ -1336,7 +1336,23 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </TabsContent>
             </div>
           </Tabs>
-        </> : null}
+        </> : eventDataIsLoading ? <>
+          <div className="flex flex-col items-center justify-center">
+            <h1 className="text-3xl font-bold text-neutral-200">
+              Loading...
+            </h1>
+            <div className="w-20 h-20 mt-5 flex items-center justify-center">
+              <Spinner/>
+            </div>
+          </div>
+        </>
+        : <div className="flex flex-col items-center justify-center">
+            <h1 className="italic text-3xl font-bold text-neutral-200">
+              Event not found
+              <FaRegSadTear className="inline-block ml-2"/>
+            </h1>
+          </div>
+        }
       </div>
     </main>
   )

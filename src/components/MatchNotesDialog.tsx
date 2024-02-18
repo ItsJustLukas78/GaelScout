@@ -48,22 +48,6 @@ export default function MatchNotesDialog({
 
   const [loading, setLoading] = useState(false)
 
-  const [currentMatchIndex, setCurrentMatchIndex] = useState(
-    matchList?.findIndex((match) => {
-      return match.id === currentNotesMatch?.id
-    }) || 0
-  )
-
-  useEffect(() => {
-    if (matchList.length === 0 || !currentNotesMatch) {
-      return;
-    }
-
-    setCurrentMatchIndex(matchList.findIndex((match) => {
-      return match.id === currentNotesMatch.id
-    }))
-  }, [matchList, currentNotesMatch])
-
   const changeTeamNotes = (team: TeamIdentifiers) => {
     if (!currentEditor) {
       return;
@@ -297,8 +281,12 @@ export default function MatchNotesDialog({
                   <button
                     className="flex h-5 w-10 items-center justify-center text-xl font-semibold text-white"
                     onClick={() => {
-                      if (currentMatchIndex !== 0) {
-                        saveNotesAndChangeMatch(false, matchList[currentMatchIndex - 1])
+                      const index = matchList?.findIndex((match) => {
+                        return match.id === currentNotesMatch?.id
+                      }) || 0
+
+                      if (index !== 0) {
+                        saveNotesAndChangeMatch(false, matchList[index - 1])
                       }
                     }}
                   >
@@ -313,8 +301,11 @@ export default function MatchNotesDialog({
                   <button
                     className="flex h-5 w-10 items-center justify-center text-xl font-semibold text-white"
                     onClick={() => {
-                      if (currentMatchIndex !== matchList.length - 1) {
-                        saveNotesAndChangeMatch(false, matchList[currentMatchIndex + 1])
+                      const index = matchList?.findIndex((match) => {
+                        return match.id === currentNotesMatch?.id
+                      }) || 0
+                      if (index !== matchList.length - 1) {
+                        saveNotesAndChangeMatch(false, matchList[index + 1])
                       }
                     }}
                   >
