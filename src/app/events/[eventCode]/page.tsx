@@ -193,7 +193,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       //   }
       // }
     } else if (teamsError && !teamsIsLoading) {
-      toast.error(teamsError + ": teams data")
+      // toast.error(teamsError + ": teams data")
     }
   }, [teamsData, teamsError])
 
@@ -203,7 +203,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     if (favoritesData && !favoritesError) {
       setFavorited(favoritesData.favorites.length > 0)
     } else if (favoritesError && !favoritesIsLoading) {
-      toast.error(favoritesError + ": favorites data")
+      // toast.error(favoritesError + ": favorites data")
     }
   }, [favoritesData, favoritesError])
 
@@ -213,7 +213,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     if (awardsData && !awardsError) {
       setAwards(awardsData.awards)
     } else if (awardsError) {
-      toast.error(awardsError + ": awards data")
+      // toast.error(awardsError + ": awards data")
     }
   }, [awardsData, awardsError])
 
@@ -531,7 +531,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       const dateSortedMatches = matchData.matches.sort(customSort);
       setMatchList(dateSortedMatches);
     } else if (matchDataError && !matchDataIsLoading) {
-      toast.error(matchDataError + ": match data")
+      // toast.error(matchDataError + ": match data")
     }
   }, [matchData])
 
@@ -545,7 +545,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
 
       setRankings(rankSortedRankings);
     } else if (rankingsDataError && !rankingsDataIsLoading) {
-      toast.error(rankingsDataError + ": rankings data")
+      // toast.error(rankingsDataError + ": rankings data")
     }
   }, [rankingsData])
 
@@ -610,7 +610,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
 
       setSkills(teamSkills);
     } else if (skillsDataError) {
-      toast.error(skillsDataError + ": skills data")
+      // toast.error(skillsDataError + ": skills data")
     }
   }, [skillsData, participatingTeams])
 
