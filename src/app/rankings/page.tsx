@@ -220,7 +220,7 @@ export default function RankingsPage() {
   const [showPerfStats, setShowMatchStats] = useState(true);
   const [showSkills, setShowSkills] = useState(true);
   const [showQuals, setShowQuals] = useState(true);
-  const [showBackgroundInfo, setShowBackgroundInfo] = useState(true);
+  const [showLocationInfo, setShowLocationInfo] = useState(true);
 
 
   useEffect(() => {
@@ -474,25 +474,25 @@ export default function RankingsPage() {
                   <input
                     type="checkbox"
                     className="h-5 w-5"
-                    checked={showBackgroundInfo}
-                    onChange={(event) => setShowBackgroundInfo(event.target.checked)}
+                    checked={showLocationInfo}
+                    onChange={(event) => setShowLocationInfo(event.target.checked)}
                   />
-                  <span className="text-sm sm:text-md xl:text-lg">Background Info</span>
+                  <span className="text-sm sm:text-md xl:text-lg">Location Info</span>
                 </label>
               </div>
             </div>
           </div>
-          {/*<div className="mb-10 flex flex-col gap-5 lg:flex-row">*/}
-          {/*  <h3 className="font-light text-md sm:text-xl">*/}
-          {/*    Teams Analyzed: 1623*/}
-          {/*  </h3>*/}
-          {/*  <h3 className="font-light text-md sm:text-xl">*/}
-          {/*    Qualled to Worlds: 23*/}
-          {/*  </h3>*/}
-          {/*  <h3 className="font-light text-md sm:text-xl">*/}
-          {/*    Qualled to Regionals: 234*/}
-          {/*  </h3>*/}
-          {/*</div>*/}
+          <div className="mb-10 flex flex-col gap-5 lg:flex-row">
+            <h3 className="font-light text-md sm:text-xl">
+              Teams Analyzed: 1623
+            </h3>
+            <h3 className="font-light text-md sm:text-xl">
+              Qualled to Worlds: 23
+            </h3>
+            <h3 className="font-light text-md sm:text-xl">
+              Qualled to Regionals: 234
+            </h3>
+          </div>
           <div className="flex flex-row overflow-auto w-[100%] mb-2">
             <table className="bg-black sticky left-0 table-auto border-separate w-[10%]">
               <thead>
@@ -554,7 +554,7 @@ export default function RankingsPage() {
                       <th>Worlds Qualled</th>
                     </>
                   ) : null}
-                  {showBackgroundInfo ? (
+                  {showLocationInfo ? (
                     <>
                       <th>Country</th>
                       <th>Region</th>
@@ -589,7 +589,7 @@ export default function RankingsPage() {
                           <td>{result.awardQualToWorlds ? "Yes" : "No"}</td>
                         </>
                       ) : null}
-                      {showBackgroundInfo ? (
+                      {showLocationInfo ? (
                         <>
                           <td>{result.TeamProfile?.teamCountry}</td>
                           <td>{result.TeamProfile?.teamEventRegion || result.TeamProfile?.teamRegion}</td>

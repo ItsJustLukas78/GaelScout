@@ -41,6 +41,10 @@ import { useGlobalStore } from "@/state/globalState";
 import { RelavancyType } from "@/app/types";
 import { TiDeleteOutline } from "react-icons/ti";
 import Spinner from "@/components/Spinner";
+import { FaCircleInfo } from "react-icons/fa6";
+import { CiExport } from "react-icons/ci";
+
+
 
 const SWROptions = {
   revalidateOnFocus: true,
@@ -439,7 +443,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
         })
 
         topCCWM.forEach((ranking: EventRankWithMetrics, index: number) => {
-          if (index < topCCWM.length * 0.1) {
+          if (index < topCCWM.length * 0.35) {
             if (ranking.ccwm < upperCCWM) {
               upperCCWM = ranking.ccwm;
             }
@@ -869,16 +873,17 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
             <div
               className="relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 mb-10 sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
               <TabsContent value="teams">
-                <div className="mb-10 flex flex-col justify-between xl:flex-row">
+                <div className="mb-5 flex flex-col justify-between xl:flex-row">
                   <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
                     Teams
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
                     <button
-                      className="h-8 min-w-max rounded-lg bg-white text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      className="h-8 min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
                       onClick={() => setExportDialogOpen(true)}
                     >
                       Generate Scout Sheet
+                      <CiExport className="inline-block mx-1 mb-0.5"/>
                     </button>
                     <select
                       className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
@@ -915,6 +920,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       />
                     </div>
                   </div>
+                  <div className="flex flex-row gap-3 mt-2">
+                    <FaCircleInfo className="text-xl text-neutral-200 align-middle"/>
+                    <p className="italic text-sm text-neutral-200 align-baseline">
+                      View a team&apos;s profile, schedule, and notes
+                    </p>
+                  </div>
                 </div>
                 <div className="flex flex-col gap-1 w-[100%]">
                   {teamsIsLoading ?
@@ -947,6 +958,8 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         goToTeamMatches={() => {
                           setTeamNumberFilter(result.teamNumber);
                           setTab(TabType.matches);
+                          // go to top of mathes
+
                         }}
                         openMatchNotes={(teamId: number) => {
                           if (isSignedIn) {
@@ -985,16 +998,17 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   : null}
               </TabsContent>
               <TabsContent value="rankings">
-                <div className="mb-10 flex flex-col">
+                <div className="mb-5 flex flex-col">
                   <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
                     Rankings
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
                     <button
-                      className="h-8 min-w-max rounded-lg bg-white text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
+                      className="h-8 min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
                       onClick={() => setRankingsExportDialogOpen(true)}
                     >
                       Generate Scout Sheet
+                      <CiExport className="inline-block mx-1 mb-0.5"/>
                     </button>
                     <select
                       className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
@@ -1050,6 +1064,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       <span className="text-xs sm:text-md xl:text-lg">Reflect Vex VIA/Account for unscored matches</span>
                     </label>
                   </div>
+                  <div className="flex flex-row gap-3 mt-2">
+                    <FaCircleInfo className="text-xl text-neutral-200 align-middle"/>
+                    <p className="italic text-sm text-neutral-200 align-baseline">
+                      Green = Top 35%, Yellow = Top 70%, Red = Bottom 30% of teams
+                    </p>
+                  </div>
                 </div>
                 {rankingsDataIsLoading ?
                   <h1 className="text-2xl font-semibold text-neutral-200">
@@ -1091,13 +1111,13 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                 />
               </TabsContent>
               <TabsContent value="matches">
-                <div className="mb-10 flex flex-col justify-between">
+                <div className="mb-5 flex flex-col justify-between">
                   <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
                     Matches
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
                     <button
-                      className="h-8 min-w-max rounded-lg bg-white text-sm text-black disabled:opacity-50 sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      className="h-8 min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black disabled:opacity-50 sm:w-44 md:h-12 md:w-52 md:text-lg"
                       onClick={() => {
                         if (!isSignedIn) {
                           toast.error("You must be signed in to view match notes");
@@ -1107,7 +1127,8 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         }
                       }}
                     >
-                      Match Notes
+                      View Match Notes
+                      <FaClipboardList className="inline-block mx-1 mb-1"/>
                     </button>
                     <select
                       className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
@@ -1161,6 +1182,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       <span className="text-sm sm:text-md xl:text-lg">Compact Mode</span>
                     </label>
                   </div>
+                  <div className="flex flex-row gap-3 mt-2">
+                    <FaCircleInfo className="text-xl text-neutral-200 align-middle"/>
+                    <p className="italic text-sm text-neutral-200 align-baseline">
+                      View match details, notes, relavancy to your team, and make predictions
+                    </p>
+                  </div>
                 </div>
                 {matchList.length === 0 && !matchDataIsLoading ?
                   <h1 className="text-2xl font-semibold text-neutral-200">
@@ -1209,7 +1236,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   : null}
               </TabsContent>
               <TabsContent value="skills">
-                <div className="mb-10 flex flex-col justify-between xl:flex-row">
+                <div className="mb-5 flex flex-col justify-between xl:flex-row">
                   <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
                     Skills
                   </h3>
@@ -1239,6 +1266,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         onClick={() => setTeamNumberFilter("")}
                       />
                     </div>
+                  </div>
+                  <div className="flex flex-row gap-3 mt-2">
+                    <FaCircleInfo className="text-xl text-neutral-200 align-middle"/>
+                    <p className="italic text-sm text-neutral-200 align-baseline">
+                      View skills scores, and their rankings
+                    </p>
                   </div>
                 </div>
                 {skillsDataIsLoading ?
