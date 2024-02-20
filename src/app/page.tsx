@@ -3,9 +3,9 @@ import CorneredButton from '@/components/CorneredButton'
 import Image from 'next/image'
 import Link from 'next/link'
 import Tilt from 'react-parallax-tilt';
-import React, {useState} from "react";
-import AnimatedTextCharacter from "@/components/AnimatedTextCharacter";
-import SpringAnimatedElement from "@/components/SpringAnimatedElement";
+import React from "react";
+// import AnimatedTextCharacter from "@/components/AnimatedTextCharacter";
+// import SpringAnimatedElement from "@/components/SpringAnimatedElement";
 import {useUser} from "@clerk/nextjs";
 import {MdSearch} from "react-icons/md";
 import { FaPeopleGroup } from "react-icons/fa6";
@@ -39,20 +39,22 @@ export default function Home() {
         <div className="flex flex-col gap-72">
           <div className="relative flex h-auto flex-col lg:items-start items-center animHeading lg:space-x-8 lg:flex-row">
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
-              <AnimatedTextCharacter className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl text-shadow-lg shadow-[var(--color-tertiary-hover)]" delay={0.4} interval={0.6} text="Scouting Done Easy."/>
-              <SpringAnimatedElement className="text-base sm:text-xl" delay={1.6}>
+              <h1 className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl text-shadow-lg shadow-[var(--color-tertiary-hover)]">
+                Scouting Done Easy.
+              </h1>
+              <h1 className="text-base sm:text-xl">
                 Enhance your VEX Robotics scouting with GaelScout – your all-in-one solution for team data, match results, rankings, efficient note-taking, and a competitive edge.
-              </SpringAnimatedElement>
-              <SpringAnimatedElement delay={1.6} className="">
+              </h1>
+              <div>
                 {isSignedIn ? (
                   <p className="text-base sm:text-xl">
                     Enjoy your smooth scouting experience with GaelScout, {user.firstName}!
                   </p>
                   )
                 : <>
-                  <SpringAnimatedElement className="text-base sm:text-xl mb-8" delay={1.6}>
+                  <p className="text-base sm:text-xl mb-8">
                     Enjoy your smooth scouting experience with GaelScout! Sign up to access all features.
-                  </SpringAnimatedElement>
+                  </p>
                   <Link href="sign-up">
                     <CorneredButton className="h-8 w-33 text-2xl font-semibold">
                       Sign Up
@@ -60,10 +62,10 @@ export default function Home() {
                   </Link>
                   </>
                 }
-              </SpringAnimatedElement>
+              </div>
             </div>
             <div className="hidden max-w-[600px] lg:block">
-              <SpringAnimatedElement className="hidden max-w-lg lg:flex lg:flex-col" delay={1.6}>
+              <div className="hidden max-w-lg lg:flex lg:flex-col">
                  <Tilt
                   tiltMaxAngleX={20}
                   tiltMaxAngleY={20}
@@ -76,10 +78,10 @@ export default function Home() {
                 >
                   <Image priority={true} src="/homeblob2.svg" alt="Robotics Students" width="400" height="200" className="transition-all hover:rotate-6"/>
                 </Tilt>
-              </SpringAnimatedElement>
+              </div>
             </div>
           </div>
-          <SpringAnimatedElement className="flex h-auto flex-col items-center pb-16 animHeading lg:space-x-8 lg:flex-row" delay={1.6}>
+          <div className="flex h-auto flex-col items-center pb-16 animHeading lg:space-x-8 lg:flex-row">
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
               <div className="text-4xl font-bold xs:text-5xl sm:text-7xl text-shadow-lg shadow-stone-500">
                 Developed by members of Gael Force Robotics
@@ -120,7 +122,7 @@ export default function Home() {
                 </iframe>
               </div>
             </div>
-          </SpringAnimatedElement>
+          </div>
           <div className="-mt-64 flex-col items-center lg:hidden flex">
             <iframe
               className="rounded-xl sm:hidden block"
@@ -138,7 +140,7 @@ export default function Home() {
             </iframe>
           </div>
         </div>
-        <SpringAnimatedElement delay={1.6} className="fixed z-50 self-center bottom-[175px] flex items-center flex-col justify-center">
+        <div className="fixed z-50 self-center bottom-[175px] flex items-center flex-col justify-center">
           <div className="flex items-center justify-center bgColorPrimary rounded-full h-10 w-48">
             <div className="ml-7 flex gap-3">
               <FaStar
@@ -156,7 +158,7 @@ export default function Home() {
             </div>
             <MdSearch className="h-5 w-5 ml-auto mr-2.5 text-neutral-500"/>
           </div>
-        </SpringAnimatedElement>
+        </div>
       </div>
     </main>
   )
