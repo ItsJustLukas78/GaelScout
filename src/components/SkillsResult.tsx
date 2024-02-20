@@ -15,7 +15,7 @@ export default function SkillsResult(
       className="flex h-auto w-full flex-col rounded-xl bgColorSecondary p-2 px-3 shadow-lg shadow-neutral-900 transition-colors duration-200 hover:bgColorSecondaryHover"
     >
       <div className="flex w-full flex-row">
-        <h1 className="mb-2 text-sm font-medium md:text-2xl outlinedText">
+        <h1 className="mb-2 text-sm font-medium md:text-2xl outlinedText line-clamp-2">
           <span className="font-extrabold">{teamNumber}</span> - {teamName}
         </h1>
       </div>

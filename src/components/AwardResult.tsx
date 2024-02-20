@@ -59,13 +59,13 @@ export default function AwardResult(
       <div className="flex flex-col gap-2 outlinedText">
         {returnAwardIcon(name)}
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 max-w-[85%]">
         <h1 className="mb-2 text-sm font-semibold md:text-lg outlinedText">
           {name}
         </h1>
         <div className="flex flex-col gap-2">
-          <h2 className="text-xs font-medium md:text-sm outlinedText">
-            Winner: {team.teamNumber} - {team.teamName}
+          <h2 className="text-xs font-medium md:text-sm outlinedText line-clamp-2">
+            Winner: {team.teamNumber} - {team.teamName}ejnwognewog newoig jewoignewoigjew
           </h2>
           <h2 className="text-xs font-medium md:text-sm outlinedText">
             Qualifications: {qualification ?? 'N/A'}

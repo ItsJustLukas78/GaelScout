@@ -364,8 +364,8 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                 <u>RobotEvents Page</u>
               </a>
               <div className="flex flex-col gap-5 min-w-auto xl:flex-row xl:gap-14">
-                <div className="flex min-w-fit flex-row gap-5 xl:flex-col">
-                  <div className="flex flex-col w-[49%] xl:w-auto">
+                <div className="flex xl:w-[30%] flex-row gap-5 xl:flex-col">
+                  <div className="flex flex-col w-[49%] xl:w-auto truncate">
                     <h3 className="text-xl font-bold">
                       Name:
                     </h3>
@@ -373,7 +373,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                       {teamProfile.teamName ? teamProfile.teamName : "N/A"}
                     </h3>
                   </div>
-                  <div className="flex flex-col w-[49%] xl:w-auto">
+                  <div className="flex flex-col w-[49%] xl:w-auto truncate">
                     <h3 className="text-xl font-bold">
                       Robot Name:
                     </h3>
@@ -382,7 +382,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </h3>
                   </div>
                 </div>
-                <div className="flex min-w-fit flex-row gap-5 xl:flex-col">
+                <div className="flex xl:w-[30%] flex-row gap-5 xl:flex-col">
                   <div className="flex flex-col w-[49%] xl:w-auto">
                     <h3 className="text-xl font-bold">
                       Org:
@@ -402,7 +402,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </h3>
                   </div>
                 </div>
-                <div className="flex min-w-fit flex-row gap-5 xl:flex-col">
+                <div className="flex xl:w-[30%] flex-row gap-5 xl:flex-col">
                   <div className="flex flex-col w-[49%] xl:w-auto">
                     <h3 className="text-xl font-bold">
                       Program:
