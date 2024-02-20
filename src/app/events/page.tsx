@@ -340,7 +340,7 @@ export default function Events() {
           </div>
         </div>
         {/*list events*/}
-        <div className="flex flex-col items-center justify-center [&>div]:min-w-72 xs:[&>div]:w-80 sm:[&>div]:w-112 md:[&>div]:w-168">
+        <div className="flex flex-col items-center justify-center [&>div]:w-80 xs:[&>div]:w-80 sm:[&>div]:w-112 md:[&>div]:w-168">
           <hr className="border-2 border-gray-500 my-10 w-[70%] xs:w-80 sm:w-112 md:w-168" />
           <div className="flex flex-col items-center justify-center mb-3 gap-2 w-full">
             {displayedEvents.map((event: Event) => {

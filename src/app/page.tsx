@@ -6,6 +6,7 @@ import Tilt from 'react-parallax-tilt';
 import React from "react";
 // import AnimatedTextCharacter from "@/components/AnimatedTextCharacter";
 // import SpringAnimatedElement from "@/components/SpringAnimatedElement";
+import Balancer from 'react-wrap-balancer'
 import {useUser} from "@clerk/nextjs";
 import {MdSearch} from "react-icons/md";
 import { FaPeopleGroup } from "react-icons/fa6";
@@ -39,13 +40,13 @@ export default function Home() {
         <div className="flex flex-col gap-72">
           <div className="relative flex h-auto flex-col lg:items-start items-center animHeading lg:space-x-8 lg:flex-row">
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
-              <h1 className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl text-shadow-lg shadow-[var(--color-tertiary-hover)]">
+              <Balancer className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl text-shadow-lg shadow-[var(--color-tertiary-hover)]">
                 Scouting Done Easy.
-              </h1>
-              <h1 className="text-base sm:text-xl">
+              </Balancer>
+              <Balancer className="text-base sm:text-xl">
                 Enhance your VEX Robotics scouting with GaelScout – your all-in-one solution for team data, match results, rankings, efficient note-taking, and a competitive edge.
-              </h1>
-              <div>
+              </Balancer>
+              <Balancer>
                 {isSignedIn ? (
                   <p className="text-base sm:text-xl">
                     Enjoy your smooth scouting experience with GaelScout, {user.firstName}!
@@ -62,7 +63,7 @@ export default function Home() {
                   </Link>
                   </>
                 }
-              </div>
+              </Balancer>
             </div>
             <div className="hidden max-w-[600px] lg:block">
               <div className="hidden max-w-lg lg:flex lg:flex-col">
@@ -83,27 +84,27 @@ export default function Home() {
           </div>
           <div className="flex h-auto flex-col items-center pb-16 animHeading lg:space-x-8 lg:flex-row">
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
-              <div className="text-4xl font-bold xs:text-5xl sm:text-7xl text-shadow-lg shadow-stone-500">
+              <Balancer className="text-4xl font-bold xs:text-5xl sm:text-7xl text-shadow-lg shadow-stone-500">
                 Developed by members of Gael Force Robotics
-              </div>
-              <p className="text-base sm:text-xl">
+              </Balancer>
+              <Balancer className="text-base sm:text-xl">
                 GaelScout was developed by Gael Force Robotics students, for students.
-              </p>
-              <p className="text-base sm:text-xl">
+              </Balancer>
+              <Balancer className="text-base sm:text-xl">
                 Scouting teams can be challenging, with a vast amount of participants,
                 few to no reliable methods of communication, limited resources, and
                 difficulty distinguishing teams from one another in competition.
-              </p>
-              <p className="text-base sm:text-xl">
+              </Balancer>
+              <Balancer className="text-base sm:text-xl">
                 GaelScout&apos;s history originates back in 2019, starting as an app offering
                 team information and scouting notes, with a neural network match predictor
                 as its standout feature.
-              </p>
-              <p className="text-base sm:text-xl">
+              </Balancer>
+              <Balancer className="text-base sm:text-xl">
                 Our members have brought back GaelScout, now serving the features of VEX Via,
                 VEX DB, and its predecessor in a single application, dependent only on RobotEvents,
                 to tackle these challenges.
-              </p>
+              </Balancer>
             </div>
             <div className="hidden max-w-[426px] lg:block">
               <div className="hidden max-w-lg flex-row flex-wrap lg:flex xl:max-w-128">
