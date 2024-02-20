@@ -7,7 +7,7 @@ export default function EventResult({ id, sku, name, start, location, dark=true,
       href={`/events/${sku}${defaultTeam ? `?team=${defaultTeam}` : ''}`}
       className={`flex h-auto w-full flex-col rounded-xl p-2 shadow-lg transition-colors duration-200 ${dark ? 'bgColorSecondary shadow-neutral-900 hover:bgColorSecondaryHover' : 'bgColorSecondary shadow-neutral-800 hover:bgColorSecondaryHover'}`}
     >
-      <h1 className="text-sm mb-1 font-semibold md:text-lg line-clamp-1 w-full outlinedText">
+      <h1 className="text-sm mb-1 font-semibold md:text-lg w-full outlinedText">
         {name}
       </h1>
       <div className="flex flex-col gap-1">

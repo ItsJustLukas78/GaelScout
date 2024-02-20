@@ -321,8 +321,8 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
   return (
     <div>
       <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32 overflow-hidden">
-        <div className={`relative flex h-auto flex-col rounded-2xl justify-center card-shine-effect ${teamNumberInput ? "sm:bgColorPrimary" : "!w-full items-center sm:bg-none"} sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px] transition-all ease-in-out duration-1000`}>
-          <div className={`relative ${teamNumberInput ? "[&>div]:opacity-0" : "sm:w-168 w-96 flex justify-center [&>div]:opacity-100"} [&>div]:[transition:transform_10s,opacity_1s] [&>div]:transition-opacity [&>div]:ease-in-out`}>
+        <div className={`relative flex h-auto flex-col rounded-2xl justify-center ${teamNumberInput ? "sm:bgColorPrimary card-shine-effect" : "!w-full items-center sm:bg-none"} sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px] transition-all ease-in-out duration-1000`}>
+          <div className={`relative ${teamNumberInput ? "[&>div]:opacity-0" : "sm:w-168 w-96 [&>div]:opacity-100 items-center"} flex flex-col justify-center [&>div]:[transition:transform_10s,opacity_1s] [&>div]:transition-opacity [&>div]:ease-in-out`}>
             <div className="absolute top-0 left-12 w-32 h-32 sm:w-72 sm:h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
             <div className="absolute top-0 right-12 w-32 h-32 sm:w-72 sm:h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
             <div className="absolute -bottom-20 w-32 h-32 sm:w-72 sm:h-72 bg-green-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
@@ -341,6 +341,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
               }}
             >
             </input>
+            <hr className={`border-2 border-gray-500 w-3/4 sm:w-5/6 ${teamNumberInput ? "opacity-0" : "opacity-100"}`} />
           </div>
           {teamProfile ? <>
             <div className="absolute max-w-max top-0.5 right-0.5 sm:top-4 sm:right-4 outlinedText">
@@ -699,7 +700,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                   </select>
                 </div>
               </div>
-              <div className="flex flex-col gap-4 p-1 overflow-auto w-[100%]">
+              <div className="flex flex-col gap-4 p-1 w-[100%]">
                 {currentEvents.length !== 0 && currentEvents.map((result: Event) => {
                   const locationString = `${result.location.venue ? result.location.venue + ' @ ' : ''}${result.location.city ? result.location.city + ", " : ""}${result.location.region ? result.location.region + ", " : ""}${result.location.country}`;
 

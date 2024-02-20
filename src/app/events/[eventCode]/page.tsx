@@ -899,7 +899,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         setCurrentTeamsDivision(newValue);
                       }}
                     >
-                      <option value={-1} key={-1}>All</option>
+                      <option value={-1} key={-1}>All Divisions</option>
                       {divisionList.map((division) => {
                         return (
                           <option key={division.id} value={division.id}>{division.name}</option>
@@ -1018,7 +1018,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         setRankedStatistic(event.target.value);
                       }}
                     >
-                      <option value="rank">Rank</option>
+                      <option value="rank">Filter by Rank</option>
                       <option value="opr">OPR (Contrib. to score)</option>
                       <option value="dpr">DPR (Contrib. to opp score)</option>
                       <option value="ccwm">CCWM (OPR - DPR)</option>
