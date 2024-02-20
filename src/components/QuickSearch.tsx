@@ -23,7 +23,7 @@ export default function QuickSearch() {
 
   return (
     <div
-      className={`fixed z-50 items-center justify-center bg-neutral-700 rounded-full w-52 h-10 2xs:w-72 2xs:h-12 p-1 transition-all duration-500 bottom-20 ${hidden ? "!-left-[280px]" : ""} ${fullyHidden ? "hidden" : ""}`}
+      className={`fixed z-50 items-center justify-center bgColorSecondary rounded-full w-52 h-10 2xs:w-72 2xs:h-12 p-1 transition-all duration-500 bottom-20 ${hidden ? "!-left-[280px]" : ""} ${fullyHidden ? "hidden" : ""}`}
     >
       <form
         className="relative h-full w-full"
@@ -51,7 +51,7 @@ export default function QuickSearch() {
         className="relative flex justify-center"
       >
         <button
-          className={`absolute flex items-center text-white justify-center bg-neutral-700 w-6 h-7 ${hidden ? "-right-[23px] bottom-1.5 rounded-r-xl" : "-left-[23px] bottom-1.5 rounded-l-xl"}`}
+          className={`absolute flex items-center text-white justify-center bgColorSecondary w-6 h-7 ${hidden ? "-right-[23px] bottom-1.5 rounded-r-xl" : "-left-[23px] bottom-1.5 rounded-l-xl"}`}
           onClick={() => {
             setHidden(!hidden);
           }}

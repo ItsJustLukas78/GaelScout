@@ -204,14 +204,14 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
     >
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="z-50 bg-black opacity-70 data-[state=open]:animate-overlayShow fixed inset-0" />
-        <AlertDialog.Content className="flex flex-col z-50 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] min-h-[550px] w-[300px] 2xs:min-h-[650px] 2xs:w-[350px] max-h-full translate-x-[-50%] translate-y-[-50%] rounded-[10px] bg-neutral-800 p-[22px] focus:outline-none overflow-y-auto">
+        <AlertDialog.Content className="flex flex-col z-50 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] min-h-[550px] w-[300px] 2xs:min-h-[650px] 2xs:w-[350px] max-h-full translate-x-[-50%] translate-y-[-50%] rounded-[10px] bgColorPrimary p-[22px] focus:outline-none overflow-y-auto">
           <AlertDialog.Title className="mb-5 text-xl font-bold">
             Team Notes
           </AlertDialog.Title>
           <AlertDialog.Description asChild>
             <div className={`flex flex-col ${loading ? "animate-pulse" : ""}`}>
               <div className="flex flex-col teamNotesDialogTipTap max-h-[300px]">
-                <h1 className="mb-5 text-2xl font-semibold text-neutral-200">
+                <h1 className="mb-5 text-2xl font-semibold ">
                   {currentNotesTeam?.teamNumber}
                 </h1>
                 <Tiptap setEditor={setCurrentEditor} />

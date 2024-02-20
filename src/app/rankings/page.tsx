@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {TeamSeasonProfile, RankableStatistic, Region, Country} from "@/app/types";
 import LoadMore from "@/components/LoadMore";
+import useSWR from "swr";
 
 
 const countries: any = {
@@ -198,6 +199,23 @@ const eventRegions = [
   "Zimbabwe"
 ];
 
+const SWROptions = {
+  revalidateOnFocus: false,
+  revalidateOnReconnect: false,
+  refreshWhenHidden: false,
+  refreshWhenOffline: false,
+}
+
+// @ts-ignore
+const fetcher = (...args: any[]) => fetch(...args).then(res => {
+  if (res.status === 200) {
+    return res.json()
+  } else if (res.status === 429) {
+    throw new Error("Too many requests")
+  } else {
+    throw new Error("Couldn't fetch data")
+  }
+})
 
 export default function RankingsPage() {
 
@@ -328,12 +346,22 @@ export default function RankingsPage() {
     getRankedTeams(null, 1, false);
   }, [rankedStatistic, seasonId, qualledToRegionals, qualledToWorlds, country, region, eventRegion]);
 
+  const [seasonAnalysis, setSeasonAnalysis] = useState<any>(null);
+
+  const { data: seasonAnalysisData, error: seasonAnalysisDataError, isLoading: seasonAnalysisDataIsLoading } = useSWR(`/api/seasons/${seasonId}/seasonStats`, fetcher, SWROptions)
+
+  useEffect(() => {
+    if (seasonAnalysisData && !seasonAnalysisDataError) {
+      setSeasonAnalysis(seasonAnalysisData);
+    }
+  }, [seasonAnalysisData, seasonAnalysisDataError]);
+
   return (
     <main>
       <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
-        <div className="flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 p-8 items-left max-w-[380px] xs:max-w-[400px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
-          <div className="mb-10 flex flex-col justify-between">
-            <h3 className="my-5 min-w-fit text-3xl font-bold xs:text-5xl text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-stone-400">
+        <div className="flex h-auto flex-col justify-center rounded-2xl sm:bgColorPrimary p-8 items-left max-w-[380px] xs:max-w-[400px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+          <div className="mb-5 flex flex-col justify-between">
+            <h3 className="my-5 min-w-fit text-3xl font-bold xs:text-5xl text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-[var(--color-tertiary-hover)]">
               Rankings
             </h3>
             <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">
@@ -443,7 +471,7 @@ export default function RankingsPage() {
               </select>
               {/*toggle box for visibility of columns lik Country, Region setValueVisibility*/}
               <div className="flex flex-wrap sm:flex-row gap-4">
-                <label className="flex items-center gap-2">
+                <label className="flex items-center gap-2 font-bold">
                   <input
                     type="checkbox"
                     className="h-5 w-5"
@@ -452,7 +480,7 @@ export default function RankingsPage() {
                   />
                   <span className="text-sm sm:text-md xl:text-lg">Performance Stats</span>
                 </label>
-                <label className="flex items-center gap-2">
+                <label className="flex items-center gap-2 font-bold">
                   <input
                     type="checkbox"
                     className="h-5 w-5"
@@ -461,7 +489,7 @@ export default function RankingsPage() {
                   />
                   <span className="text-sm sm:text-md xl:text-lg">Skills</span>
                 </label>
-                <label className="flex items-center gap-2">
+                <label className="flex items-center gap-2 font-bold">
                   <input
                     type="checkbox"
                     className="h-5 w-5"
@@ -470,7 +498,7 @@ export default function RankingsPage() {
                   />
                   <span className="text-sm sm:text-md xl:text-lg">Quals</span>
                 </label>
-                <label className="flex items-center gap-2">
+                <label className="flex items-center gap-2 font-bold">
                   <input
                     type="checkbox"
                     className="h-5 w-5"
@@ -482,21 +510,21 @@ export default function RankingsPage() {
               </div>
             </div>
           </div>
-          <div className="mb-10 flex flex-col gap-5 lg:flex-row">
-            <h3 className="font-light text-md sm:text-xl">
-              Teams Analyzed: 1623
+          <div className="mb-5 flex flex-col gap-2 lg:gap-5 sm:flex-row flex-wrap">
+            <h3 className="text-sm sm:text-xl outlinedText">
+              Teams Analyzed: {seasonAnalysis?.numberOfTeams || "Unknown"}
             </h3>
-            <h3 className="font-light text-md sm:text-xl">
-              Qualled to Worlds: 23
+            <h3 className="text-sm sm:text-xl outlinedText">
+              Qualled to Worlds: {seasonAnalysis?.numberOfWorldQualifiers || "Unknown"}
             </h3>
-            <h3 className="font-light text-md sm:text-xl">
-              Qualled to Regionals: 234
+            <h3 className="text-sm sm:text-xl outlinedText">
+              Qualled to Regionals: {seasonAnalysis?.numberOfRegionalQualifiers || "Unknown"}
             </h3>
           </div>
           <div className="flex flex-row overflow-auto w-[100%] mb-2">
-            <table className="bg-black sticky left-0 table-auto border-separate w-[10%]">
+            <table className="z-10 bg-black sticky left-0 table-auto border-separate w-[10%]">
               <thead>
-                <tr className="[&>th]:px-1 [&>th]:text-center [&>th]:h-14 md:[&>th]:text-md [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-xl bg-gray-700">
+                <tr className="[&>th]:px-1 [&>th]:outlinedText [&>th]:text-center [&>th]:h-14 md:[&>th]:text-md [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-xl bg-gray-700">
                   <th>
                     Rank
                   </th>
@@ -508,7 +536,7 @@ export default function RankingsPage() {
               <tbody>
               {topRatedTeams.length !== 0 ? topRatedTeams.map((result: TeamSeasonProfile) => {
                 return (
-                  <tr key={result.teamNumber} className="[&>td]:text-center [&>td]:px-1 [&>td]:h-16 bg-gray-700">
+                  <tr key={result.teamNumber} className="[&>td]:text-center [&>td]:outlinedText [&>td]:px-1 [&>td]:h-16 bg-gray-700">
                     <td className="text-xs font-semibold md:text-md xl:text-lg">
                       {topRatedTeams.indexOf(result) + 1}
                     </td>
@@ -519,7 +547,7 @@ export default function RankingsPage() {
                 )}) : loadingTeams ?
                 [0,1,2,3,4].map(() => {
                   return (
-                    <tr className="h-16 [&>td]:bg-gray-400 [&>td]:animate-pulse [&>td]:px-1 [&>td]:h-14 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
+                    <tr className="h-16 [&>td]:bgColorSecondaryHover [&>td]:animate-pulse [&>td]:px-1 [&>td]:h-14 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
                       <td></td>
                       <td></td>
                     </tr>
@@ -528,9 +556,9 @@ export default function RankingsPage() {
               }
               </tbody>
             </table>
-            <table className="table-auto border-separate w-[90%]">
+            <table className="z-0 table-auto border-separate w-[90%]">
               <thead>
-                <tr className="[&>th]:px-1 [&>th]:h-14 md:[&>th]:text-md [&>th]:text-center [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-lg bg-gray-600">
+                <tr className="[&>th]:px-1 [&>th]:h-14 [&>th]:outlinedText md:[&>th]:text-md [&>th]:text-center [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-lg bg-gray-600">
                   {showPerfStats ? (
                     <>
                       <th>OPR</th>
@@ -565,7 +593,7 @@ export default function RankingsPage() {
               <tbody>
                 {topRatedTeams.length !== 0 ? topRatedTeams.map((result: TeamSeasonProfile) => {
                   return (
-                    <tr key={result.teamNumber} className="[&>td]:px-1 [&>td]:h-16 [&>td]:text-center [&>td]:text-xs sm:[&>td]:text-sm xl:[&>td]:text-lg bg-gray-500">
+                    <tr key={result.teamNumber} className="[&>td]:px-1 [&>td]:h-16 [&>td]:outlinedText [&>td]:text-center [&>td]:text-xs sm:[&>td]:text-sm xl:[&>td]:text-lg bgColorSecondary font-semibold">
                       {showPerfStats ? (
                         <>
                           <td>{result.opr.toFixed(1)}</td>
@@ -600,7 +628,7 @@ export default function RankingsPage() {
                 }) : loadingTeams ?
                   [0,1,2,3,4].map(() => {
                     return (
-                      <tr className="[&>td]:bg-gray-400 [&>td]:animate-pulse [&>td]:px-1 [&>td]:h-16 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
+                      <tr className="[&>td]:bgColorSecondaryHover [&>td]:animate-pulse [&>td]:px-1 [&>td]:h-16 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
                         <td></td>
                         <td></td>
                         <td></td>

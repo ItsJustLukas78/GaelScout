@@ -201,7 +201,7 @@
 //     <main>
 //       <div className="flex w-full flex-col items-center justify-center gap-16 py-32 sm:py-32 md:flex-row md:gap-7 lg:gap-20">
 //         <div className="flex h-auto flex-col justify-center items-left max-w-[300px] xs:max-w-min md:max-w-[250px] lg:max-w-min">
-//           <h1 className="mb-10 text-6xl font-bold xs:text-8xl md:text-6xl lg:text-8xl text-shadow-lg shadow-stone-400">
+//           <h1 className="mb-10 text-6xl font-bold xs:text-8xl md:text-6xl lg:text-8xl text-shadow-lg shadow-[var(--color-tertiary-hover)]">
 //             Teams
 //           </h1>
 //           <Form.Root
@@ -308,7 +308,7 @@
 //           </Form.Root>
 //         </div>
 //         <div className="flex h-auto flex-col items-center justify-center">
-//           <div className="flex w-80 flex-col items-center gap-4 overflow-auto rounded-2xl bg-neutral-800 p-8 h-120 sm:w-96 lg:w-120">
+//           <div className="flex w-80 flex-col items-center gap-4 overflow-auto rounded-2xl bgColorPrimary p-8 h-120 sm:w-96 lg:w-120">
 //             {resultsLoading &&
 //               <>
 //                 <TeamResultSkeleton />

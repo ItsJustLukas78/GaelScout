@@ -58,7 +58,7 @@ const Tiptap = ({setEditor}: TiptapProps) => {
           <div className="flex flex-row gap-3">
             <button
               onClick={() => editor.chain().focus().toggleBold().run()}
-              className={`${editor.isActive('bold') ? 'is-active' : ''} hover:bg-neutral-700 rounded-md p-1`}
+              className={`${editor.isActive('bold') ? 'is-active' : ''} hover:bgColorSecondary rounded-md p-1`}
             >
               <FontBoldIcon/>
             </button>

@@ -219,9 +219,8 @@ export default function Events() {
       const currentDate = new Date();
       const timeDifference = currentDate.getTime() - new Date(lastDateUpdated).getTime();
 
-      console.log({timeDifference: new Date(timeDifference).getSeconds()});
-
-      if (timeDifference > (1000 * 60 * 60)) {
+      // six hours
+      if (timeDifference > (6 * 1000 * 60 * 60)) {
         getEvents();
       } else {
         setSeasonEvents(seasonToEvents[seasonId]);

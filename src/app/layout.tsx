@@ -10,6 +10,9 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 import MobileNav from "@/components/MobileNav";
 import { GeistSans } from 'geist/font/sans';
 import 'react-toastify/dist/ReactToastify.css';
+import ColorPicker from "@/components/ColorPicker";
+import ColorProvider from "@/components/ColorProvider";
+
 
 export const metadata: Metadata = {
   manifest: 'https://www.gaelscout.com/manifest.json',
@@ -68,7 +71,10 @@ export default function RootLayout({
           <div className="flex w-full justify-center pb-16 sm:pb-0 m-0">
             {/*<QuickSearch />*/}
             <MobileNav />
-            {children}
+            <ColorPicker />
+            <ColorProvider>
+              {children}
+            </ColorProvider>
             <Analytics />
           </div>
           <ToastContainer

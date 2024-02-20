@@ -256,17 +256,17 @@ export default function MatchNotesDialog({
     >
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="z-50 bg-black opacity-70 data-[state=open]:animate-overlayShow fixed inset-0" />
-        <AlertDialog.Content className="flex flex-col z-50 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] min-h-[650px] w-[350px] max-h-full translate-x-[-50%] translate-y-[-50%] rounded-[10px] bg-neutral-800 p-[22px] focus:outline-none">
+        <AlertDialog.Content className="flex flex-col z-50 data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] min-h-[650px] w-[350px] max-h-full translate-x-[-50%] translate-y-[-50%] rounded-[10px] bgColorPrimary p-[22px] focus:outline-none">
           <AlertDialog.Title className="mb-5 text-lg font-bold">
             Match Notes
           </AlertDialog.Title>
           <AlertDialog.Description asChild>
             <div className={`flex flex-col ${loading ? "animate-pulse" : ""}`}>
               <div className="flex flex-col matchNotesDialogTipTap max-h-[300px]">
-                <h1 className="text-xl font-semibold text-neutral-200">
+                <h1 className="text-xl font-semibold ">
                   {currentNotesMatch?.name} - {currentTeam?.teamNumber}
                 </h1>
-                <p className="mt-0.5 mb-2 text-xs font-semibold text-neutral-200">
+                <p className="mt-0.5 mb-2 text-xs font-semibold ">
                   Click on a team to switch notes quickly
                 </p>
                 <Tiptap setEditor={setCurrentEditor} />
@@ -294,7 +294,7 @@ export default function MatchNotesDialog({
                   </button>
                   {/* text saying match browser */}
                   <div className="mx-5 flex flex-col items-center justify-center">
-                    <h1 className="text-xs font-semibold text-neutral-200">
+                    <h1 className="text-xs font-semibold ">
                       Match Browser
                     </h1>
                   </div>

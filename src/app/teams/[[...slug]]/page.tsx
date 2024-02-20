@@ -321,7 +321,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
   return (
     <div>
       <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32 overflow-hidden">
-        <div className={`relative flex h-auto flex-col justify-center rounded-2xl ${teamNumberInput ? "sm:bg-neutral-800" : "!w-full items-center sm:bg-none"} sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px] transition-all ease-in-out duration-1000`}>
+        <div className={`relative flex h-auto flex-col rounded-2xl justify-center card-shine-effect ${teamNumberInput ? "sm:bgColorPrimary" : "!w-full items-center sm:bg-none"} sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px] transition-all ease-in-out duration-1000`}>
           <div className={`relative ${teamNumberInput ? "[&>div]:opacity-0" : "sm:w-168 w-96 flex justify-center [&>div]:opacity-100"} [&>div]:[transition:transform_10s,opacity_1s] [&>div]:transition-opacity [&>div]:ease-in-out`}>
             <div className="absolute top-0 left-12 w-32 h-32 sm:w-72 sm:h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
             <div className="absolute top-0 right-12 w-32 h-32 sm:w-72 sm:h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
@@ -333,7 +333,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
               defaultValue={teamNumberInput}
               placeholder={placeholder}
               ref={inputTeamRef}
-              className={`${teamNumberInput ? "text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-stone-400" : "text-center mt-10"} mb-5 border-none bg-transparent text-4xl font-bold outline-none xs:text-5xl sm:text-8xl placeholder-white placeholder-opacity-100`}
+              className={`${teamNumberInput ? "outlinedText text-shadow-xs sm:text-shadow lg:text-shadow-lg shadow-[var(--color-tertiary-hover)]" : "text-center mt-10"} mb-5 border-none bg-transparent text-4xl font-bold outline-none xs:text-5xl sm:text-8xl placeholder-white placeholder-opacity-100`}
               onChange={(event) => {
                 event.preventDefault();
                 window.history.pushState({}, '', `/teams/${event.target.value.toUpperCase()}`);
@@ -342,27 +342,27 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
             >
             </input>
           </div>
-          {teamProfile ? (
-            <div className={`flex flex-col mb-5 text-xl transition-all ease-in-out duration-1000 ${teamNumberInput ? "opacity-100" : "opacity-0 translate-x-full"}`}>
+          {teamProfile ? <>
+            <div className="absolute max-w-max top-0.5 right-0.5 sm:top-4 sm:right-4 outlinedText">
+              <button
+                className="flex items-center justify-center text-2xl font-extrabold min-w-[50px] min-h-[50px]"
+                onClick={(e) => {
+                  e.preventDefault()
+                  if (isSignedIn) {
+                    changeFavoriteStatus(!favorited);
+                    return;
+                  } else {
+                    toast.error("You must be signed in to favorite a team");
+                  }
+                }}
+              >
+                {favorited ? <AiFillStar className="inline-block" /> : <AiOutlineStar className="inline-block" />}
+              </button>
+            </div>
+            <div className={`outlinedText flex flex-col mb-5 text-xl ease-in-out [transition:transform_1s,opacity_1s,color_0.01s] ${teamNumberInput ? "opacity-100" : "opacity-0 translate-x-full"}`}>
               <a href={`https://www.robotevents.com/teams/VRC/${teamNumberInput.toUpperCase()}`} className="mb-5 max-w-fit text-lg font-bold hover:text-blue-500 xs:text-xl">
                 <u>RobotEvents Page</u>
               </a>
-              <div className="absolute max-w-max top-0.5 right-0.5 xl:top-2 xl:right-2">
-                <button
-                  className="flex items-center justify-center text-2xl font-extrabold min-w-[50px] min-h-[50px]"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    if (isSignedIn) {
-                      changeFavoriteStatus(!favorited);
-                      return;
-                    } else {
-                      toast.error("You must be signed in to favorite a team");
-                    }
-                  }}
-                >
-                  {favorited ? <AiFillStar className="inline-block" /> : <AiOutlineStar className="inline-block" />}
-                </button>
-              </div>
               <div className="flex flex-col gap-5 min-w-auto xl:flex-row xl:gap-14">
                 <div className="flex min-w-fit flex-row gap-5 xl:flex-col">
                   <div className="flex flex-col w-[49%] xl:w-auto">
@@ -421,7 +421,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                   </div>
                 </div>
               </div>
-            </div> ) : loadingProfile ? <h3 className="mb-5 text-xl transition-all ease-in-out duration-1000 opacity-100">
+            </div> </> : loadingProfile ? <h3 className="mb-5 text-xl transition-all ease-in-out duration-1000 opacity-100">
               Loading Team Profile... <Spinner className="inline-block !h-5 !w-5" />
             </h3> :
             <h3 className={`mb-5 text-xl transition-all ease-in-out duration-1000 ${teamNumberInput ? "opacity-100" : "opacity-0 translate-x-full"}`}>
@@ -431,8 +431,8 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
         </div>
         <hr className={`sm:hidden block my-8 w-11/12 border-t-2 border-neutral-500 ${teamNumberInput ? "opacity-100" : "opacity-0"}`} />
         <Tabs defaultValue="statistics">
-          <TabsList className={`fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bg-neutral-800 sm:h-10 transition-all ease-in-out duration-1000 ${teamNumberInput ? "opacity-100" : `opacity-0 ${isPWA ? "translate-y-100" : null}`} ${isPWA ? 'h-[90px]' : 'h-[60px]'} flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
-   to-neutral-800 from-GSGray sm:to-neutral-800 sm:from-neutral-800`}>
+          <TabsList className={`fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bgColorPrimary sm:h-10 transition-all ease-in-out duration-1000 ${teamNumberInput ? "opacity-100" : `opacity-0 ${isPWA ? "translate-y-100" : null}`} ${isPWA ? 'h-[90px]' : 'h-[60px]'} flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
+   sm:to-[var(--color-primary-hover)] sm:from-[var(--color-primary)] to-neutral-800 from-GSGray`}>
             <TabsTrigger value="statistics" className="flex sm:flex-row flex-col h-14 text-2xs sm:h-8">
               <IoStatsChart className="inline-block sm:mr-2 text-lg" />
               Season Stats
@@ -442,9 +442,9 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
               Events
             </TabsTrigger>
           </TabsList>
-          <div className={`relative flex h-auto flex-col justify-center rounded-2xl sm:bg-neutral-800 sm:p-8 mb-10 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px] transition-all ease-in-out duration-1000 ${teamNumberInput ? "opacity-100" : "opacity-0 -translate-x-full"}`}>
+          <div className={`relative flex h-auto flex-col justify-center rounded-2xl sm:bgColorPrimary sm:p-8 mb-10 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px] transition-all ease-in-out duration-1000 ${teamNumberInput ? "opacity-100" : "opacity-0 -translate-x-full"}`}>
             <TabsContent value="statistics">
-              <div className="mb-10 flex flex-col md:flex-row">
+              <div className="mb-10 flex flex-col md:flex-row outlinedText">
                 <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
                   Season Statistics
                 </h3>
@@ -475,9 +475,9 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                 </div>
               </div>
               {seasonStats ? <>
-              <div className="sm:mx-2 flex flex-row flex-wrap justify-center gap-5 md:justify-between">
-                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
-                  <div className="relative flex flex-row justify-between">
+              <div className="sm:mx-2 flex flex-row flex-wrap justify-center gap-5 md:justify-between outlinedText">
+                <div className="flex w-full flex-col gap-5 rounded-lg bgColorSecondary p-3 pb-5 md:w-[47%] xl:w-[49%]">
+                  <div className="relative flex flex-row justify-between outlinedText">
                     <h3 className={`text-xl font-bold ${seasonStats.opr ? seasonStats.opr > 40 ? "goodGradient" : seasonStats.opr < 25 ? "badGradient" : "midGradient" : ""}`}>
                       OPR:
                     </h3>
@@ -489,7 +489,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </p>
                   </div>
                   <hr/>
-                  <div className="relative flex flex-row justify-between">
+                  <div className="relative flex flex-row justify-between outlinedText">
                     <h3 className={`text-xl font-bold ${seasonStats.dpr ? seasonStats.dpr < 25 ? "goodGradient" : seasonStats.dpr > 40 ? "badGradient" : "midGradient" : ""}`}>
                       DPR:
                     </h3>
@@ -501,7 +501,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </p>
                   </div>
                   <hr/>
-                  <div className="relative flex flex-row justify-between">
+                  <div className="relative flex flex-row justify-between outlinedText">
                     <h3 className={`text-xl font-bold ${seasonStats.ccwm ? seasonStats.ccwm > 30 ? "goodGradient" : seasonStats.ccwm < 15 ? "badGradient" : "midGradient" : ""}`}>
                       CCWM:
                     </h3>
@@ -513,8 +513,8 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </p>
                   </div>
                 </div>
-                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
-                  <div className="relative flex flex-row justify-between">
+                <div className="flex w-full flex-col gap-5 rounded-lg bgColorSecondary p-3 pb-5 md:w-[47%] xl:w-[49%]">
+                  <div className="relative flex flex-row justify-between outlinedText">
                     <h3 className="text-xl font-bold">
                       OpenSkill:
                     </h3>
@@ -526,7 +526,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </p>
                   </div>
                   <hr/>
-                  <div className="flex flex-row justify-between">
+                  <div className="flex flex-row justify-between outlinedText">
                     <h3 className="text-xl font-bold">
                       OpenSkill Rank:
                     </h3>
@@ -535,8 +535,8 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </h3>
                   </div>
                 </div>
-                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
-                  <div className="flex flex-row justify-between">
+                <div className="flex w-full flex-col gap-5 rounded-lg bgColorSecondary p-3 pb-5 md:w-[47%] xl:w-[49%]">
+                  <div className="flex flex-row justify-between outlinedText">
                     <h3 className="text-xl font-bold">
                       Qual Win:
                     </h3>
@@ -545,7 +545,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </h3>
                   </div>
                   <hr/>
-                  <div className="flex flex-row justify-between">
+                  <div className="flex flex-row justify-between outlinedText">
                     <h3 className="text-xl font-bold">
                       Elim Win:
                     </h3>
@@ -554,7 +554,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </h3>
                   </div>
                   <hr/>
-                  <div className="flex flex-row justify-between">
+                  <div className="flex flex-row justify-between outlinedText">
                     <h3 className="text-xl font-bold">
                       Event Count:
                     </h3>
@@ -563,8 +563,8 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </h3>
                   </div>
                 </div>
-                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
-                  <div className="relative flex flex-row justify-between">
+                <div className="flex w-full flex-col gap-5 rounded-lg bgColorSecondary p-3 pb-5 md:w-[47%] xl:w-[49%]">
+                  <div className="relative flex flex-row justify-between outlinedText">
                     <h3 className="text-xl font-bold">
                       Skills:
                     </h3>
@@ -576,7 +576,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </p>
                   </div>
                   <hr/>
-                  <div className="flex flex-row justify-between">
+                  <div className="flex flex-row justify-between outlinedText">
                     <h3 className="text-xl font-bold">
                       Skills Rank:
                     </h3>
@@ -585,7 +585,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </h3>
                   </div>
                   <hr/>
-                  <div className="flex flex-row justify-between">
+                  <div className="flex flex-row justify-between outlinedText">
                     <h3 className="text-xl font-bold">
                       Driver:
                     </h3>
@@ -594,7 +594,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                     </h3>
                   </div>
                   <hr/>
-                  <div className="flex flex-row justify-between">
+                  <div className="flex flex-row justify-between outlinedText">
                     <h3 className="text-xl font-bold">
                       Program:
                     </h3>
@@ -604,8 +604,8 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                   </div>
                 </div>
                 { currentAwards ?
-                  <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
-                    <div className="relative flex flex-row justify-between">
+                  <div className="flex w-full flex-col gap-5 rounded-lg bgColorSecondary p-3 pb-5 md:w-[47%] xl:w-[49%]">
+                    <div className="relative flex flex-row justify-between outlinedText">
                       <h3 className="text-xl font-bold">
                         Regionals Qual:
                       </h3>
@@ -617,7 +617,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                       </p>
                     </div>
                     <hr/>
-                    <div className="relative flex flex-row justify-between">
+                    <div className="relative flex flex-row justify-between outlinedText">
                       <h3 className="text-xl font-bold">
                         Worlds Qual:
                       </h3>
@@ -632,11 +632,11 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                   : null
                 }
                 {/* display list of awards */}
-                <div className="flex w-full flex-col gap-5 rounded-lg bg-neutral-700 p-3 pb-5 md:w-[47%] xl:w-[49%]">
-                  <h3 className="text-xl font-bold">
+                <div className="flex w-full flex-col gap-5 rounded-lg bgColorSecondary p-3 pb-5 md:w-[47%] xl:w-[49%]">
+                  <h3 className="text-xl font-bold outlinedText">
                     Awards:
                   </h3>
-                  <div className="flex flex-col gap-5 overflow-auto h-60 pr-4">
+                  <div className="flex flex-col gap-5 overflow-auto h-60 pr-4 outlinedText">
                     {currentAwards.length !== 0 && currentAwards.map((award: EventAward) => {
                       return <>
                         <div key={award.id + award.order} className="flex flex-row gap-2">
@@ -683,7 +683,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
               }
             </TabsContent>
             <TabsContent value="events">
-              <div className="mb-10 flex flex-col justify-between md:flex-row">
+              <div className="mb-10 flex flex-col justify-between md:flex-row outlinedText">
                 <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
                   Events
                 </h3>
@@ -699,7 +699,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
                   </select>
                 </div>
               </div>
-              <div className="flex flex-col gap-4 overflow-auto w-[100%]">
+              <div className="flex flex-col gap-4 p-1 overflow-auto w-[100%]">
                 {currentEvents.length !== 0 && currentEvents.map((result: Event) => {
                   const locationString = `${result.location.venue ? result.location.venue + ' @ ' : ''}${result.location.city ? result.location.city + ", " : ""}${result.location.region ? result.location.region + ", " : ""}${result.location.country}`;
 

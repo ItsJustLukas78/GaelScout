@@ -54,20 +54,20 @@ export default function AwardResult(
     <Link
       href={`/teams/${team.teamNumber}`}
       key={`award-${id + order}`}
-      className="flex h-auto w-full flex-row rounded-2xl bg-neutral-700 p-3 gap-4 shadow-lg shadow-neutral-900 transition-colors duration-200 min-h-28 hover:bg-gray-400"
+      className="flex h-auto w-full flex-row rounded-2xl bgColorSecondary p-3 gap-4 shadow-lg shadow-neutral-900 transition-colors duration-200 min-h-28 hover:bgColorSecondaryHover"
     >
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 outlinedText">
         {returnAwardIcon(name)}
       </div>
       <div className="flex flex-col gap-2">
-        <h1 className="mb-2 text-sm font-semibold md:text-lg">
+        <h1 className="mb-2 text-sm font-semibold md:text-lg outlinedText">
           {name}
         </h1>
         <div className="flex flex-col gap-2">
-          <h2 className="text-xs font-medium md:text-sm">
+          <h2 className="text-xs font-medium md:text-sm outlinedText">
             Winner: {team.teamNumber} - {team.teamName}
           </h2>
-          <h2 className="text-xs font-medium md:text-sm">
+          <h2 className="text-xs font-medium md:text-sm outlinedText">
             Qualifications: {qualification ?? 'N/A'}
           </h2>
         </div>

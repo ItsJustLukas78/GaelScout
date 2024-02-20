@@ -21,14 +21,14 @@ export default function EventTeamResult({ teamId, teamNumber, teamName, programC
   return (
     <Link
       href={`/teams/${teamNumber}`}
-      className="flex p-2 h-auto w-full flex-row items-center rounded-2xl bg-neutral-700 px-3 shadow-md shadow-neutral-900 transition-colors duration-200 min-h-20 hover:bg-neutral-600"
+      className="flex p-2 h-auto w-full flex-row items-center rounded-2xl bgColorSecondary px-3 shadow-md shadow-neutral-900 transition-colors duration-200 min-h-20 hover:bgColorSecondaryHover"
     >
       <div className="flex flex-col">
-        <h1 className="mb-2 text-lg font-bold md:text-2xl">
+        <h1 className="mb-2 text-lg font-bold md:text-2xl outlinedText">
           {teamNumber} - {teamName}
         </h1>
         <div className="flex flex-col gap-2">
-          <h2 className="font-semibold text-2xs md:text-sm">
+          <h2 className="font-semibold text-2xs md:text-sm outlinedText">
             {location}
           </h2>
         </div>

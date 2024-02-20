@@ -5,7 +5,7 @@ import {SWRProvider} from "@/components/SWRProvider";
 
 const Providers = ({ children } : { children: ReactNode }) => {
 
-  return (
+  return <>
     <ClerkProvider
       appearance={{
         baseTheme: dark,
@@ -18,7 +18,7 @@ const Providers = ({ children } : { children: ReactNode }) => {
         {children}
       </SWRProvider>
     </ClerkProvider>
-  )
+  </>
 }
 
 export default Providers;

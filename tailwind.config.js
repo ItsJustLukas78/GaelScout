@@ -40,6 +40,12 @@ module.exports = {
         "discordBlue": "#5865F2",
         "GSGreen": "#2be222",
         "GSGreenDark": "#1e9e1e",
+        "primary": 'var(--color-primary)',
+        'primary-hover': 'var(--color-primary-hover)',
+        'secondary': 'var(--color-secondary)',
+        'secondary-hover': 'var(--color-secondary-hover)',
+        "tertiary": 'var(--color-tertiary)',
+        "tertiary-hover": 'var(--color-tertiary-hover)',
       },
       keyframes: {
         "accordion-down": {

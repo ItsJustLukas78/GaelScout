@@ -266,7 +266,7 @@ export default function MatchResult({
   return <>
     {eventId ? (
       <div
-        className={`flex h-full w-full flex-col rounded-xl bg-neutral-700 p-2 shadow-md shadow-neutral-900 ${compact ? null : 'md:min-h-28'}`}
+        className={`flex h-full w-full flex-col rounded-xl bgColorSecondary p-2 shadow-md shadow-neutral-900 ${compact ? null : 'md:min-h-28'}`}
       >
         <div className="flex flex-row justify-between">
           <div className="flex flex-col gap-3 text-center min-w-[55px] md:min-w-[150px]">
@@ -274,7 +274,7 @@ export default function MatchResult({
             <MatchResultTeamLink team={blueTeams[1]} mainColor={"blue"} teamsToRelavancyType={teamsToRelavancyType} />
           </div>
           <div className="flex flex-col justify-center text-center min-w-[30px] md:min-w-[55px]">
-            <h2 className="text-sm text-blue-500 sm:text-xl md:text-3xl lg:text-4xl">
+            <h2 className="text-sm text-blue-500 sm:text-xl md:text-3xl lg:text-4xl outlinedText">
               {blueScore > redScore ?
                 <u className="font-bold">{blueScore}</u>
                 :
@@ -283,15 +283,15 @@ export default function MatchResult({
             </h2>
           </div>
           <div className="flex flex-col justify-center gap-1 text-center min-w-[55px] md:min-w-[150px]">
-            <h2 className="text-xs text-GSGreen sm:text-lg md:text-2xl lg:text-3xl">
+            <h2 className="text-xs text-GSGreen sm:text-lg md:text-2xl lg:text-3xl outlinedText">
               {formattedMatchName}
             </h2>
-            <h2 className="text-xs text-neutral-200 sm:text-md md:text-xl lg:text-2xl">
+            <h2 className="text-xs  sm:text-md md:text-xl lg:text-2xl outlinedText">
               {field}
             </h2>
           </div>
           <div className="flex flex-col justify-center text-center min-w-[30px] md:min-w-[55px]">
-            <h2 className="text-sm text-red-500 sm:text-xl md:text-3xl lg:text-4xl">
+            <h2 className="text-sm text-red-500 sm:text-xl md:text-3xl lg:text-4xl outlinedText">
               {redScore > blueScore ?
                 <u className="font-bold">{redScore}</u>
                 :

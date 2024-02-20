@@ -8,7 +8,7 @@ export default function TeamResult({ username, firstName, lastName, image_url, h
   return (
     <Link
       href={`/profiles/${username}`}
-      className="flex h-auto w-full flex-col rounded-2xl bg-neutral-300 p-2 shadow-lg shadow-neutral-500 transition-colors duration-200 hover:bg-gray-400"
+      className="flex h-auto w-full flex-col rounded-2xl bgColorSecondary p-2 shadow-lg shadow-neutral-500 transition-colors duration-200 hover:bgColorSecondaryHover"
     >
       <div className="flex flex-row items-center gap-2">
         <div className="relative min-w-[40px] min-h-[40px] sm:min-w-[50px] sm:min-h-[50px]">

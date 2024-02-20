@@ -39,7 +39,7 @@ export default function Home() {
         <div className="flex flex-col gap-72">
           <div className="relative flex h-auto flex-col lg:items-start items-center animHeading lg:space-x-8 lg:flex-row">
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
-              <AnimatedTextCharacter className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl text-shadow-lg shadow-stone-500" delay={0.4} interval={0.6} text="Scouting Done Easy."/>
+              <AnimatedTextCharacter className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl text-shadow-lg shadow-[var(--color-tertiary-hover)]" delay={0.4} interval={0.6} text="Scouting Done Easy."/>
               <SpringAnimatedElement className="text-base sm:text-xl" delay={1.6}>
                 Enhance your VEX Robotics scouting with GaelScout – your all-in-one solution for team data, match results, rankings, efficient note-taking, and a competitive edge.
               </SpringAnimatedElement>
@@ -99,7 +99,8 @@ export default function Home() {
               </p>
               <p className="text-base sm:text-xl">
                 Our members have brought back GaelScout, now serving the features of VEX Via,
-                VEX DB, and its predecessor in a single application to tackle these challenges.
+                VEX DB, and its predecessor in a single application, dependent only on RobotEvents,
+                to tackle these challenges.
               </p>
             </div>
             <div className="hidden max-w-[426px] lg:block">
@@ -124,7 +125,7 @@ export default function Home() {
             <iframe
               className="rounded-xl sm:hidden block"
               src="https://discord.com/widget?id=1175614341941313647&theme=dark"
-              width="250" height="400"
+              width="300" height="400"
               sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
             >
             </iframe>
@@ -138,16 +139,16 @@ export default function Home() {
           </div>
         </div>
         <SpringAnimatedElement delay={1.6} className="fixed z-50 self-center bottom-[175px] flex items-center flex-col justify-center">
-          <div className="flex items-center justify-center bg-neutral-800 rounded-full h-10 w-48">
+          <div className="flex items-center justify-center bgColorPrimary rounded-full h-10 w-48">
             <div className="ml-7 flex gap-3">
               <FaStar
                 onClick={() => window.location.href = "/favorites"}
                 className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"/>
-              <hr className="h-5 w-0.5 bg-neutral-600 border-none"/>
+              <hr className="h-5 w-0.5 bgColorSecondaryHover border-none"/>
               <FaPeopleGroup
                 onClick={() => window.location.href = "/teams"}
                 className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"/>
-              <hr className="h-5 w-0.5 bg-neutral-600 border-none"/>
+              <hr className="h-5 w-0.5 bgColorSecondaryHover border-none"/>
               <MdEventNote
                 onClick={() => window.location.href = "/events"}
                 className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"

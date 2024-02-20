@@ -5,16 +5,16 @@ export default function EventResult({ id, sku, name, start, location, dark=true,
   return (
     <Link
       href={`/events/${sku}${defaultTeam ? `?team=${defaultTeam}` : ''}`}
-      className={`flex h-auto w-full flex-col rounded-xl p-2 shadow-lg transition-colors duration-200 ${dark ? 'bg-neutral-800 shadow-neutral-900 hover:bg-neutral-700' : 'bg-neutral-700 shadow-neutral-800 hover:bg-neutral-600'}`}
+      className={`flex h-auto w-full flex-col rounded-xl p-2 shadow-lg transition-colors duration-200 ${dark ? 'bgColorSecondary shadow-neutral-900 hover:bgColorSecondaryHover' : 'bgColorSecondary shadow-neutral-800 hover:bgColorSecondaryHover'}`}
     >
-      <h1 className="text-sm mb-1 font-semibold md:text-lg line-clamp-1 w-full">
+      <h1 className="text-sm mb-1 font-semibold md:text-lg line-clamp-1 w-full outlinedText">
         {name}
       </h1>
       <div className="flex flex-col gap-1">
-        <h2 className="text-xs font-normal md:text-sm">
+        <h2 className="text-xs font-normal md:text-sm outlinedText">
           {location}
         </h2>
-        <h2 className="text-xs font-normal md:text-sm">
+        <h2 className="text-xs font-normal md:text-sm outlinedText">
           {(new Date(start)).toLocaleString(undefined, {
               year: 'numeric',
               month: 'long',
