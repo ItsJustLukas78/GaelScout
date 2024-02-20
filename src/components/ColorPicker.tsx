@@ -25,36 +25,38 @@ export default function MyColorPicker() {
       let delayed: NodeJS.Timeout;
       if (hasHydrated) {
         delayed = setTimeout(() => {
+          const existingValue = colorVariableValues["--color-primary"]?.value;
+
           setColorVariableValues({
             "--color-primary": {
               hue: Math.trunc(colorInput.current[0].hue),
               saturation: Math.trunc(colorInput.current[0].saturation * 100),
-              value: Math.trunc((colorInput.current[0].value * 100) / 2)
+              value: existingValue || Math.trunc((colorInput.current[0].value * 100) / 2)
             },
             "--color-primary-hover": {
               hue: colorInput.current[0].hue,
               saturation: Math.trunc(colorInput.current[0].saturation * 100),
-              value: Math.trunc((colorInput.current[0].value * 100) / 2) + 20
+              value: existingValue || Math.trunc((colorInput.current[0].value * 100) / 2) + 20
             },
             "--color-secondary": {
               hue: colorInput.current[1].hue,
               saturation: Math.trunc(colorInput.current[1].saturation * 100),
-              value: Math.trunc((colorInput.current[1].value * 100) / 2)
+              value: existingValue || Math.trunc((colorInput.current[1].value * 100) / 2)
             },
             "--color-secondary-hover": {
               hue: colorInput.current[1].hue,
               saturation: Math.trunc(colorInput.current[1].saturation * 100),
-              value: Math.trunc((colorInput.current[1].value * 100) / 2) + 20
+              value: existingValue || Math.trunc((colorInput.current[1].value * 100) / 2) + 20
             },
             "--color-tertiary": {
               hue: colorInput.current[2].hue,
               saturation: Math.trunc(colorInput.current[2].saturation * 100),
-              value: Math.trunc((colorInput.current[2].value * 100) / 2)
+              value: existingValue || Math.trunc((colorInput.current[2].value * 100) / 2)
             },
             "--color-tertiary-hover": {
               hue: colorInput.current[2].hue,
               saturation: Math.trunc(colorInput.current[2].saturation * 100),
-              value: Math.trunc((colorInput.current[2].value * 100) / 2) + 20
+              value: existingValue || Math.trunc((colorInput.current[2].value * 100) / 2) + 20
             }
           });
         }, 500);
@@ -130,15 +132,24 @@ export default function MyColorPicker() {
                     <label className="text-neutral-100 font-semibold">S</label>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="relative flex items-center gap-2">
-                      <input
-                        type="number"
-                        value={colorVariableValues["--color-primary"].value}
-                        disabled
-                        className="w-14 text-xs text-neutral-100 font-semibold bg-neutral-800 border-neutral-900 border-2 p-0.5 rounded-md"
-                      />
-                      <FaLock className="text-neutral-100 h-3 w-3 absolute right-1 top-1.5" />
-                    </div>
+                    <input
+                      type="number"
+                      value={colorVariableValues["--color-primary"].value}
+                      onChange={(e) => {
+                        let newValue = Math.trunc(parseInt(e.target.value))
+                        if (newValue > 360 || newValue < 0) {
+                          newValue = 50;
+                        }
+                        setColorVariableValues({
+                          "--color-primary": {
+                            hue: colorVariableValues["--color-primary"].hue,
+                            saturation: colorVariableValues["--color-primary"].saturation,
+                            value: newValue
+                          }
+                        })
+                      }}
+                      className="w-14 text-xs text-neutral-100 font-semibold bg-neutral-800 border-neutral-900 border-2 p-0.5 rounded-md"
+                    />
                     <label className="text-neutral-100 font-semibold">V</label>
                   </div>
                 </div>
