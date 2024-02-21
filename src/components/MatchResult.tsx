@@ -270,15 +270,15 @@ export default function MatchResult({
       >
         <div className="flex flex-row justify-between">
           <div className="flex flex-col gap-3 text-center min-w-[55px] md:min-w-[150px]">
-            <MatchResultTeamLink team={blueTeams[0]} mainColor={"blue"} teamsToRelavancyType={teamsToRelavancyType} />
-            <MatchResultTeamLink team={blueTeams[1]} mainColor={"blue"} teamsToRelavancyType={teamsToRelavancyType} />
+            <MatchResultTeamLink team={redTeams[0]} mainColor={"red"} teamsToRelavancyType={teamsToRelavancyType} />
+            <MatchResultTeamLink team={redTeams[1]} mainColor={"red"} teamsToRelavancyType={teamsToRelavancyType} />
           </div>
           <div className="flex flex-col justify-center text-center min-w-[30px] md:min-w-[55px]">
-            <h2 className="text-sm text-blue-500 sm:text-xl md:text-3xl lg:text-4xl outlinedText">
-              {blueScore > redScore ?
-                <u className="font-bold">{blueScore}</u>
+            <h2 className="text-sm text-red-500 sm:text-xl md:text-3xl lg:text-4xl outlinedText">
+              {redScore > blueScore ?
+                <u className="font-bold">{redScore}</u>
                 :
-                blueScore
+                redScore
               }
             </h2>
           </div>
@@ -291,38 +291,39 @@ export default function MatchResult({
             </h2>
           </div>
           <div className="flex flex-col justify-center text-center min-w-[30px] md:min-w-[55px]">
-            <h2 className="text-sm text-red-500 sm:text-xl md:text-3xl lg:text-4xl outlinedText">
-              {redScore > blueScore ?
-                <u className="font-bold">{redScore}</u>
+            <h2 className="text-sm text-blue-500 sm:text-xl md:text-3xl lg:text-4xl outlinedText">
+              {blueScore > redScore ?
+                <u className="font-bold">{blueScore}</u>
                 :
-                redScore
+                blueScore
               }
             </h2>
           </div>
           <div className="flex flex-col gap-3 text-center min-w-[55px] md:min-w-[150px]">
-            <MatchResultTeamLink team={redTeams[0]} mainColor={"red"} teamsToRelavancyType={teamsToRelavancyType} />
-            <MatchResultTeamLink team={redTeams[1]} mainColor={"red"} teamsToRelavancyType={teamsToRelavancyType} />
+            <MatchResultTeamLink team={blueTeams[0]} mainColor={"blue"} teamsToRelavancyType={teamsToRelavancyType} />
+            <MatchResultTeamLink team={blueTeams[1]} mainColor={"blue"} teamsToRelavancyType={teamsToRelavancyType} />
           </div>
         </div>
         {!compact && (
           <div className="flex flex-row justify-between gap-2 w-full">
             <button
-              className="flex justify-center items-center ml-2 lg:ml-8 text-white text-2xs hover:text-gray-400 transition-colors duration-300"
+              className="flex opacity-0 justify-center items-center ml-2 lg:ml-8 text-white text-2xs hover:text-gray-400 transition-colors duration-300"
               onClick={(e) => {
                 e.preventDefault();
                 requestNotification();
               }}
+              disabled
             >
               <FaRegBell className="sm:h-6 sm:w-6 h-4 w-4 mt-2" />
             </button>
             <div className="mt-1 flex flex-col gap-1.5 justify-center items-center w-[85%]">
               {worldPrediction ? <>
                 <div className="flex flex-row justify-center gap-2 w-full">
-                  <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${blueWinsWorld ? "bg-green-500" : "bg-gray-600"}`}>
-                    {blueWinsWorld ? `Predicted ${Math.abs(blueWinPercentageWorld)}%` : null}
-                  </div>
                   <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${redWinsWorld ? "bg-green-500" : "bg-gray-600"}`}>
                     {redWinsWorld ? `Predicted ${Math.abs(redWinPercentageWorld)}%` : null}
+                  </div>
+                  <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${blueWinsWorld ? "bg-green-500" : "bg-gray-600"}`}>
+                    {blueWinsWorld ? `Predicted ${Math.abs(blueWinPercentageWorld)}%` : null}
                   </div>
                 </div>
               </> : <>
@@ -336,11 +337,11 @@ export default function MatchResult({
               }
               {eventPrediction ? <>
                 <div className="flex flex-row justify-center gap-2 w-full">
-                  <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black sm:p-0.5 ${blueWinsEvent ? "bg-green-500" : "bg-gray-600"}`}>
-                    {blueWinsEvent ? `Predicted ${Math.abs(blueWinPercentageEvent)}%` : null}
-                  </div>
                   <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black sm:p-0.5 ${redWinsEvent ? "bg-green-500" : "bg-gray-600"}`}>
                     {redWinsEvent ? `Predicted ${Math.abs(redWinPercentageEvent)}%` : null}
+                  </div>
+                  <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black sm:p-0.5 ${blueWinsEvent ? "bg-green-500" : "bg-gray-600"}`}>
+                    {blueWinsEvent ? `Predicted ${Math.abs(blueWinPercentageEvent)}%` : null}
                   </div>
                 </div>
                 </> : <>

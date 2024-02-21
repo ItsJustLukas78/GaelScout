@@ -27,7 +27,7 @@ const Tiptap = ({setEditor}: TiptapProps) => {
     extensions: [
       StarterKit as any,
       Placeholder.configure({
-        placeholder: 'Write match notes here...',
+        placeholder: 'Write notes on the current team here...',
       }),
       CharacterCount.configure({
         limit: charLimit,

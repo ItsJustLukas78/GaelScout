@@ -38,7 +38,7 @@ export default function MatchNotesDialog({
 
   const [previousNotesGroup, setPreviousNotesGroup] = useState<NotesGroup | null>(null)
 
-  const [currentTeam, setCurrentTeam] = useState(currentNotesMatch?.blueTeams[0])
+  const [currentTeam, setCurrentTeam] = useState(currentNotesMatch?.redTeams[0])
 
   const [currentEditor, setCurrentEditor] = useState<any>(null)
 
@@ -185,7 +185,7 @@ export default function MatchNotesDialog({
 
       if (data.notes.length === 0) {
         setCompletedInitialFetch(true)
-        setCurrentTeam(currentNotesMatch?.blueTeams[0])
+        setCurrentTeam(currentNotesMatch?.redTeams[0])
         setPreviousNotesGroup(currentNotesGroup)
         setTeamToMatchNotes(teamNotes)
         setLoading(false)
@@ -196,7 +196,7 @@ export default function MatchNotesDialog({
         teamNotes[teamNote.teamNumber as string] = teamNote.note
       }
 
-      setCurrentTeam(currentNotesMatch?.blueTeams[0])
+      setCurrentTeam(currentNotesMatch?.redTeams[0])
       setPreviousNotesGroup(currentNotesGroup)
       setTeamToMatchNotes(teamNotes)
       setCompletedInitialFetch(true)
@@ -210,7 +210,7 @@ export default function MatchNotesDialog({
 
   useEffect(() => {
     if (currentNotesMatch && matchNotesDialogOpen) {
-      getMatchTeamNotes([...currentNotesMatch.blueTeams, ...currentNotesMatch.redTeams])
+      getMatchTeamNotes([...currentNotesMatch.redTeams, ...currentNotesMatch.blueTeams])
     }
   }, [currentNotesMatch, matchNotesDialogOpen])
 
@@ -230,7 +230,7 @@ export default function MatchNotesDialog({
   useEffect(() => {
     if (completedInitialFetch && matchNotesDialogOpen) {
       saveNotesAndChangeMatch(true).then(() => {
-        getMatchTeamNotes([...currentNotesMatch.blueTeams, ...currentNotesMatch.redTeams])
+        getMatchTeamNotes([...currentNotesMatch.redTeams, ...currentNotesMatch.blueTeams])
       })
     }
   }, [currentNotesGroup])
@@ -263,8 +263,8 @@ export default function MatchNotesDialog({
           <AlertDialog.Description asChild>
             <div className={`flex flex-col ${loading ? "animate-pulse" : ""}`}>
               <div className="flex flex-col matchNotesDialogTipTap max-h-[300px]">
-                <h1 className="text-xl font-semibold ">
-                  {currentNotesMatch?.name} - {currentTeam?.teamNumber}
+                <h1 className="text-xl font-semibold outlinedText">
+                  {currentNotesMatch?.name} - <span className="font-extrabold">{currentTeam?.teamNumber}</span>
                 </h1>
                 <p className="mt-0.5 mb-2 text-xs font-semibold ">
                   Click on a team to switch notes quickly
@@ -317,6 +317,14 @@ export default function MatchNotesDialog({
             </div>
           </AlertDialog.Description>
           <div className="mt-auto flex justify-between">
+            <AlertDialog.Action asChild>
+              <button
+                className="mt-4 h-8 w-28 whitespace-nowrap rounded-md bg-red-300 text-xl font-semibold text-black"
+                onClick={(e) => setMatchNotesDialogOpen(false)}
+              >
+                Cancel
+              </button>
+            </AlertDialog.Action>
             <AlertDialog.Action asChild>
               <button
                 className="mt-4 ml-auto h-8 w-28 whitespace-nowrap rounded-md bg-green-300 text-xl font-semibold text-black disabled:opacity-50"

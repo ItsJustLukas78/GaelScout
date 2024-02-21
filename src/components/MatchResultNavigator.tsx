@@ -27,15 +27,15 @@ export default function MatchResultNavigator(
       >
         <div className="flex flex-row justify-between">
           <div className="flex flex-col gap-3 text-center w-[55px]">
-            <MatchResultTeamLink team={blueTeams[0]} mainColor="blue" teamsToRelavancyType={teamsToRelavancyType} className="text-xs" link={false} onClick={() => teamSetter(blueTeams[0])}/>
-            <MatchResultTeamLink team={blueTeams[1]} mainColor="blue" teamsToRelavancyType={teamsToRelavancyType} className="text-xs" link={false} onClick={() => teamSetter(blueTeams[1])}/>
+            <MatchResultTeamLink team={redTeams[0]} mainColor="red" teamsToRelavancyType={teamsToRelavancyType} className="text-xs" link={false} onClick={() => teamSetter(redTeams[0])}/>
+            <MatchResultTeamLink team={redTeams[1]} mainColor="red" teamsToRelavancyType={teamsToRelavancyType} className="text-xs" link={false} onClick={() => teamSetter(redTeams[1])}/>
           </div>
           <div className="flex flex-col justify-center text-center w-[30px]">
-            <h2 className="font-semibold text-blue-500 text-sm">
-              {blueScore > redScore ?
-                <u>{blueScore}</u>
+            <h2 className="font-semibold text-red-500 text-sm">
+              {redScore > blueScore ?
+                <u>{redScore}</u>
                 :
-                blueScore
+                redScore
               }
             </h2>
           </div>
@@ -48,17 +48,17 @@ export default function MatchResultNavigator(
             </h2>
           </div>
           <div className="flex flex-col justify-center text-center w-[30px]">
-            <h2 className="font-semibold text-red-500 text-sm">
-              {redScore > blueScore ?
-                <u>{redScore}</u>
+            <h2 className="font-semibold text-blue-500 text-sm">
+              {blueScore > redScore ?
+                <u>{blueScore}</u>
                 :
-                redScore
+                blueScore
               }
             </h2>
           </div>
           <div className="flex flex-col gap-3 text-center w-[55px]">
-            <MatchResultTeamLink team={redTeams[0]} mainColor="red" teamsToRelavancyType={teamsToRelavancyType} className="text-xs" link={false} onClick={() => teamSetter(redTeams[0])}/>
-            <MatchResultTeamLink team={redTeams[1]} mainColor="red" teamsToRelavancyType={teamsToRelavancyType} className="text-xs" link={false} onClick={() => teamSetter(redTeams[1])}/>
+            <MatchResultTeamLink team={blueTeams[0]} mainColor="blue" teamsToRelavancyType={teamsToRelavancyType} className="text-xs" link={false} onClick={() => teamSetter(blueTeams[0])}/>
+            <MatchResultTeamLink team={blueTeams[1]} mainColor="blue" teamsToRelavancyType={teamsToRelavancyType} className="text-xs" link={false} onClick={() => teamSetter(blueTeams[1])}/>
           </div>
         </div>
       </div>
