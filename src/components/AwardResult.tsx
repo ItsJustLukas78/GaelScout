@@ -65,7 +65,7 @@ export default function AwardResult(
         </h1>
         <div className="flex flex-col gap-2">
           <h2 className="text-xs font-medium md:text-sm outlinedText line-clamp-2">
-            Winner: {team.teamNumber} - {team.teamName}ejnwognewog newoig jewoignewoigjew
+            Winner: {team.teamNumber} - {team.teamName}
           </h2>
           <h2 className="text-xs font-medium md:text-sm outlinedText">
             Qualifications: {qualification ?? 'N/A'}
