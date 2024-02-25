@@ -68,6 +68,7 @@ export async function GET(
 ) {
   const searchParams = new URL(request.url).searchParams;
   const teamNumber = searchParams.get('teamNumber');
+  const fuzzySearch = searchParams.get('fuzzySearch');
   const region = searchParams.get('region');
   const country = searchParams.get('country');
   const grade = searchParams.get('grade');
@@ -79,7 +80,10 @@ export async function GET(
 
   const teams = await prisma.teamProfile.findMany({
     where: {
-      teamNumber: teamNumber ? teamNumber : undefined,
+      teamNumber: teamNumber ? teamNumber : fuzzySearch ? {
+          contains: fuzzySearch,
+          mode: 'insensitive',
+        } : undefined,
       teamRegion: region ? region : undefined,
       teamCountry: country ? country : undefined,
       teamGrade: grade ? grade : undefined,
@@ -90,7 +94,10 @@ export async function GET(
 
   const count = await prisma.teamProfile.count({
     where: {
-      teamNumber: teamNumber ? teamNumber : undefined,
+      teamNumber: teamNumber ? teamNumber : fuzzySearch ? {
+          contains: fuzzySearch,
+          mode: 'insensitive',
+        } : undefined,
       teamRegion: region ? region : undefined,
       teamCountry: country ? country : undefined,
       teamGrade: grade ? grade : undefined,

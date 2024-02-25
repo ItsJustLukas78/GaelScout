@@ -769,7 +769,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
         {eventObject ? <>
           <div
             className="relative flex h-auto flex-col justify-center card-shine-effect rounded-2xl sm:bgColorPrimary sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
-            <h1 className="outlinedText mb-5 min-w-[85%] max-w-[85%] text-2xl font-bold sm:text-3xl md:text-5xl lg:text-7xl text-shadow-xs sm:text-shadow lg:text-shadow-lg shadow-[var(--color-tertiary-hover)]">
+            <h1 className="outlinedText mb-5 min-w-[85%] max-w-[85%] text-2xl font-bold sm:text-3xl md:text-5xl lg:text-7xl">
               {eventObject.name}
             </h1>
             <div className="absolute max-w-max top-0.5 right-0.5 xl:top-2 xl:right-2">
@@ -847,7 +847,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
           <hr className="sm:hidden block my-8 w-11/12 border-t-2 border-neutral-500"/>
           <Tabs value={tab} onValueChange={onTabChange}>
             <TabsList
-              className="fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bgColorPrimary sm:h-10 h-[90px] flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
+              className="fixed sm:relative z-30 sm:z-0 bottom-[3rem] left-0 px-2 pb-7 sm:pb-0 sm:bgColorPrimary sm:h-10 h-[60px] flex w-full sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
    to-neutral-800 from-GSGray sm:to-[var(--color-primary-hover)] sm:from-[var(--color-primary)]">
               <TabsTrigger value="teams" className="flex sm:flex-row flex-col h-14 text-2xs sm:h-8">
                 <FaClipboardList className="inline-block sm:mr-2 text-lg"/>

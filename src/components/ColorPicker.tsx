@@ -72,16 +72,16 @@ export default function MyColorPicker() {
     const [expanded, setExpanded] = React.useState(false);
 
     return <>
-      <div className="fixed top-[100px] right-0 z-50">
+      <div className={`fixed top-[100px] right-0 z-50 ${expanded ? "" : "pointer-events-none"}`}>
         <div className={`relative w-60 bg-neutral-700 transition-all duration-500 ${expanded ? "translate-x-0 h-48" : "translate-x-60 h-10"}`}>
           <div
-            className={`flex flex-col items-center justify-center bg-gradient-to-r from-neutral-800 to-neutral-700 transition-all duration-500 w-9 ${expanded ? "h-48 rounded-l-xl" : "h-10 rounded-l-md"} p-1 absolute -left-9 cursor-pointer`}
+            className={`flex flex-col items-center justify-center bg-gradient-to-r from-neutral-800 to-neutral-700 transition-all duration-500 w-9 ${expanded ? "h-48 rounded-l-xl" : "h-10 rounded-l-md"} p-1 absolute -left-9 cursor-pointer pointer-events-auto`}
             onClick={() => setExpanded(!expanded)}
           >
             <IoIosColorPalette className={`absolute text-neutral-100 h-4 w-4 top-3 transition-all duration-500 ${expanded ? "opacity-0" : "opacity-100"}`} />
             <IoIosArrowForward className={`absolute text-neutral-100 h-6 w-6 transition-all duration-500 ${expanded ? "opacity-100" : "opacity-0"}`} />
           </div>
-          <div className={`pl-3 py-3 flex flex-col gap-2 [&>*]:transition-all [&>*]:duration-100 ${expanded ? "[&>*]:opacity-100" : "[&>*]:opacity-0"}`}>
+          <div className={`pl-3 py-3 flex flex-col gap-2 [&>*]:transition-all [&>*]:duration-100 ${expanded ? "[&>*]:opacity-100" : "[&>*]:opacity-0 pointer-events-none"}`}>
             {hasHydrated ? <>
               <div className="flex items-center gap-2">
                 <ColorWheel

@@ -61,8 +61,6 @@ const fetcher = (...args: any[]) => fetch(...args).then(res => {
 export default function TeamProfile({ params }: { params: { slug: []} }) {
   const inputTeamRef = React.useRef<HTMLInputElement>(null);
 
-  const isPWA = IsPWA();
-
   const { isSignedIn } = useUser();
 
   const teamNumber = params.slug?.at(0) as undefined | string
@@ -333,7 +331,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
               defaultValue={teamNumberInput}
               placeholder={placeholder}
               ref={inputTeamRef}
-              className={`${teamNumberInput ? "outlinedText text-shadow-xs sm:text-shadow lg:text-shadow-lg shadow-[var(--color-tertiary-hover)]" : "text-center mt-10"} mb-5 border-none bg-transparent text-4xl font-bold outline-none xs:text-5xl sm:text-8xl placeholder-white placeholder-opacity-100`}
+              className={`${teamNumberInput ? "outlinedText" : "text-center mt-10"} mb-5 border-none bg-transparent text-4xl font-bold outline-none xs:text-5xl sm:text-8xl placeholder-white placeholder-opacity-100`}
               onChange={(event) => {
                 event.preventDefault();
                 window.history.pushState({}, '', `/teams/${event.target.value.toUpperCase()}`);
@@ -432,7 +430,7 @@ export default function TeamProfile({ params }: { params: { slug: []} }) {
         </div>
         <hr className={`sm:hidden block my-8 w-11/12 border-t-2 border-neutral-500 ${teamNumberInput ? "opacity-100" : "opacity-0"}`} />
         <Tabs defaultValue="statistics">
-          <TabsList className={`fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bgColorPrimary sm:h-10 transition-all ease-in-out duration-1000 ${teamNumberInput ? "opacity-100" : `opacity-0 ${isPWA ? "translate-y-100" : null}`} ${isPWA ? 'h-[90px]' : 'h-[60px]'} flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
+          <TabsList className={`fixed sm:relative z-30 sm:z-0 bottom-[3rem] left-0 px-2 pb-7 sm:pb-0 sm:bgColorPrimary sm:h-10 transition-all ease-in-out duration-1000 ${teamNumberInput ? "opacity-100" : `opacity-0`} h-[60px] flex w-full sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
    sm:to-[var(--color-primary-hover)] sm:from-[var(--color-primary)] to-neutral-800 from-GSGray`}>
             <TabsTrigger value="statistics" className="flex sm:flex-row flex-col h-14 text-2xs sm:h-8">
               <IoStatsChart className="inline-block sm:mr-2 text-lg" />

@@ -40,22 +40,22 @@ export default function Home() {
         <div className="flex flex-col gap-72">
           <div className="relative flex h-auto flex-col lg:items-start items-center animHeading lg:space-x-8 lg:flex-row">
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
-              <Balancer className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl text-shadow-lg shadow-[var(--color-tertiary-hover)]">
+              <Balancer className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl text-shadow-lg shadow-stone-500">
                 Scouting Done Easy.
               </Balancer>
               <Balancer className="text-base sm:text-xl">
                 Enhance your VEX Robotics scouting with GaelScout – your all-in-one solution for team data, match results, rankings, efficient note-taking, and a competitive edge.
               </Balancer>
-              <Balancer>
+              <div>
                 {isSignedIn ? (
-                  <p className="text-base sm:text-xl">
+                  <Balancer className="text-base sm:text-xl">
                     Enjoy your smooth scouting experience with GaelScout, {user.firstName}!
-                  </p>
+                  </Balancer>
                   )
                 : <>
-                  <p className="text-base sm:text-xl mb-8">
+                  <Balancer className="text-base sm:text-xl mb-8">
                     Enjoy your smooth scouting experience with GaelScout! Sign up to access all features.
-                  </p>
+                  </Balancer>
                   <Link href="sign-up">
                     <CorneredButton className="h-8 w-33 text-2xl font-semibold">
                       Sign Up
@@ -63,7 +63,7 @@ export default function Home() {
                   </Link>
                   </>
                 }
-              </Balancer>
+              </div>
             </div>
             <div className="hidden max-w-[600px] lg:block">
               <div className="hidden max-w-lg lg:flex lg:flex-col">
@@ -141,25 +141,25 @@ export default function Home() {
             </iframe>
           </div>
         </div>
-        <div className="fixed z-50 self-center bottom-[175px] flex items-center flex-col justify-center">
-          <div className="flex items-center justify-center bgColorPrimary rounded-full h-10 w-48">
-            <div className="ml-7 flex gap-3">
-              <FaStar
-                onClick={() => window.location.href = "/favorites"}
-                className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"/>
-              <hr className="h-5 w-0.5 bgColorSecondaryHover border-none"/>
-              <FaPeopleGroup
-                onClick={() => window.location.href = "/teams"}
-                className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"/>
-              <hr className="h-5 w-0.5 bgColorSecondaryHover border-none"/>
-              <MdEventNote
-                onClick={() => window.location.href = "/events"}
-                className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"
-              />
-            </div>
-            <MdSearch className="h-5 w-5 ml-auto mr-2.5 text-neutral-500"/>
-          </div>
-        </div>
+        {/*<div className="fixed z-50 self-center bottom-[175px] flex items-center flex-col justify-center">*/}
+        {/*  <div className="flex items-center justify-center bgColorPrimary rounded-full h-10 w-48">*/}
+        {/*    <div className="ml-7 flex gap-3">*/}
+        {/*      <FaStar*/}
+        {/*        onClick={() => window.location.href = "/favorites"}*/}
+        {/*        className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"/>*/}
+        {/*      <hr className="h-5 w-0.5 bgColorSecondaryHover border-none"/>*/}
+        {/*      <FaPeopleGroup*/}
+        {/*        onClick={() => window.location.href = "/teams"}*/}
+        {/*        className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"/>*/}
+        {/*      <hr className="h-5 w-0.5 bgColorSecondaryHover border-none"/>*/}
+        {/*      <MdEventNote*/}
+        {/*        onClick={() => window.location.href = "/events"}*/}
+        {/*        className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"*/}
+        {/*      />*/}
+        {/*    </div>*/}
+        {/*    <MdSearch className="h-5 w-5 ml-auto mr-2.5 text-neutral-500"/>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
       </div>
     </main>
   )

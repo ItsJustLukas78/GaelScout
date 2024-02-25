@@ -12,6 +12,7 @@ import { GeistSans } from 'geist/font/sans';
 import 'react-toastify/dist/ReactToastify.css';
 import ColorPicker from "@/components/ColorPicker";
 import ColorProvider from "@/components/ColorProvider";
+import MobileSearch from "@/components/MobileSearch";
 
 
 export const metadata: Metadata = {
@@ -70,11 +71,12 @@ export default function RootLayout({
           <Navbar />
           <div className="flex w-full justify-center pb-16 sm:pb-0 m-0">
             {/*<QuickSearch />*/}
+            <MobileSearch />
             <MobileNav />
-            <ColorPicker />
-            <ColorProvider>
-              {children}
-            </ColorProvider>
+            {/*<ColorPicker />*/}
+            {/*<ColorProvider>*/}
+            {children}
+            {/*</ColorProvider>*/}
             <Analytics />
           </div>
           <ToastContainer
