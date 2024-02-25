@@ -48,6 +48,17 @@ export default function MatchNotesDialog({
 
   const [loading, setLoading] = useState(false)
 
+  const [updatedNotesMatch, setUpdatedNotesMatch] = useState<EventMatch>(currentNotesMatch)
+
+  useEffect(() => {
+    const index = matchList?.findIndex((match) => {
+      return match.name === (currentNotesMatch?.name || "")
+    }) || 0
+
+    setUpdatedNotesMatch(matchList[index])
+  }, [matchList, currentNotesMatch])
+
+
   const changeTeamNotes = (team: TeamIdentifiers) => {
     if (!currentEditor) {
       return;
@@ -272,8 +283,8 @@ export default function MatchNotesDialog({
                 <Tiptap setEditor={setCurrentEditor} />
                 <MatchResultNavigator
                   className="mt-5"
-                  key={currentNotesMatch?.id}
-                  {...currentNotesMatch}
+                  key={updatedNotesMatch?.id}
+                  {...updatedNotesMatch}
                   teamSetter={changeTeamNotes}
                   teamsToRelavancyType={teamsToRelavancyType}
                 />
@@ -302,7 +313,7 @@ export default function MatchNotesDialog({
                     className="flex h-5 w-10 items-center justify-center text-xl font-semibold text-white"
                     onClick={() => {
                       const index = matchList?.findIndex((match) => {
-                        return match.id === currentNotesMatch?.id
+                        return match.name === (currentNotesMatch?.name || "")
                       }) || 0
                       if (index !== matchList.length - 1) {
                         saveNotesAndChangeMatch(false, matchList[index + 1])
