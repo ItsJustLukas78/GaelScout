@@ -329,7 +329,7 @@ export default function MobileSearch() {
               </button>
             </animated.div>
             {/*tabs for teams and events and favorites*/}
-            <div className="mt-2 text-sm flex flex-row w-full h-min border-b-2 border-b-neutral-500">
+            <div className={`mt-2 text-sm flex flex-row w-full h-min border-b-2 border-b-neutral-500 ${expanded ? "" : "opacity-0"}`}>
               <button
                 className={`w-20 h-6 text-white transition-all duration-100 ${activeTab === TabType.TEAMS ? "border-b-2" : ""}`}
                 onClick={() => handleTabChange(TabType.TEAMS)}
@@ -350,7 +350,7 @@ export default function MobileSearch() {
               </button>
             </div>
             {/*content for teams and events and favorites*/}
-            <div className="relative h-full w-full flex">
+            <div className={`relative h-full w-full flex ${expanded ? "" : "opacity-0"}`}>
               <div className={`flex h-full flex-col items-center transition-all duration-200 [&>*]:transition-all [&>*]:duration-700 ${activeTab === TabType.TEAMS ? " w-full p-3" : "w-0 [&>*]:opacity-0"}`}>
                 {/*infinite scroll of team results*/}
                 <div className="flex flex-col h-[85%] gap-2 w-full p-2 items-center overflow-auto">
