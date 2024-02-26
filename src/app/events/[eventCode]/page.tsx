@@ -43,7 +43,7 @@ import { TiDeleteOutline } from "react-icons/ti";
 import Spinner from "@/components/Spinner";
 import { FaCircleInfo } from "react-icons/fa6";
 import { CiExport } from "react-icons/ci";
-
+import {IsPWA} from "@/components/IsPWA"
 
 
 const SWROptions = {
@@ -51,7 +51,7 @@ const SWROptions = {
   revalidateOnReconnect: true,
   refreshWhenHidden: false,
   refreshWhenOffline: false,
-  focusThrottleInterval: 30 * 1000,
+  focusThrottleInterval: 90 * 1000,
 }
 
 enum TabType {
@@ -75,6 +75,7 @@ const fetcher = (...args: any[]) => fetch(...args).then(res => {
 
 export default function EventPage({params}: { params: { eventCode: string } }) {
   const {isLoaded, isSignedIn, user} = useUser();
+  const isPWA = IsPWA();
   const router = useRouter();
   const searchParams = useSearchParams()
 
@@ -169,7 +170,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     setSkillsRanked(newSkillsRanked)
   }, [skills, skillsSort])
 
-  const { data: eventData, error: eventDataError, isLoading: eventDataIsLoading } = useSWR(`/api/events/?eventSKU=${eventCode}`, fetcher, SWROptions)
+  const { data: eventData, error: eventDataError, isLoading: eventDataIsLoading } = useSWR(`/api/events/?eventSKU=${eventCode}`, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false,
+  })
 
   useEffect(() => {
     if (eventData && !eventDataError) {
@@ -181,7 +187,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [eventData, eventDataError])
 
-  const { data: teamsData, error: teamsError, isLoading: teamsIsLoading } = useSWR(eventObject ? `/api/events/${eventObject.id}/teams` : null, fetcher, SWROptions)
+  const { data: teamsData, error: teamsError, isLoading: teamsIsLoading } = useSWR(eventObject ? `/api/events/${eventObject.id}/teams` : null, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false,
+  })
 
   useEffect(() => {
     if (teamsData && !teamsError) {
@@ -201,7 +212,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [teamsData, teamsError])
 
-  const { data: favoritesData, error: favoritesError, isLoading: favoritesIsLoading } = useSWR(isSignedIn && eventObject ? `/api/favorites/?eventId=${eventObject?.id}&favoriteType=event` : null, fetcher, SWROptions)
+  const { data: favoritesData, error: favoritesError, isLoading: favoritesIsLoading } = useSWR(isSignedIn && eventObject ? `/api/favorites/?eventId=${eventObject?.id}&favoriteType=event` : null, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false,
+  })
 
   useEffect(() => {
     if (favoritesData && !favoritesError) {
@@ -211,7 +227,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [favoritesData, favoritesError])
 
-  const { data: awardsData, error: awardsError, isLoading: awardsIsLoading } = useSWR(eventObject ? `/api/events/${eventObject.id}/awards` : null, fetcher, SWROptions)
+  const { data: awardsData, error: awardsError, isLoading: awardsIsLoading } = useSWR(eventObject ? `/api/events/${eventObject.id}/awards` : null, fetcher, {...SWROptions, refreshInterval: 1000 * 60 * 10})
 
   useEffect(() => {
     if (awardsData && !awardsError) {
@@ -528,7 +544,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [teamNumberFilter, matchList]);
 
-  const { data: matchData, error: matchDataError, isLoading: matchDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/matches` : null, fetcher, {...SWROptions, refreshInterval: 1000  * 60})
+  const { data: matchData, error: matchDataError, isLoading: matchDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/matches` : null, fetcher, {...SWROptions, refreshInterval: 1000 * 60})
 
   useEffect(() => {
     if (matchData && !matchDataError) {
@@ -539,7 +555,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [matchData])
 
-  const { data: rankingsData, error: rankingsDataError, isLoading: rankingsDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/rankings` : null, fetcher, {...SWROptions, refreshInterval: 1000  * 60})
+  const { data: rankingsData, error: rankingsDataError, isLoading: rankingsDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/rankings` : null, fetcher, {...SWROptions, refreshInterval: 1000 * 60})
 
   useEffect(() => {
     if (rankingsData && !rankingsDataError) {
@@ -553,7 +569,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [rankingsData])
 
-  const { data: skillsData, error: skillsDataError, isLoading: skillsDataIsLoading } = useSWR(eventObject ? `/api/events/${eventObject?.id}/skills` : null, fetcher, {...SWROptions, refreshInterval: 1000  * 60})
+  const { data: skillsData, error: skillsDataError, isLoading: skillsDataIsLoading } = useSWR(eventObject ? `/api/events/${eventObject?.id}/skills` : null, fetcher, SWROptions)
 
   useEffect(() => {
     if (skillsData && participatingTeams.length !== 0 && !skillsDataError) {
@@ -847,8 +863,8 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
           <hr className="sm:hidden block my-8 w-11/12 border-t-2 border-neutral-500"/>
           <Tabs value={tab} onValueChange={onTabChange}>
             <TabsList
-              className="fixed sm:relative z-30 sm:z-0 bottom-[3rem] left-0 px-2 pb-7 sm:pb-0 sm:bgColorPrimary sm:h-10 h-[60px] flex w-full sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
-   to-neutral-800 from-GSGray sm:to-[var(--color-primary-hover)] sm:from-[var(--color-primary)]">
+              className={`fixed sm:relative z-30 sm:z-0 ${isPWA ? "bottom-[4rem]" : "bottom-[3rem]"} sm:bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bgColorPrimary sm:h-10 h-[60px] flex w-full sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
+   to-neutral-800 from-GSGray sm:to-[var(--color-primary-hover)] sm:from-[var(--color-primary)]`}>
               <TabsTrigger value="teams" className="flex sm:flex-row flex-col h-14 text-2xs sm:h-8">
                 <FaClipboardList className="inline-block sm:mr-2 text-lg"/>
                 Teams

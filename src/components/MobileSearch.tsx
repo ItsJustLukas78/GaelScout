@@ -40,7 +40,7 @@ const fetcher = (...args: any[]) => fetch(...args).then(res => {
 
 export default function MobileSearch() {
   const {isLoaded, isSignedIn, user} = useUser();
-
+  const isPWA = IsPWA();
 
   enum TabType {
     TEAMS="TEAMS",
@@ -86,6 +86,12 @@ export default function MobileSearch() {
       setExpanded(true);
     }
   })
+
+  useEffect(() => {
+    if (!expanded) {
+      setSearchButtonEnabled(false);
+    }
+  }, [expanded]);
 
   const [searchButtonEnabled, setSearchButtonEnabled] = useState(true);
 
@@ -168,6 +174,10 @@ export default function MobileSearch() {
   const hasHydrated = useGlobalStore(state => state._hasHydrated);
 
   useEffect(() => {
+    if (!expanded) {
+      return;
+    }
+
     setLoadingTeams(true);
 
     if (!hasHydrated) {
@@ -188,7 +198,7 @@ export default function MobileSearch() {
         setSeasonEvents(seasonToEvents[seasonId]);
       }
     }
-  }, [seasonId, hasHydrated]);
+  }, [seasonId, hasHydrated, expanded]);
 
   const increaseEventsShown = () => {
     setDisplayedEvents(filteredEvents.slice(0, (currentEventsPage + 1) * 15));
@@ -226,8 +236,8 @@ export default function MobileSearch() {
     }
   }, [currentSearch, activeTab]);
 
-  const { data: favoriteTeamsData, error: favoriteTeamsError, isLoading: favoriteTeamsIsLoading } = useSWR(`/api/favorites?favoriteType=team`, fetcher, SWROptions);
-  const { data: favoriteEventsData, error: favoriteEventsError, isLoading: favoriteEventsIsLoading } = useSWR(`/api/favorites?favoriteType=event`, fetcher, SWROptions);
+  const { data: favoriteTeamsData, error: favoriteTeamsError, isLoading: favoriteTeamsIsLoading } = useSWR(expanded && isSignedIn ? `/api/favorites?favoriteType=team` : null, fetcher, SWROptions);
+  const { data: favoriteEventsData, error: favoriteEventsError, isLoading: favoriteEventsIsLoading } = useSWR(expanded && isSignedIn ? `/api/favorites?favoriteType=event` : null, fetcher, SWROptions);
 
   useEffect(() => {
     if (favoriteTeamsData) {
@@ -281,7 +291,7 @@ export default function MobileSearch() {
       />
         <animated.div
           style={{ y, touchAction: 'none' }}
-          className={`sm:hidden flex fixed w-full h-[85%] z-40 left-0 transition-all ease-in-out duration-1000 border-t-[1px] ${expanded ? "bottom-0 border-transparent" : `bottom-[calc(-85%+3rem)] border-neutral-600 border-opacity-100`}`}
+          className={`sm:hidden flex fixed w-full h-[85%] z-40 left-0 transition-all ease-in-out duration-1000 border-t-[1px] ${expanded ? "bottom-0 border-transparent" : `${isPWA ? "bottom-[calc(-85%+4rem)]" : "bottom-[calc(-85%+3rem)]"} border-neutral-600 border-opacity-100`}`}
         >
           <div className={`flex flex-col w-full h-full bgColorPrimary ${expanded ? "rounded-t-3xl" : ""}`}>
             <animated.div
