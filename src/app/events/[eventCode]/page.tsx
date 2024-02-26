@@ -43,6 +43,9 @@ import { TiDeleteOutline } from "react-icons/ti";
 import Spinner from "@/components/Spinner";
 import { FaCircleInfo } from "react-icons/fa6";
 import { CiExport } from "react-icons/ci";
+import {IsPWA} from "@/components/IsPWA"
+import { MdSearch } from "react-icons/md";
+import SearchBar from "@/components/SearchBar";
 
 
 
@@ -51,7 +54,7 @@ const SWROptions = {
   revalidateOnReconnect: true,
   refreshWhenHidden: false,
   refreshWhenOffline: false,
-  focusThrottleInterval: 30 * 1000,
+  focusThrottleInterval: 90 * 1000,
 }
 
 enum TabType {
@@ -75,6 +78,7 @@ const fetcher = (...args: any[]) => fetch(...args).then(res => {
 
 export default function EventPage({params}: { params: { eventCode: string } }) {
   const {isLoaded, isSignedIn, user} = useUser();
+  const isPWA = IsPWA();
   const router = useRouter();
   const searchParams = useSearchParams()
 
@@ -169,7 +173,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     setSkillsRanked(newSkillsRanked)
   }, [skills, skillsSort])
 
-  const { data: eventData, error: eventDataError, isLoading: eventDataIsLoading } = useSWR(`/api/events/?eventSKU=${eventCode}`, fetcher, SWROptions)
+  const { data: eventData, error: eventDataError, isLoading: eventDataIsLoading } = useSWR(`/api/events/?eventSKU=${eventCode}`, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false,
+  })
 
   useEffect(() => {
     if (eventData && !eventDataError) {
@@ -181,7 +190,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [eventData, eventDataError])
 
-  const { data: teamsData, error: teamsError, isLoading: teamsIsLoading } = useSWR(eventObject ? `/api/events/${eventObject.id}/teams` : null, fetcher, SWROptions)
+  const { data: teamsData, error: teamsError, isLoading: teamsIsLoading } = useSWR(eventObject ? `/api/events/${eventObject.id}/teams` : null, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false,
+  })
 
   useEffect(() => {
     if (teamsData && !teamsError) {
@@ -201,7 +215,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [teamsData, teamsError])
 
-  const { data: favoritesData, error: favoritesError, isLoading: favoritesIsLoading } = useSWR(isSignedIn && eventObject ? `/api/favorites/?eventId=${eventObject?.id}&favoriteType=event` : null, fetcher, SWROptions)
+  const { data: favoritesData, error: favoritesError, isLoading: favoritesIsLoading } = useSWR(isSignedIn && eventObject ? `/api/favorites/?eventId=${eventObject?.id}&favoriteType=event` : null, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false,
+  })
 
   useEffect(() => {
     if (favoritesData && !favoritesError) {
@@ -211,7 +230,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [favoritesData, favoritesError])
 
-  const { data: awardsData, error: awardsError, isLoading: awardsIsLoading } = useSWR(eventObject ? `/api/events/${eventObject.id}/awards` : null, fetcher, SWROptions)
+  const { data: awardsData, error: awardsError, isLoading: awardsIsLoading } = useSWR(eventObject ? `/api/events/${eventObject.id}/awards` : null, fetcher, {...SWROptions, refreshInterval: 1000 * 60 * 10})
 
   useEffect(() => {
     if (awardsData && !awardsError) {
@@ -528,7 +547,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [teamNumberFilter, matchList]);
 
-  const { data: matchData, error: matchDataError, isLoading: matchDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/matches` : null, fetcher, {...SWROptions, refreshInterval: 1000  * 60})
+  const { data: matchData, error: matchDataError, isLoading: matchDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/matches` : null, fetcher, {...SWROptions, refreshInterval: 1000 * 60})
 
   useEffect(() => {
     if (matchData && !matchDataError) {
@@ -539,7 +558,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [matchData])
 
-  const { data: rankingsData, error: rankingsDataError, isLoading: rankingsDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/rankings` : null, fetcher, {...SWROptions, refreshInterval: 1000  * 60})
+  const { data: rankingsData, error: rankingsDataError, isLoading: rankingsDataIsLoading } = useSWR(currentDivision && (currentDivision.name !== "Default") ? `/api/events/${eventObject?.id}/${currentDivision.id}/rankings` : null, fetcher, {...SWROptions, refreshInterval: 1000 * 60})
 
   useEffect(() => {
     if (rankingsData && !rankingsDataError) {
@@ -553,7 +572,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
   }, [rankingsData])
 
-  const { data: skillsData, error: skillsDataError, isLoading: skillsDataIsLoading } = useSWR(eventObject ? `/api/events/${eventObject?.id}/skills` : null, fetcher, {...SWROptions, refreshInterval: 1000  * 60})
+  const { data: skillsData, error: skillsDataError, isLoading: skillsDataIsLoading } = useSWR(eventObject ? `/api/events/${eventObject?.id}/skills` : null, fetcher, SWROptions)
 
   useEffect(() => {
     if (skillsData && participatingTeams.length !== 0 && !skillsDataError) {
@@ -769,7 +788,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
         {eventObject ? <>
           <div
             className="relative flex h-auto flex-col justify-center card-shine-effect rounded-2xl sm:bgColorPrimary sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
-            <h1 className="outlinedText mb-5 min-w-[85%] max-w-[85%] text-2xl font-bold sm:text-3xl md:text-5xl lg:text-7xl text-shadow-xs sm:text-shadow lg:text-shadow-lg shadow-[var(--color-tertiary-hover)]">
+            <h1 className="outlinedText mb-5 min-w-[85%] max-w-[85%] text-2xl font-bold sm:text-3xl md:text-5xl lg:text-7xl">
               {eventObject.name}
             </h1>
             <div className="absolute max-w-max top-0.5 right-0.5 xl:top-2 xl:right-2">
@@ -847,8 +866,8 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
           <hr className="sm:hidden block my-8 w-11/12 border-t-2 border-neutral-500"/>
           <Tabs value={tab} onValueChange={onTabChange}>
             <TabsList
-              className="fixed sm:relative z-50 sm:z-0 bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bgColorPrimary sm:h-10 h-[90px] flex w-screen sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
-   to-neutral-800 from-GSGray sm:to-[var(--color-primary-hover)] sm:from-[var(--color-primary)]">
+              className={`fixed sm:relative z-30 sm:z-0 ${isPWA ? "bottom-[4rem]" : "bottom-[3rem]"} sm:bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bgColorPrimary sm:h-10 h-[60px] flex w-full sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
+   to-neutral-800 from-GSGray sm:to-[var(--color-primary-hover)] sm:from-[var(--color-primary)]`}>
               <TabsTrigger value="teams" className="flex sm:flex-row flex-col h-14 text-2xs sm:h-8">
                 <FaClipboardList className="inline-block sm:mr-2 text-lg"/>
                 Teams
@@ -879,11 +898,11 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
                     <button
-                      className="h-8 min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      className="h-8 flex relative items-center min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black sm:w-52 md:h-12 md:w-60 md:text-lg"
                       onClick={() => setExportDialogOpen(true)}
                     >
                       Generate Scout Sheet
-                      <CiExport className="inline-block mx-1 mb-0.5"/>
+                      <CiExport className="inline-block absolute right-2"/>
                     </button>
                     <select
                       className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
@@ -906,19 +925,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         )
                       })}
                     </select>
-                    <div className="relative min-w-max">
-                      <input
-                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
-                        type="text"
-                        value={teamNumberFilter}
-                        placeholder="Filter by team..."
-                        onChange={(e) => setTeamNumberFilter(e.target.value)}
-                      />
-                      <TiDeleteOutline
-                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
-                        onClick={() => setTeamNumberFilter("")}
-                      />
-                    </div>
+                    <SearchBar value={teamNumberFilter} changeValue={setTeamNumberFilter} placeholder={"Filter by team..."} />
                   </div>
                 </div>
                 <div className="flex flex-row gap-3 my-5 outlinedText">
@@ -1004,27 +1011,27 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
                     <button
-                      className="h-8 min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
+                      className="flex items-center relative h-8 min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black sm:w-52 md:h-12 md:w-60 md:text-lg"
                       onClick={() => setRankingsExportDialogOpen(true)}
                     >
                       Generate Scout Sheet
-                      <CiExport className="inline-block mx-1 mb-0.5"/>
+                      <CiExport className="inline-block right-2 absolute"/>
                     </button>
-                    <select
-                      className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
-                      required
-                      value={rankedStatistic}
-                      onChange={(event) => {
-                        setRankedStatistic(event.target.value);
-                      }}
-                    >
-                      <option value="rank">Filter by Rank</option>
-                      <option value="opr">OPR (Contrib. to score)</option>
-                      <option value="dpr">DPR (Contrib. to opp score)</option>
-                      <option value="ccwm">CCWM (OPR - DPR)</option>
-                      <option value="ap">AP (Auton Win Points)</option>
-                      <option value="sp">SP (Opponent Strength)</option>
-                    </select>
+                    {/*<select*/}
+                    {/*  className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"*/}
+                    {/*  required*/}
+                    {/*  value={rankedStatistic}*/}
+                    {/*  onChange={(event) => {*/}
+                    {/*    setRankedStatistic(event.target.value);*/}
+                    {/*  }}*/}
+                    {/*>*/}
+                    {/*  <option value="rank">Filter by Rank</option>*/}
+                    {/*  <option value="opr">OPR (Contrib. to score)</option>*/}
+                    {/*  <option value="dpr">DPR (Contrib. to opp score)</option>*/}
+                    {/*  <option value="ccwm">CCWM (OPR - DPR)</option>*/}
+                    {/*  <option value="ap">AP (Auton Win Points)</option>*/}
+                    {/*  <option value="sp">SP (Opponent Strength)</option>*/}
+                    {/*</select>*/}
                     <select
                       className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
                       required
@@ -1041,28 +1048,54 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         )
                       })}
                     </select>
-                    <div className="relative min-w-max">
-                      <input
-                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
-                        type="text"
-                        value={teamNumberFilter}
-                        placeholder="Filter by team..."
-                        onChange={(e) => setTeamNumberFilter(e.target.value)}
-                      />
-                      <TiDeleteOutline
-                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
-                        onClick={() => setTeamNumberFilter("")}
-                      />
+                    <SearchBar value={teamNumberFilter} changeValue={setTeamNumberFilter} placeholder={"Filter by team..."} />
+                    <div className="flex flex-row w-full [&>*]:flex-1 [&>*]:p-1 bg-secondary p-1 rounded-lg [&>*]:transition-colors [&>*]:duration-300">
+                      <button
+                        className={`h-8 min-w-max rounded-lg text-sm text-white ${rankedStatistic === "rank" ? "bg-neutral-900" : "bg-transparent"}`}
+                        onClick={() => setRankedStatistic("rank")}
+                      >
+                        Rank
+                      </button>
+                      <button
+                        className={`h-8 min-w-max rounded-lg text-sm text-white ${rankedStatistic === "opr" ? "bg-neutral-900" : "bg-transparent"}`}
+                        onClick={() => setRankedStatistic("opr")}
+                      >
+                        OPR
+                      </button>
+                      <button
+                        className={`h-8 min-w-max rounded-lg text-sm text-white ${rankedStatistic === "dpr" ? "bg-neutral-900" : "bg-transparent"}`}
+                        onClick={() => setRankedStatistic("dpr")}
+                      >
+                        DPR
+                      </button>
+                      <button
+                        className={`h-8 min-w-max rounded-lg text-sm text-white ${rankedStatistic === "ccwm" ? "bg-neutral-900" : "bg-transparent"}`}
+                        onClick={() => setRankedStatistic("ccwm")}
+                      >
+                        CCWM
+                      </button>
+                      <button
+                        className={`h-8 min-w-max rounded-lg text-sm text-white ${rankedStatistic === "ap" ? "bg-neutral-900" : ""}`}
+                        onClick={() => setRankedStatistic("ap")}
+                      >
+                        AP
+                      </button>
+                      <button
+                        className={`h-8 min-w-max rounded-lg text-sm text-white ${rankedStatistic === "sp" ? "bg-neutral-900" : ""}`}
+                        onClick={() => setRankedStatistic("sp")}
+                      >
+                        SP
+                      </button>
                     </div>
-                    <label className="flex items-center gap-2 font-bold">
-                      <input
-                        type="checkbox"
-                        className="h-5 w-5"
-                        checked={reflectVIAStats}
-                        onChange={(event) => setReflectVIAStats(event.target.checked)}
-                      />
-                      <span className="text-xs sm:text-md xl:text-lg">Reflect Vex VIA/Account for unscored matches</span>
-                    </label>
+                    {/*<label className="flex items-center gap-2 font-bold">*/}
+                    {/*  <input*/}
+                    {/*    type="checkbox"*/}
+                    {/*    className="h-5 w-5"*/}
+                    {/*    checked={reflectVIAStats}*/}
+                    {/*    onChange={(event) => setReflectVIAStats(event.target.checked)}*/}
+                    {/*  />*/}
+                    {/*  <span className="text-xs sm:text-md xl:text-lg">Reflect Vex VIA/Account for unscored matches</span>*/}
+                    {/*</label>*/}
                   </div>
                   <div className="flex flex-row gap-3 my-5">
                     <FaCircleInfo className="text-xl  align-middle"/>
@@ -1117,7 +1150,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
                     <button
-                      className="h-8 min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black disabled:opacity-50 sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      className="relative flex items-center h-8 min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black disabled:opacity-50 sm:w-44 md:h-12 md:w-52 md:text-lg"
                       onClick={() => {
                         if (!isSignedIn) {
                           toast.error("You must be signed in to view match notes");
@@ -1128,7 +1161,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       }}
                     >
                       View Match Notes
-                      <FaClipboardList className="inline-block mx-1 mb-1"/>
+                      <FaClipboardList className="absolute right-3"/>
                     </button>
                     <select
                       className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
@@ -1146,42 +1179,30 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         )
                       })}
                     </select>
-                    <div className="relative min-w-max">
+                    <SearchBar value={teamNumberFilter} changeValue={setTeamNumberFilter} placeholder={"Filter by team..."} />
+                    <div className="relative flex flex-row min-w-max items-center">
                       <input
                         className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
                         type="text"
-                        value={teamNumberFilter}
-                        placeholder="Filter by team..."
-                        onChange={(e) => setTeamNumberFilter(e.target.value)}
-                      />
-                      <TiDeleteOutline
-                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
-                        onClick={() => setTeamNumberFilter("")}
-                      />
-                    </div>
-                    <div className="relative min-w-max">
-                      <input
-                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-72 md:text-lg"
-                        type="text"
                         value={currentUsersTeamNumber ? currentUsersTeamNumber : ""}
-                        placeholder="Label alliances/opponents for..."
+                        placeholder="Use labels for..."
                         onChange={(e) => setUsersCurrentTeamNumber(e.target.value)}
                       />
                       <TiDeleteOutline
-                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
+                        className="absolute right-2 text-lg sm:text-xl cursor-pointer text-black"
                         onClick={() => setUsersCurrentTeamNumber("")}
                       />
                     </div>
-                    <label className="flex items-center gap-2 font-bold">
-                      <input
-                        type="checkbox"
-                        className="h-5 w-5"
-                        checked={compactMatches}
-                        onChange={(event) => setCompactMatches(event.target.checked)}
-                      />
-                      <span className="text-sm sm:text-md xl:text-lg">Compact Mode</span>
-                    </label>
                   </div>
+                  <label className="mt-3 flex items-center gap-2 font-bold">
+                    <input
+                      type="checkbox"
+                      className="h-5 w-5"
+                      checked={compactMatches}
+                      onChange={(event) => setCompactMatches(event.target.checked)}
+                    />
+                    <span className="text-sm sm:text-md xl:text-lg">Compact Mode</span>
+                  </label>
                 </div>
                 <div className="flex flex-row gap-3 my-5 outlinedText">
                   <FaCircleInfo className="text-xl align-middle"/>
@@ -1253,19 +1274,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       <option value="prog">Prog</option>
                       <option value="driver">Driver</option>
                     </select>
-                    <div className="relative min-w-max">
-                      <input
-                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
-                        type="text"
-                        value={teamNumberFilter}
-                        placeholder="Filter by team..."
-                        onChange={(e) => setTeamNumberFilter(e.target.value)}
-                      />
-                      <TiDeleteOutline
-                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
-                        onClick={() => setTeamNumberFilter("")}
-                      />
-                    </div>
+                    <SearchBar value={teamNumberFilter} changeValue={setTeamNumberFilter} placeholder={"Filter by team..."} />
                   </div>
                 </div>
                 <div className="flex flex-row outlinedText gap-3 my-5">
@@ -1305,19 +1314,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     Awards
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
-                    <div className="relative min-w-max">
-                      <input
-                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
-                        type="text"
-                        value={teamNumberFilter}
-                        placeholder="Filter by team..."
-                        onChange={(e) => setTeamNumberFilter(e.target.value)}
-                      />
-                      <TiDeleteOutline
-                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
-                        onClick={() => setTeamNumberFilter("")}
-                      />
-                    </div>
+                    <SearchBar value={teamNumberFilter} changeValue={setTeamNumberFilter} placeholder={"Filter by team..."} />
                   </div>
                 </div>
                 <p className="mb-10 text-sm font-semibold outlinedText">
