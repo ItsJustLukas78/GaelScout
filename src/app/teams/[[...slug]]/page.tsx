@@ -16,6 +16,7 @@ import {IsPWA} from "@/components/IsPWA";
 import Spinner from "@/components/Spinner";
 import useSWR from 'swr'
 import {TbNotebook, TbNumbers} from "react-icons/tb";
+import {useGlobalStore} from "@/state/globalState";
 
 
 const SWROptions = {
@@ -54,6 +55,9 @@ const fetcher = (...args: any[]) => fetch(...args).then(res => {
 export default function TeamProfile({params}: { params: { slug: [] } }) {
   const inputTeamRef = React.useRef<HTMLInputElement>(null);
   const isPWA = IsPWA();
+
+  const addRecentlyViewedTeam = useGlobalStore(state => state.addRecentlyViewedTeam);
+  const hasHydrated = useGlobalStore(state => state._hasHydrated);
 
   const {isSignedIn} = useUser();
 
@@ -138,9 +142,12 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
 
       setTeamProfile(data.team)
       setLoadingProfile(false);
+
+      if (hasHydrated) {
+        addRecentlyViewedTeam(data.team);
+      }
     } catch (err) {
       toast.error(err as any)
-      setTeamProfile(null);
       setLoadingProfile(false);
     }
   }
@@ -378,7 +385,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
               </a>
               <div className="flex flex-col gap-5 min-w-auto xl:flex-row xl:gap-14">
                 <div className="flex flex-row gap-5 xl:w-[30%] xl:flex-col">
-                  <div className="flex flex-col truncate w-[49%] xl:w-auto">
+                  <div className="flex flex-col w-[49%] xl:w-auto">
                     <h3 className="text-xl font-bold">
                       Name:
                     </h3>

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { NotesGroup } from '@/app/types'
+import {NotesGroup, TeamProfile} from '@/app/types'
 import { Event } from '@/app/types'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
@@ -22,6 +22,8 @@ interface GlobalState {
   setUsersCurrentTeamNumber: (teamNumber: string | null) => void;
   setSeasonToEvents: (seasonId: number, events: Event[]) => void;
   setSeasonToEventsAge: (seasonId: number, age: Date) => void;
+  recentlyViewedTeams: [TeamProfile, TeamProfile, TeamProfile, TeamProfile, TeamProfile];
+  addRecentlyViewedTeam: (team: TeamProfile) => void;
 }
 
 export const useGlobalStore = create<GlobalState>()(
@@ -55,6 +57,19 @@ export const useGlobalStore = create<GlobalState>()(
       setUsersCurrentTeamNumber: (teamNumber: string | null) => set({ currentUsersTeamNumber: teamNumber }),
       setSeasonToEvents: (seasonId: number, events: Event[]) => set({ seasonToEvents: {...get().seasonToEvents, [seasonId]: events} }),
       setSeasonToEventsAge: (seasonId: number, age: Date) => set({ seasonToEventsAge: {...get().seasonToEventsAge, [seasonId]: age} }),
+      recentlyViewedTeams: [],
+      addRecentlyViewedTeam: (team: TeamProfile) => {
+        const recentlyViewedTeams = get().recentlyViewedTeams;
+        if (recentlyViewedTeams.length === 5) {
+          recentlyViewedTeams.pop();
+        }
+        // If the team is already in the list, remove it and add it to the front.
+        if (recentlyViewedTeams.some((recentlyViewedTeam: TeamProfile) => recentlyViewedTeam.teamId === team.teamId)) {
+          set({ recentlyViewedTeams: [team, ...recentlyViewedTeams.filter((recentlyViewedTeam: TeamProfile) => recentlyViewedTeam.teamId !== team.teamId)] });
+        } else {
+          set({recentlyViewedTeams: [team, ...recentlyViewedTeams]});
+        }
+      }
     }), {
     name: 'global-state',
     storage: createJSONStorage(() => localStorage),

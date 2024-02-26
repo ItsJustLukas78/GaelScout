@@ -40,6 +40,8 @@ export default function MobileSearch() {
   const {isLoaded, isSignedIn, user} = useUser();
   const isPWA = IsPWA();
 
+  const recentlyViewedTeams = useGlobalStore(state => state.recentlyViewedTeams);
+
   enum TabType {
     TEAMS="TEAMS",
     EVENTS="EVENTS",
@@ -63,6 +65,8 @@ export default function MobileSearch() {
 
   const searchBarRef = React.useRef(null);
 
+  const [searchButtonEnabled, setSearchButtonEnabled] = useState(true);
+
   const bind = useDrag(({ down, movement: [mx, my] }) => {
     if (my < -5 && expanded) {
       my = -5;
@@ -80,18 +84,15 @@ export default function MobileSearch() {
         setSearchButtonEnabled(true);
       }, 1000);
     } else if (down && my < -5) {
-      setSearchButtonEnabled(false);
       setExpanded(true);
+      setSearchButtonEnabled(false);
     }
   })
 
   useEffect(() => {
-    if (!expanded) {
-      setSearchButtonEnabled(false);
-    }
-  }, [expanded]);
-
-  const [searchButtonEnabled, setSearchButtonEnabled] = useState(true);
+    setSearchButtonEnabled(true);
+    setExpanded(false);
+  }, []);
 
   const [currentSearch, setCurrentSearch] = useState<string>("");
 
@@ -268,17 +269,10 @@ export default function MobileSearch() {
   }, [favoriteEventsData]);
 
   // check if the page has tabs or not (on team or event page)
-  const [covered, setCovered] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
-    if (pathname.startsWith("/teams") || pathname.startsWith("/events")) {
-      console.log("covered");
-      setCovered(true);
-    } else {
-      console.log("not covered");
-      setCovered(false);
-    }
+    setExpanded(false);
   }, [pathname]);
 
   return (
@@ -308,8 +302,8 @@ export default function MobileSearch() {
                   setCurrentSearch(e.target.value);
                 }}
                 onClick={() => {
-                  if (!expanded && searchButtonEnabled) {
-                    setExpanded(!expanded)
+                  if (searchButtonEnabled) {
+                    setExpanded(true);
                   }
                 }}
               />
@@ -357,7 +351,7 @@ export default function MobileSearch() {
             </div>
             {/*content for teams and events and favorites*/}
             <div className="relative h-full w-full flex">
-              <div className={`flex h-full flex-col items-center transition-all duration-300 ${activeTab === TabType.TEAMS ? " w-full p-3" : "w-0 [&>*]:hidden"}`}>
+              <div className={`flex h-full flex-col items-center transition-all duration-200 [&>*]:transition-all [&>*]:duration-700 ${activeTab === TabType.TEAMS ? " w-full p-3" : "w-0 [&>*]:opacity-0"}`}>
                 {/*infinite scroll of team results*/}
                 <div className="flex flex-col h-[85%] gap-2 w-full p-2 items-center overflow-auto">
                   {teamResults.map((team, index) => {
@@ -376,13 +370,36 @@ export default function MobileSearch() {
                       />
                     )
                   })}
+                  {teamResults.length === 0 && currentSearch.length == 0 && recentlyViewedTeams?.length > 0 ? <>
+                    <h1 className="text-white text-left self-start font-semibold text-lg">Recently Viewed Teams</h1>
+                    <hr className="w-full border-neutral-500"/>
+                    {recentlyViewedTeams.map((team, index) => {
+                      return (
+                        <TeamResult
+                          key={index}
+                          teamId={team.teamId}
+                          teamNumber={team.teamNumber}
+                          teamName={team.teamName}
+                          programCode={team.programCode}
+                          teamGrade={team.teamGrade}
+                          teamOrg={team.teamOrg}
+                          teamCity={team.teamCity}
+                          teamRegion={team.teamRegion}
+                          teamCountry={team.teamCountry}
+                        />
+                      )
+                    })}
+                  </> : teamResults.length === 0 && currentSearch.length > 0 ? (
+                      <h1 className="text-white text-center font-semibold text-lg">No teams found</h1>
+                    ) : null
+                  }
                   <LoadMore
                     loadMore={() => getTeams(currentTeamsPage + 1, true)}
                     active={teamResults.length !== 0 && teamResults.length % 15 === 0 && !loadingTeams && teamResults.length > 0}
                   />
                 </div>
               </div>
-              <div className={`flex h-full flex-col items-center transition-all duration-300 ${activeTab === TabType.EVENTS ? " w-full p-3" : "w-0 [&>*]:hidden"}`}>
+              <div className={`flex h-full flex-col items-center transition-all duration-200 [&>*]:transition-all [&>*]:duration-700 ${activeTab === TabType.EVENTS ? " w-full p-3" : "w-0 [&>*]:opacity-0"}`}>
                 <select
                     className="min-h-8 mb-1 w-full rounded-lg p-0.5 text-black bg-neutral-500"
                     value={seasonId}
@@ -404,10 +421,11 @@ export default function MobileSearch() {
                   />
                 </div>
               </div>
-              <div className={`flex h-full flex-col items-center transition-all duration-300 ${activeTab === TabType.FAVORITES ? " w-full p-3" : "w-0 [&>*]:hidden"}`}>
+              <div className={`flex h-full flex-col items-center transition-all duration-200 [&>*]:transition-all [&>*]:duration-700 ${activeTab === TabType.FAVORITES ? " w-full p-3" : "w-0 [&>*]:opacity-0"}`}>
                 {isSignedIn ? (
                   <div className="flex flex-col h-[85%] gap-2 w-full p-2 items-center overflow-auto">
                     <h1 className="text-white text-left self-start font-semibold text-lg">Teams</h1>
+                    <hr className="w-full border-neutral-500" />
                     {favoriteResults.teams.map((team, index) => {
                       return (
                         <TeamResult
@@ -425,6 +443,7 @@ export default function MobileSearch() {
                       )
                     })}
                     <h1 className="text-white text-left self-start font-semibold text-lg">Events</h1>
+                    <hr className="w-full border-neutral-500" />
                     {favoriteResults.events.map((event, index) => {
                       const locationString = `${event.location.city ? event.location.city + ", " : ""}${event.location.region ? event.location.region + ", " : ""}${event.location.country}`;
                       return (
