@@ -44,6 +44,9 @@ import Spinner from "@/components/Spinner";
 import { FaCircleInfo } from "react-icons/fa6";
 import { CiExport } from "react-icons/ci";
 import {IsPWA} from "@/components/IsPWA"
+import { MdSearch } from "react-icons/md";
+import SearchBar from "@/components/SearchBar";
+
 
 
 const SWROptions = {
@@ -895,11 +898,11 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
                     <button
-                      className="h-8 min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      className="h-8 flex relative items-center min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black sm:w-52 md:h-12 md:w-60 md:text-lg"
                       onClick={() => setExportDialogOpen(true)}
                     >
                       Generate Scout Sheet
-                      <CiExport className="inline-block mx-1 mb-0.5"/>
+                      <CiExport className="inline-block absolute right-2"/>
                     </button>
                     <select
                       className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
@@ -922,19 +925,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         )
                       })}
                     </select>
-                    <div className="relative min-w-max">
-                      <input
-                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
-                        type="text"
-                        value={teamNumberFilter}
-                        placeholder="Filter by team..."
-                        onChange={(e) => setTeamNumberFilter(e.target.value)}
-                      />
-                      <TiDeleteOutline
-                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
-                        onClick={() => setTeamNumberFilter("")}
-                      />
-                    </div>
+                    <SearchBar value={teamNumberFilter} changeValue={setTeamNumberFilter} placeholder={"Filter by team..."} />
                   </div>
                 </div>
                 <div className="flex flex-row gap-3 my-5 outlinedText">
@@ -1020,27 +1011,27 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
                     <button
-                      className="h-8 min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
+                      className="flex items-center relative h-8 min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black sm:w-52 md:h-12 md:w-60 md:text-lg"
                       onClick={() => setRankingsExportDialogOpen(true)}
                     >
                       Generate Scout Sheet
-                      <CiExport className="inline-block mx-1 mb-0.5"/>
+                      <CiExport className="inline-block right-2 absolute"/>
                     </button>
-                    <select
-                      className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
-                      required
-                      value={rankedStatistic}
-                      onChange={(event) => {
-                        setRankedStatistic(event.target.value);
-                      }}
-                    >
-                      <option value="rank">Filter by Rank</option>
-                      <option value="opr">OPR (Contrib. to score)</option>
-                      <option value="dpr">DPR (Contrib. to opp score)</option>
-                      <option value="ccwm">CCWM (OPR - DPR)</option>
-                      <option value="ap">AP (Auton Win Points)</option>
-                      <option value="sp">SP (Opponent Strength)</option>
-                    </select>
+                    {/*<select*/}
+                    {/*  className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"*/}
+                    {/*  required*/}
+                    {/*  value={rankedStatistic}*/}
+                    {/*  onChange={(event) => {*/}
+                    {/*    setRankedStatistic(event.target.value);*/}
+                    {/*  }}*/}
+                    {/*>*/}
+                    {/*  <option value="rank">Filter by Rank</option>*/}
+                    {/*  <option value="opr">OPR (Contrib. to score)</option>*/}
+                    {/*  <option value="dpr">DPR (Contrib. to opp score)</option>*/}
+                    {/*  <option value="ccwm">CCWM (OPR - DPR)</option>*/}
+                    {/*  <option value="ap">AP (Auton Win Points)</option>*/}
+                    {/*  <option value="sp">SP (Opponent Strength)</option>*/}
+                    {/*</select>*/}
                     <select
                       className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"
                       required
@@ -1057,28 +1048,54 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         )
                       })}
                     </select>
-                    <div className="relative min-w-max">
-                      <input
-                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
-                        type="text"
-                        value={teamNumberFilter}
-                        placeholder="Filter by team..."
-                        onChange={(e) => setTeamNumberFilter(e.target.value)}
-                      />
-                      <TiDeleteOutline
-                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
-                        onClick={() => setTeamNumberFilter("")}
-                      />
+                    <SearchBar value={teamNumberFilter} changeValue={setTeamNumberFilter} placeholder={"Filter by team..."} />
+                    <div className="flex flex-row w-full [&>*]:flex-1 [&>*]:p-1 bg-secondary p-1 rounded-lg [&>*]:transition-colors [&>*]:duration-300">
+                      <button
+                        className={`h-8 min-w-max rounded-lg text-sm text-white ${rankedStatistic === "rank" ? "bg-neutral-900" : "bg-transparent"}`}
+                        onClick={() => setRankedStatistic("rank")}
+                      >
+                        Rank
+                      </button>
+                      <button
+                        className={`h-8 min-w-max rounded-lg text-sm text-white ${rankedStatistic === "opr" ? "bg-neutral-900" : "bg-transparent"}`}
+                        onClick={() => setRankedStatistic("opr")}
+                      >
+                        OPR
+                      </button>
+                      <button
+                        className={`h-8 min-w-max rounded-lg text-sm text-white ${rankedStatistic === "dpr" ? "bg-neutral-900" : "bg-transparent"}`}
+                        onClick={() => setRankedStatistic("dpr")}
+                      >
+                        DPR
+                      </button>
+                      <button
+                        className={`h-8 min-w-max rounded-lg text-sm text-white ${rankedStatistic === "ccwm" ? "bg-neutral-900" : "bg-transparent"}`}
+                        onClick={() => setRankedStatistic("ccwm")}
+                      >
+                        CCWM
+                      </button>
+                      <button
+                        className={`h-8 min-w-max rounded-lg text-sm text-white ${rankedStatistic === "ap" ? "bg-neutral-900" : ""}`}
+                        onClick={() => setRankedStatistic("ap")}
+                      >
+                        AP
+                      </button>
+                      <button
+                        className={`h-8 min-w-max rounded-lg text-sm text-white ${rankedStatistic === "sp" ? "bg-neutral-900" : ""}`}
+                        onClick={() => setRankedStatistic("sp")}
+                      >
+                        SP
+                      </button>
                     </div>
-                    <label className="flex items-center gap-2 font-bold">
-                      <input
-                        type="checkbox"
-                        className="h-5 w-5"
-                        checked={reflectVIAStats}
-                        onChange={(event) => setReflectVIAStats(event.target.checked)}
-                      />
-                      <span className="text-xs sm:text-md xl:text-lg">Reflect Vex VIA/Account for unscored matches</span>
-                    </label>
+                    {/*<label className="flex items-center gap-2 font-bold">*/}
+                    {/*  <input*/}
+                    {/*    type="checkbox"*/}
+                    {/*    className="h-5 w-5"*/}
+                    {/*    checked={reflectVIAStats}*/}
+                    {/*    onChange={(event) => setReflectVIAStats(event.target.checked)}*/}
+                    {/*  />*/}
+                    {/*  <span className="text-xs sm:text-md xl:text-lg">Reflect Vex VIA/Account for unscored matches</span>*/}
+                    {/*</label>*/}
                   </div>
                   <div className="flex flex-row gap-3 my-5">
                     <FaCircleInfo className="text-xl  align-middle"/>
@@ -1133,7 +1150,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
                     <button
-                      className="h-8 min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black disabled:opacity-50 sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      className="relative flex items-center h-8 min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black disabled:opacity-50 sm:w-44 md:h-12 md:w-52 md:text-lg"
                       onClick={() => {
                         if (!isSignedIn) {
                           toast.error("You must be signed in to view match notes");
@@ -1144,7 +1161,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       }}
                     >
                       View Match Notes
-                      <FaClipboardList className="inline-block mx-1 mb-1"/>
+                      <FaClipboardList className="absolute right-3"/>
                     </button>
                     <select
                       className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
@@ -1162,42 +1179,30 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         )
                       })}
                     </select>
-                    <div className="relative min-w-max">
+                    <SearchBar value={teamNumberFilter} changeValue={setTeamNumberFilter} placeholder={"Filter by team..."} />
+                    <div className="relative flex flex-row min-w-max items-center">
                       <input
                         className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
                         type="text"
-                        value={teamNumberFilter}
-                        placeholder="Filter by team..."
-                        onChange={(e) => setTeamNumberFilter(e.target.value)}
-                      />
-                      <TiDeleteOutline
-                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
-                        onClick={() => setTeamNumberFilter("")}
-                      />
-                    </div>
-                    <div className="relative min-w-max">
-                      <input
-                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-72 md:text-lg"
-                        type="text"
                         value={currentUsersTeamNumber ? currentUsersTeamNumber : ""}
-                        placeholder="Label alliances/opponents for..."
+                        placeholder="Use labels for..."
                         onChange={(e) => setUsersCurrentTeamNumber(e.target.value)}
                       />
                       <TiDeleteOutline
-                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
+                        className="absolute right-2 text-lg sm:text-xl cursor-pointer text-black"
                         onClick={() => setUsersCurrentTeamNumber("")}
                       />
                     </div>
-                    <label className="flex items-center gap-2 font-bold">
-                      <input
-                        type="checkbox"
-                        className="h-5 w-5"
-                        checked={compactMatches}
-                        onChange={(event) => setCompactMatches(event.target.checked)}
-                      />
-                      <span className="text-sm sm:text-md xl:text-lg">Compact Mode</span>
-                    </label>
                   </div>
+                  <label className="mt-3 flex items-center gap-2 font-bold">
+                    <input
+                      type="checkbox"
+                      className="h-5 w-5"
+                      checked={compactMatches}
+                      onChange={(event) => setCompactMatches(event.target.checked)}
+                    />
+                    <span className="text-sm sm:text-md xl:text-lg">Compact Mode</span>
+                  </label>
                 </div>
                 <div className="flex flex-row gap-3 my-5 outlinedText">
                   <FaCircleInfo className="text-xl align-middle"/>
@@ -1269,19 +1274,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       <option value="prog">Prog</option>
                       <option value="driver">Driver</option>
                     </select>
-                    <div className="relative min-w-max">
-                      <input
-                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
-                        type="text"
-                        value={teamNumberFilter}
-                        placeholder="Filter by team..."
-                        onChange={(e) => setTeamNumberFilter(e.target.value)}
-                      />
-                      <TiDeleteOutline
-                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
-                        onClick={() => setTeamNumberFilter("")}
-                      />
-                    </div>
+                    <SearchBar value={teamNumberFilter} changeValue={setTeamNumberFilter} placeholder={"Filter by team..."} />
                   </div>
                 </div>
                 <div className="flex flex-row outlinedText gap-3 my-5">
@@ -1321,19 +1314,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     Awards
                   </h3>
                   <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
-                    <div className="relative min-w-max">
-                      <input
-                        className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
-                        type="text"
-                        value={teamNumberFilter}
-                        placeholder="Filter by team..."
-                        onChange={(e) => setTeamNumberFilter(e.target.value)}
-                      />
-                      <TiDeleteOutline
-                        className="absolute right-2 top-2 text-lg cursor-pointer text-black"
-                        onClick={() => setTeamNumberFilter("")}
-                      />
-                    </div>
+                    <SearchBar value={teamNumberFilter} changeValue={setTeamNumberFilter} placeholder={"Filter by team..."} />
                   </div>
                 </div>
                 <p className="mb-10 text-sm font-semibold outlinedText">

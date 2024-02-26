@@ -1,11 +1,9 @@
 "use client"
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
 import {IsPWA} from "@/components/IsPWA"
 import { MdSearch } from "react-icons/md";
 import {Event, TeamProfile} from "@/app/types";
-import {useSpring, animated, useTrail} from '@react-spring/web'
+import {useSpring, animated} from '@react-spring/web'
 import { useDrag } from '@use-gesture/react'
 import LoadMore from "@/components/LoadMore";
 import TeamResult from "@/components/TeamResult";
