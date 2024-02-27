@@ -283,7 +283,7 @@ export default function MobileSearch() {
       />
         <animated.div
           style={{ y, touchAction: 'none' }}
-          className={`sm:hidden flex fixed w-full h-[85%] z-40 left-0 transition-all ease-in-out duration-1000 border-t-[1px] ${expanded ? "bottom-0 border-transparent" : `${isPWA ? "bottom-[calc(-85%+4rem)]" : "bottom-[calc(-85%+3rem)]"} border-neutral-600 border-opacity-100`}`}
+          className={`sm:hidden flex fixed w-full h-[85%] z-40 left-0 transition-all ease-in-out duration-1000 border-t-[1px] ${expanded ? "bottom-0 border-transparent" : `${isPWA ? "bottom-[calc(-85%+4.5rem)]" : "bottom-[calc(-85%+3rem)]"} border-neutral-600 border-opacity-100`}`}
         >
           <div className={`flex flex-col w-full h-full bgColorPrimary ${expanded ? "rounded-t-3xl" : ""}`}>
             <animated.div

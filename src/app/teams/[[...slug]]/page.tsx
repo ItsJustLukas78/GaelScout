@@ -455,7 +455,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
           className={`sm:hidden block my-8 w-11/12 border-t-2 border-neutral-500 ${teamNumberInput ? "opacity-100" : "opacity-0"}`}/>
         <Tabs defaultValue="statistics">
           <TabsList
-            className={`fixed sm:relative z-30 sm:z-0 ${isPWA ? "bottom-[4rem]" : "bottom-[3rem]"} sm:bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bgColorPrimary sm:h-10 transition-all ease-in-out duration-1000 ${teamNumberInput ? "opacity-100" : `opacity-0`} h-[60px] flex w-full sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
+            className={`fixed sm:relative z-30 sm:z-0 ${isPWA ? "bottom-[4.5rem]" : "bottom-[3rem]"} sm:bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bgColorPrimary sm:h-10 transition-all ease-in-out duration-1000 ${teamNumberInput ? "opacity-100" : `opacity-0`} h-[60px] flex w-full sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
    sm:to-[var(--color-primary-hover)] sm:from-[var(--color-primary)] to-neutral-800 from-GSGray`}>
             <TabsTrigger value="statistics" className="flex h-14 flex-col text-2xs sm:h-8 sm:flex-row">
               <IoStatsChart className="inline-block text-lg sm:mr-2"/>
