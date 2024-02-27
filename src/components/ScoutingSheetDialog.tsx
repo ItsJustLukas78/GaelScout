@@ -63,7 +63,7 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
       "qualMatchWinPercentage" = "Qual Win Percentage",
       "elimMatchWinPercentage" = "Elim Win Percentage",
       "qualToRegionals" = "Qualified to Regionals",
-      "awardQualToWorlds" = "Awards-Qualified to Worlds",
+      "awardQualToWorlds" = "Qualified to Worlds",
       "teamNumber" = "Number",
       "teamName" = "Name",
       "teamOrg" = "Organization",
@@ -368,7 +368,7 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
                     Qual to Regionals
                   </CheckboxDiv>
                   <CheckboxDiv checked={awqtwChecked} onCheckedChange={(e) => setAwqtwChecked((awqtwChecked) => (!awqtwChecked))}>
-                    Awards-Qual to Worlds
+                    Qual to Worlds
                   </CheckboxDiv>
                 </div>
               </div>
