@@ -649,7 +649,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                           {currentAwards.some((award: EventAward) => award.qualification == "Event Region Championship") ? "Yes" : "No"}
                         </h3>
                         <p className="absolute -bottom-1/2 left-0 text-gray-300 text-2xs">
-                          Qualifies to Regionals from event awards
+                          Qualifies to Regionals
                         </p>
                       </div>
                       <hr/>
@@ -661,7 +661,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                           {currentAwards.some((award: EventAward) => award.qualification == "World Championship") ? "Yes" : "No"}
                         </h3>
                         <p className="absolute -bottom-1/2 left-0 text-gray-300 text-2xs">
-                          Qualifies to Worlds from event awards
+                          Qualifies to Worlds
                         </p>
                       </div>
                     </div>

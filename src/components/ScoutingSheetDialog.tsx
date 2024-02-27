@@ -238,7 +238,15 @@ export default function ScoutingSheetDialog({ exportDialogOpen, eventObject, par
               }
             }
 
-            if ((!teamValue || teamValue === "") && typeof teamValue !== 'number') {
+            if (key === "awardQualToWorlds" || key === "qualToRegionals") {
+              if (teamValue) {
+                teamValue = "Yes"
+              } else if (!teamValue) {
+                teamValue = "No"
+              } else {
+                teamValue = "N/A"
+              }
+            } else if ((!teamValue || teamValue === "") && typeof teamValue !== 'number') {
               csvRow += "N/A" + ","
               continue;
             }

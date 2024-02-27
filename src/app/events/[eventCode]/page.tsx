@@ -6,6 +6,7 @@ import {
   Event,
   EventMatch,
   TeamProfile,
+  TeamSeasonProfile,
   Division,
   EventRank,
   TeamIdentifiers,
@@ -182,11 +183,11 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
 
   useEffect(() => {
     if (eventData && !eventDataError) {
-      setEventObject(eventData.events[0])
-      setDivisionList(eventData.events[0].divisions)
-      setCurrentDivision(eventData.events[0].divisions[0])
-    } else if (eventDataError) {
-      // router.replace("/not-found", undefined)
+      if (eventData.events.length !== 0) {
+        setEventObject(eventData.events[0])
+        setDivisionList(eventData.events[0].divisions)
+        setCurrentDivision(eventData.events[0].divisions[0])
+      }
     }
   }, [eventData, eventDataError])
 
@@ -782,6 +783,23 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
     }
     }, [currentNotesMatch])
 
+  const { data: teamSeasonProfilesData, error: teamSeasonProfilesDataError, isLoading: teamSeasonProfilesDataIsLoading } = useSWR(eventObject ? `/api/events/${eventObject.id}/seasonProfiles?seasonId=${eventObject.season.id}` : null, fetcher, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false,
+  })
+
+  const [teamSeasonProfiles, setTeamSeasonProfiles] = useState<TeamSeasonProfile[]>([])
+
+  useEffect(() => {
+    if (teamSeasonProfilesData && !teamSeasonProfilesDataError) {
+      setTeamSeasonProfiles(teamSeasonProfilesData.teamSeasonProfiles)
+    } else if (teamSeasonProfilesDataError) {
+      // toast.error(teamSeasonProfilesDataError + ": teamSeasonProfiles data")
+    }
+  }, [teamSeasonProfilesData, teamSeasonProfilesDataError])
+
   return (
     <main>
       <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
@@ -1280,7 +1298,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                 <div className="flex flex-row outlinedText gap-3 my-5">
                   <FaCircleInfo className="text-xl align-middle"/>
                   <p className="italic text-sm align-baseline">
-                    View skills scores, and their rankings
+                    View skills scores, their rankings, and team qualifications
                   </p>
                 </div>
                 {skillsDataIsLoading ?
@@ -1294,17 +1312,39 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   </h1>
                   : null}
                 <div className="flex flex-col p-0.5 gap-1 overflow-auto w-[100%]">
-                  {skillsRanked.length !== 0 ? skillsRanked.map((result: CombinedTeamSkills) => {
+                  {skillsRanked.length !== 0 ? skillsRanked.map((result: CombinedTeamSkills, index) => {
                     if (teamNumberFilter !== "" && !result.teamNumber.startsWith(teamNumberFilter.toUpperCase())) {
                       return null;
                     }
 
-                    return (
-                      <SkillsResult
-                        key={result.teamId}
-                        skills={result}
-                      />
-                    )
+                    const foundSeasonProfile = teamSeasonProfiles.find((team) => team.teamId === result.teamId);
+
+                    if (index === Math.floor(skillsRanked.length * 0.3)) {
+                      return (
+                        <div key={index}>
+                          <div className="flex flex-row [&>*]:flex-1 outlinedText items-center justify-center">
+                            <hr className="w-full my-8"/>
+                            <p className="italic h-full text-sm sm:text-lg text-center">
+                              30% Cutoff
+                            </p>
+                            <hr className="w-full my-8"/>
+                          </div>
+                          <SkillsResult
+                            key={result.teamId}
+                            skills={result}
+                            seasonProfile={foundSeasonProfile}
+                          />
+                        </div>
+                      )
+                    } else {
+                      return (
+                        <SkillsResult
+                          key={result.teamId}
+                          skills={result}
+                          seasonProfile={foundSeasonProfile}
+                        />
+                      )
+                    }
                   }) : null}
                 </div>
               </TabsContent>
