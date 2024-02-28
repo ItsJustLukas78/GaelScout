@@ -350,7 +350,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
               defaultValue={teamNumberInput}
               placeholder={placeholder}
               ref={inputTeamRef}
-              className={`${teamNumberInput ? "outlinedText" : "text-center mt-10"} uppercase mb-5 border-none bg-transparent text-4xl font-bold outline-none xs:text-5xl sm:text-8xl placeholder-white placeholder-opacity-100`}
+              className={`${teamNumberInput ? "outlinedText" : "text-center mt-10"} mb-5 border-none bg-transparent text-4xl font-bold outline-none xs:text-5xl sm:text-8xl placeholder-white placeholder-opacity-100`}
               onChange={(event) => {
                 event.preventDefault();
                 window.history.pushState({}, '', `/teams/${event.target.value.toUpperCase()}`);
