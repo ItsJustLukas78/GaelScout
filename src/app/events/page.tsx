@@ -240,13 +240,13 @@ export default function Events() {
 
   return (
     <main>
-      <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32 overflow-hidden">
+      <div className="flex w-full flex-col items-center justify-center overflow-hidden py-32 sm:py-32">
         <div className={`flex flex-col justify-center rounded-2xl items-center sm:bg-none sm:p-8 items-left w-full md:w-[800px] lg:w-[900px] xl:w-[1200px]`}>
           <div className={`relative ${eventSearchValue ? "[&>div]:opacity-0" : "sm:w-168 w-96 [&>div]:opacity-100"} flex flex-col items-center justify-center [&>div]:[transition:transform_10s,opacity_1s] [&>div]:transition-opacity [&>div]:ease-in-out`}>
-            <div className="absolute top-10 left-12 w-28 h-28 sm:w-44 sm:h-44 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
-            <div className="absolute top-10 right-12 w-28 h-28 sm:w-44 sm:h-44 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
-            <div className="absolute -bottom-10 w-28 h-28 sm:w-44 sm:h-44 bg-green-300 rounded-full mix-blend-multiply filter blur-xl opacity-50 animate-blob pointer-events-none" />
-            <div className="absolute -bottom-10 w-24 h-24 sm:w-48 sm:h-48 bg-white rounded-full mix-blend-difference filter blur-sm opacity-100 animate-spotlight pointer-events-none" />
+            <div className="pointer-events-none absolute top-10 left-12 h-28 w-28 rounded-full bg-purple-300 opacity-50 mix-blend-multiply blur-xl filter animate-blob sm:h-44 sm:w-44" />
+            <div className="pointer-events-none absolute top-10 right-12 h-28 w-28 rounded-full bg-yellow-300 opacity-50 mix-blend-multiply blur-xl filter animate-blob sm:h-44 sm:w-44" />
+            <div className="pointer-events-none absolute -bottom-10 h-28 w-28 rounded-full bg-green-300 opacity-50 mix-blend-multiply blur-xl filter animate-blob sm:h-44 sm:w-44" />
+            <div className="pointer-events-none absolute -bottom-10 h-24 w-24 rounded-full bg-white opacity-100 mix-blend-difference blur-sm filter animate-spotlight sm:h-48 sm:w-48" />
             <input
               type="textArea"
               key="eventInput"
@@ -259,14 +259,14 @@ export default function Events() {
               }}
             >
             </input>
-            <hr className="border-2 border-gray-500 w-3/4 sm:w-5/6" />
+            <hr className="w-3/4 border-2 border-gray-500 sm:w-5/6" />
           </div>
         </div>
-        <div className="flex flex-wrap w-full sm:w-[700px] [&>div]:w-60 xs:[&>div]:w-80 flex-col items-center justify-center mt-16 gap-3 md:flex-row sm:gap-5 xl:gap-10">
+        <div className="mt-16 flex w-full flex-col flex-wrap items-center justify-center gap-3 sm:w-[700px] sm:gap-5 md:flex-row xl:gap-10 [&>div]:w-60 xs:[&>div]:w-80">
           {/*season selection box*/}
           <div className="flex flex-col">
             <select
-              className="h-8 rounded-lg p-0.5 text-black"
+              className="h-8 rounded-lg text-black p-0.5"
               value={seasonId}
               onChange={(e) => setSeasonId(parseInt(e.target.value))}
             >
@@ -280,7 +280,7 @@ export default function Events() {
           {/*country selection box*/}
           <div className="flex flex-col">
             <select
-              className="h-8 rounded-lg p-0.5 text-black"
+              className="h-8 rounded-lg text-black p-0.5"
               value={country}
               onChange={(e) => setCountry(e.target.value)}
             >
@@ -318,7 +318,7 @@ export default function Events() {
           </div>
           <div className="flex flex-col">
             <select
-              className="h-8 rounded-lg p-0.5 text-black"
+              className="h-8 rounded-lg text-black p-0.5"
               value={region}
               onChange={(e) => setRegion(e.target.value)}
               disabled={availableRegions.length === 1}
@@ -340,9 +340,9 @@ export default function Events() {
           </div>
         </div>
         {/*list events*/}
-        <div className="flex flex-col items-center justify-center [&>div]:w-80 xs:[&>div]:w-80 sm:[&>div]:w-112 md:[&>div]:w-168">
-          <hr className="border-2 border-gray-500 my-10 w-[70%] xs:w-80 sm:w-112 md:w-168" />
-          <div className="flex flex-col items-center justify-center mb-3 gap-2 w-full">
+        <div className="flex flex-col items-center justify-center sm:[&>div]:w-112 md:[&>div]:w-168 [&>div]:w-80 xs:[&>div]:w-80">
+          <hr className="my-10 border-2 border-gray-500 w-[70%] xs:w-80 sm:w-112 md:w-168" />
+          <div className="mb-3 flex w-full flex-col items-center justify-center gap-2">
             {displayedEvents.map((event: Event) => {
               const locationString = `${event.location.city ? event.location.city + ", " : ""}${event.location.region ? event.location.region + ", " : ""}${event.location.country}`;
 

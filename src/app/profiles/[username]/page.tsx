@@ -35,7 +35,7 @@ export default function UserProfile({ params }: { params: { username: string } }
     <main>
       <div className="flex w-full flex-col items-center justify-center gap-16 py-32 sm:py-32">
         {userProfile ? <>
-          <div className="flex h-auto flex-col justify-center rounded-2xl bgColorPrimary p-8 items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+          <div className="flex h-auto flex-col justify-center rounded-2xl p-8 bgColorPrimary items-left max-w-[340px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
             <div className="mb-5 flex flex-row items-center gap-5">
               <div className="relative h-11 w-11 xs:h-12 xs:w-12 md:h-16 md:w-16 lg:h-24 lg:w-24">
                 <Image

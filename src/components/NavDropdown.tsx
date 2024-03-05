@@ -16,7 +16,7 @@ export default function NavDropDown({ children }: { children: React.ReactNode })
       <BiSolidDownArrow className="ml-2 inline-flex h-2.5 w-2.5"/>
       {expanded &&
         <div
-          className="absolute hidden flex-col rounded-md bgColorPrimary px-5 py-3 shadow-gray-500 translate-x-[-20%] group-hover:flex"
+          className="absolute hidden flex-col rounded-md px-5 py-3 shadow-gray-500 bgColorPrimary translate-x-[-20%] group-hover:flex"
         >
           {children}
         </div>

@@ -181,7 +181,7 @@ export default function Verify() {
                       <p className="mt-5 text-sm font-semibold xs:text-md">
                         Temporarily change your robot name to:
                       </p>
-                      <p className="mt-2 flex flex-row items-center rounded-md bgColorSecondaryHover p-2 text-sm font-semibold xs:text-md">
+                      <p className="mt-2 flex flex-row items-center rounded-md p-2 text-sm font-semibold bgColorSecondaryHover xs:text-md">
                         <span className="text-green-500">
                           {verificationCode ? verificationCode : "Loading..."}
                         </span>

@@ -31,7 +31,7 @@ export default function MatchResultNavigator(
             <MatchResultTeamLink team={redTeams[1]} mainColor="red" teamsToRelavancyType={teamsToRelavancyType} className="text-xs" link={false} onClick={() => teamSetter(redTeams[1])}/>
           </div>
           <div className="flex flex-col justify-center text-center w-[30px]">
-            <h2 className="font-semibold text-red-500 text-sm">
+            <h2 className="text-sm font-semibold text-red-500">
               {redScore > blueScore ?
                 <u>{redScore}</u>
                 :
@@ -43,12 +43,12 @@ export default function MatchResultNavigator(
             <h2 className="text-2xs text-GSGreen">
               {formattedMatchName}
             </h2>
-            <h2 className="text-2xs  line-clamp-3">
+            <h2 className="text-2xs line-clamp-3">
               {field}
             </h2>
           </div>
           <div className="flex flex-col justify-center text-center w-[30px]">
-            <h2 className="font-semibold text-blue-500 text-sm">
+            <h2 className="text-sm font-semibold text-blue-500">
               {blueScore > redScore ?
                 <u>{blueScore}</u>
                 :

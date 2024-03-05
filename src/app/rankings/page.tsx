@@ -359,7 +359,7 @@ export default function RankingsPage() {
   return (
     <main>
       <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
-        <div className="flex h-auto flex-col justify-center rounded-2xl sm:bgColorPrimary p-8 items-left max-w-[380px] xs:max-w-[400px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
+        <div className="flex h-auto flex-col justify-center rounded-2xl p-8 items-left max-w-[380px] xs:max-w-[400px] sm:bgColorPrimary sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
           <div className="mb-5 flex flex-col justify-between">
             <h3 className="my-5 min-w-fit text-3xl font-bold xs:text-5xl">
               Rankings
@@ -470,7 +470,7 @@ export default function RankingsPage() {
                 <option value="false">Did not Qual to Worlds</option>
               </select>
               {/*toggle box for visibility of columns lik Country, Region setValueVisibility*/}
-              <div className="flex flex-wrap sm:flex-row gap-4">
+              <div className="flex flex-wrap gap-4 sm:flex-row">
                 <label className="flex items-center gap-2 font-bold">
                   <input
                     type="checkbox"
@@ -510,21 +510,21 @@ export default function RankingsPage() {
               </div>
             </div>
           </div>
-          <div className="mb-5 flex flex-col gap-2 lg:gap-5 sm:flex-row flex-wrap">
-            <h3 className="text-sm sm:text-xl outlinedText">
+          <div className="mb-5 flex flex-col flex-wrap gap-2 sm:flex-row lg:gap-5">
+            <h3 className="text-sm outlinedText sm:text-xl">
               Teams Analyzed: {seasonAnalysis?.numberOfTeams || "Unknown"}
             </h3>
-            <h3 className="text-sm sm:text-xl outlinedText">
+            <h3 className="text-sm outlinedText sm:text-xl">
               Qualled to Worlds: {seasonAnalysis?.numberOfWorldQualifiers || "Unknown"}
             </h3>
-            <h3 className="text-sm sm:text-xl outlinedText">
+            <h3 className="text-sm outlinedText sm:text-xl">
               Qualled to Regionals: {seasonAnalysis?.numberOfRegionalQualifiers || "Unknown"}
             </h3>
           </div>
-          <div className="flex flex-row overflow-auto w-[100%] mb-2">
-            <table className="z-10 bg-black sticky left-0 table-auto border-separate w-[10%]">
+          <div className="mb-2 flex flex-row overflow-auto w-[100%]">
+            <table className="sticky left-0 z-10 table-auto border-separate bg-black w-[10%]">
               <thead>
-                <tr className="[&>th]:px-1 [&>th]:outlinedText [&>th]:text-center [&>th]:h-14 md:[&>th]:text-md [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-xl bg-gray-700">
+                <tr className="bg-gray-700 [&>th]:outlinedText md:[&>th]:text-md [&>th]:h-14 [&>th]:px-1 [&>th]:text-center [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-xl">
                   <th>
                     Rank
                   </th>
@@ -536,7 +536,7 @@ export default function RankingsPage() {
               <tbody>
               {topRatedTeams.length !== 0 ? topRatedTeams.map((result: TeamSeasonProfile) => {
                 return (
-                  <tr key={result.teamNumber} className="[&>td]:text-center [&>td]:outlinedText [&>td]:px-1 [&>td]:h-16 bg-gray-700">
+                  <tr key={result.teamNumber} className="bg-gray-700 [&>td]:outlinedText [&>td]:h-16 [&>td]:px-1 [&>td]:text-center">
                     <td className="text-xs font-semibold md:text-md xl:text-lg">
                       {topRatedTeams.indexOf(result) + 1}
                     </td>
@@ -547,7 +547,7 @@ export default function RankingsPage() {
                 )}) : loadingTeams ?
                 [0,1,2,3,4].map(() => {
                   return (
-                    <tr className="h-16 [&>td]:bgColorSecondaryHover [&>td]:animate-pulse [&>td]:px-1 [&>td]:h-14 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
+                    <tr className="h-16 [&>td]:bgColorSecondaryHover [&>td]:h-14 [&>td]:animate-pulse [&>td]:px-1 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
                       <td></td>
                       <td></td>
                     </tr>
@@ -558,7 +558,7 @@ export default function RankingsPage() {
             </table>
             <table className="z-0 table-auto border-separate w-[90%]">
               <thead>
-                <tr className="[&>th]:px-1 [&>th]:h-14 [&>th]:outlinedText md:[&>th]:text-md [&>th]:text-center [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-lg bg-gray-600">
+                <tr className="bg-gray-600 [&>th]:outlinedText md:[&>th]:text-md [&>th]:h-14 [&>th]:px-1 [&>th]:text-center [&>th]:text-xs sm:[&>th]:text-sm xl:[&>th]:text-lg">
                   {showPerfStats ? (
                     <>
                       <th>OPR</th>
@@ -593,7 +593,7 @@ export default function RankingsPage() {
               <tbody>
                 {topRatedTeams.length !== 0 ? topRatedTeams.map((result: TeamSeasonProfile) => {
                   return (
-                    <tr key={result.teamNumber} className="[&>td]:px-1 [&>td]:h-16 [&>td]:outlinedText [&>td]:text-center [&>td]:text-xs sm:[&>td]:text-sm xl:[&>td]:text-lg bgColorSecondary font-semibold">
+                    <tr key={result.teamNumber} className="font-semibold bgColorSecondary [&>td]:outlinedText [&>td]:h-16 [&>td]:px-1 [&>td]:text-center [&>td]:text-xs sm:[&>td]:text-sm xl:[&>td]:text-lg">
                       {showPerfStats ? (
                         <>
                           <td>{result.opr.toFixed(1)}</td>
@@ -628,7 +628,7 @@ export default function RankingsPage() {
                 }) : loadingTeams ?
                   [0,1,2,3,4].map(() => {
                     return (
-                      <tr className="[&>td]:bgColorSecondaryHover [&>td]:animate-pulse [&>td]:px-1 [&>td]:h-16 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
+                      <tr className="[&>td]:bgColorSecondaryHover [&>td]:h-16 [&>td]:animate-pulse [&>td]:px-1 [&>td]:text-xs sm:[&>td]:text-lg xl:[&>td]:text-xl" key={Math.random()}>
                         <td></td>
                         <td></td>
                         <td></td>

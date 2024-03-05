@@ -211,7 +211,7 @@ export default function TeamNotesDialog({ teamNotesDialogOpen, currentNotesTeam,
           <AlertDialog.Description asChild>
             <div className={`flex flex-col ${loading ? "animate-pulse" : ""}`}>
               <div className="flex flex-col teamNotesDialogTipTap max-h-[300px]">
-                <h1 className="mb-5 text-2xl font-semibold ">
+                <h1 className="mb-5 text-2xl font-semibold">
                   {currentNotesTeam?.teamNumber}
                 </h1>
                 <Tiptap setEditor={setCurrentEditor} />

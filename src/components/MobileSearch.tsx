@@ -353,7 +353,7 @@ export default function MobileSearch() {
             <div className={`relative h-full w-full flex ${expanded ? "" : "opacity-0"}`}>
               <div className={`flex h-full flex-col items-center transition-all duration-200 [&>*]:transition-all [&>*]:duration-700 ${activeTab === TabType.TEAMS ? " w-full p-3" : "w-0 [&>*]:opacity-0"}`}>
                 {/*infinite scroll of team results*/}
-                <div className="flex flex-col h-[85%] gap-2 w-full p-2 items-center overflow-auto">
+                <div className="flex w-full flex-col items-center gap-2 overflow-auto p-2 h-[85%]">
                   {teamResults.map((team, index) => {
                     return (
                       <TeamResult
@@ -371,7 +371,7 @@ export default function MobileSearch() {
                     )
                   })}
                   {teamResults.length === 0 && currentSearch.length == 0 && recentlyViewedTeams?.length > 0 ? <>
-                    <h1 className="text-white text-left self-start font-semibold text-lg">Recently Viewed Teams</h1>
+                    <h1 className="self-start text-left text-lg font-semibold text-white">Recently Viewed Teams</h1>
                     <hr className="w-full border-neutral-500"/>
                     {recentlyViewedTeams.map((team, index) => {
                       return (
@@ -390,7 +390,7 @@ export default function MobileSearch() {
                       )
                     })}
                   </> : teamResults.length === 0 && currentSearch.length > 0 ? (
-                      <h1 className="text-white text-center font-semibold text-lg">No teams found</h1>
+                      <h1 className="text-center text-lg font-semibold text-white">No teams found</h1>
                     ) : null
                   }
                   <LoadMore
@@ -401,14 +401,14 @@ export default function MobileSearch() {
               </div>
               <div className={`flex h-full flex-col items-center transition-all duration-200 [&>*]:transition-all [&>*]:duration-700 ${activeTab === TabType.EVENTS ? " w-full p-3" : "w-0 [&>*]:opacity-0"}`}>
                 <select
-                    className="min-h-8 mb-1 w-full rounded-lg p-0.5 text-black bg-neutral-500"
+                    className="mb-1 w-full rounded-lg bg-neutral-500 text-black min-h-8 p-0.5"
                     value={seasonId}
                     onChange={(e) => setSeasonId(parseInt(e.target.value))}
                   >
                     <option value="173">Spin Up 2022-23</option>
                     <option value="181">Over Under 2023-24</option>
                 </select>
-                <div className="flex flex-col h-[85%] gap-2 w-full p-2 items-center overflow-auto">
+                <div className="flex w-full flex-col items-center gap-2 overflow-auto p-2 h-[85%]">
                   {displayedEvents.map((event, index) => {
                     const locationString = `${event.location.city ? event.location.city + ", " : ""}${event.location.region ? event.location.region + ", " : ""}${event.location.country}`;
                     return (
@@ -423,8 +423,8 @@ export default function MobileSearch() {
               </div>
               <div className={`flex h-full flex-col items-center transition-all duration-200 [&>*]:transition-all [&>*]:duration-700 ${activeTab === TabType.FAVORITES ? " w-full p-3" : "w-0 [&>*]:opacity-0"}`}>
                 {isSignedIn ? (
-                  <div className="flex flex-col h-[85%] gap-2 w-full p-2 items-center overflow-auto">
-                    <h1 className="text-white text-left self-start font-semibold text-lg">Teams</h1>
+                  <div className="flex w-full flex-col items-center gap-2 overflow-auto p-2 h-[85%]">
+                    <h1 className="self-start text-left text-lg font-semibold text-white">Teams</h1>
                     <hr className="w-full border-neutral-500" />
                     {favoriteResults.teams.map((team, index) => {
                       return (
@@ -442,7 +442,7 @@ export default function MobileSearch() {
                         />
                       )
                     })}
-                    <h1 className="text-white text-left self-start font-semibold text-lg">Events</h1>
+                    <h1 className="self-start text-left text-lg font-semibold text-white">Events</h1>
                     <hr className="w-full border-neutral-500" />
                     {favoriteResults.events.map((event, index) => {
                       const locationString = `${event.location.city ? event.location.city + ", " : ""}${event.location.region ? event.location.region + ", " : ""}${event.location.country}`;
@@ -453,7 +453,7 @@ export default function MobileSearch() {
                   </div>
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
-                    <h1 className="text-white text-center font-semibold text-lg">Sign in to view your favorites</h1>
+                    <h1 className="text-center text-lg font-semibold text-white">Sign in to view your favorites</h1>
                   </div>
                 )}
               </div>

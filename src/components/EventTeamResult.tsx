@@ -21,21 +21,21 @@ export default function EventTeamResult({ teamId, teamNumber, teamName, programC
   return (
     <Link
       href={`/teams/${teamNumber}`}
-      className="flex p-2 h-auto w-full flex-row items-center rounded-2xl bgColorSecondary px-3 shadow-md shadow-neutral-900 transition-colors duration-200 hover:bgColorSecondaryHover"
+      className="flex h-auto w-full flex-row items-center rounded-2xl p-2 px-3 shadow-md shadow-neutral-900 transition-colors duration-200 bgColorSecondary hover:bgColorSecondaryHover"
     >
       <div className="flex flex-col max-w-[65%]">
-        <h1 className="mb-2 text-xs font-semibold md:text-xl outlinedText line-clamp-2 text-ellipsis">
+        <h1 className="mb-2 text-ellipsis text-xs font-semibold outlinedText line-clamp-2 md:text-xl">
           {teamNumber} - {teamName}
         </h1>
         <div className="flex flex-col gap-2">
-          <h2 className="font-semibold text-2xs md:text-sm outlinedText">
+          <h2 className="font-semibold text-2xs outlinedText md:text-sm">
             {location}
           </h2>
         </div>
       </div>
       {goToTeamMatches && (
         <button
-          className="ml-auto flex items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 sm:text-xl text-lg font-semibold text-black opacity-50 sm:min-w-[50px] sm:min-h-[40px] min-w-[40px] min-h-[30px] disabled:opacity-50 sm:mr-3"
+          className="ml-auto flex items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 text-lg font-semibold text-black opacity-50 min-w-[40px] min-h-[30px] disabled:opacity-50 sm:min-w-[50px] sm:min-h-[40px] sm:mr-3 sm:text-xl"
           onClick={(e) => {
             e.preventDefault()
             e.stopPropagation()

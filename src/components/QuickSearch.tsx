@@ -33,7 +33,7 @@ export default function QuickSearch() {
         }}
       >
         <input
-          className="h-full w-full rounded-full bg-white text-center text-md 2xs:text-xl font-semibold text-black placeholder-neutral-400 placeholder-opacity-100"
+          className="h-full w-full rounded-full bg-white text-center 2xs:text-xl font-semibold text-black text-md placeholder-neutral-400 placeholder-opacity-100"
           type="text"
           disabled={hidden}
           placeholder="Team Quicksearch"
@@ -44,7 +44,7 @@ export default function QuickSearch() {
             window.location.href = `/teams/${(document.querySelector("input") as HTMLInputElement).value}`
           }}
         >
-          <MdSearch className="absolute right-1 bottom-1 2xs:h-6 2xs:w-6 h-5 w-5"/>
+          <MdSearch className="absolute right-1 bottom-1 h-5 2xs:h-6 w-5 2xs:w-6"/>
         </button>
       </form>
       <div

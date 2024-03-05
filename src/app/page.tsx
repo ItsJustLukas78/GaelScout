@@ -18,9 +18,9 @@ export default function Home() {
     <main>
       <div className="flex w-full items-center justify-center py-28 xs:py-32">
         <div className="flex flex-col gap-72">
-          <div className="relative flex h-auto flex-col lg:items-start items-center lg:space-x-8 lg:flex-row">
+          <div className="relative flex h-auto flex-col items-center lg:space-x-8 lg:flex-row lg:items-start">
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
-              <Balancer className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl text-shadow-lg shadow-stone-500">
+              <Balancer className="text-5xl font-bold shadow-stone-500 text-shadow-lg xs:text-7xl sm:text-8xl lg:pt-10">
                 Scouting Done Easy.
               </Balancer>
               <Balancer className="text-base sm:text-xl">
@@ -33,11 +33,11 @@ export default function Home() {
                   </Balancer>
                   )
                 : <>
-                  <Balancer className="text-base sm:text-xl mb-8">
+                  <Balancer className="mb-8 text-base sm:text-xl">
                     Enjoy your smooth scouting experience with GaelScout! Sign up to access all features.
                   </Balancer>
                   <Link href="sign-up">
-                    <CorneredButton className="h-8 w-33 text-2xl font-semibold">
+                    <CorneredButton className="h-8 text-2xl font-semibold w-33">
                       Sign Up
                     </CorneredButton>
                   </Link>
@@ -64,7 +64,7 @@ export default function Home() {
           </div>
           <div className="flex h-auto flex-col items-center pb-16 lg:space-x-8 lg:flex-row">
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
-              <Balancer className="text-4xl font-bold xs:text-5xl sm:text-7xl text-shadow-lg shadow-stone-500">
+              <Balancer className="text-4xl font-bold shadow-stone-500 text-shadow-lg xs:text-5xl sm:text-7xl">
                 Developed by members of Gael Force Robotics
               </Balancer>
               <Balancer className="text-base sm:text-xl">
@@ -104,16 +104,16 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="-mt-64 flex-col items-center lg:hidden flex">
+          <div className="-mt-64 flex flex-col items-center lg:hidden">
             <iframe
-              className="rounded-xl sm:hidden block"
+              className="block rounded-xl sm:hidden"
               src="https://discord.com/widget?id=1175614341941313647&theme=dark"
               width="300" height="400"
               sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
             >
             </iframe>
             <iframe
-              className="rounded-xl hidden sm:block"
+              className="hidden rounded-xl sm:block"
               src="https://discord.com/widget?id=1175614341941313647&theme=dark"
               width="500" height="500"
               sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
@@ -121,23 +121,23 @@ export default function Home() {
             </iframe>
           </div>
         </div>
-        {/*<div className="fixed z-50 self-center bottom-[175px] flex items-center flex-col justify-center">*/}
-        {/*  <div className="flex items-center justify-center bgColorPrimary rounded-full h-10 w-48">*/}
+        {/*<div className="fixed z-50 flex flex-col items-center justify-center self-center bottom-[175px]">*/}
+        {/*  <div className="flex h-10 w-48 items-center justify-center rounded-full bgColorPrimary">*/}
         {/*    <div className="ml-7 flex gap-3">*/}
         {/*      <FaStar*/}
         {/*        onClick={() => window.location.href = "/favorites"}*/}
         {/*        className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"/>*/}
-        {/*      <hr className="h-5 w-0.5 bgColorSecondaryHover border-none"/>*/}
+        {/*      <hr className="h-5 border-none w-0.5 bgColorSecondaryHover"/>*/}
         {/*      <FaPeopleGroup*/}
         {/*        onClick={() => window.location.href = "/teams"}*/}
         {/*        className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"/>*/}
-        {/*      <hr className="h-5 w-0.5 bgColorSecondaryHover border-none"/>*/}
+        {/*      <hr className="h-5 border-none w-0.5 bgColorSecondaryHover"/>*/}
         {/*      <MdEventNote*/}
         {/*        onClick={() => window.location.href = "/events"}*/}
         {/*        className="h-5 w-5 hover:cursor-pointer hover:text-neutral-600"*/}
         {/*      />*/}
         {/*    </div>*/}
-        {/*    <MdSearch className="h-5 w-5 ml-auto mr-2.5 text-neutral-500"/>*/}
+        {/*    <MdSearch className="ml-auto h-5 w-5 text-neutral-500 mr-2.5"/>*/}
         {/*  </div>*/}
         {/*</div>*/}
       </div>

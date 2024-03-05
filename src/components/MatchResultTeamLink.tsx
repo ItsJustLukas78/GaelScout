@@ -28,7 +28,7 @@ export default function MatchResultTeamLink({ team, mainColor, teamsToRelavancyT
       }
     >
       {team.teamNumber}
-      <span className="ml-1 text-2xs sm:text-sm text-GSGreen">
+      <span className="ml-1 text-2xs text-GSGreen sm:text-sm">
         {teamsToRelavancyType[team.teamId] === RelavancyType.opponent ? <LuSwords /> : null}
         {teamsToRelavancyType[team.teamId] === RelavancyType.alliance ? <FaHandshakeSimple /> : null}
         {teamsToRelavancyType[team.teamId] === RelavancyType.both ? <><LuSwords /> <FaHandshakeSimple /></> : null}

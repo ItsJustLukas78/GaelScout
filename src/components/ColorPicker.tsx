@@ -112,9 +112,9 @@ export default function MyColorPicker() {
                           value: colorVariableValues["--color-primary"].value
                         }
                       })}
-                      className="w-14 text-xs text-neutral-100 font-semibold bg-neutral-800 border-neutral-900 border-2 p-0.5 rounded-md"
+                      className="w-14 rounded-md border-2 border-neutral-900 bg-neutral-800 text-xs font-semibold text-neutral-100 p-0.5"
                     />
-                    <label className="text-neutral-100 font-semibold">H</label>
+                    <label className="font-semibold text-neutral-100">H</label>
                   </div>
                   <div className="flex items-center gap-2">
                     <input
@@ -127,9 +127,9 @@ export default function MyColorPicker() {
                           value: colorVariableValues["--color-primary"].value
                         }
                       })}
-                      className="w-14 text-xs text-neutral-100 font-semibold bg-neutral-800 border-neutral-900 border-2 p-0.5 rounded-md"
+                      className="w-14 rounded-md border-2 border-neutral-900 bg-neutral-800 text-xs font-semibold text-neutral-100 p-0.5"
                     />
-                    <label className="text-neutral-100 font-semibold">S</label>
+                    <label className="font-semibold text-neutral-100">S</label>
                   </div>
                   <div className="flex items-center gap-2">
                     <input
@@ -148,9 +148,9 @@ export default function MyColorPicker() {
                           }
                         })
                       }}
-                      className="w-14 text-xs text-neutral-100 font-semibold bg-neutral-800 border-neutral-900 border-2 p-0.5 rounded-md"
+                      className="w-14 rounded-md border-2 border-neutral-900 bg-neutral-800 text-xs font-semibold text-neutral-100 p-0.5"
                     />
-                    <label className="text-neutral-100 font-semibold">V</label>
+                    <label className="font-semibold text-neutral-100">V</label>
                   </div>
                 </div>
               </div>
@@ -158,15 +158,15 @@ export default function MyColorPicker() {
                 <select
                   value={harmony}
                   onChange={(e) => setHarmony(e.target.value as "triad" | "tetradic" | "analogous" | "square")}
-                  className="w-28 text-neutral-100 font-semibold bg-neutral-800 border-neutral-900 border-2 p-0.5 rounded-md"
+                  className="w-28 rounded-md border-2 border-neutral-900 bg-neutral-800 font-semibold text-neutral-100 p-0.5"
                 >
                   <option value="triad">Triad</option>
                   <option value="tetradic">Tetradic</option>
                   <option value="analogous">Analogous</option>
                   <option value="square">Square</option>
                 </select>
-                <label className="flex items-center gap-2 w-24">
-                  <span className="pl-1 font-semibold text-sm sm:text-md xl:text-lg text-neutral-100">Enabled</span>
+                <label className="flex w-24 items-center gap-2">
+                  <span className="pl-1 text-sm font-semibold text-neutral-100 sm:text-md xl:text-lg">Enabled</span>
                   <input
                     type="checkbox"
                     className="h-5 w-5"

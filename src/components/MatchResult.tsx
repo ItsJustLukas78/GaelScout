@@ -274,7 +274,7 @@ export default function MatchResult({
             <MatchResultTeamLink team={redTeams[1]} mainColor={"red"} teamsToRelavancyType={teamsToRelavancyType} />
           </div>
           <div className="flex flex-col justify-center text-center min-w-[30px] md:min-w-[55px]">
-            <h2 className="text-sm text-red-500 sm:text-xl md:text-3xl lg:text-4xl outlinedText">
+            <h2 className="text-sm text-red-500 outlinedText sm:text-xl md:text-3xl lg:text-4xl">
               {redScore > blueScore ?
                 <u className="font-bold">{redScore}</u>
                 :
@@ -283,15 +283,15 @@ export default function MatchResult({
             </h2>
           </div>
           <div className="flex flex-col justify-center gap-1 text-center min-w-[55px] md:min-w-[150px]">
-            <h2 className="text-xs text-GSGreen sm:text-lg md:text-2xl lg:text-3xl outlinedText">
+            <h2 className="text-xs text-GSGreen outlinedText sm:text-lg md:text-2xl lg:text-3xl">
               {formattedMatchName}
             </h2>
-            <h2 className="text-xs  sm:text-md md:text-xl lg:text-2xl outlinedText">
+            <h2 className="text-xs outlinedText sm:text-md md:text-xl lg:text-2xl">
               {field}
             </h2>
           </div>
           <div className="flex flex-col justify-center text-center min-w-[30px] md:min-w-[55px]">
-            <h2 className="text-sm text-blue-500 sm:text-xl md:text-3xl lg:text-4xl outlinedText">
+            <h2 className="text-sm text-blue-500 outlinedText sm:text-xl md:text-3xl lg:text-4xl">
               {blueScore > redScore ?
                 <u className="font-bold">{blueScore}</u>
                 :
@@ -305,20 +305,20 @@ export default function MatchResult({
           </div>
         </div>
         {!compact && (
-          <div className="flex flex-row justify-between gap-2 w-full">
+          <div className="flex w-full flex-row justify-between gap-2">
             <button
-              className="flex opacity-0 justify-center items-center ml-2 lg:ml-8 text-white text-2xs hover:text-gray-400 transition-colors duration-300"
+              className="ml-2 flex items-center justify-center text-white opacity-0 transition-colors duration-300 text-2xs hover:text-gray-400 lg:ml-8"
               onClick={(e) => {
                 e.preventDefault();
                 requestNotification();
               }}
               disabled
             >
-              <FaRegBell className="sm:h-6 sm:w-6 h-4 w-4 mt-2" />
+              <FaRegBell className="mt-2 h-4 w-4 sm:h-6 sm:w-6" />
             </button>
-            <div className="mt-1 flex flex-col gap-1.5 justify-center items-center w-[85%]">
+            <div className="mt-1 flex flex-col items-center justify-center gap-1.5 w-[85%]">
               {worldPrediction ? <>
-                <div className="flex flex-row justify-center gap-2 w-full">
+                <div className="flex w-full flex-row justify-center gap-2">
                   <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black font-medium sm:p-0.5 ${redWinsWorld ? "bg-green-500" : "bg-gray-600"}`}>
                     {redWinsWorld ? `Predicted ${Math.abs(redWinPercentageWorld)}%` : null}
                   </div>
@@ -328,7 +328,7 @@ export default function MatchResult({
                 </div>
               </> : <>
                 <button
-                  className="flex flex-row justify-center rounded-2xl text-black shadow-md transition-colors duration-200 w-[75%] text-2xs bg-green-500 hover:bg-green-600 sm:w-44 sm:p-0.5 lg:text-md lg:w-64"
+                  className="flex flex-row justify-center rounded-2xl bg-green-500 text-black shadow-md transition-colors duration-200 w-[75%] text-2xs hover:bg-green-600 sm:p-0.5 sm:w-44 lg:text-md lg:w-64"
                   onClick={(event) => predictMatch(event, ModelType.worldModel)}
                 >
                   Predict (World)
@@ -336,7 +336,7 @@ export default function MatchResult({
               </>
               }
               {eventPrediction ? <>
-                <div className="flex flex-row justify-center gap-2 w-full">
+                <div className="flex w-full flex-row justify-center gap-2">
                   <div className={`flex flex-row w-[47%] text-2xs lg:text-md justify-center rounded-2xl text-black sm:p-0.5 ${redWinsEvent ? "bg-green-500" : "bg-gray-600"}`}>
                     {redWinsEvent ? `Predicted ${Math.abs(redWinPercentageEvent)}%` : null}
                   </div>
@@ -346,7 +346,7 @@ export default function MatchResult({
                 </div>
                 </> : <>
                 <button
-                  className="flex flex-row justify-center rounded-2xl text-black shadow-md transition-colors duration-200 w-[75%] text-2xs bg-green-500 hover:green-600 sm:w-44 sm:p-0.5 lg:text-md lg:w-64"
+                  className="flex flex-row justify-center rounded-2xl bg-green-500 text-black shadow-md transition-colors duration-200 w-[75%] text-2xs hover:green-600 sm:p-0.5 sm:w-44 lg:text-md lg:w-64"
                   onClick={(event) => predictMatch(event, ModelType.eventModel)}
                 >
                   Predict (Event)
@@ -355,13 +355,13 @@ export default function MatchResult({
               }
             </div>
             <button
-              className="flex justify-center items-center mr-2 lg:mr-8 text-white text-2xs hover:text-gray-400 transition-colors duration-300"
+              className="mr-2 flex items-center justify-center text-white transition-colors duration-300 text-2xs hover:text-gray-400 lg:mr-8"
               onClick={(e) => {
                 e.preventDefault();
                 openMatchNotes(id);
               }}
             >
-              <GiNotebook className="sm:h-6 sm:w-6 h-4 w-4 mt-2" />
+              <GiNotebook className="mt-2 h-4 w-4 sm:h-6 sm:w-6" />
             </button>
           </div>
           )}

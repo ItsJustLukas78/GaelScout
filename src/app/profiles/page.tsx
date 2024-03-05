@@ -62,7 +62,7 @@ export default function Profiles() {
           />
         </div>
         <div className="flex h-auto flex-col items-center justify-center">
-          <div className="flex w-80 flex-col items-center gap-4 overflow-auto rounded-2xl bgColorPrimary p-8 h-120 sm:w-96 lg:w-120 xl:w-144">
+          <div className="flex w-80 flex-col items-center gap-4 overflow-auto rounded-2xl p-8 bgColorPrimary h-120 sm:w-96 lg:w-120 xl:w-144">
             {resultsLoading &&
               <>
                 <UserResultSkeleton />

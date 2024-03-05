@@ -805,13 +805,13 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
       <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
         {eventObject ? <>
           <div
-            className="relative flex h-auto flex-col justify-center card-shine-effect rounded-2xl sm:bgColorPrimary sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px]">
-            <h1 className="outlinedText mb-5 min-w-[85%] max-w-[85%] text-2xl font-bold sm:text-3xl md:text-5xl lg:text-7xl">
+            className="relative flex h-auto flex-col justify-center rounded-2xl card-shine-effect items-left w-[340px] sm:bgColorPrimary sm:w-[500px] sm:p-8 md:w-[700px] lg:w-[900px] xl:w-[1200px]">
+            <h1 className="mb-5 text-2xl font-bold outlinedText min-w-[85%] max-w-[85%] sm:text-3xl md:text-5xl lg:text-7xl">
               {eventObject.name}
             </h1>
             <div className="absolute max-w-max top-0.5 right-0.5 xl:top-2 xl:right-2">
               <button
-                className="flex items-center justify-center outlinedText text-2xl font-extrabold min-w-[50px] min-h-[50px]"
+                className="flex items-center justify-center text-2xl font-extrabold outlinedText min-w-[50px] min-h-[50px]"
                 onClick={(e) => {
                   e.preventDefault()
                   if (isSignedIn) {
@@ -829,7 +829,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                className="mb-5 max-w-fit text-lg font-bold outlinedText hover:text-blue-500 xs:text-xl">
               <u>RobotEvents Page</u>
             </a>
-            <div className="outlinedText flex flex-row gap-5 md:gap-10">
+            <div className="flex flex-row gap-5 outlinedText md:gap-10">
               <div className="flex flex-col gap-5 mim-w-[49%]">
                 <div className="flex flex-col">
                   <h3 className="font-bold text-md sm:text-xl">
@@ -881,46 +881,46 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </div>
             </div>
           </div>
-          <hr className="sm:hidden block my-8 w-11/12 border-t-2 border-neutral-500"/>
+          <hr className="my-8 block w-11/12 border-t-2 border-neutral-500 sm:hidden"/>
           <Tabs value={tab} onValueChange={onTabChange}>
             <TabsList
               className={`fixed sm:relative z-30 sm:z-0 ${isPWA ? "bottom-[4.5rem]" : "bottom-[3rem]"} sm:bottom-0 left-0 px-2 pb-7 sm:pb-0 sm:bgColorPrimary sm:h-10 h-[60px] flex w-full sm:w-min sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px] sm:my-8 [&>*]:flex-1 bg-gradient-to-b
    to-neutral-800 from-GSGray sm:to-[var(--color-primary-hover)] sm:from-[var(--color-primary)]`}>
-              <TabsTrigger value="teams" className="flex sm:flex-row flex-col h-14 text-2xs sm:h-8">
-                <FaClipboardList className="inline-block sm:mr-2 text-lg"/>
+              <TabsTrigger value="teams" className="flex h-14 flex-col text-2xs sm:h-8 sm:flex-row">
+                <FaClipboardList className="inline-block text-lg sm:mr-2"/>
                 Teams
               </TabsTrigger>
-              <TabsTrigger value="rankings" className="flex sm:flex-row flex-col h-14 text-2xs sm:h-8">
-                <FaRankingStar className="inline-block sm:mr-2 text-lg"/>
+              <TabsTrigger value="rankings" className="flex h-14 flex-col text-2xs sm:h-8 sm:flex-row">
+                <FaRankingStar className="inline-block text-lg sm:mr-2"/>
                 Rankings
               </TabsTrigger>
-              <TabsTrigger value="matches" className="flex sm:flex-row flex-col h-14 text-2xs sm:h-8">
-                <GiTrumpet className="inline-block sm:mr-2 text-lg"/>
+              <TabsTrigger value="matches" className="flex h-14 flex-col text-2xs sm:h-8 sm:flex-row">
+                <GiTrumpet className="inline-block text-lg sm:mr-2"/>
                  Matches
               </TabsTrigger>
-              <TabsTrigger value="skills" className="flex sm:flex-row flex-col h-14 text-2xs sm:h-8">
-                <GoNumber className="inline-block sm:mr-2 text-lg"/>
+              <TabsTrigger value="skills" className="flex h-14 flex-col text-2xs sm:h-8 sm:flex-row">
+                <GoNumber className="inline-block text-lg sm:mr-2"/>
                 Skills
               </TabsTrigger>
-              <TabsTrigger value="awards" className="flex sm:flex-row flex-col h-14 text-2xs sm:h-8">
-                <FaTrophy className="inline-block sm:mr-2 text-lg"/>
+              <TabsTrigger value="awards" className="flex h-14 flex-col text-2xs sm:h-8 sm:flex-row">
+                <FaTrophy className="inline-block text-lg sm:mr-2"/>
                 Awards
               </TabsTrigger>
             </TabsList>
             <div
-              className="relative flex h-auto flex-col justify-center rounded-2xl outlinedText sm:bgColorPrimary mb-10 sm:p-8 items-left w-[340px] sm:w-[500px] md:w-[700px] lg:w-[900px] xl:w-[1200px] transition-all ease-in-out duration-1000">
+              className="relative mb-10 flex h-auto flex-col justify-center rounded-2xl transition-all duration-1000 ease-in-out outlinedText items-left w-[340px] sm:bgColorPrimary sm:w-[500px] sm:p-8 md:w-[700px] lg:w-[900px] xl:w-[1200px]">
               <TabsContent value="teams">
-                <div className="outlinedText flex flex-col justify-between xl:flex-row">
-                  <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
+                <div className="flex flex-col justify-between outlinedText xl:flex-row">
+                  <h3 className="mb-5 min-w-fit text-3xl font-bold md:text-4xl">
                     Teams
                   </h3>
-                  <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
+                  <div className="flex flex-col flex-nowrap gap-3 sm:flex-row sm:flex-wrap">
                     <button
-                      className="h-8 flex relative items-center min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black sm:w-52 md:h-12 md:w-60 md:text-lg"
+                      className="relative flex h-8 min-w-max items-center rounded-lg bg-white pl-3 text-left text-sm text-black sm:w-52 md:h-12 md:w-60 md:text-lg"
                       onClick={() => setExportDialogOpen(true)}
                     >
                       Generate Scout Sheet
-                      <CiExport className="inline-block absolute right-2"/>
+                      <CiExport className="absolute right-2 inline-block"/>
                     </button>
                     <select
                       className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
@@ -946,20 +946,20 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     <SearchBar value={teamNumberFilter} changeValue={setTeamNumberFilter} placeholder={"Filter by team..."} />
                   </div>
                 </div>
-                <div className="flex flex-row gap-3 my-5 outlinedText">
-                  <FaCircleInfo className="text-xl  align-middle"/>
-                  <p className="italic text-sm align-baseline">
+                <div className="my-5 flex flex-row gap-3 outlinedText">
+                  <FaCircleInfo className="align-middle text-xl"/>
+                  <p className="align-baseline text-sm italic">
                     View a team&apos;s profile, schedule, and notes
                   </p>
                 </div>
-                <div className="flex flex-col p-0.5 gap-1 w-[100%]">
+                <div className="flex flex-col gap-1 p-0.5 w-[100%]">
                   {teamsIsLoading ?
-                    <h1 className="text-2xl font-semibold ">
+                    <h1 className="text-2xl font-semibold">
                       Loading...
                     </h1>
                     : null}
                   {divisionFilteredTeams.length === 0 && !teamsIsLoading ?
-                    <h1 className="text-2xl font-semibold ">
+                    <h1 className="text-2xl font-semibold">
                       No teams found
                     </h1>
                     : null}
@@ -1023,17 +1023,17 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   : null}
               </TabsContent>
               <TabsContent value="rankings">
-                <div className="outlinedText flex flex-col">
-                  <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
+                <div className="flex flex-col outlinedText">
+                  <h3 className="mb-5 min-w-fit text-3xl font-bold md:text-4xl">
                     Rankings
                   </h3>
-                  <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
+                  <div className="flex flex-col flex-nowrap gap-3 sm:flex-row sm:flex-wrap">
                     <button
-                      className="flex items-center relative h-8 min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black sm:w-52 md:h-12 md:w-60 md:text-lg"
+                      className="relative flex h-8 min-w-max items-center rounded-lg bg-white pl-3 text-left text-sm text-black sm:w-52 md:h-12 md:w-60 md:text-lg"
                       onClick={() => setRankingsExportDialogOpen(true)}
                     >
                       Generate Scout Sheet
-                      <CiExport className="inline-block right-2 absolute"/>
+                      <CiExport className="absolute right-2 inline-block"/>
                     </button>
                     {/*<select*/}
                     {/*  className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-52 md:h-12 md:w-52 md:text-lg"*/}
@@ -1115,24 +1115,24 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     {/*  <span className="text-xs sm:text-md xl:text-lg">Reflect Vex VIA/Account for unscored matches</span>*/}
                     {/*</label>*/}
                   </div>
-                  <div className="flex flex-row gap-3 my-5">
-                    <FaCircleInfo className="text-xl  align-middle"/>
-                    <p className="italic text-sm align-baseline">
+                  <div className="my-5 flex flex-row gap-3">
+                    <FaCircleInfo className="align-middle text-xl"/>
+                    <p className="align-baseline text-sm italic">
                       Green = Top 35%, Yellow = Top 70%, Red = Bottom 30% of teams
                     </p>
                   </div>
                 </div>
                 {rankingsDataIsLoading ?
-                  <h1 className="text-2xl font-semibold ">
+                  <h1 className="text-2xl font-semibold">
                     Loading...
                   </h1>
                   : null}
                 {rankings.length === 0 && !rankingsDataIsLoading ?
-                  <h1 className="text-2xl font-semibold ">
+                  <h1 className="text-2xl font-semibold">
                     No rankings found, insufficient match data to calculate rankings
                   </h1>
                   : null}
-                <div className="flex flex-col gap-1 p-0.5 overflow-auto w-[100%]">
+                <div className="flex flex-col gap-1 overflow-auto p-0.5 w-[100%]">
                   {rankingsWithMetricsSorted.length !== 0 ? rankingsWithMetricsSorted.map((result: EventRankWithMetrics) => {
                     const foundTeamProfile = participatingTeams.find((team) => team.teamId === result.team.teamId);
                     if (!foundTeamProfile) {
@@ -1163,12 +1163,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
               </TabsContent>
               <TabsContent value="matches">
                 <div className="flex flex-col justify-between outlinedText">
-                  <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
+                  <h3 className="mb-5 min-w-fit text-3xl font-bold md:text-4xl">
                     Matches
                   </h3>
-                  <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
+                  <div className="flex flex-col flex-nowrap gap-3 sm:flex-row sm:flex-wrap">
                     <button
-                      className="relative flex items-center h-8 min-w-max text-left pl-3 rounded-lg bg-white text-sm text-black disabled:opacity-50 sm:w-44 md:h-12 md:w-52 md:text-lg"
+                      className="relative flex h-8 min-w-max items-center rounded-lg bg-white pl-3 text-left text-sm text-black disabled:opacity-50 sm:w-44 md:h-12 md:w-52 md:text-lg"
                       onClick={() => {
                         if (!isSignedIn) {
                           toast.error("You must be signed in to view match notes");
@@ -1198,7 +1198,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       })}
                     </select>
                     <SearchBar value={teamNumberFilter} changeValue={setTeamNumberFilter} placeholder={"Filter by team..."} />
-                    <div className="relative flex flex-row min-w-max items-center">
+                    <div className="relative flex min-w-max flex-row items-center">
                       <input
                         className="h-8 w-full rounded-lg bg-white p-3 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
                         type="text"
@@ -1207,7 +1207,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         onChange={(e) => setUsersCurrentTeamNumber(e.target.value)}
                       />
                       <TiDeleteOutline
-                        className="absolute right-2 text-lg sm:text-xl cursor-pointer text-black"
+                        className="absolute right-2 cursor-pointer text-lg text-black sm:text-xl"
                         onClick={() => setUsersCurrentTeamNumber("")}
                       />
                     </div>
@@ -1222,18 +1222,18 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     <span className="text-sm sm:text-md xl:text-lg">Compact Mode</span>
                   </label>
                 </div>
-                <div className="flex flex-row gap-3 my-5 outlinedText">
-                  <FaCircleInfo className="text-xl align-middle"/>
-                  <p className="italic text-sm align-baseline">
+                <div className="my-5 flex flex-row gap-3 outlinedText">
+                  <FaCircleInfo className="align-middle text-xl"/>
+                  <p className="align-baseline text-sm italic">
                     View match details, notes, relavancy to your team, and make predictions
                   </p>
                 </div>
                 {matchList.length === 0 && !matchDataIsLoading ?
-                  <h1 className="text-2xl font-semibold ">
+                  <h1 className="text-2xl font-semibold">
                     No matches found
                   </h1>
                 : null}
-                <div className="flex flex-col gap-1.5 p-0.5 overflow-auto w-[100%]">
+                <div className="flex flex-col overflow-auto gap-1.5 p-0.5 w-[100%]">
                   {fiteredMatches.length !== 0 ? fiteredMatches.map((result: EventMatch) => {
                     return (
                       <MatchResult
@@ -1275,11 +1275,11 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   : null}
               </TabsContent>
               <TabsContent value="skills">
-                <div className="flex flex-col justify-between xl:flex-row outlinedText">
-                  <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
+                <div className="flex flex-col justify-between outlinedText xl:flex-row">
+                  <h3 className="mb-5 min-w-fit text-3xl font-bold md:text-4xl">
                     Skills
                   </h3>
-                  <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
+                  <div className="flex flex-col flex-nowrap gap-3 sm:flex-row sm:flex-wrap">
                     <select
                       className="h-8 min-w-max rounded-lg bg-white pl-2 text-sm text-black sm:w-44 md:h-12 md:w-52 md:text-lg"
                       required
@@ -1295,23 +1295,23 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                     <SearchBar value={teamNumberFilter} changeValue={setTeamNumberFilter} placeholder={"Filter by team..."} />
                   </div>
                 </div>
-                <div className="flex flex-row outlinedText gap-3 my-5">
-                  <FaCircleInfo className="text-xl align-middle"/>
-                  <p className="italic text-sm align-baseline">
+                <div className="my-5 flex flex-row gap-3 outlinedText">
+                  <FaCircleInfo className="align-middle text-xl"/>
+                  <p className="align-baseline text-sm italic">
                     View skills scores, their rankings, and team qualifications
                   </p>
                 </div>
                 {skillsDataIsLoading ?
-                  <h1 className="text-2xl font-semibold ">
+                  <h1 className="text-2xl font-semibold">
                     Loading...
                   </h1>
                   : null}
                 {skills.length === 0 && !skillsDataIsLoading ?
-                  <h1 className="text-2xl font-semibold ">
+                  <h1 className="text-2xl font-semibold">
                     No skills runs found
                   </h1>
                   : null}
-                <div className="flex flex-col p-0.5 gap-1 overflow-auto w-[100%]">
+                <div className="flex flex-col gap-1 overflow-auto p-0.5 w-[100%]">
                   {skillsRanked.length !== 0 ? skillsRanked.map((result: CombinedTeamSkills, index) => {
                     if (teamNumberFilter !== "" && !result.teamNumber.startsWith(teamNumberFilter.toUpperCase())) {
                       return null;
@@ -1323,11 +1323,11 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                       return (
                         <div key={index}>
                           <div className="flex flex-row [&>*]:flex-1 outlinedText items-center justify-center">
-                            <hr className="w-full my-8"/>
-                            <p className="italic h-full text-sm sm:text-lg text-center">
+                            <hr className="my-8 w-full"/>
+                            <p className="h-full text-center text-sm italic sm:text-lg">
                               30% Cutoff
                             </p>
-                            <hr className="w-full my-8"/>
+                            <hr className="my-8 w-full"/>
                           </div>
                           <SkillsResult
                             key={result.teamId}
@@ -1349,11 +1349,11 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                 </div>
               </TabsContent>
               <TabsContent value="awards">
-                <div className="mb-5 flex flex-col justify-between xl:flex-row outlinedText">
-                  <h3 className="mb-5 min-w-fit font-bold text-3xl md:text-4xl">
+                <div className="mb-5 flex flex-col justify-between outlinedText xl:flex-row">
+                  <h3 className="mb-5 min-w-fit text-3xl font-bold md:text-4xl">
                     Awards
                   </h3>
-                  <div className="flex gap-3 sm:flex-wrap sm:flex-row flex-nowrap flex-col">
+                  <div className="flex flex-col flex-nowrap gap-3 sm:flex-row sm:flex-wrap">
                     <SearchBar value={teamNumberFilter} changeValue={setTeamNumberFilter} placeholder={"Filter by team..."} />
                   </div>
                 </div>
@@ -1373,12 +1373,12 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                   link will copy the event code to your clipboard.
                 </p>
                 {awardsIsLoading ?
-                  <h1 className="text-2xl font-semibold ">
+                  <h1 className="text-2xl font-semibold">
                     Loading...
                   </h1>
                   : null}
                 {awards.length === 0 && !awardsIsLoading ?
-                  <h1 className="text-2xl font-semibold ">
+                  <h1 className="text-2xl font-semibold">
                     No awards found
                   </h1>
                   : null}
@@ -1408,18 +1408,18 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
           </Tabs>
         </> : eventDataIsLoading ? <>
           <div className="flex flex-col items-center justify-center">
-            <h1 className="text-3xl font-bold ">
+            <h1 className="text-3xl font-bold">
               Loading...
             </h1>
-            <div className="w-20 h-20 mt-5 flex items-center justify-center">
+            <div className="mt-5 flex h-20 w-20 items-center justify-center">
               <Spinner/>
             </div>
           </div>
         </>
         : <div className="flex flex-col items-center justify-center">
-            <h1 className="italic text-3xl font-bold ">
+            <h1 className="text-3xl font-bold italic">
               Event not found
-              <FaRegSadTear className="inline-block ml-2"/>
+              <FaRegSadTear className="ml-2 inline-block"/>
             </h1>
           </div>
         }

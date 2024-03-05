@@ -19,20 +19,20 @@ export default function TeamResult({ teamId, teamNumber, teamName, programCode, 
   return (
     <Link
       href={`/teams/${teamNumber}`}
-      className="flex h-auto w-full flex-col rounded-2xl bgColorSecondary p-2 shadow-lg shadow-neutral-900 transition-colors duration-200 min-h-[85px] hover:bgColorSecondaryHover"
+      className="flex h-auto w-full flex-col rounded-2xl p-2 shadow-lg shadow-neutral-900 transition-colors duration-200 bgColorSecondary min-h-[85px] hover:bgColorSecondaryHover"
     >
-      <h1 className="mb-2 text-sm font-bold md:text-lg outlinedText">
+      <h1 className="mb-2 text-sm font-bold outlinedText md:text-lg">
         {teamNumber} - {teamName}
       </h1>
       <div className="flex flex-col gap-2">
-        <h2 className="text-xs font-medium md:text-sm outlinedText">
+        <h2 className="text-xs font-medium outlinedText md:text-sm">
           {locationString}
         </h2>
         <div className="flex flex-row justify-between">
-          <h2 className="text-xs font-medium md:text-sm outlinedText line-clamp-1 max-w-[60%]">
+          <h2 className="text-xs font-medium outlinedText line-clamp-1 max-w-[60%] md:text-sm">
             {teamOrg}
           </h2>
-          <h2 className="text-xs font-medium md:text-sm outlinedText">
+          <h2 className="text-xs font-medium outlinedText md:text-sm">
             {programCode} {teamGrade}
           </h2>
         </div>

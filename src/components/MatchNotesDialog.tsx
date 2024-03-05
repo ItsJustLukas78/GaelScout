@@ -277,7 +277,7 @@ export default function MatchNotesDialog({
                 <h1 className="text-xl font-semibold outlinedText">
                   {currentNotesMatch?.name} - <span className="font-extrabold">{currentTeam?.teamNumber}</span>
                 </h1>
-                <p className="mt-0.5 mb-2 text-xs font-semibold ">
+                <p className="mb-2 text-xs font-semibold mt-0.5">
                   Click on a team to switch notes quickly
                 </p>
                 <Tiptap setEditor={setCurrentEditor} />
@@ -305,7 +305,7 @@ export default function MatchNotesDialog({
                   </button>
                   {/* text saying match browser */}
                   <div className="mx-5 flex flex-col items-center justify-center">
-                    <h1 className="text-xs font-semibold ">
+                    <h1 className="text-xs font-semibold">
                       Match Browser
                     </h1>
                   </div>

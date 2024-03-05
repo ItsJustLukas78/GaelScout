@@ -184,7 +184,7 @@ export default function NotesGroupComponent() {
     <div className="mt-5 flex flex-row justify-between rounded-xl bg-neutral-900 p-2 px-3 shadow-md shadow-neutral-900">
       <div className="relative flex flex-row items-center">
         <select
-          className="appearance-none rounded-md bg-neutral-900 pr-6 text-sm "
+          className="appearance-none rounded-md bg-neutral-900 pr-6 text-sm"
           value={currentNotesGroup ? currentNotesGroup.id : "me"}
           onChange={(e) => {
             if (e.target.value === "me") {
@@ -221,10 +221,10 @@ export default function NotesGroupComponent() {
       </button>
     </div>
     <div className="mt-5 flex flex-row gap-3 rounded-xl bg-neutral-900 p-1 px-2 shadow-md shadow-neutral-900">
-      <div className="flex flex-row items-center justify-between w-full">
+      <div className="flex w-full flex-row items-center justify-between">
         <div className="flex flex-row items-center justify-between">
           <input
-            className="w-20 2xs:w-28 border-b-2 border-neutral-600 bg-neutral-900 text-xs 2xs:text-sm  px-0.5"
+            className="w-20 2xs:w-28 border-b-2 border-neutral-600 bg-neutral-900 text-xs 2xs:text-sm px-0.5"
             type="text"
             placeholder="Join Code"
             value={enteredJoinCode}
@@ -244,7 +244,7 @@ export default function NotesGroupComponent() {
         <div className="flex flex-row items-center justify-between">
           <div className="relative flex flex-col">
             <input
-              className="w-24 2xs:w-28 border-b-2 border-neutral-600 bg-neutral-900 pr-7 text-xs 2xs:text-sm  pl-0.5"
+              className="w-24 2xs:w-28 border-b-2 border-neutral-600 bg-neutral-900 pr-7 text-xs 2xs:text-sm pl-0.5"
               type="text"
               placeholder="New Group"
               maxLength={40}
@@ -253,7 +253,7 @@ export default function NotesGroupComponent() {
                 setEnteredNewGroup(e.target.value)
               }}
             />
-            <p className="absolute text-right  right-0.5 bottom-0.5 text-3xs">{enteredNewGroup.length}/40</p>
+            <p className="absolute text-right right-0.5 bottom-0.5 text-3xs">{enteredNewGroup.length}/40</p>
           </div>
           <button
             className="pl-1 text-2xl font-extrabold text-green-600 hover:rotate-6 hover:text-green-400 disabled:opacity-75"

@@ -13,17 +13,17 @@ import { MdBuild } from "react-icons/md";
 import React from "react";
 
 const awardIcons = {
-  "Excellence Award": <GiDiamondTrophy className="w-10 h-10 mt-1" />,
-  "Tournament Champions": <FaTrophy className="w-10 h-10 mt-1" />,
-  "Design Award": <TbNotebook className="w-10 h-10 mt-1" />,
-  "Judges Award": <MdSupervisorAccount className="w-10 h-10 mt-1" />,
-  "Skills Champion": <TbNumbers className="w-10 h-10 mt-1" />,
-  "Think Award": <FaLaptopCode className="w-10 h-10 mt-1" />,
-  "Amaze Award": <BiCool className="w-10 h-10 mt-1" />,
-  "Build Award": <MdBuild className="w-10 h-10 mt-1" />,
-  "Create Award": <MdEngineering className="w-10 h-10 mt-1" />,
-  "Innovate Award": <FaLightbulb className="w-10 h-10 mt-1" />,
-  "Sportsmanship Award": <MdCelebration className="w-10 h-10 mt-1" />,
+  "Excellence Award": <GiDiamondTrophy className="mt-1 h-10 w-10" />,
+  "Tournament Champions": <FaTrophy className="mt-1 h-10 w-10" />,
+  "Design Award": <TbNotebook className="mt-1 h-10 w-10" />,
+  "Judges Award": <MdSupervisorAccount className="mt-1 h-10 w-10" />,
+  "Skills Champion": <TbNumbers className="mt-1 h-10 w-10" />,
+  "Think Award": <FaLaptopCode className="mt-1 h-10 w-10" />,
+  "Amaze Award": <BiCool className="mt-1 h-10 w-10" />,
+  "Build Award": <MdBuild className="mt-1 h-10 w-10" />,
+  "Create Award": <MdEngineering className="mt-1 h-10 w-10" />,
+  "Innovate Award": <FaLightbulb className="mt-1 h-10 w-10" />,
+  "Sportsmanship Award": <MdCelebration className="mt-1 h-10 w-10" />,
 };
 
 interface AwardResultProps {
@@ -37,7 +37,7 @@ export default function AwardResult(
 {
 
   const returnAwardIcon = (awardName: string) => {
-    let icon = <FaAward className="w-10 h-10 mt-1" />;
+    let icon = <FaAward className="mt-1 h-10 w-10" />;
 
     Object.keys(awardIcons).forEach((key: any) => {
       if (awardName.startsWith(key)) {
@@ -54,20 +54,20 @@ export default function AwardResult(
     <Link
       href={`/teams/${team.teamNumber}`}
       key={`award-${id + order}`}
-      className="flex h-auto w-full flex-row rounded-2xl bgColorSecondary p-3 gap-4 shadow-lg shadow-neutral-900 transition-colors duration-200 min-h-28 hover:bgColorSecondaryHover"
+      className="flex h-auto w-full flex-row gap-4 rounded-2xl p-3 shadow-lg shadow-neutral-900 transition-colors duration-200 bgColorSecondary min-h-28 hover:bgColorSecondaryHover"
     >
       <div className="flex flex-col gap-2 outlinedText">
         {returnAwardIcon(name)}
       </div>
       <div className="flex flex-col gap-2 max-w-[85%]">
-        <h1 className="mb-2 text-sm font-semibold md:text-lg outlinedText">
+        <h1 className="mb-2 text-sm font-semibold outlinedText md:text-lg">
           {name}
         </h1>
         <div className="flex flex-col gap-2">
-          <h2 className="text-xs font-medium md:text-sm outlinedText line-clamp-2">
+          <h2 className="text-xs font-medium outlinedText line-clamp-2 md:text-sm">
             Winner: {team.teamNumber} - {team.teamName}
           </h2>
-          <h2 className="text-xs font-medium md:text-sm outlinedText">
+          <h2 className="text-xs font-medium outlinedText md:text-sm">
             Qualifications: {qualification ?? 'N/A'}
           </h2>
         </div>

@@ -306,7 +306,7 @@ export default function Teams() {
               </div>
             </div>
             <div className="flex h-auto flex-col items-center justify-center">
-              <div className="flex h-60 w-64 flex-col items-center gap-5 rounded-2xl bgColorPrimary p-5 shadow-lg shadow-neutral-700 sm:w-144 sm:h-72 sm:p-10">
+              <div className="flex h-60 w-64 flex-col items-center gap-5 rounded-2xl p-5 shadow-lg shadow-neutral-700 bgColorPrimary sm:w-144 sm:h-72 sm:p-10">
                 <div className="flex flex-col items-center">
                   <div className="flex flex-row items-center justify-center gap-20 sm:gap-44">
                     <div className="flex flex-col items-center justify-center">
@@ -336,7 +336,7 @@ export default function Teams() {
                       />
                     </Progress.Root>
                   </div>
-                  <h1 className="text-xs font-bold sm:text-sm outlinedText">
+                  <h1 className="text-xs font-bold outlinedText sm:text-sm">
                     OpenSkill Prediction
                   </h1>
                 </div>
@@ -369,13 +369,13 @@ export default function Teams() {
                       />
                     </Progress.Root>
                   </div>
-                  <h1 className="text-center text-xs font-bold sm:text-sm outlinedText">
+                  <h1 className="text-center text-xs font-bold outlinedText sm:text-sm">
                     Model trained using OpenSkill, OPR, DPR, and CCWM
                   </h1>
-                  <h1 className="font-bold  text-2xs sm:text-xs outlinedText">
+                  <h1 className="font-bold text-2xs outlinedText sm:text-xs">
                     Not good with outlying scenarios
                   </h1>
-                  <h1 className="font-bold  text-2xs sm:text-xs outlinedText">
+                  <h1 className="font-bold text-2xs outlinedText sm:text-xs">
                     85% accuracy otherwise
                   </h1>
                 </div>

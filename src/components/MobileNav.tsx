@@ -16,7 +16,7 @@ export default function QuickSearch() {
       {isPWA ? (
         <div className="block sm:hidden">
           <button
-            className="fixed z-30 bottom-[175px] flex items-center left-4 md:left-12 justify-center rounded-full bgColorSecondary text-white w-8 h-8 sm:w-10 sm:h-10 shadow-md shadow-neutral-900 transition-colors duration-200 hover:bgColorSecondaryHover"
+            className="fixed left-4 z-30 flex h-8 w-8 items-center justify-center rounded-full text-white shadow-md shadow-neutral-900 transition-colors duration-200 bottom-[175px] bgColorSecondary hover:bgColorSecondaryHover sm:h-10 sm:w-10 md:left-12"
             onClick={() => {
               router.back();
             }}
@@ -24,7 +24,7 @@ export default function QuickSearch() {
             <FaAngleLeft className="text-2xl" />
           </button>
           <button
-            className="fixed z-30 bottom-[175px] flex items-center right-4 md:right-12 justify-center rounded-full bgColorSecondary text-white w-8 h-8 sm:w-10 sm:h-10 shadow-md shadow-neutral-900 transition-colors duration-200 hover:bgColorSecondaryHover"
+            className="fixed right-4 z-30 flex h-8 w-8 items-center justify-center rounded-full text-white shadow-md shadow-neutral-900 transition-colors duration-200 bottom-[175px] bgColorSecondary hover:bgColorSecondaryHover sm:h-10 sm:w-10 md:right-12"
             onClick={() => {
               router.forward();
             }}

@@ -76,23 +76,23 @@ export default function EventsMap() {
               return <>
                 <Marker key={name + i} coordinates={coordinates} onClick={() => setActivelyViewedEvent(name)} onMouseEnter={() => setActivelyViewedEvent(name)}>
                   <circle r={markerSize} fill="#FFFFFF" strokeWidth={0}/>
-                  <circle r={markerSize * 5} fill="#FFFFFF" strokeWidth={0} className="animate-ping pointer-events-none"/>
+                  <circle r={markerSize * 5} fill="#FFFFFF" strokeWidth={0} className="pointer-events-none animate-ping"/>
                 </Marker>
               </>
             })}
           </ZoomableGroup>
         </ComposableMap>
       </div>
-      <div className="fixed sm:bottom-32 bottom-6 flex justify-center w-full">
-        <div className="bg-black bg-opacity-50 p-3 rounded-lg m-4">
+      <div className="fixed bottom-6 flex w-full justify-center sm:bottom-32">
+        <div className="m-4 rounded-lg bg-black bg-opacity-50 p-3">
           {currentEvent ?
             <>
               <Link href={`/events/${currentEvent.sku}`}>
-                <h1 className="sm:text-2xl text-base font-bold text-white hover:text-blue-500">{(currentEvent.name).slice(0, 40)}...</h1>
+                <h1 className="text-base font-bold text-white hover:text-blue-500 sm:text-2xl">{(currentEvent.name).slice(0, 40)}...</h1>
               </Link>
-              <p className="text-white sm:texl-lg text-xs"><strong>Location:</strong> {currentEvent.location.city ? currentEvent.location.city + ", " : ""}{currentEvent.location.region ? currentEvent.location.region + ", ": ""}{currentEvent.location.country}</p>
-              <p className="text-white sm:texl-lg text-xs"><strong>SKU:</strong> {currentEvent.sku}</p>
-              <p className="text-white sm:texl-lg text-xs"><strong>Date:</strong> {formatDate(currentEvent.start)} - {formatDate(currentEvent.end)}</p>
+              <p className="text-xs text-white sm:texl-lg"><strong>Location:</strong> {currentEvent.location.city ? currentEvent.location.city + ", " : ""}{currentEvent.location.region ? currentEvent.location.region + ", ": ""}{currentEvent.location.country}</p>
+              <p className="text-xs text-white sm:texl-lg"><strong>SKU:</strong> {currentEvent.sku}</p>
+              <p className="text-xs text-white sm:texl-lg"><strong>Date:</strong> {formatDate(currentEvent.start)} - {formatDate(currentEvent.end)}</p>
             </>
             :
             <>
