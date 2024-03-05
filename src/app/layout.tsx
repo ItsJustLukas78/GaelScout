@@ -10,8 +10,6 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 import MobileNav from "@/components/MobileNav";
 import { GeistSans } from 'geist/font/sans';
 import 'react-toastify/dist/ReactToastify.css';
-import ColorPicker from "@/components/ColorPicker";
-import ColorProvider from "@/components/ColorProvider";
 import MobileSearch from "@/components/MobileSearch";
 
 
@@ -80,8 +78,8 @@ export default function RootLayout({
             <Analytics />
           </div>
           <ToastContainer
-            className="!scale-90 !bottom-[5em] sm:!bottom-[1em]"
-            position="bottom-right"
+            className=""
+            position="top-center"
             autoClose={2000}
             hideProgressBar={false}
             newestOnTop={false}

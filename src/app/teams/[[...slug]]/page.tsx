@@ -555,7 +555,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                         {seasonStats.openSkill != undefined ? seasonStats.openSkill.toFixed(2) : "N/A"}
                       </h3>
                       <p className="absolute -bottom-1/2 left-0 text-gray-300 text-2xs">
-                        TrueSkill Alt. Ranking Using Wins and Losses
+                        &quot;Robot ELO&quot; - Based on won against/lost to
                       </p>
                     </div>
                     <hr/>
@@ -566,6 +566,9 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                       <h3 className="text-xl">
                         {seasonStats.openSkillRank != undefined ? seasonStats.openSkillRank : "N/A"}
                       </h3>
+                      <p className="absolute -bottom-1/2 left-0 text-gray-300 text-2xs">
+                        Ranking against all match-participating teams
+                      </p>
                     </div>
                   </div>
                   <div
@@ -577,6 +580,9 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                       <h3 className="text-xl">
                         {seasonStats.qualMatchWinPercentage != undefined ? `${seasonStats.qualMatchWinPercentage.toFixed(2)}%` : "N/A"}
                       </h3>
+                      <p className="absolute -bottom-1/2 left-0 text-gray-300 text-2xs">
+                        How often Qualification Matches are won
+                      </p>
                     </div>
                     <hr/>
                     <div className="flex flex-row justify-between outlinedText">
@@ -586,6 +592,9 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                       <h3 className="text-xl">
                         {seasonStats.elimMatchWinPercentage != undefined ? `${seasonStats.elimMatchWinPercentage.toFixed(2)}%` : "N/A"}
                       </h3>
+                      <p className="absolute -bottom-1/2 left-0 text-gray-300 text-2xs">
+                        How often Elimination Matches are won
+                      </p>
                     </div>
                     <hr/>
                     <div className="flex flex-row justify-between outlinedText">
@@ -595,6 +604,9 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                       <h3 className="text-xl">
                         {seasonStats.eventCount != undefined ? seasonStats.eventCount : "N/A"}
                       </h3>
+                      <p className="absolute -bottom-1/2 left-0 text-gray-300 text-2xs">
+                        Number of Events Attended
+                      </p>
                     </div>
                   </div>
                   <div
@@ -618,6 +630,9 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                       <h3 className="text-xl">
                         {seasonStats.skillsRank != undefined ? seasonStats.skillsRank : "N/A"}
                       </h3>
+                      <p className="absolute -bottom-1/2 left-0 text-gray-300 text-2xs">
+                        Ranking against all skill-participating teams
+                      </p>
                     </div>
                     <hr/>
                     <div className="flex flex-row justify-between outlinedText">
@@ -627,6 +642,9 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                       <h3 className="text-xl">
                         {seasonStats.driverSkills != undefined ? seasonStats.driverSkills : "N/A"}
                       </h3>
+                      <p className="absolute -bottom-1/2 left-0 text-gray-300 text-2xs">
+                        Score from Human-Driven Skills
+                      </p>
                     </div>
                     <hr/>
                     <div className="flex flex-row justify-between outlinedText">
@@ -636,6 +654,9 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                       <h3 className="text-xl">
                         {seasonStats.progSkills != undefined ? seasonStats.progSkills : "N/A"}
                       </h3>
+                      <p className="absolute -bottom-1/2 left-0 text-gray-300 text-2xs">
+                        Score from automated skills through programming
+                      </p>
                     </div>
                   </div>
                   {currentAwards ?
@@ -661,7 +682,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                           {currentAwards.some((award: EventAward) => award.qualification == "World Championship") ? "Yes" : "No"}
                         </h3>
                         <p className="absolute -bottom-1/2 left-0 text-gray-300 text-2xs">
-                          Qualifies to Worlds
+                          Qualifies to Worlds and is Registered
                         </p>
                       </div>
                     </div>

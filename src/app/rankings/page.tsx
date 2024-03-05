@@ -361,7 +361,7 @@ export default function RankingsPage() {
       <div className="flex w-full flex-col items-center justify-center py-32 sm:py-32">
         <div className="flex h-auto flex-col justify-center rounded-2xl sm:bgColorPrimary p-8 items-left max-w-[380px] xs:max-w-[400px] sm:min-w-[500px] md:min-w-[700px] lg:min-w-[900px] xl:min-w-[1200px]">
           <div className="mb-5 flex flex-col justify-between">
-            <h3 className="my-5 min-w-fit text-3xl font-bold xs:text-5xl text-shadow-sm sm:text-shadow lg:text-shadow-lg shadow-[var(--color-tertiary-hover)]">
+            <h3 className="my-5 min-w-fit text-3xl font-bold xs:text-5xl">
               Rankings
             </h3>
             <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap">

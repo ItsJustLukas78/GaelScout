@@ -4,15 +4,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Tilt from 'react-parallax-tilt';
 import React from "react";
-// import AnimatedTextCharacter from "@/components/AnimatedTextCharacter";
-// import SpringAnimatedElement from "@/components/SpringAnimatedElement";
 import Balancer from 'react-wrap-balancer'
 import {useUser} from "@clerk/nextjs";
-import {MdSearch} from "react-icons/md";
-import { FaPeopleGroup } from "react-icons/fa6";
-import { MdEventNote } from "react-icons/md";
-import {FaStar} from "react-icons/fa";
-
 
 // Z indexes
 // 50 - Modals
@@ -21,24 +14,11 @@ import {FaStar} from "react-icons/fa";
 export default function Home() {
   const { isSignedIn, user, isLoaded } = useUser();
 
-  // const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-  //
-  // const handleMouseMove = (e: any) => {
-  //   const x = e.clientX / window.innerWidth;
-  //   const y = e.clientY / window.innerHeight;
-  //   setCursorPosition({ x, y });
-  // };
-  //
-  // const coordinateStyles = {
-  //   transform: `translate(-${cursorPosition.x * 30}px, -${cursorPosition.y * 30}px)`,
-  //   transition: "transform 0.5s"
-  // }
-
   return (
     <main>
       <div className="flex w-full items-center justify-center py-28 xs:py-32">
         <div className="flex flex-col gap-72">
-          <div className="relative flex h-auto flex-col lg:items-start items-center animHeading lg:space-x-8 lg:flex-row">
+          <div className="relative flex h-auto flex-col lg:items-start items-center lg:space-x-8 lg:flex-row">
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
               <Balancer className="lg:pt-10 text-5xl font-bold xs:text-7xl sm:text-8xl text-shadow-lg shadow-stone-500">
                 Scouting Done Easy.
@@ -82,7 +62,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="flex h-auto flex-col items-center pb-16 animHeading lg:space-x-8 lg:flex-row">
+          <div className="flex h-auto flex-col items-center pb-16 lg:space-x-8 lg:flex-row">
             <div className="flex w-72 flex-col p-1 space-y-8 xs:w-96 sm:w-144 lg:w-128 xl:w-144">
               <Balancer className="text-4xl font-bold xs:text-5xl sm:text-7xl text-shadow-lg shadow-stone-500">
                 Developed by members of Gael Force Robotics
