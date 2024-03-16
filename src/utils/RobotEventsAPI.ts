@@ -361,7 +361,7 @@ export async function getSkillsStandings({seasonId} : {seasonId: number}): Promi
 }
 
 
-export async function getEvents({seasonId, eventSKUs, eventIds, onlyActive} : {seasonId?: number, eventSKUs?: string[], eventIds?: number[], onlyActive?: boolean}): Promise<any[]> {
+export async function getEvents({seasonId, eventSKUs, eventIds, onlyActive} : {seasonId?: number | undefined, eventSKUs?: string[], eventIds?: number[], onlyActive?: boolean}): Promise<any[]> {
   const url = `https://www.robotevents.com/api/v2/events`;
   const new_headers = {
     "accept": "application/json",
