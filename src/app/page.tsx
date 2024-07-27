@@ -83,7 +83,7 @@ export default function Home() {
               <Balancer className="text-base sm:text-xl">
                 Our members have brought back GaelScout, now serving the features of VEX Via,
                 VEX DB, and its predecessor in a single application, dependent only on RobotEvents,
-                to tackle these challenges.
+                to tackle these challenges. Find more about Gael Force Robotics at <a href="https://www.gaelforcerobotics.com" className="text-blue-500">gaelforcerobotics.com</a>.
               </Balancer>
             </div>
             <div className="hidden max-w-[426px] lg:block">
