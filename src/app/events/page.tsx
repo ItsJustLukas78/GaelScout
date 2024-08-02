@@ -77,7 +77,7 @@ export default function Events() {
   const seasonToEventsAge = useGlobalStore(state => state.seasonToEventsAge);
   const setSeasonToEventsAge = useGlobalStore(state => state.setSeasonToEventsAge);
 
-  const [seasonId, setSeasonId] = useState(181);
+  const [seasonId, setSeasonId] = useState(190);
   const [seasonEvents, setSeasonEvents] = useState<Event[]>([]);
   const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
 
@@ -272,6 +272,7 @@ export default function Events() {
             >
               <option value="173">Spin Up 2022-23</option>
               <option value="181">Over Under 2023-24</option>
+              <option value="190">High Stakes 2024-25</option>
             </select>
             <h3 className="text-sm font-semibold">
               Season

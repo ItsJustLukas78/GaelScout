@@ -67,7 +67,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
 
   const [teamProfile, setTeamProfile] = useState<TeamProfile | null>(null);
   const [seasonStats, setSeasonStats] = useState<TeamSeasonProfile | null>(null);
-  const [seasonId, setSeasonId] = useState<number>(181);
+  const [seasonId, setSeasonId] = useState<number>(190);
 
   const [teamNotesDialogOpen, setTeamNotesDialogOpen] = useState<boolean>(false);
 
@@ -482,6 +482,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                   >
                     <option value="173">Spin Up 2022-23</option>
                     <option value="181">Over Under 2023-24</option>
+                    <option value="190">High Stakes 2024-25</option>
                   </select>
                   <button
                     className="flex h-10 items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 text-xl font-semibold text-black opacity-50 min-w-[50px] disabled:opacity-50 sm:h-12"
@@ -754,6 +755,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                   >
                     <option value="173">Spin Up 2022-23</option>
                     <option value="181">Over Under 2023-24</option>
+                    <option value="190">High Stakes 2024-25</option>
                   </select>
                 </div>
               </div>

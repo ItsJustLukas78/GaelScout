@@ -25,7 +25,7 @@ export default function Favorites() {
 
   const [loadingFavorites, setLoadingFavorites] = useState<boolean>(true);
 
-  const [seasonId, setSeasonId] = useState<number>(181);
+  const [seasonId, setSeasonId] = useState<number>(190);
 
   const getFavorites = async() => {
     if (!isSignedIn) return;
@@ -135,6 +135,7 @@ export default function Favorites() {
                   >
                     <option value="173">Spin Up 2022-23</option>
                     <option value="181">Over Under 2023-24</option>
+                    <option value="190">High Stakes 2024-25</option>
                   </select>
                 </div>
               </div>
@@ -208,6 +209,7 @@ export default function Favorites() {
                   >
                     <option value="173">Spin Up 2022-23</option>
                     <option value="181">Over Under 2023-24</option>
+                    <option value="190">High Stakes 2024-25</option>
                   </select>
                 </div>
               </div>

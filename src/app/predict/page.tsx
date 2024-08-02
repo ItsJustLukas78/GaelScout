@@ -24,7 +24,7 @@ export default function Teams() {
   const [b1Team, setB1Team] = useState< string | null >(null);
   const [b2Team, setB2Team] = useState< string | null >(null);
 
-  const [seasonId, setSeasonId] = useState<number>(181);
+  const [seasonId, setSeasonId] = useState<number>(190);
 
   const [prediction, setPrediction] = useState< any >(null);
 
@@ -262,6 +262,7 @@ export default function Teams() {
             >
               <option value="173">Spin Up 2022-23</option>
               <option value="181">Over Under 2023-24</option>
+              <option value="190">High Stakes 2024-25</option>
             </select>
           </Form.Field>
           <Form.Submit asChild>
@@ -428,6 +429,7 @@ export default function Teams() {
               >
                 <option value="173">Spin Up 2022-23</option>
                 <option value="181">Over Under 2023-24</option>
+                <option value="190">High Stakes 2024-25</option>
               </select>
             </Form.Field>
             <Form.Submit asChild>

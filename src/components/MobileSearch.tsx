@@ -105,7 +105,7 @@ export default function MobileSearch() {
   const [loadingTeams, setLoadingTeams] = useState<boolean>(false);
   const [loadingEvents, setLoadingEvents] = useState<boolean>(false);
 
-  const [seasonId, setSeasonId] = useState<number>(181);
+  const [seasonId, setSeasonId] = useState<number>(190);
 
   const getTeams = async (page: number, append: boolean) => {
     setLoadingTeams(true);
@@ -407,6 +407,7 @@ export default function MobileSearch() {
                   >
                     <option value="173">Spin Up 2022-23</option>
                     <option value="181">Over Under 2023-24</option>
+                    <option value="190">High Stakes 2024-25</option>
                 </select>
                 <div className="flex w-full flex-col items-center gap-2 overflow-auto p-2 h-[85%]">
                   {displayedEvents.map((event, index) => {
