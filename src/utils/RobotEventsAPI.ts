@@ -558,24 +558,24 @@ export async function getEventAwards(event_id: number) {
   }
 }
 
-// export async function getSeason(seasonId: number) {
-//   const url = `https://www.robotevents.com/api/v2/seasons/${seasonId}`;
-//   const new_headers = {
-//     "accept": "application/json",
-//     "Authorization": "Bearer " + API_KEY,
-//   };
-//
-//   try {
-//     const response = await apiCall(url, new_headers);
-//
-//     if (!response) {
-//       console.error("Warning: No Season could be found");
-//       return null;
-//     }
-//
-//     return response;
-//   } catch (error) {
-//     console.error(error);
-//     return null;
-//   }
-// }
+export async function getSeason(seasonId: number) {
+  const url = `https://www.robotevents.com/api/v2/seasons/${seasonId}`;
+  const new_headers = {
+    "accept": "application/json",
+    "Authorization": "Bearer " + API_KEY,
+  };
+
+  try {
+    const response = await apiCall(url, new_headers);
+
+    if (!response) {
+      console.error("Warning: No Season could be found");
+      return null;
+    }
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}

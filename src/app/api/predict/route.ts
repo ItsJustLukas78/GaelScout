@@ -56,6 +56,7 @@ import { TeamSeasonProfile } from "@/app/types";
  *        type: integer
  */
 export async function GET(request: NextRequest) {
+
   const { searchParams } = new URL(request.nextUrl);
 
   const r1Team = searchParams.get('r1Team');

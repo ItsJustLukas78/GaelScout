@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({error: 'Event not found'}, {status: 400});
     }
 
-    const eventSKURegex = new RegExp('^RE-VRC-\\d{2}-\\d{4}$');
+    const eventSKURegex = new RegExp('^RE-V5RC-\\d{2}-\\d{4}$');
 
     const validSKUs = eventSKU.filter((sku) => {
       return eventSKURegex.test(sku);
