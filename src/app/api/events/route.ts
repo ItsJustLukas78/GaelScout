@@ -19,10 +19,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({error: 'Event not found'}, {status: 400});
     }
 
-    const eventSKURegex = new RegExp('^RE-V5RC-\\d{2}-\\d{4}$');
+
+    const eventSKURegex1 = new RegExp('^RE-VRC-\\d{2}-\\d{4}$');
+    const eventSKURegex2 = new RegExp('^RE-V5RC-\\d{2}-\\d{4}$');
 
     const validSKUs = eventSKU.filter((sku) => {
-      return eventSKURegex.test(sku);
+      return eventSKURegex1.test(sku) || eventSKURegex2.test(sku);
     });
 
     if (validSKUs.length === 0 && eventSKU.length !== 0) {

@@ -15,10 +15,6 @@ export async function POST(
 
   const notesGroupId = data.notesGroupId;
 
-  // [{
-  //   teamNumber: string;
-  //   notes: json
-  // }]
   const newTeamsToNotes = data.notes as { [key: string]: object | null };
 
   try {
