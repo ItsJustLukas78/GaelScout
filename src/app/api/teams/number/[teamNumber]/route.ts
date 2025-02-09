@@ -70,18 +70,6 @@ export async function GET(
     });
   }
 
-  // fetch all teams that include the word "kirby" in their name casing-insensitive
-  const teams = await prisma.teamProfile.findMany({
-    where: {
-      teamName: {
-        contains: 'kirby',
-        mode: 'insensitive'
-      }
-    }
-  });
-
-  console.log({teams});
-
   return NextResponse.json({ team }, {
     status: 200,
     headers: {
