@@ -5,7 +5,7 @@ import Link from 'next/link'
 interface EventRankComponentProps {
   rank: EventRankWithMetrics,
   team: TeamProfile,
-  seasonProfile: TeamSeasonProfile,
+  seasonProfile: TeamSeasonProfile | undefined,
   statBrackets: {[key: string]: number},
 }
 export default function EventRankComponent({ rank, team, seasonProfile, statBrackets }: EventRankComponentProps) {
