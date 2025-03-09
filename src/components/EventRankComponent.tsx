@@ -1,22 +1,32 @@
-import { EventRankWithMetrics } from "@/app/types";
+import { EventRankWithMetrics, TeamSeasonProfile } from "@/app/types";
 import { TeamProfile } from "@/app/types";
 import Link from 'next/link'
 
 interface EventRankComponentProps {
   rank: EventRankWithMetrics,
   team: TeamProfile,
+  seasonProfile: TeamSeasonProfile,
   statBrackets: {[key: string]: number},
 }
-export default function EventRankComponent({ rank, team, statBrackets }: EventRankComponentProps) {
+export default function EventRankComponent({ rank, team, seasonProfile, statBrackets }: EventRankComponentProps) {
   return (
     <Link
       href={`/teams/${team.teamNumber}`}
       className="flex h-auto w-full flex-col items-center rounded-xl p-2 px-3 shadow-md shadow-neutral-900 transition-colors duration-200 bgColorSecondary hover:bgColorSecondaryHover"
     >
-      <div className="flex w-full flex-row">
-        <h1 className="mb-2 truncate text-sm font-medium outlinedText md:text-2xl">
+      <div className="flex w-full flex-row mb-2">
+        <h1 className="truncate text-sm font-medium outlinedText md:text-2xl">
           <span className="font-extrabold">{team.teamNumber}</span> - {team.teamName}
         </h1>
+        {seasonProfile ? (
+          <h1 className="truncate text-sm font-medium outlinedText md:text-2xl mr-0 ml-auto">
+            {seasonProfile?.qualToRegionals ? (
+              <span className="text-green-500">R-</span>
+            ) : <span className="text-red-500">R-</span>}
+            {seasonProfile?.awardQualToWorlds ? (
+              <span className="text-green-500">W</span>
+            ) : <span className="text-red-500">W</span>}
+          </h1>) : <div></div>}
       </div>
       <div className="flex w-full flex-col gap-2">
         <div className="flex flex-row w-full [&>*]:w-1/4">

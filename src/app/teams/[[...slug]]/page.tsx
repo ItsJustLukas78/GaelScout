@@ -192,7 +192,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
     } else if (!eventsData) {
       setCurrentEvents([]);
     } else {
-      setCurrentEvents(eventsData.events);
+      setCurrentEvents([eventsData.events].reverse());
     }
   }, [eventsData, eventsError]);
 

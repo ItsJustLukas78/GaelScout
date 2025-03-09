@@ -1135,6 +1135,8 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                 <div className="flex flex-col gap-1 overflow-auto p-0.5 w-[100%]">
                   {rankingsWithMetricsSorted.length !== 0 ? rankingsWithMetricsSorted.map((result: EventRankWithMetrics) => {
                     const foundTeamProfile = participatingTeams.find((team) => team.teamId === result.team.teamId);
+                    const foundSeasonProfile = teamSeasonProfiles.find((team) => team.teamId === result.team.teamId);
+
                     if (!foundTeamProfile) {
                       return null;
                     }
@@ -1148,6 +1150,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                         key={foundTeamProfile.teamId}
                         rank={result}
                         team={foundTeamProfile}
+                        seasonProfile={foundSeasonProfile}
                         statBrackets={statBrackets}
                       />
                     )
