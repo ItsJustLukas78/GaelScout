@@ -806,7 +806,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
         {eventObject ? <>
           <div
             className="relative flex h-auto flex-col justify-center rounded-2xl card-shine-effect items-left w-[340px] sm:bgColorPrimary sm:w-[500px] sm:p-8 md:w-[700px] lg:w-[900px] xl:w-[1200px]">
-            <h1 className="mb-5 text-2xl font-bold outlinedText min-w-[85%] max-w-[85%] sm:text-3xl md:text-5xl lg:text-7xl">
+            <h1 className="mb-5 text-2xl font-bold outlinedText min-w-[85%] max-w-[85%] sm:text-3xl md:text-5xl">
               {eventObject.name}
             </h1>
             <div className="absolute max-w-max top-0.5 right-0.5 xl:top-2 xl:right-2">
