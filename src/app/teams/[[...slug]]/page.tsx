@@ -761,7 +761,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
               </div>
               <div className="flex flex-col gap-4 p-1 w-[100%]">
                 {currentEvents.length !== 0 && currentEvents.map((result: Event) => {
-                    const locationString = `${result.location.venue ? result.location.venue + ' @ ' : ''}${result.location.city ? result.location.city + ", " : ""}${result.location.region ? result.location.region + ", " : ""}${result.location.country}`;
+                    const locationString = `${result.location?.venue ? result.location?.venue + ' @ ' : ''}${result.location?.city ? result.location?.city + ", " : ""}${result.location?.region ? result.location?.region + ", " : ""}${result.location?.country}`;
 
                     return (
                       <EventResult
