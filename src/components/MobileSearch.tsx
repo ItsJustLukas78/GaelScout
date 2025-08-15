@@ -105,7 +105,7 @@ export default function MobileSearch() {
   const [loadingTeams, setLoadingTeams] = useState<boolean>(false);
   const [loadingEvents, setLoadingEvents] = useState<boolean>(false);
 
-  const [seasonId, setSeasonId] = useState<number>(190);
+  const [seasonId, setSeasonId] = useState<number>(197);
 
   const getTeams = async (page: number, append: boolean) => {
     setLoadingTeams(true);

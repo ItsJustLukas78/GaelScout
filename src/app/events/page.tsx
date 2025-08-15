@@ -77,7 +77,7 @@ export default function Events() {
   const seasonToEventsAge = useGlobalStore(state => state.seasonToEventsAge);
   const setSeasonToEventsAge = useGlobalStore(state => state.setSeasonToEventsAge);
 
-  const [seasonId, setSeasonId] = useState(190);
+  const [seasonId, setSeasonId] = useState(197);
   const [seasonEvents, setSeasonEvents] = useState<Event[]>([]);
   const [upcomingEvents, setUpcomingEvents] = useState<Event[]>([]);
 

@@ -223,7 +223,7 @@ export default function RankingsPage() {
   const [rankedStatistic, setRankedStatistic] = useState<RankableStatistic>(RankableStatistic.OPENSKILL);
   const [qualledToRegionals, setQualledToRegionals] = useState<"true" | "false" | "all">("all");
   const [qualledToWorlds, setQualledToWorlds] = useState<"true" | "false" | "all">("all");
-  const [seasonId, setSeasonId] = useState<number>(190);
+  const [seasonId, setSeasonId] = useState<number>(197);
   const [topRatedTeams, setTopRatedTeams] = useState<TeamSeasonProfile[]>([]);
   const [currentResultsCount, setCurrentResultsCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);

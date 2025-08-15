@@ -19,7 +19,7 @@ export async function GET(
   }
 
   try {
-    const teamEvents = await getTeamEvents(teamId, (parseInt(seasonId)) || 190);
+    const teamEvents = await getTeamEvents(teamId, (parseInt(seasonId)) || 197);
 
     const formattedEvents: Event[] = teamEvents.map((event) => {
       return {

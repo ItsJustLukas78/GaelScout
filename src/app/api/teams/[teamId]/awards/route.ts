@@ -19,7 +19,7 @@ export async function GET(
   }
 
   try {
-    const teamAwards = await getTeamAwards(teamId, (parseInt(seasonId)) || 190);
+    const teamAwards = await getTeamAwards(teamId, (parseInt(seasonId)) || 197);
 
     const formattedAwards: EventAward[] = teamAwards.map((award: any) => {
       const teamWinner = award.teamWinners.find((team: any) => {

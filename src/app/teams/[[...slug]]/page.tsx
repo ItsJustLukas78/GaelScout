@@ -67,7 +67,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
 
   const [teamProfile, setTeamProfile] = useState<TeamProfile | null>(null);
   const [seasonStats, setSeasonStats] = useState<TeamSeasonProfile | null>(null);
-  const [seasonId, setSeasonId] = useState<number>(190);
+  const [seasonId, setSeasonId] = useState<number>(197);
 
   const [teamNotesDialogOpen, setTeamNotesDialogOpen] = useState<boolean>(false);
 
