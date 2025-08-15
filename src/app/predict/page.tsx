@@ -263,6 +263,7 @@ export default function Teams() {
               <option value="173">Spin Up 2022-23</option>
               <option value="181">Over Under 2023-24</option>
               <option value="190">High Stakes 2024-25</option>
+              <option value="197">Push Back 2025-26</option>
             </select>
           </Form.Field>
           <Form.Submit asChild>
@@ -430,6 +431,7 @@ export default function Teams() {
                 <option value="173">Spin Up 2022-23</option>
                 <option value="181">Over Under 2023-24</option>
                 <option value="190">High Stakes 2024-25</option>
+                <option value="197">Push Back 2025-26</option>
               </select>
             </Form.Field>
             <Form.Submit asChild>

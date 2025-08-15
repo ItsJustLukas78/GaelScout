@@ -483,6 +483,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                     <option value="173">Spin Up 2022-23</option>
                     <option value="181">Over Under 2023-24</option>
                     <option value="190">High Stakes 2024-25</option>
+                    <option value="197">Push Back 2025-26</option>
                   </select>
                   <button
                     className="flex h-10 items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 text-xl font-semibold text-black opacity-50 min-w-[50px] disabled:opacity-50 sm:h-12"
@@ -756,6 +757,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                     <option value="173">Spin Up 2022-23</option>
                     <option value="181">Over Under 2023-24</option>
                     <option value="190">High Stakes 2024-25</option>
+                    <option value="197">Push Back 2025-26</option>
                   </select>
                 </div>
               </div>
