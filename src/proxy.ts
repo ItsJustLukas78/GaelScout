@@ -30,7 +30,7 @@ const generalPaths = [
   '/api/notesGroups/leave'
 ];
 
-async function middleware(auth: any, request: NextRequest, event: NextFetchEvent): Promise<Response | undefined> {
+async function proxy(auth: any, request: NextRequest, event: NextFetchEvent): Promise<Response | undefined> {
   if (!(auth.userId || auth.isPublicRoute)) {
     // redirect to /login
 
