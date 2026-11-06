@@ -1,7 +1,7 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
-import { authMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
 type Unit = "ms" | "s" | "m" | "h" | "d";
 type Duration = `${number} ${Unit}` | `${number}${Unit}`;
@@ -94,7 +94,7 @@ async function middleware(auth: any, request: NextRequest, event: NextFetchEvent
   return NextResponse.next();
 }
 
-export default authMiddleware({
+export default clerkMiddleware({
   publicRoutes: [
     '/',
     '/privacy',
