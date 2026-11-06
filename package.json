@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "engines": {
+    "node": ">=26.0.0"
+  },
   "dependencies": {
     "@apollo/sandbox": "^2.7.4",
     "@apollo/server": "^4.13.0",
