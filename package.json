@@ -11,6 +11,11 @@
   "engines": {
     "node": ">=26.0.0"
   },
+  "trustedDependencies": [
+    "prisma",
+    "@prisma/client",
+    "sharp"
+  ],
   "dependencies": {
     "@apollo/sandbox": "^2.7.4",
     "@apollo/server": "^4.13.0",
