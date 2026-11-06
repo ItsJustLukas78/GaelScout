@@ -223,7 +223,7 @@ export default function RankingsPage() {
   const [rankedStatistic, setRankedStatistic] = useState<RankableStatistic>(RankableStatistic.OPENSKILL);
   const [qualledToRegionals, setQualledToRegionals] = useState<"true" | "false" | "all">("all");
   const [qualledToWorlds, setQualledToWorlds] = useState<"true" | "false" | "all">("all");
-  const [seasonId, setSeasonId] = useState<number>(197);
+  const [seasonId, setSeasonId] = useState<number>(204);
   const [topRatedTeams, setTopRatedTeams] = useState<TeamSeasonProfile[]>([]);
   const [currentResultsCount, setCurrentResultsCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -375,6 +375,7 @@ export default function RankingsPage() {
                 <option value="181">Over Under 2023-24</option>
                 <option value="190">High Stakes 2024-25</option>
                 <option value="197">Push Back 2025-26</option>
+                <option value="204">Override 2026-27</option>
               </select>
               {/* country and region select inputs */}
               <select

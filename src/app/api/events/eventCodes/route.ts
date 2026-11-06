@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
       newSearchParams.append('page', page);
     }
 
-    const REURL: string = `https://www.robotevents.com/robot-competitions/vex-robotics-competition/?${newSearchParams}`;
+    const REURL: string = `https://events.vex.com/robot-competitions/vex-robotics-competition/?${newSearchParams}`;
 
     const response = await fetch(REURL, {
       headers: {
@@ -64,9 +64,9 @@ export async function GET(request: NextRequest) {
 
     const eventSKURegex = new RegExp('^RE-VRC-\\d{2}-\\d{4}$');
 
-    $('a[href*="https://www.robotevents.com/robot-competitions/vex-robotics-competition/"]').each((i, elem) => {
+    $('a[href*="https://events.vex.com/robot-competitions/vex-robotics-competition/"]').each((i, elem) => {
       const href = $(elem).attr('href');
-      const eventSKU = href?.replace('https://www.robotevents.com/robot-competitions/vex-robotics-competition/', '').replace('.html', '');
+      const eventSKU = href?.replace('https://events.vex.com/robot-competitions/vex-robotics-competition/', '').replace('.html', '');
       if (eventSKU) {
         if (eventSKURegex.test(eventSKU)) {
           foundEventSKUs.push(eventSKU);

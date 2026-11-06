@@ -200,7 +200,7 @@ export default function Verify() {
                         {"Click confirm once you have changed your robot name and it has been updated on your "}
                         <a
                           target={"_blank"}
-                          href={`https://www.robotevents.com/teams/VRC/${teamNumberInput}`}
+                          href={`https://events.vex.com/teams/VRC/${teamNumberInput}`}
                           className="text-blue-500"
                         >
                           Team Page

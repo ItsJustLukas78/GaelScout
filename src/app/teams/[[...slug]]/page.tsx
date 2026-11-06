@@ -67,7 +67,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
 
   const [teamProfile, setTeamProfile] = useState<TeamProfile | null>(null);
   const [seasonStats, setSeasonStats] = useState<TeamSeasonProfile | null>(null);
-  const [seasonId, setSeasonId] = useState<number>(197);
+  const [seasonId, setSeasonId] = useState<number>(204);
 
   const [teamNotesDialogOpen, setTeamNotesDialogOpen] = useState<boolean>(false);
 
@@ -379,7 +379,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
             </div>
             <div
               className={`outlinedText flex flex-col mb-5 text-xl ease-in-out [transition:transform_1s,opacity_1s,color_0.01s] ${teamNumberInput ? "opacity-100" : "opacity-0 translate-x-full"}`}>
-              <a href={`https://www.robotevents.com/teams/VRC/${teamNumberInput.toUpperCase()}`}
+              <a href={`https://events.vex.com/teams/VRC/${teamNumberInput.toUpperCase()}`}
                  className="mb-5 max-w-fit text-lg font-bold hover:text-blue-500 xs:text-xl">
                 <u>RobotEvents Page</u>
               </a>
@@ -484,6 +484,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                     <option value="181">Over Under 2023-24</option>
                     <option value="190">High Stakes 2024-25</option>
                     <option value="197">Push Back 2025-26</option>
+                    <option value="204">Override 2026-27</option>
                   </select>
                   <button
                     className="flex h-10 items-center justify-center whitespace-nowrap rounded-md bg-neutral-50 text-xl font-semibold text-black opacity-50 min-w-[50px] disabled:opacity-50 sm:h-12"
@@ -758,6 +759,7 @@ export default function TeamProfile({params}: { params: { slug: [] } }) {
                     <option value="181">Over Under 2023-24</option>
                     <option value="190">High Stakes 2024-25</option>
                     <option value="197">Push Back 2025-26</option>
+                    <option value="204">Override 2026-27</option>
                   </select>
                 </div>
               </div>

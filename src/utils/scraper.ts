@@ -14,7 +14,7 @@ import * as cheerio from 'cheerio';
 //   // On this new page:
 //   // - open the "http://quotes.toscrape.com/" website
 //   // - wait until the dom content is loaded (HTML is ready)
-//   await page.goto(`https://www.robotevents.com/teams/VRC/${teamNumber.toUpperCase()}`, {
+//   await page.goto(`https://events.vex.com/teams/VRC/${teamNumber.toUpperCase()}`, {
 //     waitUntil: "domcontentloaded",
 //   });
 //
@@ -38,7 +38,7 @@ import * as cheerio from 'cheerio';
 // };
 
 export const getTeamRobotNameCheerio = async (teamNumber: string) => {
-  const response = await fetch(`https://www.robotevents.com/teams/VRC/${teamNumber.toUpperCase()}`);
+  const response = await fetch(`https://events.vex.com/teams/VRC/${teamNumber.toUpperCase()}`);
   const html = await response.text();
   const $ = cheerio.load(html);
 

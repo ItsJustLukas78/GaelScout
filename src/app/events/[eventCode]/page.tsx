@@ -825,7 +825,7 @@ export default function EventPage({params}: { params: { eventCode: string } }) {
                 {favorited ? <AiFillStar className="inline-block"/> : <AiOutlineStar className="inline-block"/>}
               </button>
             </div>
-            <a href={`https://www.robotevents.com/robot-competitions/vex-robotics-competition/${eventCode}.html`}
+            <a href={`https://events.vex.com/robot-competitions/vex-robotics-competition/${eventCode}.html`}
                className="mb-5 max-w-fit text-lg font-bold outlinedText hover:text-blue-500 xs:text-xl">
               <u>RobotEvents Page</u>
             </a>
