@@ -17,8 +17,6 @@ const fetcher = (...args: any[]) => fetch(...args).then(res => {
   }
 })
 
-export const revalidate = 3600
-
 const SWROptions = {
   revalidateOnFocus: true,
   revalidateOnReconnect: true,
