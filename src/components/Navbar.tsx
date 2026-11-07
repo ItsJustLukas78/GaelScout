@@ -65,13 +65,11 @@ export default function Navbar() {
           {/*    </div>*/}
           {/*  </NavButton>*/}
           {/*}*/}
-          {isLoaded && isSignedIn ? <UserButton signOutOptions={{ redirectUrl: "/" }} /> :
-            <NavButton
-              href={`/sign-in?redirect_url=${path ? path : "/"}`}
-            >
+          {isLoaded && isSignedIn ? <UserButton /> : (
+            <NavButton href={`/sign-in?redirect_url=${path || "/"}`}>
               Sign In
             </NavButton>
-          }
+          )}
         </div>
         <div className="mr-auto lg:hidden">
           <Hamburger toggled={expanded} toggle={setExpanded} />
@@ -81,11 +79,11 @@ export default function Navbar() {
           <NavButton href="/" className="text-shadow-xs shadow-[var(--color-tertiary-hover)]">GaelScout</NavButton>
         </div>
         <div className="ml-auto lg:hidden">
-          {isLoaded && isSignedIn ? <UserButton signOutOptions={{ redirectUrl: "/" }} /> :
-              <NavButton href="/sign-in">
-                <VscAccount className="inline-block text-3xl" />
-              </NavButton>
-            }
+          {isLoaded && isSignedIn ? <UserButton /> : (
+            <NavButton href="/sign-in">
+              <VscAccount className="inline-block text-3xl" />
+            </NavButton>
+          )}
         </div>
       </div>
       <div className={`${expanded ? "block" : "hidden"} lg:hidden`}>
