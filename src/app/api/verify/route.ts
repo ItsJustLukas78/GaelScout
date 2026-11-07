@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import { clerkClient } from "@clerk/nextjs";
+import { clerkClient } from "@clerk/nextjs/server";
 import { getTeamRobotNameCheerio } from "@/utils/scraper";
 import { getAuth } from "@clerk/nextjs/server";
 

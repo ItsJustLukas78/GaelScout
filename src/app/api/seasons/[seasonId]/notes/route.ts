@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 import { NextResponse, NextRequest } from "next/server";
-import { auth } from "@clerk/nextjs";
+import { auth } from '@clerk/nextjs/server';
 import { getTeamObject } from "@/utils/RobotEventsAPI";
 
 export async function POST(

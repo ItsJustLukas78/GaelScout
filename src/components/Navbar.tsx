@@ -66,7 +66,7 @@ export default function Navbar() {
           {/*  </NavButton>*/}
           {/*}*/}
           {isLoaded && isSignedIn ? <UserButton
-              afterSignOutUrl="/"
+              signOutUrl="/"
             /> :
             <NavButton
               href={`/sign-in?redirect_url=${path ? path : "/"}`}
