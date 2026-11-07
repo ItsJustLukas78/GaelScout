@@ -1,7 +1,7 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server";
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import {clerkMiddleware, createRouteMatcher} from "@clerk/nextjs/server";
 
 type Unit = "ms" | "s" | "m" | "h" | "d";
 type Duration = `${number} ${Unit}` | `${number}${Unit}`;
@@ -30,10 +30,8 @@ const generalPaths = [
   '/api/notesGroups/leave'
 ];
 
-async function proxy(auth: any, request: NextRequest, event: NextFetchEvent): Promise<Response | undefined> {
-  if (!(auth.userId || auth.isPublicRoute)) {
-    // redirect to /login
-
+async function proxy(userId: string | null, request: NextRequest, event: NextFetchEvent): Promise<Response> {
+  if (!userId && !isPublicRoute(request)) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
@@ -92,30 +90,31 @@ async function proxy(auth: any, request: NextRequest, event: NextFetchEvent): Pr
 
   return NextResponse.next();
 }
+const isPublicRoute = createRouteMatcher([
+  "/",
+  "/privacy",
+  "/teams(.*)",
+  "/events(.*)",
+  "/profiles(.*)",
+  "/rankings",
+  "/predict",
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/predictionModel(.*)",
+  "/api(.*)",
+  "/favorites(.*)",
+  "/~offline",
+  "/not-found",
+]);
 
-export default clerkMiddleware({
-  publicRoutes: [
-    '/',
-    '/privacy',
-    '/teams/:teamId*',
-    '/events/:eventId*',
-    '/profiles/:profileId*',
-    '/rankings',
-    '/predict',
-    '/sign-in',
-    '/sign-up',
-    '/predictionModel/:route*',
-    '/api/:route*',
-    '/favorites/:route*',
-    '/~offline',
-    '/not-found',
-  ],
-  apiRoutes: ['/api/:route*'],
+export default clerkMiddleware(async (auth, request, event) => {
+  const { userId } = await auth();
 
-  //@ts-ignore
-  afterAuth(auth, request: NextRequest, event: NextFetchEvent) {
-    return middleware(auth, request, event);
+  if (!userId && !isPublicRoute(request)) {
+    return NextResponse.redirect(new URL("/sign-in", request.url));
   }
+
+  return proxy(userId, request, event);
 });
 
 export const config = {

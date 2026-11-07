@@ -65,9 +65,7 @@ export default function Navbar() {
           {/*    </div>*/}
           {/*  </NavButton>*/}
           {/*}*/}
-          {isLoaded && isSignedIn ? <UserButton
-              signOutUrl="/"
-            /> :
+          {isLoaded && isSignedIn ? <UserButton signOutOptions={{ redirectUrl: "/" }} /> :
             <NavButton
               href={`/sign-in?redirect_url=${path ? path : "/"}`}
             >
@@ -83,9 +81,7 @@ export default function Navbar() {
           <NavButton href="/" className="text-shadow-xs shadow-[var(--color-tertiary-hover)]">GaelScout</NavButton>
         </div>
         <div className="ml-auto lg:hidden">
-          {isLoaded && isSignedIn ? <UserButton
-                afterSignOutUrl="/"
-              /> :
+          {isLoaded && isSignedIn ? <UserButton signOutOptions={{ redirectUrl: "/" }} /> :
               <NavButton href="/sign-in">
                 <VscAccount className="inline-block text-3xl" />
               </NavButton>
