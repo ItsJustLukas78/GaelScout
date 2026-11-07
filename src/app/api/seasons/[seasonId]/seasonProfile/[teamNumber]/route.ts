@@ -65,8 +65,9 @@ async function formatTeamSeasonProfile(teamSeasonProfile: any) {
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { seasonId: string, teamNumber: string } }
+  props: { params: Promise<{ seasonId: string, teamNumber: string }> }
 ) {
+  const params = await props.params;
   const teamNumber = params.teamNumber;
   const seasonId = parseInt(params.seasonId);
 

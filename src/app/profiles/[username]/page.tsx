@@ -9,6 +9,7 @@ import {useParams} from "next/navigation";
 
 export default function UserProfile() {
   const params = useParams<{ username: string }>()
+  const username = params.username;
 
   const [userProfile, setUserProfile] = useState<null | UserProfile >(null);
  

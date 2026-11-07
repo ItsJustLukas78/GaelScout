@@ -5,7 +5,7 @@ import prisma from "@/lib/db";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { eventId: string, divId: string } }
+  { params }: { params: Promise<{ eventId: string, divId: string }> }
 ) {
   const { eventId: rawEventId, divId: rawDivId } = await params;
   const eventId = Number(rawEventId);

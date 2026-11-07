@@ -3,11 +3,11 @@ import {SkillsStandingsData} from "@/app/types";
 import {getSkillsStandings} from "@/utils/RobotEventsAPI";
 
 export async function GET(
-  request: NextRequest, { params }: { params: { seasonId: string } }
+  request: NextRequest, { params }: { params: Promise<{ seasonId: string }> }
 ) {
   // try {
   //   const searchParams = new URL(request.url).searchParams;
-  //   const seasonId = parseInt(params.seasonId);
+  //   const seasonId = parseInt((await params).seasonId);
   //
   //   if (!seasonId) {
   //     return NextResponse.json({error: 'Season ID not provided'}, {status: 400});

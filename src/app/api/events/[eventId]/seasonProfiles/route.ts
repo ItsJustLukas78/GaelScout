@@ -5,7 +5,7 @@ import { TeamProfile } from "@/app/types";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { eventId: string } }
+  { params }: { params: Promise<{ eventId: string }> }
 ) {
     //ignore request for now, add a script that automates the process of listing all the achievements of our teams
   //season id : 125

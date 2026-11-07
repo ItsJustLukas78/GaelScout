@@ -7,7 +7,7 @@ import {Event} from "@/app/types";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { teamId: string } }
+  { params }: { params: Promise<{ teamId: string }> }
 ) {
   const { teamId: rawTeamId } = await params;
   const teamId = Number(rawTeamId);

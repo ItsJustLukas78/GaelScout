@@ -30,7 +30,7 @@ import {getTeamObject} from "@/utils/RobotEventsAPI";
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { teamNumber: string } }
+  { params }: { params: Promise<{ teamNumber: string }> }
 ) {
   const { teamNumber } = await params;
 

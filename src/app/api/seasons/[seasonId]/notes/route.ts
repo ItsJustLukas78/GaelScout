@@ -5,7 +5,7 @@ import { getTeamObject } from "@/utils/RobotEventsAPI";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { seasonId: string } }
+  { params }: { params: Promise<{ seasonId: string }> }
 ) {
   const { seasonId: rawSeasonId } = await params;
   const seasonId = Number(rawSeasonId);
@@ -201,11 +201,9 @@ export async function POST(
   }
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { seasonId: string } }
-) {
-  const seasonId = parseInt(params.seasonId);
+export async function GET(request: NextRequest, props: { params: Promise<{ seasonId: string }> }) {
+  const params = await props.params;
+  const seasonId = parseInt((await params).seasonId);
 
   const { userId } = await auth();
 

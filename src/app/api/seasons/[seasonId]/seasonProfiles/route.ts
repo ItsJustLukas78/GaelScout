@@ -45,7 +45,7 @@ import { RankableStatistic } from "@/app/types";
  *        description: Internal server error
  */
 export async function GET(
-  request: NextRequest, { params }: { params: { seasonId: string } }
+  request: NextRequest, { params }: { params: Promise<{ seasonId: string }> }
 ) {
   const searchParams = new URL(request.url).searchParams;
   const page = parseInt(searchParams.get('page') || '1');

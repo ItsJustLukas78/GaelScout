@@ -5,7 +5,7 @@ import { TeamProfile } from "@/app/types";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { eventId: string } }
+  { params }: { params: Promise<{ eventId: string }> }
 ) {
   const { eventId: rawEventId } = await params;
   const eventId = Number(rawEventId);

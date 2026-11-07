@@ -3,7 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { seasonId: string} }
+  { params }: { params: Promise<{ seasonId: string}> }
 ) {
   const { seasonId: rawSeasonId } = await params;
   const seasonId = Number(rawSeasonId);
