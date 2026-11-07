@@ -7,7 +7,12 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { seasonId: string } }
 ) {
-  const seasonId = parseInt(params.seasonId);
+  const { seasonId: rawSeasonId } = await params;
+  const seasonId = Number(rawSeasonId);
+
+  if (!Number.isInteger(seasonId)) {
+    return NextResponse.json({ error: "Season ID is invalid" }, { status: 400 });
+  }
 
   const { userId } = await auth();
 

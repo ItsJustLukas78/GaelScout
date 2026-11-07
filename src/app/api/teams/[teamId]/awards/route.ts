@@ -7,9 +7,14 @@ import {Event, EventAward} from "@/app/types";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { teamId: number } }
+  { params }: { params: { teamId: string } }
 ) {
-  const teamId = params.teamId;
+  const { teamId: rawTeamId } = await params;
+  const teamId = Number(rawTeamId);
+
+  if (!Number.isInteger(teamId)) {
+    return NextResponse.json({ error: "Team ID is invalid" }, { status: 400 });
+  }
 
   const searchParams = new URL(request.url).searchParams;
   let seasonId = searchParams.get('seasonId') || undefined;

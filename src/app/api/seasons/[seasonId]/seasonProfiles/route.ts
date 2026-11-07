@@ -50,7 +50,13 @@ export async function GET(
   const searchParams = new URL(request.url).searchParams;
   const page = parseInt(searchParams.get('page') || '1');
   const perPage = parseInt(searchParams.get('perPage') || '15') > 50 ? 50 : parseInt(searchParams.get('perPage') || '15');
-  const seasonId = parseInt(params.seasonId);
+
+  const { seasonId: rawSeasonId } = await params;
+  const seasonId = Number(rawSeasonId);
+
+  if (!Number.isInteger(seasonId)) {
+    return NextResponse.json({ error: "Season ID is invalid" }, { status: 400 });
+  }
 
   const isQualToRegionals = searchParams.get('qualToRegionals') as "true" | "false" | "all" | undefined;
   const isAwardQualToWorlds = searchParams.get('awardQualToWorlds') as "true" | "false" | "all" | undefined;

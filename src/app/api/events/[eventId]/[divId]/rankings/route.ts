@@ -4,10 +4,15 @@ import {EventMatch, EventRank} from "@/app/types";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { eventId: number, divId: number } }
+  { params }: { params: { eventId: string, divId: string } }
 ) {
-  const eventId = params.eventId;
-  const divId = params.divId;
+  const { eventId: rawEventId, divId: rawDivId } = await params;
+  const eventId = Number(rawEventId);
+  const divId = Number(rawDivId);
+
+  if (!Number.isInteger(eventId) || !Number.isInteger(divId)) {
+    return NextResponse.json({ error: "Event or division ID is invalid" }, { status: 400 });
+  }
 
   if (!eventId || !divId) {
     return NextResponse.json({ error: 'Event or div id not provided' }, { status: 400 });

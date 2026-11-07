@@ -5,9 +5,10 @@ import {toast} from "react-toastify";
 import {MdVerified} from "react-icons/md";
 import { AiOutlineLink } from "react-icons/ai";
 import { UserProfile } from "@/app/types";
+import {useParams} from "next/navigation";
 
-export default function UserProfile({ params }: { params: { username: string } }) {
-  const username = params.username
+export default function UserProfile() {
+  const params = useParams<{ username: string }>()
 
   const [userProfile, setUserProfile] = useState<null | UserProfile >(null);
  

@@ -17,6 +17,7 @@ import Spinner from "@/components/Spinner";
 import useSWR from 'swr'
 import {TbNotebook, TbNumbers} from "react-icons/tb";
 import {useGlobalStore} from "@/state/globalState";
+import {useParams} from "next/navigation";
 
 
 const SWROptions = {
@@ -52,7 +53,8 @@ const fetcher = (...args: any[]) => fetch(...args).then(res => {
   }
 })
 
-export default function TeamProfile({params}: { params: { slug: [] } }) {
+export default function TeamProfile() {
+  const params = useParams<{ slug?: string[] }>();
   const inputTeamRef = React.useRef<HTMLInputElement>(null);
   const isPWA = IsPWA();
 

@@ -32,7 +32,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { teamNumber: string } }
 ) {
-  const teamNumber = params.teamNumber;
+  const { teamNumber } = await params;
 
   if (!teamNumber) {
     return NextResponse.json({ error: 'Team number not provided' }, { status: 400 });

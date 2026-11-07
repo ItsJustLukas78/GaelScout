@@ -20,7 +20,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({error: 'Team number not provided'}, {status: 400});
     }
 
-    const clerkUser = await clerkClient.users.getUser(userId);
+    const client = await clerkClient()
+
+    const clerkUser = await client.users.getUser(userId);
 
     if (!clerkUser) {
       return NextResponse.json({error: 'User not found'}, {status: 404});
@@ -42,7 +44,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({error: `Verification code does not match, found "${currentTeamRobotName}"`}, {status: 400});
     }
 
-    await clerkClient.users.updateUserMetadata(clerkUser.id, {
+    await client.users.updateUserMetadata(clerkUser.id, {
       publicMetadata: {
         ...clerkUser.publicMetadata,
         verifiedTeamNumber: teamNumber,

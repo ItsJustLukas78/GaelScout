@@ -8,15 +8,21 @@ const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || ``;
 
 async function validateRequest(request: Request) {
   const payloadString = await request.text();
-  const headerPayload = headers();
 
-  const svixHeaders = {
-    "svix-id": headerPayload.get("svix-id")!,
-    "svix-timestamp": headerPayload.get("svix-timestamp")!,
-    "svix-signature": headerPayload.get("svix-signature")!,
-  };
+  const svixId = request.headers.get("svix-id");
+  const svixTimestamp = request.headers.get("svix-timestamp");
+  const svixSignature = request.headers.get("svix-signature");
+
+  if (!svixId || !svixTimestamp || !svixSignature) {
+    throw new Error("Missing Svix webhook headers");
+  }
+
   const wh = new Webhook(webhookSecret);
-  return wh.verify(payloadString, svixHeaders) as WebhookEvent;
+  return wh.verify(payloadString, {
+    "svix-id": svixId,
+    "svix-timestamp": svixTimestamp,
+    "svix-signature": svixSignature,
+  }) as WebhookEvent;
 }
 
 

@@ -5,7 +5,7 @@ import { TeamProfile } from "@/app/types";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { eventId: number } }
+  { params }: { params: { eventId: string } }
 ) {
     //ignore request for now, add a script that automates the process of listing all the achievements of our teams
   //season id : 125
@@ -126,7 +126,14 @@ export async function GET(
   //ignore everything:
 
   const searchParams = new URL(request.url).searchParams;
-  const eventId = params.eventId;
+
+  const { eventId: rawEventId } = await params;
+  const eventId = Number(rawEventId);
+
+  if (!Number.isInteger(eventId)) {
+    return NextResponse.json({ error: "Event ID is invalid" }, { status: 400 });
+  }
+
   const seasonId = searchParams.get('seasonId') || undefined;
 
   if (!eventId || !seasonId) {

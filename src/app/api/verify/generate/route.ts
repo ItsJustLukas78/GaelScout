@@ -12,8 +12,9 @@ export async function POST(request: NextRequest) {
     if (!userId) {
       return NextResponse.json({error: 'Unauthorized'}, {status: 401});
     }
+    const client = await clerkClient()
 
-    const clerkUser = await clerkClient.users.getUser(userId);
+    const clerkUser = await client.users.getUser(userId);
     // const userObject = prisma.user.findUnique({
     //   where: {
     //     id: userId
@@ -26,7 +27,7 @@ export async function POST(request: NextRequest) {
 
     const randomString = "gaelscout" + Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
 
-    await clerkClient.users.updateUserMetadata(clerkUser.id, {
+    await client.users.updateUserMetadata(clerkUser.id, {
       privateMetadata: {
         ...clerkUser.privateMetadata,
         verificationCode: randomString,

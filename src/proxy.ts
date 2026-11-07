@@ -37,8 +37,7 @@ async function proxy(auth: any, request: NextRequest, event: NextFetchEvent): Pr
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
-  const ip = request.ip ?? "127.0.0.1";
-
+  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   if (request.nextUrl.pathname === "/api/blocked") {
     return NextResponse.next();
   } else if (generalPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {

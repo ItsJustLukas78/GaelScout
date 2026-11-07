@@ -5,9 +5,14 @@ import { TeamProfile } from "@/app/types";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { eventId: number } }
+  { params }: { params: { eventId: string } }
 ) {
-  const eventId = params.eventId;
+  const { eventId: rawEventId } = await params;
+  const eventId = Number(rawEventId);
+
+  if (!Number.isInteger(eventId)) {
+    return NextResponse.json({ error: "Event ID is invalid" }, { status: 400 });
+  }
 
   if (!eventId) {
     return NextResponse.json({ error: 'Event Id not provided' }, { status: 400 });

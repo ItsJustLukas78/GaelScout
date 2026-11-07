@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export async function GET(request: NextRequest, { params }: { params: { username: string } }) {
 
-  const username = params.username;
+  const { username } = await params;
 
   if (!username) {
     return NextResponse.json({ error: 'Username not provided' }, { status: 400 });

@@ -32,7 +32,7 @@ import {
   concat,
 } from "mathjs";
 import useSWR from 'swr'
-import { useSearchParams, useRouter } from 'next/navigation'
+import {useSearchParams, useRouter, useParams} from 'next/navigation'
 import {FaClipboardList, FaRegSadTear, FaTrophy} from "react-icons/fa";
 import { FaRankingStar } from "react-icons/fa6";
 import {GiTrumpet} from "react-icons/gi";
@@ -77,7 +77,8 @@ const fetcher = (...args: any[]) => fetch(...args).then(res => {
   }
 })
 
-export default function EventPage({params}: { params: { eventCode: string } }) {
+export default function EventPage() {
+  const params = useParams<{ eventCode: string }>()
   const {isLoaded, isSignedIn, user} = useUser();
   const isPWA = IsPWA();
   const router = useRouter();
