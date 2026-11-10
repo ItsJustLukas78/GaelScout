@@ -22,9 +22,10 @@ export async function GET(request: NextRequest) {
 
     const eventSKURegex1 = new RegExp('^RE-VRC-\\d{2}-\\d{4}$');
     const eventSKURegex2 = new RegExp('^RE-V5RC-\\d{2}-\\d{4}$');
+    const eventSKURegex3 = new RegExp('^VE-V5-\\d{2}-\\d{5}$');
 
     const validSKUs = eventSKU.filter((sku) => {
-      return eventSKURegex1.test(sku) || eventSKURegex2.test(sku);
+      return eventSKURegex1.test(sku) || eventSKURegex2.test(sku) || eventSKURegex3.test(sku);
     });
 
     if (validSKUs.length === 0 && eventSKU.length !== 0) {
